@@ -1,6 +1,6 @@
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 import { exec, spawn } from 'child_process';
-import * as stripAnsi from 'strip-ansi';
+import stripAnsi from 'strip-ansi';
 import IProcessSystem from '../types/IProcessSystem';
 
 const MESSAGE_NAME_PATTERN = /^(\[[^\]]+\]) .+/;
@@ -12,7 +12,7 @@ const NAME_COLOURS = [chalk.blue, chalk.magenta, chalk.cyan, chalk.yellow, chalk
 const assignedNameColours: any = {};
 let nextColour = 0;
 
-const trim = (s: string | Buffer) => (stripAnsi as any)(s.toString()).trim();
+const trim = (s: string | Buffer) => stripAnsi(s.toString()).trim();
 
 const log = (message: string) => {
   const removeMatches = MESSAGE_REPLACE_PATTERN.exec(message);

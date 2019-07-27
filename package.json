@@ -10,10 +10,12 @@
   },
   "main": "index.js",
   "scripts": {
+    "clean": "rm -rf ./lib",
     "build": "tsc --outDir lib --rootDir src",
+    "buildServer": "tsc -p tsconfig-source-only.json --outDir lib --rootDir src",
     "watch": "tsc -w",
     "lint": "tslint -c tslint.json -p tsconfig.json",
-    "start": "npm run build && electron ./lib/main.js",
+    "start": "npm run clean && npm run build && electron ./lib/main.js",
     "jest": "jest --watch"
   },
   "dependencies": {
@@ -51,6 +53,7 @@
     "@types/request": "^2.48.2",
     "@types/semver": "^6.0.1",
     "@types/socket.io": "^2.1.2",
+    "@types/socket.io-client": "^1.4.32",
     "@types/tar": "^4.0.3",
     "electron": "^5.0.8",
     "eslint": "^6.1.0",

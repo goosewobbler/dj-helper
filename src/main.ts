@@ -1,11 +1,11 @@
 import { app, BrowserWindow } from 'electron';
 import startServer from './indexServer';
 
-startServer().catch(console.error);
-
 let mainWindow: Electron.BrowserWindow;
 
-function createWindow() {
+async function createWindow() {
+  await startServer().catch(console.error);
+
   mainWindow = new BrowserWindow({
     height: 600,
     width: 800,

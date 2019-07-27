@@ -10,11 +10,11 @@ interface IAction {
   show?: boolean;
 }
 
-interface IState {
-  selectedComponent?: IComponentData;
-}
+// interface IComponentState {
+//   selectedComponent?: IComponentData;
+// }
 
-const reducer = (state: IState = {}, action: IAction) => {
+const reducer = (state: any = {}, action: IAction) => {
   switch (action.type) {
     case 'RECEIVE_EDITORS': {
       return {

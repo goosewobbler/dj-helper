@@ -15,6 +15,7 @@
     "buildServer": "tsc -p tsconfig-source-only.json --outDir lib --rootDir src",
     "watch": "tsc -w",
     "lint": "tslint -c tslint.json -p tsconfig.json",
+    "prettier": "prettier --write '{src/**/*,test/**/*,*}.{ts,tsx,js,json}'",
     "start": "npm run clean && npm run build && electron ./lib/main.js",
     "jest": "jest --watch"
   },

@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import ComponentState from '../../types/ComponentState';
 import IComponentData from '../../types/IComponentData';
-import ListItemButton from '../styled/ListItemButton';
 import ExternalLink from './ExternalLink';
 import IconButton from './IconButton';
 
@@ -117,18 +116,15 @@ class ComponentListItem extends React.PureComponent<IComponentListItemProps> {
         : this.props.component.displayName;
 
     return (
-      <ListItemButton
+      <div
         role="button"
         id={createID(this.props.component.name)}
-        backgroundColor={backgroundColorForState(this.props.component.state)}
-        highlighted={this.props.selected}
-        onClick={this.props.onClick}
       >
         {renderFavouriteButton(this.props)}
         <span className="component-name-label">{name}</span>
         {renderLaunchButton(this.props.component)}
         {renderStartStopButton(this.props)}
-      </ListItemButton>
+      </div>
     );
   }
 }

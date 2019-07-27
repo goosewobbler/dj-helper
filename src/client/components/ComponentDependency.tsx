@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import ListItemButton from '../styled/ListItemButton';
 import VersionBox from '../ui/VersionBox';
 import LabelButton from './LabelButton';
 
@@ -63,13 +62,13 @@ const renderVersionBox = (version: string, outdated: boolean) => (
 );
 
 const ComponentDependency = (props: IComponentDependencyProps) => (
-  <ListItemButton className="component-dependency" backgroundColor={getBackgroundColour(props)} onClick={props.onClick}>
+  <div className="component-dependency" onClick={props.onClick}>
     <span className="component-name-label">{props.dependency}</span>
     {renderLinkButton(props)}
     {renderVersionBox(props.version, props.outdated)}
     {renderVersionBox(props.has, props.has && props.latest && props.has !== props.latest)}
     {renderVersionBox(props.latest, false)}
-  </ListItemButton>
+  </div>
 );
 
 export default ComponentDependency;

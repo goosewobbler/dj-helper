@@ -23,15 +23,14 @@ const renderIndex = async (service: IService, template: string, selectedComponen
   const store = createStore(initialState);
 
   const html = renderToString(
-      <Provider store={store}>
-        <App />
-      </Provider>,
+    <Provider store={store}>
+      <App />
+    </Provider>,
   );
 
   const preloadedState = store.getState();
 
   return template
-    .replace('CSS_PLACEHOLDER', 'bleh')
     .replace('HTML_PLACEHOLDER', html)
     .replace('STATE_PLACEHOLDER', JSON.stringify(preloadedState).replace(/</g, '\\u003c'));
 };

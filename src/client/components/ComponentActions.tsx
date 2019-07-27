@@ -97,14 +97,14 @@ const ComponentActions = (props: IComponentActionsProps) => (
         <ExternalLink
           label="Dependency Graph"
           link={`https://morph-dependency-grapher.test.api.bbc.co.uk/env/test/modules/${props.component.displayName}`}
-          black={true}
+          black
         />
       </div>
       <div className="item-wrapper">
         <ExternalLink
           label="GitHub"
           link={`https://github.com/bbc/morph-modules/tree/master/${props.component.displayName}`}
-          black={true}
+          black
         />
       </div>
     </div>

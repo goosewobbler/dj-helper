@@ -20,7 +20,8 @@ interface IComponentDependencyProps {
 const getBackgroundColour = (props: IComponentDependencyProps) => {
   if (props.linking) {
     return 'orange';
-  } else if (props.linked) {
+  }
+  if (props.linked) {
     return '#c9ffc9';
   }
   return 'white';

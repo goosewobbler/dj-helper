@@ -79,13 +79,13 @@ const renderStartStopButton = (props: IComponentListItemProps) => {
         />
       );
     case ComponentState.Installing:
-      return <IconButton label="Installing" loading={true} />;
+      return <IconButton label="Installing" loading />;
     case ComponentState.Building:
-      return <IconButton label="Building" loading={true} />;
+      return <IconButton label="Building" loading />;
     case ComponentState.Linking:
-      return <IconButton label="Linking" loading={true} />;
+      return <IconButton label="Linking" loading />;
     case ComponentState.Starting:
-      return <IconButton label="Starting" loading={true} />;
+      return <IconButton label="Starting" loading />;
     case ComponentState.Running:
       return (
         <IconButton

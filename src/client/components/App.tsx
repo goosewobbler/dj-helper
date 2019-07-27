@@ -32,17 +32,17 @@ const App = (props: IAppProps) => (
         <ExternalLink
           link="https://ci.sport.tools.bbc.co.uk/view/morph-module-pipeline/"
           label="INT Pipeline"
-          black={true}
+          black
         />
         <ExternalLink
           link="https://ci.sport.tools.bbc.co.uk/view/morph-module-test-pipeline//"
           label="TEST Pipeline"
-          black={true}
+          black
         />
         <ExternalLink
           link="https://ci.sport.tools.bbc.co.uk/view/morph-module-live-pipeline//"
           label="LIVE Pipeline"
-          black={true}
+          black
         />
         <GitHubLink link="https://github.com/bbc/morph-developer-console" />
       </div>

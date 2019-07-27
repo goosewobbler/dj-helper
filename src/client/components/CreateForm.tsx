@@ -8,7 +8,7 @@ const KEY_ESCAPE = 27;
 const SelectInput = (props: {
   className?: string;
   label: string;
-  options: Array<{ value: string; label: string }>;
+  options: { value: string; label: string }[];
   onChange(event: any): any;
 }) => (
   <div>
@@ -53,7 +53,9 @@ interface ICreateFormState {
 
 class CreateForm extends React.Component<ICreateFormProps, ICreateFormState> {
   private name: string;
+
   private description: string;
+
   private type: string;
 
   constructor(props: ICreateFormProps) {
@@ -84,7 +86,7 @@ class CreateForm extends React.Component<ICreateFormProps, ICreateFormState> {
         <TextInput
           label="Name"
           className="create-name-input"
-          autoFocus={true}
+          autoFocus
           onChange={event => this.handleNameChange(event)}
           onKeyDown={event => this.handleKeyDown(event)}
         />

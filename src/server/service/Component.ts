@@ -84,7 +84,8 @@ const Component = (
     const packageDependencies = packageContents.dependencies || {};
     if (packageDependencies['bbc-morph-page-assembler']) {
       return ComponentType.Page;
-    } else if (packageDependencies.react) {
+    }
+    if (packageDependencies.react) {
       return ComponentType.View;
     }
     return ComponentType.Data;
@@ -214,7 +215,7 @@ const Component = (
   };
 
   const setFavorite = async (favorite: boolean) => {
-    await state.store(`favorite.${name}`, favorite ? favorite : null);
+    await state.store(`favorite.${name}`, favorite || null);
   };
 
   const request = async (props: { [Key: string]: string }, history: boolean) => {

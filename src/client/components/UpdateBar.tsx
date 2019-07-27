@@ -10,7 +10,8 @@ interface IUpdateBarProps {
 const getMessage = (props: IUpdateBarProps) => {
   if (props.updating) {
     return 'Updating  😟';
-  } else if (props.updated) {
+  }
+  if (props.updated) {
     return 'Morph Developer Console updated sucessfully  🎉  Restart to apply updates.';
   }
   return [
@@ -29,7 +30,8 @@ const getMessage = (props: IUpdateBarProps) => {
 const renderButton = (props: IUpdateBarProps) => {
   if (props.updating) {
     return <img src="/image/icon/gel-icon-loading-white.svg" />;
-  } else if (props.updated) {
+  }
+  if (props.updated) {
     return null;
   }
   return (

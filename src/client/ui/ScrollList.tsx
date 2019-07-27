@@ -53,8 +53,8 @@ class ComponentList extends React.Component<IScrollListProps, IScrollListState> 
             itemRenderer={this.props.renderListItem}
             length={this.props.length}
             type="uniform"
-            useStaticSize={true}
-            useTranslate3d={true}
+            useStaticSize
+            useTranslate3d
             minSize={20}
           />
         </ul>

@@ -22,7 +22,7 @@ const getNeedleSubstring = (needle: string, haystack: string) => {
   return { indexOfFirstNeedleCharacter, length };
 };
 
-const getMatchesRecursive = (needle: string, haystack: string): Array<string | { matched: string }> => {
+const getMatchesRecursive = (needle: string, haystack: string): (string | { matched: string })[] => {
   const { indexOfFirstNeedleCharacter, length } = getNeedleSubstring(needle, haystack);
 
   if (length === 0) {
@@ -39,7 +39,7 @@ const getMatchesRecursive = (needle: string, haystack: string): Array<string | {
 const getMatches = (needle: string, haystack: string) => {
   const trimmedNeedle = trim(needle);
   const matches = getMatchesRecursive(trimmedNeedle, haystack);
-  const matchedParts = matches.filter(match => typeof match === 'object') as Array<{ matched: string }>;
+  const matchedParts = matches.filter(match => typeof match === 'object') as { matched: string }[];
   const combinedMatchedParts = matchedParts.reduce((acc, match) => acc + match.matched, '');
 
   if (combinedMatchedParts.length !== trimmedNeedle.length) {

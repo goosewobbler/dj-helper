@@ -11,7 +11,8 @@ const getSortedComponents = (components: IComponentData[]): IComponentData[] => 
   return components.sort((mA: IComponentData, mB: IComponentData) => {
     if (mA.favorite && !mB.favorite) {
       return -1;
-    } else if (!mA.favorite && mB.favorite) {
+    }
+    if (!mA.favorite && mB.favorite) {
       return 1;
     }
     return mA.name.localeCompare(mB.name);
@@ -41,7 +42,7 @@ const getComponents = (components: IComponentData[], filter: string) => {
 };
 
 const mapStateToProps = (state: IState) => {
-  const filter = state.ui.filter;
+  const { filter } = state.ui;
   return {
     components: getComponents(state.components, filter),
     filter,

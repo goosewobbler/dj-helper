@@ -66,13 +66,13 @@ const Service = async (
     await Promise.all(packageDirectories.map(addComponent));
 
     await system.file.watchDirectory(options.componentsDirectory, async path => {
-      const relativePath = path.replace(options.componentsDirectory + '/', '');
+      const relativePath = path.replace(`${options.componentsDirectory}/`, '');
       const slashIndex = relativePath.indexOf('/');
       const directoryName = relativePath.substr(0, slashIndex);
       const changedComponent = components.find(component => component.getDirectoryName() === directoryName);
       if (changedComponent && changedComponent.getState() === ComponentState.Running) {
         const isSass = relativePath.indexOf('/sass/') > -1;
-        await changedComponent.build(isSass, relativePath.replace(directoryName + '/', ''));
+        await changedComponent.build(isSass, relativePath.replace(`${directoryName}/`, ''));
       }
     });
 

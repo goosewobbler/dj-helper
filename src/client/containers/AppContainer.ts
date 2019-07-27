@@ -16,6 +16,9 @@ const mapStateToProps = (state: IState) => ({
   shouldShowCreateDialog: state.ui.showCreateDialog,
 });
 
-const Container = connect(mapStateToProps, mapDispatchToProps)(App);
+const Container = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(App);
 
 export default Container;

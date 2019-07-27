@@ -20,10 +20,7 @@ const PromoteConnector = (props: { environment?: string; promoting?: boolean; pr
     const onClick = props.promoting ? null : props.promote;
     return (
       <div className="connector">
-        <button className="promote-button"
-          data-test={props.environment}
-          onClick={onClick}
-        >
+        <button className="promote-button" data-test={props.environment} onClick={onClick}>
           {props.promoting ? <span>Promoting</span> : 'Promote'}
         </button>
       </div>
@@ -101,7 +98,8 @@ const ComponentVersions = (props: IComponentVersionsProps) => {
     <p className="promotion-failure">
       <span role="img" aria-label="Anguished face">
         😧
-      </span>&nbsp; Promotion failed:&nbsp;
+      </span>
+      &nbsp; Promotion failed:&nbsp;
       {failureElement}
     </p>
   ) : null;

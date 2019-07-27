@@ -55,9 +55,9 @@ const renderFavouriteButton = (props: IComponentListItemProps) => {
 };
 
 const renderLaunchButton = (component: IComponentData) => {
-  const link = `${component.url}${Array.isArray(component.history) && component.history.length > 0
-    ? component.history[0]
-    : ''}`;
+  const link = `${component.url}${
+    Array.isArray(component.history) && component.history.length > 0 ? component.history[0] : ''
+  }`;
 
   if (component.state === ComponentState.Running) {
     return (
@@ -116,10 +116,7 @@ class ComponentListItem extends React.PureComponent<IComponentListItemProps> {
         : this.props.component.displayName;
 
     return (
-      <div
-        role="button"
-        id={createID(this.props.component.name)}
-      >
+      <div role="button" id={createID(this.props.component.name)}>
         {renderFavouriteButton(this.props)}
         <span className="component-name-label">{name}</span>
         {renderLaunchButton(this.props.component)}

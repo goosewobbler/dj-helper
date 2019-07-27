@@ -11,6 +11,10 @@ const createDefaultState = (): IState => ({
 });
 
 const store = (initialState?: IState) =>
-  createStore<IState, any, any, any>(combinedReducer, initialState || createDefaultState(), applyMiddleware(thunkMiddleware));
+  createStore<IState, any, any, any>(
+    combinedReducer,
+    initialState || createDefaultState(),
+    applyMiddleware(thunkMiddleware),
+  );
 
 export default store;

@@ -10,6 +10,9 @@ const mapDispatchToProps = (dispatch: any) => ({
   onInput: (filter: string) => dispatch(filterComponents(filter)),
 });
 
-const Container = connect(mapStateToProps, mapDispatchToProps)(ComponentListFilter);
+const Container = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ComponentListFilter);
 
 export default Container;

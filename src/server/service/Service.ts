@@ -130,11 +130,10 @@ const Service = async (
   });
 
   const getComponentsSummaryData = () => ({
-    components: components.map(
-      component =>
-        component.getState() === ComponentState.Running
-          ? getData(component.getName())
-          : getSummaryData(component.getName()),
+    components: components.map(component =>
+      component.getState() === ComponentState.Running
+        ? getData(component.getName())
+        : getSummaryData(component.getName()),
     ),
     editors,
   });

@@ -12,7 +12,7 @@ import LabelButton from './LabelButton';
 
 interface IAppProps {
   shouldShowCreateDialog: boolean;
-//  onCreate(): any;
+  //  onCreate(): any;
   showCreateDialog(show: boolean): any;
   submitModule(name: string, description: string, type: string): any;
 }

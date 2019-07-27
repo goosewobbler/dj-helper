@@ -23,11 +23,7 @@ const VersionBox = (props: {
     backgroundColor = '#59bb5d';
   }
 
-  return (
-    <div>
-      {contents}
-    </div>
-  );
+  return <div>{contents}</div>;
 };
 
 export default VersionBox;

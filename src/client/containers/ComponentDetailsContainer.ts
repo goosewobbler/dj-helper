@@ -43,6 +43,9 @@ const mapDispatchToProps = (dispatch: any) => ({
   onUnlinkComponent: (name: string, dependency: string) => dispatch(unlinkComponent(name, dependency)),
 });
 
-const Container = connect(mapStateToProps, mapDispatchToProps)(ComponentDetails);
+const Container = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ComponentDetails);
 
 export default Container;

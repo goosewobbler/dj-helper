@@ -57,6 +57,9 @@ const mapDispatchToProps = (dispatch: any) => ({
   onStopComponent: (name: string) => dispatch(stopComponent(name)),
 });
 
-const Container = connect(mapStateToProps, mapDispatchToProps)(ComponentList);
+const Container = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ComponentList);
 
 export default Container;

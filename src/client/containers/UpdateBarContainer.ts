@@ -14,6 +14,9 @@ const mapDispatchToProps = (dispatch: any) => ({
   onUpdate: () => dispatch(update()),
 });
 
-const Container = connect(mapStateToProps, mapDispatchToProps)(UpdateBar);
+const Container = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(UpdateBar);
 
 export default Container;

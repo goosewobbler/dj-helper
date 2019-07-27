@@ -122,14 +122,16 @@ const Component = (
     dependencies = await Promise.all(
       Object.keys(packageContents.dependencies || {})
         .filter(startsWith('bbc-morph-'))
-        .map(async (dependencyName): Promise<IComponentDependency> => {
-          return {
-            ...getDependency(dependencyName),
-            displayName: dependencyName.substr(10),
-            linked: await system.file.symbolicLinkExists(join(componentPath, 'node_modules', dependencyName)),
-            name: dependencyName,
-          };
-        }),
+        .map(
+          async (dependencyName): Promise<IComponentDependency> => {
+            return {
+              ...getDependency(dependencyName),
+              displayName: dependencyName.substr(10),
+              linked: await system.file.symbolicLinkExists(join(componentPath, 'node_modules', dependencyName)),
+              name: dependencyName,
+            };
+          },
+        ),
     );
 
     await updated();

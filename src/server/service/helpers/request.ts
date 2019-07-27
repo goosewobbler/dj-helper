@@ -43,9 +43,9 @@ const requestWithRetries = async (
     const reason = body.split('\n')[0];
     const remainingRetries = retries - 1;
     log(
-      `Trying again because: ${reason} (${remainingRetries} ${remainingRetries === 1
-        ? 'retry'
-        : 'retries'} remaining).`,
+      `Trying again because: ${reason} (${remainingRetries} ${
+        remainingRetries === 1 ? 'retry' : 'retries'
+      } remaining).`,
     );
     return requestWithRetries(system, name, type, port, propsString, log, remainingRetries);
   }

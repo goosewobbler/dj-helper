@@ -6,9 +6,9 @@ import IService from '../types/IService';
 import ceefaxStyle from './helpers/ceefaxStyle';
 
 const headScript = (config: IConfig) =>
-  `<script src="http://localhost:3333/socket.io/socket.io.js"></script>${config.getValue('ceefax') === true
-    ? ceefaxStyle
-    : ''}`;
+  `<script src="http://localhost:3333/socket.io/socket.io.js"></script>${
+    config.getValue('ceefax') === true ? ceefaxStyle : ''
+  }`;
 const bodyScript =
   '<script>const socket = io("http://localhost:3333"); socket.on("reload", () => window.location.reload(true));</script>';
 

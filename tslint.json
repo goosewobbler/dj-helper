@@ -1,5 +1,0 @@
-{
-  "defaultSeverity": "error",
-  "extends": ["tslint:latest", "tslint-config-airbnb", "tslint-react", "tslint-config-prettier"],
-  "rules": {}
-}

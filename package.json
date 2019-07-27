@@ -14,9 +14,10 @@
     "build": "tsc --outDir lib --rootDir src",
     "buildServer": "tsc -p tsconfig-source-only.json --outDir lib --rootDir src",
     "watch": "tsc -w",
-    "lint": "tslint -c tslint.json -p tsconfig.json",
+    "lint": "eslint --ext .ts --ext .tsx ./src",
     "prettier": "prettier --write '{src/**/*,test/**/*,*}.{ts,tsx,js,json}'",
-    "start": "npm run clean && npm run build && electron ./lib/main.js",
+    "start-dev": "npm run clean && npm run build && electron ./lib/main.js -D",
+    "start": "electron ./lib/main.js",
     "jest": "jest --watch"
   },
   "dependencies": {
@@ -56,15 +57,21 @@
     "@types/socket.io": "^2.1.2",
     "@types/socket.io-client": "^1.4.32",
     "@types/tar": "^4.0.3",
+    "@typescript-eslint/eslint-plugin": "^1.13.0",
+    "@typescript-eslint/parser": "^1.13.0",
     "electron": "^5.0.8",
     "eslint": "^6.1.0",
+    "eslint-config-airbnb": "^17.1.1",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-config-typescript": "^3.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jest": "^22.14.0",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.14.3",
     "jest": "^24.8.0",
     "prettier": "^1.18.2",
     "ts-jest": "^24.0.2",
-    "tslint": "^5.18.0",
-    "tslint-config-airbnb-base": "^0.3.0",
-    "tslint-config-prettier": "^1.18.0",
-    "tslint-react": "^4.0.0",
     "typescript": "^3.5.3"
   }
 }

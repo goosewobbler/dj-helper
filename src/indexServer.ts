@@ -1,4 +1,3 @@
-import { spawn } from 'child_process';
 import { Express } from 'express';
 import { Server } from 'http';
 import { join } from 'path';
@@ -78,12 +77,6 @@ const startServer = async () => {
 
   const url = 'http://localhost:3333';
   console.log(`[console] Running at ${url}`);
-
-  const canOpen = config.getValue('openOnStart') !== false;
-
-  if (!devMode && canOpen) {
-    spawn('open', [url]);
-  }
 
   io.on('connection', socket => {
     io.emit('freshState', service.getComponentsData());

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { pure } from 'recompose';
 
 const VSCodeIcon = () => (
   <svg width="100%" height="100%" viewBox="0 0 1010 1018" xmlnsXlink="http://www.w3.org/1999/xlink">
@@ -27,4 +26,4 @@ const VSCodeIcon = () => (
   </svg>
 );
 
-export default pure(VSCodeIcon);
+export default VSCodeIcon;

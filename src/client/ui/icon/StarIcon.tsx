@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { pure } from 'recompose';
 
 const renderStarred = (colour: string) => (
   <svg width="100%" height="100%" viewBox="0 0 482.207 482.207" fill={colour}>
@@ -16,4 +15,4 @@ const renderUnstarred = (colour: string) => (
 const StarIcon = (props: { colour?: string; starred: boolean }) =>
   props.starred ? renderStarred(props.colour) : renderUnstarred(props.colour);
 
-export default pure(StarIcon);
+export default StarIcon;

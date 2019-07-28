@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { pure } from 'recompose';
 
 const TopIcon = (props: { colour?: string }) => (
   <svg width="100%" height="100%" viewBox="0 0 32 31.9" fill={props.colour}>
@@ -9,4 +8,4 @@ const TopIcon = (props: { colour?: string }) => (
   </svg>
 );
 
-export default pure(TopIcon);
+export default TopIcon;

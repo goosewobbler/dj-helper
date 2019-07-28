@@ -21,9 +21,11 @@
     "jest": "jest --watch"
   },
   "dependencies": {
+    "body-parser": "^1.19.0",
     "chalk": "^2.4.2",
     "classnames": "^2.2.6",
     "cors": "^2.8.5",
+    "electron": "^5.0.8",
     "express": "^4.17.1",
     "fs-extra": "^8.1.0",
     "graceful-fs": "^4.2.0",
@@ -38,9 +40,12 @@
     "react-hot-loader": "^4.12.9",
     "react-list": "^0.8.11",
     "react-redux": "^7.1.0",
+    "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
     "semver": "^6.3.0",
     "socket.io": "^2.2.0",
+    "socket.io-client": "^2.2.0",
+    "strip-ansi": "^5.2.0",
     "tar": "^4.4.10"
   },
   "devDependencies": {
@@ -61,7 +66,6 @@
     "@types/tar": "^4.0.3",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
-    "electron": "^5.0.8",
     "eslint": "^6.1.0",
     "eslint-config-airbnb": "^17.1.1",
     "eslint-config-prettier": "^6.0.0",

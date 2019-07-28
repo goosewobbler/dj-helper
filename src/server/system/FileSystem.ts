@@ -19,6 +19,16 @@ const ignore = [
   '/shrinkwrap.yaml',
 ];
 
+const copyIgnore = [
+  '/.tscache/',
+  '/.cache/',
+  '/.git/',
+  '/coverage/',
+  '/node_modules/',
+  '/package-lock.json',
+  '/shrinkwrap.yaml',
+];
+
 const exists = (path: string) => Promise.resolve(existsSync(path));
 
 const getPackageDirectories = async (directory: string) =>
@@ -64,15 +74,23 @@ const watchDirectory = (directory: string, callback: (path: string) => void) =>
     ),
   );
 
-const copyDirectory = async (from: string, to: string) =>
+const copyDirectory = async (from: string, to: string, filter: boolean) =>
   new Promise<void>((resolve, reject) =>
-    (ncp as any)(from, to, (error: any) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve();
-      }
-    }),
+    (ncp as any)(
+      from,
+      to,
+      {
+        filter: (name: string) =>
+          !filter || !some((pathToIgnore: string) => name.indexOf(pathToIgnore) > -1, copyIgnore),
+      },
+      (error: any) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve();
+        }
+      },
+    ),
   );
 
 const moveDirectory = async (from: string, to: string) => {

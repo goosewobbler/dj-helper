@@ -1,8 +1,8 @@
 window.define('live-push', [], function() {
-  var intervals = {},
-    onMomentCallbacks = [],
-    consoleAvailable = !!window.console && !window.jasmine,
-    exports = {};
+  const intervals = {};
+  const onMomentCallbacks = [];
+  const consoleAvailable = !!window.console && !window.jasmine;
+  const exports = {};
 
   function logSubscriptions() {
     console.info('Morph Live Push Local: subscriptions:', Object.keys(intervals));
@@ -15,18 +15,18 @@ window.define('live-push', [], function() {
   }
 
   function fetch(topic, callbackWhen202, callback) {
-    var url = 'http://localhost:4000/proxy' + topic.substring(12);
+    let url = `http://localhost:4000/proxy${topic.substring(12)}`;
 
     if (topic.indexOf('nitro://') > -1) {
-      url = 'http://open.test.bbci.co.uk/live-broker/moments?request=' + encodeURIComponent(topic);
+      url = `http://open.test.bbci.co.uk/live-broker/moments?request=${encodeURIComponent(topic)}`;
     }
 
-    var xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
     xhr.open('GET', url, true);
     xhr.onreadystatechange = function() {
-      var responseBody;
+      let responseBody;
       if (xhr.readyState === 4) {
-        var responseCode = xhr.status;
+        const responseCode = xhr.status;
         if (responseCode === 200) {
           responseBody = xhr.responseText;
           if (topic.indexOf('nitro://') > -1) {
@@ -34,7 +34,7 @@ window.define('live-push', [], function() {
             responseBody = JSON.parse(xhr.responseText).moments;
           }
           callback({
-            topic: topic,
+            topic,
             payload: responseBody,
           });
         } else if (consoleAvailable) {
@@ -53,7 +53,7 @@ window.define('live-push', [], function() {
       return;
     }
 
-    var poll = fetch.bind(this, topic, false, callbackAllOnMomentCallbacks);
+    const poll = fetch.bind(this, topic, false, callbackAllOnMomentCallbacks);
     intervals[topic] = setInterval(poll, POLL_INTERVAL_FROM_CONFIG);
     poll();
 
@@ -82,8 +82,8 @@ window.define('live-push', [], function() {
     }
 
     fetch(topic, true, function(moment) {
-      var moments = moment ? [moment] : [];
-      callback(JSON.stringify({ moments: moments }));
+      const moments = moment ? [moment] : [];
+      callback(JSON.stringify({ moments }));
     });
   };
 

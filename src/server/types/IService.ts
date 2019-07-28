@@ -1,13 +1,19 @@
 import ComponentData from '../../types/ComponentData';
 import CreateType from './CreateType';
+import ITheme from '../../types/ITheme';
+import IGraphData from './IGraphData';
 
-interface IService {
+export default interface IService {
   bump(name: string, type: 'patch' | 'minor'): Promise<void>;
   build(name: string): Promise<void>;
+  clone(name: string, cloneName: string, options: { description: string }): Promise<void>;
   create(name: string, type: CreateType, options: { description: string }): Promise<void>;
   fetchDetails(name: string): Promise<void>;
-  getComponentsData(): { components: ComponentData[]; editors: string[] };
-  getComponentsSummaryData(): { components: ComponentData[]; editors: string[] };
+  getComponentsData(): { components: ComponentData[]; editors: string[]; theme: ITheme };
+  getComponentsSummaryData(): { components: ComponentData[]; editors: string[]; theme: ITheme };
+  getDependantGraph(name: string): IGraphData;
+  getDependencyGraph(name: string): IGraphData;
+  getTheme(): ITheme;
   link(name: string, dependency: string): Promise<void>;
   openInEditor(name: string): Promise<void>;
   promote(name: string, environment: string): Promise<void>;
@@ -23,5 +29,3 @@ interface IService {
   stop(name: string): Promise<void>;
   unlink(name: string, dependency: string): Promise<void>;
 }
-
-export default IService;

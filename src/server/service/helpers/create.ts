@@ -13,7 +13,7 @@ const create = async (system: ISystem, name: string, type: CreateType, createOpt
   const typeDirectory = createTypeDirectories[type];
   const fromDirectory = join(__dirname, `../../../../templates/${typeDirectory}`);
   const toDirectory = join(await system.process.getCurrentWorkingDirectory(), name);
-  await system.file.copyDirectory(fromDirectory, toDirectory);
+  await system.file.copyDirectory(fromDirectory, toDirectory, false);
 
   const packageJSONPath = join(toDirectory, 'package.json');
   const packageJSON = JSON.parse(await system.file.readFile(packageJSONPath));

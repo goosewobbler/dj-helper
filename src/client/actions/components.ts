@@ -1,12 +1,13 @@
 import ComponentState from '../../types/ComponentState';
-import ComponentData from '../../types/ComponentData';
+import IComponentData from '../../types/ComponentData';
+import Theme from '../../types/Theme';
 
-export const receiveComponents = (components: ComponentData[]) => ({
+export const receiveComponents = (components: IComponentData[]) => ({
   components,
   type: 'RECEIVE_COMPONENTS',
 });
 
-export const receiveComponent = (component: ComponentData) => ({
+export const receiveComponent = (component: IComponentData) => ({
   component,
   type: 'RECEIVE_COMPONENT',
 });
@@ -14,6 +15,11 @@ export const receiveComponent = (component: ComponentData) => ({
 export const receiveEditors = (editors: string[]) => ({
   editors,
   type: 'RECEIVE_EDITORS',
+});
+
+export const receiveTheme = (theme: Theme) => ({
+  theme,
+  type: 'RECEIVE_THEME',
 });
 
 export const selectComponent = (name: string) => ({
@@ -27,12 +33,17 @@ export const promotingComponent = (name: string, environment: string) => ({
   type: 'PROMOTING_COMPONENT',
 });
 
-export const updateAndSelectComponent = (name: string, noHistory?: boolean) => (dispatch: any) => {
-  if (!noHistory && (window as any).historyEnabled) {
-    window.history.pushState({ name }, null, `/component/${name}`);
-  }
-  dispatch(fetchVersions(name));
-  dispatch(selectComponent(name));
+export const updateAndSelectComponent = (name: string, noHistory?: boolean) => {
+  const action = ((dispatch: any) => {
+    if (!noHistory && (window as any).historyEnabled) {
+      window.history.pushState({ name }, null, `/component/${name}`);
+    }
+    dispatch(fetchVersions(name));
+    dispatch(selectComponent(name));
+  }) as any;
+
+  action.type = null;
+  return action;
 };
 
 export const startingComponent = (name: string) => ({
@@ -103,8 +114,13 @@ export const favouriteComponent = (name: string, favorite: boolean) => (dispatch
   fetch(`http://localhost:3333/api/component/${name}/favorite/${favorite}`, { method: 'POST' });
 };
 
-export const fetchVersions = (name: string) => () => {
-  fetch(`http://localhost:3333/api/component/${name}/versions`, { method: 'POST' });
+export const fetchVersions = (name: string) => {
+  const action = (() => {
+    return fetch(`http://localhost:3333/api/component/${name}/versions`, { method: 'POST' });
+  }) as any;
+
+  action.type = null;
+  return action;
 };
 
 export const bumpComponent = (name: string, type: string) => (dispatch: any) => {
@@ -150,6 +166,11 @@ export const update = () => (dispatch: any) => {
   fetch(`http://localhost:3333/api/update`, { method: 'POST' });
 };
 
+export const showCloneDialog = (name: string) => ({
+  name,
+  type: 'SHOW_CLONE_DIALOG',
+});
+
 export const showCreateDialog = (show: boolean) => ({
   show,
   type: 'SHOW_CREATE_DIALOG',
@@ -167,11 +188,27 @@ export const createModule = (name: string, description: string, type: string) =>
     body: JSON.stringify({ name, description }),
     headers: {
       'Content-Type': 'application/json',
-    },
+    } as any,
     method: 'POST',
   }).then(() => {
     const fullName = `bbc-morph-${name}`;
     dispatch(createComponent(fullName, name));
+    dispatch(updateAndSelectComponent(fullName));
+    dispatch(installComponent(fullName));
+  });
+};
+
+export const cloneComponent = (name: string, createName: string, description: string) => (dispatch: any) => {
+  dispatch(showCloneDialog(null));
+  fetch(`http://localhost:3333/api/component/${name}/clone`, {
+    body: JSON.stringify({ name: createName, description }),
+    headers: {
+      'Content-Type': 'application/json',
+    } as any,
+    method: 'POST',
+  }).then(() => {
+    const fullName = `bbc-morph-${createName}`;
+    dispatch(createComponent(fullName, createName));
     dispatch(updateAndSelectComponent(fullName));
     dispatch(installComponent(fullName));
   });

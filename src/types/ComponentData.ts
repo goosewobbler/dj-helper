@@ -1,15 +1,17 @@
+import ComponentType from '../server/service/types/ComponentType';
 import ComponentState from './ComponentState';
 import ComponentDependency from './ComponentDependency';
 
 export default interface ComponentData {
   name: string;
   displayName: string;
-  highlighted?: string;
+  highlighted?: any;
   state: ComponentState;
   favorite: boolean;
   history?: string[];
   url?: string;
-  dependencies?: ComponentDependency[];
+  type?: ComponentType;
+  dependencies?: IComponentDependency[];
   linking?: string[];
   promoting?: string;
   promotionFailure?: string;
@@ -20,4 +22,5 @@ export default interface ComponentData {
     local: string;
     test: string;
   };
+  rendererType: string;
 }

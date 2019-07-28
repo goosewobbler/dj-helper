@@ -6,4 +6,5 @@ export default interface ComponentDependency {
   linked: boolean;
   outdated: boolean;
   version: string;
+  rendererType: string;
 }

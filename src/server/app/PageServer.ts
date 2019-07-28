@@ -38,7 +38,7 @@ const createPageServer = (service: IService, config: IConfig, componentName: str
 
   server.get('*', async (req, res) => {
     try {
-      const { accept } = req.headers;
+      const {accept} = req.headers;
       const history = !accept || accept.indexOf('text/html') !== -1;
       const query = url.parse(req.url).query || '';
       const path = req.path + (query ? `?${query}` : '');

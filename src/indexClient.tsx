@@ -9,6 +9,7 @@ import {
   receiveComponent,
   receiveComponents,
   receiveEditors,
+  receiveTheme,
   updateAndSelectComponent,
   updateAvailable,
   updated,
@@ -16,6 +17,16 @@ import {
 } from './client/actions/components';
 import App from './client/containers/AppContainer';
 import createStore from './client/store';
+
+if (process.env.NODE_ENV !== 'production' && typeof window !== 'undefined') {
+  Object.defineProperty(React, 'createClass', {
+    set: nextCreateClass => null,
+  });
+  const { whyDidYouUpdate } = require('why-did-you-update');
+  whyDidYouUpdate(React, {
+    include: 'ComponentListItem',
+  });
+}
 
 const preloadedState = (window as any).__PRELOADED_STATE__;
 
@@ -29,6 +40,7 @@ if (!preloadedState) {
     .then(json => {
       store.dispatch(receiveComponents(json.components));
       store.dispatch(receiveEditors(json.editors));
+      store.dispatch(receiveTheme(json.theme));
     });
 }
 
@@ -75,6 +87,7 @@ if (io) {
   socket.on('freshState', (freshState: any) => {
     store.dispatch(receiveComponents(freshState.components));
     store.dispatch(receiveEditors(freshState.editors));
+    store.dispatch(receiveTheme(freshState.theme));
     updateSelected();
   });
 

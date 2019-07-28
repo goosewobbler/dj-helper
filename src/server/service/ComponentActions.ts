@@ -18,7 +18,7 @@ const ComponentActions = (
   log: (message: string) => void,
   getOther: (name: string) => IComponent,
   getUseCache: () => boolean,
-  onReload: () => void,
+  onReload: (restartOthers: boolean) => void,
 ): IComponentActions => {
   let stopRunning: () => Promise<void>;
 
@@ -125,7 +125,7 @@ const ComponentActions = (
     return false;
   };
 
-  const run = async () => {
+  const run = async (restartOthers: boolean = false) => {
     const useCache = getUseCache();
     log('Starting...');
     const command = join(
@@ -133,7 +133,7 @@ const ComponentActions = (
       `../../../node_modules/morph-cli/bin/morph.js develop${useCache ? ' --cache' : ''} --port ${getPort()}`,
     );
     const stopProcess = await system.process.runUntilStopped(componentPath, command, log, log);
-    onReload();
+    await onReload(restartOthers);
     await routing.updateRoute(name, getPort());
     stopRunning = async () => {
       await routing.updateRoute(name, null);

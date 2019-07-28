@@ -2,14 +2,13 @@ import { startsWith } from 'lodash/fp';
 import { join } from 'path';
 import * as semver from 'semver';
 
-import ComponentDependency from '../../types/ComponentDependency';
+import IComponentDependency from '../../types/ComponentDependency';
 import IConfig from '../types/IConfig';
 import IRouting from '../types/IRouting';
 import IState from '../types/IState';
 import ISystem from '../types/ISystem';
 import ComponentActions from './ComponentActions';
 import ComponentStateMachine from './ComponentStateMachine';
-import getDefaulTypeOverride from './DefaultTypeOverrides';
 import openInEditorHelper from './helpers/editor';
 import requestWithRetries from './helpers/request';
 import ComponentType from './types/ComponentType';
@@ -23,16 +22,18 @@ const Component = (
   name: string,
   directoryName: string,
   componentPath: string,
+  componentType: ComponentType,
   acquirePort: () => number,
   onUpdate: (name: string) => Promise<void>,
-  onReload: () => void,
+  onReload: (restartOthers: boolean) => void,
   getOther: (name: string) => IComponent,
+  rendererType: string,
 ): IComponent => {
   let port: number = null;
   let pagePort: number = null;
   let promoting: string = null;
   let promotionFailure: string = null;
-  let dependencies: ComponentDependency[] = [];
+  let dependencies: IComponentDependency[] = [];
   let url: string = null;
   const linking: string[] = [];
   const versions: { int: string; live: string; local: string; test: string } = {
@@ -54,6 +55,8 @@ const Component = (
 
   const getName = () => name;
 
+  const getRendererType = () => rendererType;
+
   const getDirectoryName = () => directoryName;
 
   const getPort = () => {
@@ -67,33 +70,11 @@ const Component = (
     pagePort = newPagePort;
   };
 
-  const getType = async () => {
-    const typeOverride = getDefaulTypeOverride(name) || config.getValue(`typeOverrides.${name}`);
-    if (typeOverride) {
-      switch (typeOverride) {
-        case 'data':
-          return ComponentType.Data;
-        case 'view':
-          return ComponentType.View;
-        case 'page':
-          return ComponentType.Page;
-      }
-    }
-
-    const packageContents = await readPackage();
-    const packageDependencies = packageContents.dependencies || {};
-    if (packageDependencies['bbc-morph-page-assembler']) {
-      return ComponentType.Page;
-    }
-    if (packageDependencies.react) {
-      return ComponentType.View;
-    }
-    return ComponentType.Data;
-  };
+  const getType = () => componentType;
 
   const updateURL = async () => {
     const localhost = config.getValue('localhost') || 'localhost';
-    const type = await getType();
+    const type = getType();
     if (type === ComponentType.Page) {
       if (pagePort) {
         url = `http://${localhost}:${pagePort}`;
@@ -118,13 +99,21 @@ const Component = (
     );
   };
 
+  const getDependenciesSummary = async () => {
+    const packageContents = await readPackage();
+
+    return Object.keys(packageContents.dependencies || {})
+      .filter(startsWith('bbc-morph-'))
+      .map((dependencyName: string) => ({ name: dependencyName }));
+  };
+
   const updateDependencies = async () => {
     const packageContents = await readPackage();
     dependencies = await Promise.all(
       Object.keys(packageContents.dependencies || {})
         .filter(startsWith('bbc-morph-'))
         .map(
-          async (dependencyName): Promise<ComponentDependency> => {
+          async (dependencyName): Promise<IComponentDependency> => {
             return {
               ...getDependency(dependencyName),
               displayName: dependencyName.substr(10),
@@ -215,7 +204,7 @@ const Component = (
   };
 
   const setFavorite = async (favorite: boolean) => {
-    await state.store(`favorite.${name}`, favorite || null);
+    await state.store(`favorite.${name}`, favorite ? favorite : null);
   };
 
   const request = async (props: { [Key: string]: string }, history: boolean) => {
@@ -224,8 +213,9 @@ const Component = (
       config,
       state,
       name,
+      componentPath,
       getState(),
-      await getType(),
+      getType(),
       getPort(),
       props,
       log,
@@ -259,7 +249,7 @@ const Component = (
     }
   };
 
-  const openInEditor = () => openInEditorHelper(system, componentPath);
+  const openInEditor = () => openInEditorHelper(system, config, componentPath);
 
   const actions = ComponentActions(
     system,
@@ -339,11 +329,11 @@ const Component = (
     const packageContents = await readPackage();
     const newVersion = semver.inc(packageContents.version, type);
     packageContents.version = newVersion;
-    await system.file.writeFile(getPackagePath(), `${JSON.stringify(packageContents, null, 2)}\n`);
-
     const newBranch = `bump-${name}-${await system.git.getRandomBranchName()}`;
     const currentBranch = await system.git.getCurrentBranch(componentPath);
 
+    await system.git.checkoutMaster(componentPath);
+    await system.file.writeFile(getPackagePath(), `${JSON.stringify(packageContents, null, 2)}\n`);
     await system.git.checkoutNewBranch(componentPath, newBranch);
     await system.git.stageFile(componentPath, 'package.json');
     await system.git.commit(componentPath, `bump ${name} to ${newVersion}`);
@@ -364,6 +354,7 @@ const Component = (
     bump,
     fetchDetails,
     getDependencies,
+    getDependenciesSummary,
     getDirectoryName,
     getDisplayName,
     getFavorite,
@@ -373,6 +364,7 @@ const Component = (
     getName,
     getPromoting,
     getPromotionFailure,
+    getRendererType,
     getState,
     getType,
     getURL,

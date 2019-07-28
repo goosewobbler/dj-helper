@@ -1,5 +1,5 @@
 import ComponentState from '../../../types/ComponentState';
-import ComponentDependency from '../../../types/ComponentDependency';
+import IComponentDependency from '../../../types/ComponentDependency';
 import ComponentType from './ComponentType';
 
 interface IComponent {
@@ -8,14 +8,15 @@ interface IComponent {
   getName(): string;
   getDirectoryName(): string;
   getDisplayName(): string;
-  getType(): Promise<ComponentType>;
+  getType(): ComponentType;
   getURL(): string;
   getFavorite(): boolean;
   getHistory(): string[];
   getUseCache(): boolean;
   setFavorite(favorite: boolean): Promise<void>;
   setUseCache(useCache: boolean): Promise<void>;
-  getDependencies(): ComponentDependency[];
+  getDependencies(): IComponentDependency[];
+  getDependenciesSummary(): Promise<{ name: string }[]>;
   getLatestVersion(): Promise<string>;
   getLinking(): string[];
   getVersions(): {
@@ -27,6 +28,7 @@ interface IComponent {
   getState(): ComponentState;
   getPromoting(): string;
   getPromotionFailure(): string;
+  getRendererType(): string;
   promote(environment: string): Promise<void>;
   openInEditor(): Promise<void>;
   reinstall(): Promise<void>;

@@ -1,6 +1,7 @@
 import ComponentData from '../../types/ComponentData';
+import Theme from '../../types/Theme';
 
-interface Action {
+interface IAction {
   type: string;
   component?: ComponentData;
   filter?: string;
@@ -8,18 +9,21 @@ interface Action {
   name?: string;
   environment?: string;
   show?: boolean;
+  theme?: Theme;
 }
 
-// interface IComponentState {
-//   selectedComponent?: IComponentData;
-// }
-
-const reducer = (state: any = {}, action: Action) => {
+const reducer = (state: any = {}, action: IAction) => {
   switch (action.type) {
     case 'RECEIVE_EDITORS': {
       return {
         ...state,
         editors: action.editors,
+      };
+    }
+    case 'RECEIVE_THEME': {
+      return {
+        ...state,
+        theme: action.theme,
       };
     }
     case 'SELECT_COMPONENT': {
@@ -52,6 +56,12 @@ const reducer = (state: any = {}, action: Action) => {
         ...state,
         updated: true,
         updating: false,
+      };
+    }
+    case 'SHOW_CLONE_DIALOG': {
+      return {
+        ...state,
+        cloningName: action.name,
       };
     }
     case 'SHOW_CREATE_DIALOG': {

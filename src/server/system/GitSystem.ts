@@ -5,6 +5,9 @@ import ProcessSystem from './ProcessSystem';
 const checkoutExistingBranch = (directory: string, branchName: string) =>
   ProcessSystem.runToCompletion(directory, `git checkout ${branchName}`, () => null, console.error);
 
+const checkoutMaster = (directory: string) =>
+  ProcessSystem.runToCompletion(directory, `git checkout master`, () => null, console.error);
+
 const checkoutNewBranch = (directory: string, branchName: string) =>
   ProcessSystem.runToCompletion(directory, `git checkout -b ${branchName}`, () => null, console.error);
 
@@ -49,6 +52,7 @@ const stageFile = (directory: string, path: string) =>
 
 const GitSystem: IGitSystem = {
   checkoutExistingBranch,
+  checkoutMaster,
   checkoutNewBranch,
   commit,
   getCurrentBranch,

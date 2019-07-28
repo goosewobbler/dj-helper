@@ -1,7 +1,8 @@
 import { Express } from 'express';
 import { join } from 'path';
 
-import ComponentData from '../../types/ComponentData';
+import * as appRoot from 'app-root-path';
+import IComponentData from '../../types/ComponentData';
 import Service from '../service/Service';
 import ISystem from '../types/ISystem';
 import createApiServer from './ApiServer';
@@ -13,7 +14,7 @@ import Updater from './Updater';
 
 const createApp = async (
   system: ISystem,
-  onComponentUpdate: (data: ComponentData) => void,
+  onComponentUpdate: (data: IComponentData) => void,
   onReload: () => void,
   onUpdated: () => void,
   startServer: (server: Express, port: number) => Promise<void>,
@@ -27,12 +28,14 @@ const createApp = async (
   const devMode = (await system.process.getCommandLineArgs()).indexOf('-D') !== -1;
   const currentWorkingDirectory = await system.process.getCurrentWorkingDirectory();
   const componentsDirectory = devMode ? join(currentWorkingDirectory, '../morph-modules') : currentWorkingDirectory;
-  const routingFilePath = '/tmp/morph-developer-console-routing.json';
+  const routingFilePath = appRoot + '/.routing.json';
   const configFilePath = join(componentsDirectory, 'morph-developer-console-config.json');
   const config = await Config(configFilePath, system);
   const stateFilePath = join(componentsDirectory, 'morph-developer-console-state.json');
   const state = await State(stateFilePath, system);
   const updater = Updater(system, currentVersion);
+
+  process.env.APP_ROOT_PATH = appRoot.toString();
 
   const startPageServer = async (name: string) => {
     if (name in pageServers) {

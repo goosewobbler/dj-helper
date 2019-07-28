@@ -22,7 +22,7 @@ const getNeedleSubstring = (needle: string, haystack: string) => {
   return { indexOfFirstNeedleCharacter, length };
 };
 
-const getMatchesRecursive = (needle: string, haystack: string): (string | { matched: string })[] => {
+const getMatchesRecursive = (needle: string, haystack: string): Array<string | { matched: string }> => {
   const { indexOfFirstNeedleCharacter, length } = getNeedleSubstring(needle, haystack);
 
   if (length === 0) {

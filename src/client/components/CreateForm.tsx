@@ -1,14 +1,16 @@
 import * as React from 'react';
 
-import LabelButton from './LabelButton';
+import Theme from '../../types/Theme';
+import LabelButton from '../ui/LabelButton';
 
 const KEY_ENTER = 13;
 const KEY_ESCAPE = 27;
 
 const SelectInput = (props: {
+  theme: Theme;
   className?: string;
   label: string;
-  options: { value: string; label: string }[];
+  options: Array<{ value: string; label: string }>;
   onChange(event: any): any;
 }) => (
   <div>
@@ -39,10 +41,12 @@ const TextInput = (props: {
       onChange={props.onChange}
       onKeyDown={props.onKeyDown}
     />
-  </div>
+  </InputContainingDiv>
 );
 
 interface ICreateFormProps {
+  typeSelectEnabled: boolean;
+  theme: ITheme;
   submitModule(name: string, description: string, type: string): any;
   onClose(): any;
 }
@@ -53,9 +57,7 @@ interface ICreateFormState {
 
 class CreateForm extends React.Component<ICreateFormProps, ICreateFormState> {
   private name: string;
-
   private description: string;
-
   private type: string;
 
   constructor(props: ICreateFormProps) {
@@ -75,37 +77,45 @@ class CreateForm extends React.Component<ICreateFormProps, ICreateFormState> {
       { label: 'Data Template', value: 'data' },
     ];
 
+    const typeSelect = this.props.typeSelectEnabled ? (
+      <SelectInput
+        theme={this.props.theme}
+        className="create-type-select"
+        label="Type"
+        options={options}
+        onChange={event => this.handleTypeChange(event)}
+      />
+    ) : null;
+
     return (
-      <div>
-        <SelectInput
-          className="create-type-select"
-          label="Type"
-          options={options}
-          onChange={event => this.handleTypeChange(event)}
-        />
+      <ContainingDiv>
+        {typeSelect}
         <TextInput
+          theme={this.props.theme}
           label="Name"
           className="create-name-input"
-          autoFocus
+          autoFocus={true}
           onChange={event => this.handleNameChange(event)}
           onKeyDown={event => this.handleKeyDown(event)}
         />
         <TextInput
+          theme={this.props.theme}
           label="Description"
           className="create-description-input"
           autoFocus={false}
           onChange={event => this.handleDescriptionChange(event)}
           onKeyDown={event => this.handleKeyDown(event)}
         />
-        <div>
+        <CreateButtonDiv>
           <LabelButton
+            theme={this.props.theme}
             className="create-create-button"
             label="Create"
             disabled={!this.state.valid}
             onClick={() => this.create()}
           />
-        </div>
-      </div>
+        </CreateButtonDiv>
+      </ContainingDiv>
     );
   }
 

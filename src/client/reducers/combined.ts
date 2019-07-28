@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
-import IState from '../types/IState';
+import State from '../types/IState';
 import components from './components';
 import ui from './ui';
 
-const reducer = combineReducers<IState>({
+const reducer = combineReducers<State>({
   components,
   ui,
 });

@@ -1,3 +1,4 @@
+import renderChas from 'chas';
 import { startsWith } from 'lodash/fp';
 
 import ComponentState from '../../../types/ComponentState';
@@ -77,6 +78,7 @@ const request = async (
   config: IConfig,
   state: IState,
   name: string,
+  componentPath: string,
   currentState: ComponentState,
   type: ComponentType,
   port: number,
@@ -100,6 +102,16 @@ const request = async (
     const currentHistory = state.retrieve(stateKey) || [];
     const newEntry = type === ComponentType.Page ? props.path || '' : propsString;
     await state.store(stateKey, getNewHistory(currentHistory, newEntry));
+  }
+
+  if (config.getValue('renderer') === 'chas') {
+    const chasType = type === ComponentType.View ? 'view' : 'data';
+    const response = await renderChas(componentPath, chasType, props);
+    return {
+      body: JSON.stringify(response.body),
+      headers: { 'Content-Type': 'application/json' },
+      statusCode: response.code,
+    };
   }
 
   const retries = config.getValue('retries') || 10;

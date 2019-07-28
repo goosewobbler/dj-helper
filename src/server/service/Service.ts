@@ -1,13 +1,20 @@
+import { get } from 'lodash';
 import { join } from 'path';
+
 import ComponentState from '../../types/ComponentState';
-import ComponentData from '../../types/ComponentData';
+import IComponentData from '../../types/ComponentData';
+import Theme from '../app/Theme';
 import CreateType from '../types/CreateType';
 import IConfig from '../types/IConfig';
+import IGrapher from '../types/IGrapher';
 import IRouting from '../types/IRouting';
 import IService from '../types/IService';
 import IState from '../types/IState';
 import ISystem from '../types/ISystem';
 import Component from './Component';
+import Grapher from './Grapher';
+import cloneComponent from './helpers/clone';
+import getComponentType from './helpers/componentType';
 import createComponent from './helpers/create';
 import Routing from './Routing';
 import ComponentType from './types/ComponentType';
@@ -17,7 +24,7 @@ const Service = async (
   system: ISystem,
   config: IConfig,
   state: IState,
-  onComponentUpdate: (data: ComponentData) => void,
+  onComponentUpdate: (data: IComponentData) => void,
   onReload: () => void,
   startPageServer: (name: string) => Promise<number>,
   options: {
@@ -29,6 +36,9 @@ const Service = async (
   let nextPort = 8083;
   let routing: IRouting;
   const editors: string[] = [];
+  const theme = await Theme(config);
+  const allDependencies: { [Key: string]: Array<{ name: string }> } = {};
+  let grapher: IGrapher;
 
   const acquirePort = () => nextPort++;
 
@@ -37,9 +47,29 @@ const Service = async (
     onComponentUpdate(data);
   };
 
+  const restartRunning = () => {
+    const running = components.filter(component => component.getState() === ComponentState.Running);
+
+    return Promise.all(
+      running.map(async component => {
+        await component.stop();
+        await component.start();
+      }),
+    );
+  };
+
   const addComponent = async (componentDirectoryName: string): Promise<IComponent> => {
     const componentDirectory = join(options.componentsDirectory, componentDirectoryName);
     const packageContents = JSON.parse(await system.file.readFile(join(componentDirectory, 'package.json')));
+    const componentType = getComponentType(config, packageContents, packageContents.name);
+    const rendererType = get(packageContents, 'morph.rendererType', 'node:0.12').replace('node:', '');
+
+    const reloadHandler = async (restartOthers: boolean) => {
+      if (restartOthers) {
+        await restartRunning();
+      }
+      return onReload();
+    };
 
     const component = Component(
       system,
@@ -49,10 +79,12 @@ const Service = async (
       packageContents.name,
       componentDirectoryName,
       componentDirectory,
+      componentType,
       acquirePort,
       onComponentUpdated,
-      onReload,
+      reloadHandler,
       getComponent,
+      rendererType,
     );
     components.push(component);
     return component;
@@ -65,14 +97,19 @@ const Service = async (
 
     await Promise.all(packageDirectories.map(addComponent));
 
+    for (const component of components) {
+      allDependencies[component.getName()] = await component.getDependenciesSummary();
+    }
+    grapher = Grapher(allDependencies);
+
     await system.file.watchDirectory(options.componentsDirectory, async path => {
-      const relativePath = path.replace(`${options.componentsDirectory}/`, '');
+      const relativePath = path.replace(options.componentsDirectory + '/', '');
       const slashIndex = relativePath.indexOf('/');
       const directoryName = relativePath.substr(0, slashIndex);
       const changedComponent = components.find(component => component.getDirectoryName() === directoryName);
       if (changedComponent && changedComponent.getState() === ComponentState.Running) {
         const isSass = relativePath.indexOf('/sass/') > -1;
-        await changedComponent.build(isSass, relativePath.replace(`${directoryName}/`, ''));
+        await changedComponent.build(isSass, relativePath.replace(directoryName + '/', ''));
       }
     });
 
@@ -88,19 +125,20 @@ const Service = async (
 
   const getComponent = (name: string) => components.find(component => component.getName() === name);
 
-  const getSummaryData = (name: string): ComponentData => {
+  const getSummaryData = (name: string): IComponentData => {
     const component = getComponent(name);
 
     return {
       displayName: component.getDisplayName(),
       favorite: component.getFavorite(),
       name: component.getName(),
+      rendererType: component.getRendererType(),
       state: component.getState(),
       useCache: component.getUseCache(),
     };
   };
 
-  const getData = (name: string): ComponentData => {
+  const getData = (name: string): IComponentData => {
     const component = getComponent(name);
 
     return {
@@ -112,11 +150,21 @@ const Service = async (
       name: component.getName(),
       promoting: component.getPromoting(),
       promotionFailure: component.getPromotionFailure(),
+      rendererType: component.getRendererType(),
       state: component.getState(),
+      type: component.getType(),
       url: component.getURL(),
       useCache: component.getUseCache(),
       versions: component.getVersions(),
     };
+  };
+
+  const clone = async (name: string, cloneName: string, cloneOptions: { description: string }) => {
+    const componentDirectoryName = getComponent(name).getDirectoryName();
+    const componentDirectory = join(options.componentsDirectory, componentDirectoryName);
+    const clonedComponentDirectory = join(options.componentsDirectory, cloneName);
+    await cloneComponent(system, componentDirectory, cloneName, clonedComponentDirectory, cloneOptions);
+    await addComponent(cloneName);
   };
 
   const create = async (name: string, type: CreateType, createOptions: { description: string }) => {
@@ -127,6 +175,7 @@ const Service = async (
   const getComponentsData = () => ({
     components: components.map(component => getData(component.getName())),
     editors,
+    theme: theme.getValues(),
   });
 
   const getComponentsSummaryData = () => ({
@@ -136,8 +185,14 @@ const Service = async (
         : getSummaryData(component.getName()),
     ),
     editors,
+    theme: theme.getValues(),
   });
 
+  const getDependantGraph = (name: string) => grapher.getDependantData(name);
+
+  const getDependencyGraph = (name: string) => grapher.getDependencyData(name);
+
+  const getTheme = () => theme.getValues();
   const bump = (name: string, type: 'patch' | 'minor') => getComponent(name).bump(type);
   const build = (name: string) => getComponent(name).build();
   const fetchDetails = (name: string) => getComponent(name).fetchDetails();
@@ -151,7 +206,7 @@ const Service = async (
   const setUseCache = (name: string, useCache: boolean) => getComponent(name).setUseCache(useCache);
   const start = async (name: string) => {
     const component = getComponent(name);
-    if ((await component.getType()) === ComponentType.Page) {
+    if (component.getType() === ComponentType.Page) {
       const port = await startPageServer(name);
       component.setPagePort(port);
     }
@@ -165,10 +220,14 @@ const Service = async (
   return {
     build,
     bump,
+    clone,
     create,
     fetchDetails,
     getComponentsData,
     getComponentsSummaryData,
+    getDependantGraph,
+    getDependencyGraph,
+    getTheme,
     link,
     openInEditor,
     promote,

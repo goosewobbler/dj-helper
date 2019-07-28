@@ -17,6 +17,10 @@ const createApiComponentRouter = (service: IService) => {
 
   router.get('/', (req: any, res: any) => res.json(service.getComponentsSummaryData()));
 
+  router.get('/:name/dependency-graph', (req: any, res: any) => res.json(service.getDependencyGraph(req.params.name)));
+
+  router.get('/:name/dependant-graph', (req: any, res: any) => res.json(service.getDependantGraph(req.params.name)));
+
   router.post('/:name/versions', (req: any, res: any) => {
     service.fetchDetails(req.params.name).catch(error);
     res.send('🤔');
@@ -79,10 +83,17 @@ const createApiComponentRouter = (service: IService) => {
       .catch(error);
   });
 
+  router.post('/:name/clone', (req: any, res: any) => {
+    service
+      .clone(req.params.name, req.body.name, { description: req.body.description })
+      .then(() => res.send('👍'))
+      .catch(error);
+  });
+
   router.post('/create/:type', (req: any, res: any) => {
     const type = createTypeMap[req.params.type];
     service
-      .create(req.body.name, type, req.body.description)
+      .create(req.body.name, type, { description: req.body.description })
       .then(() => res.send('👍'))
       .catch(error);
   });

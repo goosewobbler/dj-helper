@@ -2,6 +2,8 @@ import { throttle } from 'lodash/fp';
 import * as React from 'react';
 import * as ReactList from 'react-list';
 
+import TopIcon from './icon/TopIcon';
+
 const ReactListComponent: any = ReactList;
 
 interface IScrollListProps {
@@ -15,7 +17,7 @@ interface IScrollListState {
   showScrollToTop: boolean;
 }
 
-class ComponentList extends React.Component<IScrollListProps, IScrollListState> {
+class ScrollList extends React.Component<IScrollListProps, IScrollListState> {
   private listElement: any;
 
   constructor(props: IScrollListProps) {
@@ -58,7 +60,9 @@ class ComponentList extends React.Component<IScrollListProps, IScrollListState> 
             minSize={20}
           />
         </ul>
-        <button onClick={this.handleScrollToTheTop} />
+        <button onClick={this.handleScrollToTheTop}>
+          <TopIcon />
+        </button>
       </div>
     );
   }
@@ -82,6 +86,6 @@ class ComponentList extends React.Component<IScrollListProps, IScrollListState> 
   }
 }
 
-const ComponentListAdapter = (props: IScrollListProps) => <ComponentList {...props} />;
+const ScrollListAdapter = (props: IScrollListProps) => <ScrollList {...props} />;
 
-export default ComponentListAdapter;
+export default ScrollListAdapter;

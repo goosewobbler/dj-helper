@@ -1,19 +1,19 @@
 import * as React from 'react';
 
-import ComponentData from '../../types/ComponentData';
+import IComponentListItemProps from '../types/IComponentListItemData';
 import ScrollList from '../ui/ScrollList';
 import ComponentListItem from './ComponentListItem';
 
 interface IComponentListProps {
-  components: ComponentData[];
+  components: IComponentListItemProps[];
   selectedComponent?: string;
-  onSelectComponent(component: ComponentData): null;
-  onFavouriteComponent(component: ComponentData, favorite: boolean): null;
-  onStartComponent(name: string): null;
-  onStopComponent(name: string): null;
+  onSelectComponent(name: string): any;
+  onFavouriteComponent(name: string, favorite: boolean): any;
+  onStartComponent(name: string): any;
+  onStopComponent(name: string): any;
 }
 
-class ComponentList extends React.Component<IComponentListProps> {
+class ComponentList extends React.PureComponent<IComponentListProps> {
   constructor(props: IComponentListProps) {
     super(props);
 
@@ -34,20 +34,24 @@ class ComponentList extends React.Component<IComponentListProps> {
 
   private renderListItem(index: number, key: string) {
     const component = this.props.components[index];
+
     return (
       <ComponentListItem
         key={key}
-        component={component}
-        selected={true && component.name === this.props.selectedComponent}
-        onClick={() => this.props.onSelectComponent(component)}
-        onToggleFavourite={() => this.props.onFavouriteComponent(component, !component.favorite)}
-        onStart={() => this.props.onStartComponent(component.name)}
-        onStop={() => this.props.onStopComponent(component.name)}
+        name={component.name}
+        displayName={component.displayName}
+        highlighted={component.highlighted}
+        url={component.url}
+        state={component.state}
+        favourite={component.favourite}
+        selected={component.name === this.props.selectedComponent}
+        onClick={this.props.onSelectComponent}
+        onFavourite={this.props.onFavouriteComponent}
+        onStart={this.props.onStartComponent}
+        onStop={this.props.onStopComponent}
       />
     );
   }
 }
 
-const ComponentListAdapter = (props: IComponentListProps) => <ComponentList {...props} />;
-
-export default ComponentListAdapter;
+export default ComponentList;

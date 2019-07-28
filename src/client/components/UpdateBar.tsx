@@ -1,6 +1,10 @@
 import * as React from 'react';
 
+import Theme from '../../types/Theme';
+import LoadingIcon from '../ui/icon/LoadingIcon';
+
 interface IUpdateBarProps {
+  theme: Theme;
   outOfDate: boolean;
   updating: boolean;
   updated: boolean;
@@ -29,9 +33,12 @@ const getMessage = (props: IUpdateBarProps) => {
 
 const renderButton = (props: IUpdateBarProps) => {
   if (props.updating) {
-    return <img src="/image/icon/gel-icon-loading-white.svg" />;
-  }
-  if (props.updated) {
+    return (
+      <span className="loading">
+        <LoadingIcon colour={props.theme.secondaryTextColour} />
+      </span>
+    );
+  } if (props.updated) {
     return null;
   }
   return (

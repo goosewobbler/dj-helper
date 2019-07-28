@@ -1,11 +1,11 @@
 import * as React from 'react';
 
 interface IIconButtonProps {
+  children?: any;
   className?: string;
-  image?: string;
   label: string;
   loading?: boolean;
-  onClick?(): null;
+  onClick?(): void;
 }
 
 const createClickAction = (clickAction: any) => (event: any) => {
@@ -15,7 +15,7 @@ const createClickAction = (clickAction: any) => (event: any) => {
 
 const IconButton = (props: IIconButtonProps) => (
   <button className={props.className} onClick={createClickAction(props.onClick)}>
-    <img src={props.loading ? '/image/icon/gel-icon-loading.svg' : props.image} />
+    {props.children}
     <span>{props.label}</span>
   </button>
 );

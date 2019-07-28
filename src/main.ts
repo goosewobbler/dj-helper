@@ -7,8 +7,8 @@ async function createWindow() {
   await startServer().catch(console.error);
 
   mainWindow = new BrowserWindow({
-    height: 600,
-    width: 800,
+    height: 800,
+    width: 1200,
   });
 
   mainWindow.loadURL(`http://localhost:3333/`);

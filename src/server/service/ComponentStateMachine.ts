@@ -37,7 +37,7 @@ const ComponentStateMachine = (actions: IComponentActions, onStateChanged: (stat
     await actions.stop();
     await actions.buildAll();
     await changeState(ComponentState.Starting);
-    await actions.run();
+    await actions.run(true);
     await changeState(ComponentState.Running);
   };
 

@@ -1,8 +1,10 @@
 import ComponentData from '../../types/ComponentData';
+import Theme from '../../types/Theme';
 
-interface IState {
+export default interface State {
   components: ComponentData[];
   ui: {
+    cloningName?: string;
     editors: string[];
     selectedComponent?: string;
     filter?: string;
@@ -10,7 +12,6 @@ interface IState {
     updating?: boolean;
     updated?: boolean;
     showCreateDialog?: boolean;
+    theme: Theme;
   };
 }
-
-export default IState;

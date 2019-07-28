@@ -1,8 +1,11 @@
 import * as React from 'react';
 
-import LabelButton from './LabelButton';
+import Theme from '../../types/Theme';
+import RemoveIcon from '../ui/icon/RemoveIcon';
+import LabelButton from '../ui/LabelButton';
 
 interface IDialogProps {
+  theme: Theme;
   children?: any;
   title: string;
   onClose(): any;
@@ -15,9 +18,10 @@ const Dialog = (props: IDialogProps) => (
         <h1>{props.title}</h1>
         <div>
           <LabelButton
+            theme={props.theme}
             className="dialog-close-button"
             width="100%"
-            image="/image/icon/no.svg"
+            image={<RemoveIcon colour={props.theme.primaryTextColour} />}
             label=""
             onClick={props.onClose}
           />

@@ -5,7 +5,9 @@ import ComponentState from '../../types/ComponentState';
 import ComponentDependency from '../../types/ComponentDependency';
 import ComponentContext from '../types/ComponentContext';
 import VersionBox from '../ui/VersionBox';
-import LabelButton from './LabelButton';
+import LoadingIcon from '../ui/icon/LoadingIcon';
+import LabelButton from '../ui/LabelButton';
+import ListItemButton from '../ui/ListItemButton';
 import { context } from '../contexts/componentContext';
 
 interface ComponentDependencyProps {

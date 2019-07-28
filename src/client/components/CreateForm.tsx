@@ -7,7 +7,6 @@ const KEY_ENTER = 13;
 const KEY_ESCAPE = 27;
 
 const SelectInput = (props: {
-  theme: Theme;
   className?: string;
   label: string;
   options: Array<{ value: string; label: string }>;

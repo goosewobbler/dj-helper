@@ -2,7 +2,7 @@ import glamorous from 'glamorous';
 import * as React from 'react';
 import { pure } from 'recompose';
 
-import ITheme from '../../types/ITheme';
+import ITheme from '../../types/Theme';
 import LoadingIcon from './icon/LoadingIcon';
 
 const LoadingButton = glamorous.button({

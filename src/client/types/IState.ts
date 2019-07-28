@@ -1,7 +1,7 @@
-import IComponentData from '../../types/IComponentData';
+import ComponentData from '../../types/IComponentData';
 
 interface IState {
-  components: IComponentData[];
+  components: ComponentData[];
   ui: {
     editors: string[];
     selectedComponent?: string;

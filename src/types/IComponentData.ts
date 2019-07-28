@@ -1,7 +1,7 @@
 import ComponentState from './ComponentState';
-import IComponentDependency from './IComponentDependency';
+import ComponentDependency from './ComponentDependency';
 
-interface IComponentData {
+export default interface ComponentData {
   name: string;
   displayName: string;
   highlighted?: string;
@@ -9,7 +9,7 @@ interface IComponentData {
   favorite: boolean;
   history?: string[];
   url?: string;
-  dependencies?: IComponentDependency[];
+  dependencies?: ComponentDependency[];
   linking?: string[];
   promoting?: string;
   promotionFailure?: string;
@@ -21,5 +21,3 @@ interface IComponentData {
     test: string;
   };
 }
-
-export default IComponentData;

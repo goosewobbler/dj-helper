@@ -1,6 +1,6 @@
 import { join } from 'path';
 import ComponentState from '../../types/ComponentState';
-import IComponentData from '../../types/IComponentData';
+import ComponentData from '../../types/IComponentData';
 import CreateType from '../types/CreateType';
 import IConfig from '../types/IConfig';
 import IRouting from '../types/IRouting';
@@ -17,7 +17,7 @@ const Service = async (
   system: ISystem,
   config: IConfig,
   state: IState,
-  onComponentUpdate: (data: IComponentData) => void,
+  onComponentUpdate: (data: ComponentData) => void,
   onReload: () => void,
   startPageServer: (name: string) => Promise<number>,
   options: {
@@ -88,7 +88,7 @@ const Service = async (
 
   const getComponent = (name: string) => components.find(component => component.getName() === name);
 
-  const getSummaryData = (name: string): IComponentData => {
+  const getSummaryData = (name: string): ComponentData => {
     const component = getComponent(name);
 
     return {
@@ -100,7 +100,7 @@ const Service = async (
     };
   };
 
-  const getData = (name: string): IComponentData => {
+  const getData = (name: string): ComponentData => {
     const component = getComponent(name);
 
     return {

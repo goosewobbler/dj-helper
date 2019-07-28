@@ -4,14 +4,14 @@ import { join } from 'path';
 import * as socketIo from 'socket.io';
 import createApp from './server/app/app';
 import System from './server/system/System';
-import IComponentData from './types/IComponentData';
+import ComponentData from './types/IComponentData';
 
 const startServer = async () => {
-  let sendComponentData: (data: IComponentData) => void;
+  let sendComponentData: (data: ComponentData) => void;
   let sendReload: () => void;
   let sendUpdated: () => void;
 
-  const onComponentUpdate = (data: IComponentData) => {
+  const onComponentUpdate = (data: ComponentData) => {
     if (sendComponentData) {
       sendComponentData(data);
     }
@@ -51,7 +51,7 @@ const startServer = async () => {
   const componentServer = new Server(component);
   const io = socketIo(apiServer);
 
-  sendComponentData = (data: IComponentData) => {
+  sendComponentData = (data: ComponentData) => {
     io.emit('component', data);
   };
 

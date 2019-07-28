@@ -1,18 +1,10 @@
 import * as React from 'react';
 
 import ComponentState from '../../types/ComponentState';
-import IComponentData from '../../types/IComponentData';
+import ComponentContext from '../types/ComponentContext';
 import ExternalLink from './ExternalLink';
 import LabelButton from './LabelButton';
-
-interface IComponentActionsProps {
-  component: IComponentData;
-  editors: string[];
-  onSetUseCache(name: string, value: boolean): any;
-  onBuild(name: string): any;
-  onInstall(name: string): any;
-  onOpenInCode(name: string): any;
-}
+import { context } from '../contexts/componentContext';
 
 const renderStateLabel = (state: ComponentState) => {
   switch (state) {
@@ -31,84 +23,69 @@ const renderStateLabel = (state: ComponentState) => {
   }
 };
 
-const renderUseCacheButton = (props: IComponentActionsProps) => {
-  if (props.component.state === ComponentState.Stopped || props.component.state === ComponentState.Running) {
-    return (
-      <div className="item-wrapper">
-        <LabelButton
-          backgroundColor={props.component.useCache ? '#c9ffc9' : 'transparent'}
-          className={props.component.useCache ? 'no-use-cache-button' : 'use-cache-button'}
-          label="Cache"
-          onClick={() => props.onSetUseCache(props.component.name, !props.component.useCache)}
-        />
-      </div>
-    );
-  }
-  return null;
-};
+const shouldRenderUseCacheButton = (state: number) =>
+  state === ComponentState.Stopped || state === ComponentState.Running;
 
-const renderBuildButton = (props: IComponentActionsProps) => {
-  if (props.component.state === ComponentState.Running) {
-    return (
-      <div className="item-wrapper">
-        <LabelButton className="build-button" label="Build" onClick={() => props.onBuild(props.component.name)} />
-      </div>
-    );
-  }
-  return null;
-};
+const shouldRenderBuildButton = (state: number) => state === ComponentState.Running;
 
-const renderInstallButton = (props: IComponentActionsProps) => {
-  if (props.component.state === ComponentState.Stopped || props.component.state === ComponentState.Running) {
-    return (
-      <div className="item-wrapper">
-        <LabelButton
-          className="install-button"
-          label="Reinstall"
-          onClick={() => props.onInstall(props.component.name)}
-        />
-      </div>
-    );
-  }
-  return null;
-};
+const shouldRenderInstallButton = (state: number) =>
+  state === ComponentState.Stopped || state === ComponentState.Running;
 
-const ComponentActions = (props: IComponentActionsProps) => (
-  <div className="container">
-    <div className="header">
-      <h2 className="name">{props.component.displayName}</h2>
-      <p className="state-label">{renderStateLabel(props.component.state)}</p>
-    </div>
-    <div className="actions">
-      {renderUseCacheButton(props)}
-      {renderBuildButton(props)}
-      {renderInstallButton(props)}
-      {props.editors.indexOf('code') !== -1 ? (
-        <div className="item-wrapper" key="vs-code-button">
-          <LabelButton
-            className="vs-code-button"
-            label="VS Code"
-            image="/image/icon/vscode-logo.svg"
-            onClick={() => props.onOpenInCode(props.component.name)}
+const ComponentActions = ({ editors }: { editors: string[] }) => {
+  const componentContext: ComponentContext = React.useContext(context);
+  const { onInstall, onBuild, onOpenInCode, onSetUseCache } = componentContext.handlers;
+  const { displayName, state, name, useCache } = componentContext.component;
+
+  return (
+    <div className="container">
+      <div className="header">
+        <h2 className="name">{displayName}</h2>
+        <p className="state-label">{renderStateLabel(state)}</p>
+      </div>
+      <div className="actions">
+        {shouldRenderUseCacheButton(state) && (
+          <div className="item-wrapper">
+            <LabelButton
+              backgroundColor={useCache ? '#c9ffc9' : 'transparent'}
+              className={useCache ? 'no-use-cache-button' : 'use-cache-button'}
+              label="Cache"
+              onClick={() => onSetUseCache(name, !useCache)}
+            />
+          </div>
+        )}
+        {shouldRenderBuildButton(state) && (
+          <div className="item-wrapper">
+            <LabelButton className="build-button" label="Build" onClick={() => onBuild(name)} />
+          </div>
+        )}
+        {shouldRenderInstallButton(state) && (
+          <div className="item-wrapper">
+            <LabelButton className="install-button" label="Reinstall" onClick={() => onInstall(name)} />
+          </div>
+        )}
+        {editors.indexOf('code') !== -1 ? (
+          <div className="item-wrapper" key="vs-code-button">
+            <LabelButton
+              className="vs-code-button"
+              label="VS Code"
+              image="/image/icon/vscode-logo.svg"
+              onClick={() => onOpenInCode(name)}
+            />
+          </div>
+        ) : null}
+        <div className="item-wrapper">
+          <ExternalLink
+            label="Dependency Graph"
+            link={`https://morph-dependency-grapher.test.api.bbc.co.uk/env/test/modules/${displayName}`}
+            black
           />
         </div>
-      ) : null}
-      <div className="item-wrapper">
-        <ExternalLink
-          label="Dependency Graph"
-          link={`https://morph-dependency-grapher.test.api.bbc.co.uk/env/test/modules/${props.component.displayName}`}
-          black
-        />
-      </div>
-      <div className="item-wrapper">
-        <ExternalLink
-          label="GitHub"
-          link={`https://github.com/bbc/morph-modules/tree/master/${props.component.displayName}`}
-          black
-        />
+        <div className="item-wrapper">
+          <ExternalLink label="GitHub" link={`https://github.com/bbc/morph-modules/tree/master/${displayName}`} black />
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default ComponentActions;

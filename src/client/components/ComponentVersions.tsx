@@ -1,43 +1,33 @@
-import { startsWith } from 'lodash/fp';
 import * as React from 'react';
+import classNames from 'classnames';
 import { gte, lt, valid } from 'semver';
 
-import IComponentData from '../../types/IComponentData';
+import ComponentContext from '../types/ComponentContext';
+import { context } from '../contexts/componentContext';
 
-const BumpConnector = (props: { bumping?: boolean; bump?(): any }) => {
-  const onClick = props.bumping ? null : props.bump;
-  return (
-    <div className="connector">
-      <button className="bump-button" onClick={onClick}>
-        {props.bumping ? <span>Bumping</span> : 'Bump'}
-      </button>
-    </div>
-  );
-};
+const promotionInProgressText = (environment: string) => (environment === 'int' ? 'Bumping' : 'Promoting');
+const promotionActionText = (environment: string) => (environment === 'int' ? 'Bump' : 'Promote');
 
-const PromoteConnector = (props: { environment?: string; promoting?: boolean; promote?(): any }) => {
-  if (props.promote) {
-    const onClick = props.promoting ? null : props.promote;
-    return (
-      <div className="connector">
-        <button className="promote-button" data-test={props.environment} onClick={onClick}>
-          {props.promoting ? <span>Promoting</span> : 'Promote'}
-        </button>
-      </div>
-    );
-  }
+const PromoteButton = ({
+  environment,
+  buildInProgress,
+  action,
+}: {
+  environment: string;
+  buildInProgress: { [key: string]: boolean };
+  action: any;
+}) => (
+  <button className={classNames(['promote-button', environment])} onClick={action}>
+    {buildInProgress[environment] ? (
+      <span>{promotionInProgressText(environment)}</span>
+    ) : (
+      promotionActionText(environment)
+    )}
+  </button>
+);
 
-  return <div className="connector" />;
-};
-
-interface IEnvironmentProps {
-  label: string;
-  version: string;
-  current: boolean;
-}
-
-const Environment = (props: IEnvironmentProps) => {
-  if (props.version === null) {
+const Environment = ({ version, label, isCurrent }: { label: string; version: string; isCurrent: boolean }) => {
+  if (version === null) {
     return (
       <div className="environment-loading">
         <img src="/image/icon/gel-icon-loading-white.svg" />
@@ -46,75 +36,113 @@ const Environment = (props: IEnvironmentProps) => {
   }
 
   return (
-    <div data-test={props.current} className="environment-version">
-      <p className="version-label">{props.version || 'N/A'}</p>
-      <p className="environment-label">{props.label}</p>
+    <div className={classNames(['environment-version', isCurrent && 'current'])}>
+      <p className="version-label">{version || 'N/A'}</p>
+      <p className="environment-label">{label}</p>
     </div>
   );
 };
 
-interface IComponentVersionsProps {
-  component: IComponentData;
-  onBumpComponent?(name: string, type: string): any;
-  onPromoteComponent?(name: string, environment: string): any;
-}
+const promotionFailureElement = (failure: string) => {
+  if (!failure.startsWith('http')) {
+    return failure;
+  }
 
-const ComponentVersions = (props: IComponentVersionsProps) => {
-  const rawVersions = props.component.versions || { local: null, int: null, test: null, live: null };
-  const versions = {
-    int: rawVersions.int === '' ? rawVersions.int : valid(rawVersions.int),
-    live: rawVersions.live === '' ? rawVersions.live : valid(rawVersions.live),
-    local: valid(rawVersions.local),
-    test: rawVersions.test === '' ? rawVersions.test : valid(rawVersions.test),
-  };
-
-  const localUpToDate = !versions.local || !versions.int || gte(versions.local, versions.int);
-  const latestVersion = localUpToDate ? versions.local : versions.int;
-  const intCurrent = Boolean(versions.int && versions.local && gte(versions.int, versions.local));
-  const testCurrent = Boolean(latestVersion && versions.test && gte(versions.test, latestVersion));
-  const liveCurrent = Boolean(latestVersion && versions.live && gte(versions.live, latestVersion));
-  const bumping = props.component.promoting === 'int';
-  const promotingINT = props.component.promoting === 'test';
-  const promotingTEST = props.component.promoting === 'live';
-  const showPromoteINT =
-    versions.int && versions.test !== null && !promotingTEST && (!versions.test || lt(versions.test, versions.int));
-  const showPromoteTEST =
-    versions.test && versions.live !== null && !promotingINT && (!versions.live || lt(versions.live, versions.test));
-  const bumpAction = () => props.onBumpComponent(props.component.name, 'patch');
-  const promoteToTestAction = showPromoteINT ? () => props.onPromoteComponent(props.component.name, 'test') : null;
-  const promoteToLiveAction = showPromoteTEST ? () => props.onPromoteComponent(props.component.name, 'live') : null;
-
-  const failure = props.component.promotionFailure;
-
-  const failureElement = startsWith('http', failure) ? (
-    <a className="failure" href={failure} target="_blank">
+  return (
+    <a className="failure" href={failure} target="_blank" rel="noopener noreferrer">
       {failure}
     </a>
-  ) : (
-    failure
   );
+};
 
-  const promotionFailure = failure ? (
-    <p className="promotion-failure">
-      <span role="img" aria-label="Anguished face">
-        😧
-      </span>
-      &nbsp; Promotion failed:&nbsp;
-      {failureElement}
-    </p>
-  ) : null;
+const shouldRenderPromoteButton = (versions: any, buildInProgress: any, fromEnv: string, toEnv: string) => {
+  if (!versions[fromEnv] || versions[toEnv] === null || buildInProgress[toEnv]) {
+    return false;
+  }
+  if (!versions[toEnv]) {
+    return true;
+  }
+
+  return lt(versions[toEnv], versions[fromEnv]);
+};
+
+const parseVersions = ({
+  local = null,
+  int = null,
+  test = null,
+  live = null,
+}: {
+  local: string;
+  int: string;
+  test: string;
+  live: string;
+}) => ({
+  local: valid(local),
+  int: int === '' ? int : valid(int),
+  test: test === '' ? test : valid(test),
+  live: live === '' ? live : valid(live),
+});
+
+const ComponentVersions = () => {
+  const componentContext: ComponentContext = React.useContext(context);
+  const { onBumpComponent, onPromoteComponent } = componentContext.handlers;
+  const { versions, promoting, name, promotionFailure } = componentContext.component;
+  const parsedVersions: { local: string; int: string; test: string; live: string } = parseVersions(versions);
+  const { local, int, test, live } = parsedVersions;
+
+  const buildInProgress = {
+    int: promoting === 'int',
+    test: promoting === 'test',
+    live: promoting === 'live',
+  };
+
+  const localUpToDate = !local || !int || gte(local, int);
+  const latestVersion = localUpToDate ? local : int;
+  const intUpToDate = !!(int && local && gte(int, local));
+  const testUpToDate = !!(latestVersion && test && gte(test, latestVersion));
+  const liveUpToDate = !!(latestVersion && live && gte(live, latestVersion));
 
   return (
     <div>
-      {promotionFailure}
+      {promotionFailure && (
+        <p className="promotion-failure">
+          <span role="img" aria-label="Anguished face">
+            😧
+          </span>
+          &nbsp; Promotion failed:&nbsp;
+          {promotionFailureElement(promotionFailure)}
+        </p>
+      )}
       <div className="environment">
-        <Environment label="LOCAL" version={versions.local} current={localUpToDate} />
-        <BumpConnector bumping={bumping} bump={bumpAction} />
-        <Environment label="INT" version={versions.int} current={intCurrent} />
-        <PromoteConnector environment="test" promoting={promotingINT} promote={promoteToTestAction} />
-        <Environment label="TEST" version={versions.test} current={testCurrent} />
-        <PromoteConnector environment="live" promoting={promotingTEST} promote={promoteToLiveAction} />
-        <Environment label="LIVE" version={versions.live} current={liveCurrent} />
+        <Environment label="LOCAL" version={local} isCurrent={localUpToDate} />
+        <div className="connector">
+          <PromoteButton
+            environment="int"
+            buildInProgress={buildInProgress}
+            action={() => onBumpComponent(name, 'patch')}
+          />
+        </div>
+        <Environment label="INT" version={int} isCurrent={intUpToDate} />
+        <div className="connector">
+          {shouldRenderPromoteButton(versions, buildInProgress, 'int', 'test') && (
+            <PromoteButton
+              environment="test"
+              buildInProgress={buildInProgress}
+              action={() => onPromoteComponent(name, 'test')}
+            />
+          )}
+        </div>
+        <Environment label="TEST" version={test} isCurrent={testUpToDate} />
+        <div className="connector">
+          {shouldRenderPromoteButton(versions, buildInProgress, 'test', 'live') && (
+            <PromoteButton
+              environment="live"
+              buildInProgress={buildInProgress}
+              action={() => onPromoteComponent(name, 'live')}
+            />
+          )}
+        </div>
+        <Environment label="LIVE" version={live} isCurrent={liveUpToDate} />
       </div>
     </div>
   );

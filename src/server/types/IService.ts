@@ -1,4 +1,4 @@
-import IComponentData from '../../types/IComponentData';
+import ComponentData from '../../types/IComponentData';
 import CreateType from './CreateType';
 
 interface IService {
@@ -6,8 +6,8 @@ interface IService {
   build(name: string): Promise<void>;
   create(name: string, type: CreateType, options: { description: string }): Promise<void>;
   fetchDetails(name: string): Promise<void>;
-  getComponentsData(): { components: IComponentData[]; editors: string[] };
-  getComponentsSummaryData(): { components: IComponentData[]; editors: string[] };
+  getComponentsData(): { components: ComponentData[]; editors: string[] };
+  getComponentsSummaryData(): { components: ComponentData[]; editors: string[] };
   link(name: string, dependency: string): Promise<void>;
   openInEditor(name: string): Promise<void>;
   promote(name: string, environment: string): Promise<void>;

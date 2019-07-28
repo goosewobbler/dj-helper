@@ -1,7 +1,7 @@
-import IComponentData from '../../types/IComponentData';
+import ComponentData from '../../types/IComponentData';
 
 interface IServer {
-  sendComponentData(data: IComponentData): void;
+  sendComponentData(data: ComponentData): void;
 }
 
 export default IServer;

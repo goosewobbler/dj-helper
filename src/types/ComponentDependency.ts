@@ -1,4 +1,4 @@
-interface IComponentDependency {
+export default interface ComponentDependency {
   name: string;
   displayName: string;
   has: string;
@@ -7,5 +7,3 @@ interface IComponentDependency {
   outdated: boolean;
   version: string;
 }
-
-export default IComponentDependency;

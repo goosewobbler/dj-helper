@@ -1,14 +1,14 @@
 import { assign } from 'lodash/fp';
 import { connect } from 'react-redux';
 
-import IComponentData from '../../types/IComponentData';
+import ComponentData from '../../types/IComponentData';
 import { favouriteComponent, startComponent, stopComponent, updateAndSelectComponent } from '../actions/components';
 import ComponentList from '../components/ComponentList';
 import findOrderedSearchResults from '../helpers/resultsHelper';
 import IState from '../types/IState';
 
-const getSortedComponents = (components: IComponentData[]): IComponentData[] => {
-  return components.sort((mA: IComponentData, mB: IComponentData) => {
+const getSortedComponents = (components: ComponentData[]): ComponentData[] => {
+  return components.sort((mA: ComponentData, mB: ComponentData) => {
     if (mA.favorite && !mB.favorite) {
       return -1;
     }
@@ -19,7 +19,7 @@ const getSortedComponents = (components: IComponentData[]): IComponentData[] => 
   });
 };
 
-const getFilteredComponents = (components: IComponentData[], filter: string): IComponentData[] => {
+const getFilteredComponents = (components: ComponentData[], filter: string): ComponentData[] => {
   const componentsWithAlternatives = components.map(component =>
     assign(component, {
       alternatives: [component.displayName.replace(/-/g, ' ')],
@@ -34,7 +34,7 @@ const getFilteredComponents = (components: IComponentData[], filter: string): IC
   return results;
 };
 
-const getComponents = (components: IComponentData[], filter: string) => {
+const getComponents = (components: ComponentData[], filter: string) => {
   if (filter) {
     return getFilteredComponents(components, filter);
   }
@@ -51,9 +51,9 @@ const mapStateToProps = (state: IState) => {
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-  onFavouriteComponent: (component: IComponentData, favorite: boolean) =>
+  onFavouriteComponent: (component: ComponentData, favorite: boolean) =>
     dispatch(favouriteComponent(component.name, favorite)),
-  onSelectComponent: (component: IComponentData) => dispatch(updateAndSelectComponent(component.name)),
+  onSelectComponent: (component: ComponentData) => dispatch(updateAndSelectComponent(component.name)),
   onStartComponent: (name: string) => dispatch(startComponent(name)),
   onStopComponent: (name: string) => dispatch(stopComponent(name)),
 });

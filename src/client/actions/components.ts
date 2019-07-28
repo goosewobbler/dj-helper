@@ -1,12 +1,12 @@
 import ComponentState from '../../types/ComponentState';
-import IComponentData from '../../types/IComponentData';
+import ComponentData from '../../types/IComponentData';
 
-export const receiveComponents = (components: IComponentData[]) => ({
+export const receiveComponents = (components: ComponentData[]) => ({
   components,
   type: 'RECEIVE_COMPONENTS',
 });
 
-export const receiveComponent = (component: IComponentData) => ({
+export const receiveComponent = (component: ComponentData) => ({
   component,
   type: 'RECEIVE_COMPONENT',
 });

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import ComponentState from '../../types/ComponentState';
-import IComponentData from '../../types/IComponentData';
+import ComponentData from '../../types/IComponentData';
 import ExternalLink from './ExternalLink';
 import IconButton from './IconButton';
 
@@ -25,7 +25,7 @@ const backgroundColorForState = (state: ComponentState) => {
 };
 
 interface IComponentListItemProps {
-  component: IComponentData;
+  component: ComponentData;
   selected: boolean;
   onClick?(): null;
   onToggleFavourite?(): null;
@@ -54,7 +54,7 @@ const renderFavouriteButton = (props: IComponentListItemProps) => {
   );
 };
 
-const renderLaunchButton = (component: IComponentData) => {
+const renderLaunchButton = (component: ComponentData) => {
   const link = `${component.url}${
     Array.isArray(component.history) && component.history.length > 0 ? component.history[0] : ''
   }`;

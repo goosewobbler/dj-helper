@@ -1,8 +1,8 @@
-import IComponentData from '../../types/IComponentData';
+import ComponentData from '../../types/IComponentData';
 
-interface IAction {
+interface Action {
   type: string;
-  component?: IComponentData;
+  component?: ComponentData;
   filter?: string;
   editors?: string[];
   name?: string;
@@ -14,7 +14,7 @@ interface IAction {
 //   selectedComponent?: IComponentData;
 // }
 
-const reducer = (state: any = {}, action: IAction) => {
+const reducer = (state: any = {}, action: Action) => {
   switch (action.type) {
     case 'RECEIVE_EDITORS': {
       return {

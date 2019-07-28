@@ -2,7 +2,7 @@ import { startsWith } from 'lodash/fp';
 import { join } from 'path';
 import * as semver from 'semver';
 
-import IComponentDependency from '../../types/IComponentDependency';
+import ComponentDependency from '../../types/ComponentDependency';
 import IConfig from '../types/IConfig';
 import IRouting from '../types/IRouting';
 import IState from '../types/IState';
@@ -32,7 +32,7 @@ const Component = (
   let pagePort: number = null;
   let promoting: string = null;
   let promotionFailure: string = null;
-  let dependencies: IComponentDependency[] = [];
+  let dependencies: ComponentDependency[] = [];
   let url: string = null;
   const linking: string[] = [];
   const versions: { int: string; live: string; local: string; test: string } = {
@@ -124,7 +124,7 @@ const Component = (
       Object.keys(packageContents.dependencies || {})
         .filter(startsWith('bbc-morph-'))
         .map(
-          async (dependencyName): Promise<IComponentDependency> => {
+          async (dependencyName): Promise<ComponentDependency> => {
             return {
               ...getDependency(dependencyName),
               displayName: dependencyName.substr(10),

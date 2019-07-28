@@ -1,14 +1,14 @@
 import * as React from 'react';
 
-import IComponentData from '../../types/IComponentData';
+import ComponentData from '../../types/IComponentData';
 import ScrollList from '../ui/ScrollList';
 import ComponentListItem from './ComponentListItem';
 
 interface IComponentListProps {
-  components: IComponentData[];
+  components: ComponentData[];
   selectedComponent?: string;
-  onSelectComponent(component: IComponentData): null;
-  onFavouriteComponent(component: IComponentData, favorite: boolean): null;
+  onSelectComponent(component: ComponentData): null;
+  onFavouriteComponent(component: ComponentData, favorite: boolean): null;
   onStartComponent(name: string): null;
   onStopComponent(name: string): null;
 }

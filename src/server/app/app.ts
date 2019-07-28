@@ -1,7 +1,7 @@
 import { Express } from 'express';
 import { join } from 'path';
 
-import IComponentData from '../../types/IComponentData';
+import ComponentData from '../../types/IComponentData';
 import Service from '../service/Service';
 import ISystem from '../types/ISystem';
 import createApiServer from './ApiServer';
@@ -13,7 +13,7 @@ import Updater from './Updater';
 
 const createApp = async (
   system: ISystem,
-  onComponentUpdate: (data: IComponentData) => void,
+  onComponentUpdate: (data: ComponentData) => void,
   onReload: () => void,
   onUpdated: () => void,
   startServer: (server: Express, port: number) => Promise<void>,

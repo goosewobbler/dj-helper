@@ -9,7 +9,6 @@ import AppContainer from '../ui/AppContainer';
 import HeaderLinks from '../ui/HeaderLinks';
 import AddIcon from '../ui/icon/AddIcon';
 import LabelButton from '../ui/LabelButton';
-import Title from '../ui/Title';
 import CreateForm from './CreateForm';
 import Dialog from './Dialog';
 import GitHubLink from './GitHubLink';
@@ -26,9 +25,9 @@ interface IAppProps {
 }
 
 const renderHeader = (props: IAppProps) => [
-  <Title key="title" theme={props.theme}>
+  <h1 key="title">
     Morph Developer Console
-  </Title>,
+  </h1>,
   <HeaderLinks key="links">
     <LabelButton
       theme={props.theme}

@@ -45,18 +45,11 @@ const createServer = (service: IService, config: IConfig, updater: IUpdater, onU
   });
 
   app.get('/', async (req, res) => {
-    res.send(await renderIndex(service, readFileSync(join(publicPath, 'index.html'), 'utf-8'), service.getTheme()));
+    res.send(await renderIndex(service, readFileSync(join(publicPath, 'index.html'), 'utf-8')));
   });
 
   app.get('/component/:name', async (req, res) => {
-    res.send(
-      await renderIndex(
-        service,
-        readFileSync(join(publicPath, 'index.html'), 'utf-8'),
-        service.getTheme(),
-        req.params.name,
-      ),
-    );
+    res.send(await renderIndex(service, readFileSync(join(publicPath, 'index.html'), 'utf-8'), req.params.name));
   });
 
   app.use(express.static(publicPath));

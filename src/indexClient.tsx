@@ -9,7 +9,6 @@ import {
   receiveComponent,
   receiveComponents,
   receiveEditors,
-  receiveTheme,
   updateAndSelectComponent,
   updateAvailable,
   updated,

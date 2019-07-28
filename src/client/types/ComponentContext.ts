@@ -1,4 +1,4 @@
-import ComponentHandlers from '../types/ComponentHandlers';
+import ComponentHandlers from './ComponentHandlers';
 import ComponentData from '../../types/ComponentData';
 
 export default interface ComponentContext {

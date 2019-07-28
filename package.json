@@ -1,7 +1,7 @@
 {
   "name": "mdc-electron",
   "description": "A visual tool for developing morph modules.",
-  "version": "0.0.1",
+  "version": "4.0.0",
   "author": "Sam Maister <sam.maister@bbc.co.uk>",
   "license": "UNLICENSED",
   "repository": {

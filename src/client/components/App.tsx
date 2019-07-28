@@ -6,7 +6,6 @@ import ComponentListContainer from '../containers/ComponentListContainer';
 import ComponentListFilterContainer from '../containers/ComponentListFilterContainer';
 import UpdateBar from '../containers/UpdateBarContainer';
 import AppContainer from '../ui/AppContainer';
-import HeaderLinks from '../ui/HeaderLinks';
 import AddIcon from '../ui/icon/AddIcon';
 import LabelButton from '../ui/LabelButton';
 import CreateForm from './CreateForm';
@@ -25,10 +24,8 @@ interface IAppProps {
 }
 
 const renderHeader = (props: IAppProps) => [
-  <h1 key="title">
-    Morph Developer Console
-  </h1>,
-  <HeaderLinks key="links">
+  <h1 key="title">Morph Developer Console</h1>,
+  <div key="links">
     <LabelButton
       theme={props.theme}
       className="create-button"
@@ -37,14 +34,14 @@ const renderHeader = (props: IAppProps) => [
       onClick={() => props.showCreateDialog(true)}
     />
     <GitHubLink theme={props.theme} link="https://github.com/bbc/morph-developer-console" />
-  </HeaderLinks>,
+  </div>,
 ];
 
 const renderCreateDialog = (props: IAppProps) =>
   props.shouldShowCreateDialog ? (
     <Dialog theme={props.theme} title="Create a new Morph module" onClose={() => props.showCreateDialog(false)}>
       <CreateForm
-        typeSelectEnabled={true}
+        typeSelectEnabled
         theme={props.theme}
         submitModule={props.submitModule}
         onClose={() => props.showCreateDialog(false)}

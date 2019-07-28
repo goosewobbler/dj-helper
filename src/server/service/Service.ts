@@ -3,7 +3,6 @@ import { join } from 'path';
 
 import ComponentState from '../../types/ComponentState';
 import IComponentData from '../../types/ComponentData';
-import Theme from '../app/Theme';
 import CreateType from '../types/CreateType';
 import IConfig from '../types/IConfig';
 import IGrapher from '../types/IGrapher';
@@ -36,7 +35,6 @@ const Service = async (
   let nextPort = 8083;
   let routing: IRouting;
   const editors: string[] = [];
-  const theme = await Theme(config);
   const allDependencies: { [Key: string]: Array<{ name: string }> } = {};
   let grapher: IGrapher;
 
@@ -175,7 +173,6 @@ const Service = async (
   const getComponentsData = () => ({
     components: components.map(component => getData(component.getName())),
     editors,
-    theme: theme.getValues(),
   });
 
   const getComponentsSummaryData = () => ({
@@ -185,14 +182,12 @@ const Service = async (
         : getSummaryData(component.getName()),
     ),
     editors,
-    theme: theme.getValues(),
   });
 
   const getDependantGraph = (name: string) => grapher.getDependantData(name);
 
   const getDependencyGraph = (name: string) => grapher.getDependencyData(name);
 
-  const getTheme = () => theme.getValues();
   const bump = (name: string, type: 'patch' | 'minor') => getComponent(name).bump(type);
   const build = (name: string) => getComponent(name).build();
   const fetchDetails = (name: string) => getComponent(name).fetchDetails();
@@ -227,7 +222,6 @@ const Service = async (
     getComponentsSummaryData,
     getDependantGraph,
     getDependencyGraph,
-    getTheme,
     link,
     openInEditor,
     promote,

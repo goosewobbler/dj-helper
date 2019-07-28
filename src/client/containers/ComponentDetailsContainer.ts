@@ -31,7 +31,6 @@ const getSelectedComponent = (state: IState): ComponentData => {
 const mapStateToProps = (state: IState) => ({
   component: getSelectedComponent(state),
   editors: state.ui.editors,
-  theme: state.ui.theme,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

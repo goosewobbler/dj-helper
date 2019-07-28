@@ -1,6 +1,5 @@
 import ComponentState from '../../types/ComponentState';
 import IComponentData from '../../types/ComponentData';
-import Theme from '../../types/Theme';
 
 export const receiveComponents = (components: IComponentData[]) => ({
   components,
@@ -15,11 +14,6 @@ export const receiveComponent = (component: IComponentData) => ({
 export const receiveEditors = (editors: string[]) => ({
   editors,
   type: 'RECEIVE_EDITORS',
-});
-
-export const receiveTheme = (theme: Theme) => ({
-  theme,
-  type: 'RECEIVE_THEME',
 });
 
 export const selectComponent = (name: string) => ({

@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import Theme from '../../types/Theme';
 import ComponentDetailsContainer from '../containers/ComponentDetailsContainer';
 import ComponentListContainer from '../containers/ComponentListContainer';
 import ComponentListFilterContainer from '../containers/ComponentListFilterContainer';
@@ -15,7 +14,6 @@ import GitHubLink from './GitHubLink';
 interface IAppProps {
   shouldShowCreateDialog: boolean;
   cloningName: string;
-  theme: Theme;
   onCreate(): any;
   showCreateDialog(show: boolean): any;
   hideCloneDialog(): any;
@@ -27,38 +25,27 @@ const renderHeader = (props: IAppProps) => [
   <h1 key="title">Morph Developer Console</h1>,
   <div key="links">
     <LabelButton
-      theme={props.theme}
       className="create-button"
       label="Create"
-      image={<AddIcon colour={props.theme.primaryTextColour} />}
+      image={<AddIcon />}
       onClick={() => props.showCreateDialog(true)}
     />
-    <GitHubLink theme={props.theme} link="https://github.com/bbc/morph-developer-console" />
+    <GitHubLink link="https://github.com/bbc/morph-developer-console" />
   </div>,
 ];
 
 const renderCreateDialog = (props: IAppProps) =>
   props.shouldShowCreateDialog ? (
-    <Dialog theme={props.theme} title="Create a new Morph module" onClose={() => props.showCreateDialog(false)}>
-      <CreateForm
-        typeSelectEnabled
-        theme={props.theme}
-        submitModule={props.submitModule}
-        onClose={() => props.showCreateDialog(false)}
-      />
+    <Dialog title="Create a new Morph module" onClose={() => props.showCreateDialog(false)}>
+      <CreateForm typeSelectEnabled submitModule={props.submitModule} onClose={() => props.showCreateDialog(false)} />
     </Dialog>
   ) : null;
 
 const renderCloneDialog = (props: IAppProps) =>
   props.cloningName ? (
-    <Dialog
-      theme={props.theme}
-      title={`Clone ${props.cloningName.replace('bbc-morph-', '')}`}
-      onClose={() => props.hideCloneDialog()}
-    >
+    <Dialog title={`Clone ${props.cloningName.replace('bbc-morph-', '')}`} onClose={() => props.hideCloneDialog()}>
       <CreateForm
         typeSelectEnabled={false}
-        theme={props.theme}
         submitModule={(name: string, description: string) => props.cloneComponent(props.cloningName, name, description)}
         onClose={() => props.hideCloneDialog()}
       />
@@ -67,7 +54,6 @@ const renderCloneDialog = (props: IAppProps) =>
 
 const App = (props: IAppProps) => (
   <AppContainer
-    theme={props.theme}
     banner={<UpdateBar />}
     header={renderHeader(props)}
     leftPanel={[<ComponentListFilterContainer key="filter" />, <ComponentListContainer key="list" />]}

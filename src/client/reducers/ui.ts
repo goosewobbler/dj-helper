@@ -1,5 +1,4 @@
 import ComponentData from '../../types/ComponentData';
-import Theme from '../../types/Theme';
 
 interface IAction {
   type: string;
@@ -9,7 +8,6 @@ interface IAction {
   name?: string;
   environment?: string;
   show?: boolean;
-  theme?: Theme;
 }
 
 const reducer = (state: any = {}, action: IAction) => {
@@ -18,12 +16,6 @@ const reducer = (state: any = {}, action: IAction) => {
       return {
         ...state,
         editors: action.editors,
-      };
-    }
-    case 'RECEIVE_THEME': {
-      return {
-        ...state,
-        theme: action.theme,
       };
     }
     case 'SELECT_COMPONENT': {

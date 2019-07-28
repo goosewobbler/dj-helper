@@ -5,22 +5,15 @@ import { Provider } from 'react-redux';
 import App from '../../client/containers/AppContainer';
 import createStore from '../../client/store';
 import IState from '../../client/types/IState';
-import Theme from '../../types/Theme';
 import IService from '../types/IService';
 
-const renderIndex = async (
-  service: IService,
-  template: string,
-  theme: Theme,
-  selectedComponent?: string,
-): Promise<string> => {
+const renderIndex = async (service: IService, template: string, selectedComponent?: string): Promise<string> => {
   const summaryData = await service.getComponentsSummaryData();
 
   const initialState: IState = {
     components: summaryData.components,
     ui: {
       editors: summaryData.editors,
-      theme: summaryData.theme,
     },
   };
 
@@ -37,8 +30,6 @@ const renderIndex = async (
   );
 
   const preloadedState = store.getState();
-
-  const extraCSS = `mark{background-color:${theme.highlightColour};}`;
 
   return template
     .replace('HTML_PLACEHOLDER', html)

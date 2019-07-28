@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import Theme from '../../types/Theme';
 import LabelButton from '../ui/LabelButton';
 
 const KEY_ENTER = 13;
@@ -40,12 +39,11 @@ const TextInput = (props: {
       onChange={props.onChange}
       onKeyDown={props.onKeyDown}
     />
-  </InputContainingDiv>
+  </div>
 );
 
 interface ICreateFormProps {
   typeSelectEnabled: boolean;
-  theme: ITheme;
   submitModule(name: string, description: string, type: string): any;
   onClose(): any;
 }
@@ -56,7 +54,9 @@ interface ICreateFormState {
 
 class CreateForm extends React.Component<ICreateFormProps, ICreateFormState> {
   private name: string;
+
   private description: string;
+
   private type: string;
 
   constructor(props: ICreateFormProps) {
@@ -78,7 +78,6 @@ class CreateForm extends React.Component<ICreateFormProps, ICreateFormState> {
 
     const typeSelect = this.props.typeSelectEnabled ? (
       <SelectInput
-        theme={this.props.theme}
         className="create-type-select"
         label="Type"
         options={options}
@@ -87,34 +86,31 @@ class CreateForm extends React.Component<ICreateFormProps, ICreateFormState> {
     ) : null;
 
     return (
-      <ContainingDiv>
+      <div>
         {typeSelect}
         <TextInput
-          theme={this.props.theme}
           label="Name"
           className="create-name-input"
-          autoFocus={true}
+          autoFocus
           onChange={event => this.handleNameChange(event)}
           onKeyDown={event => this.handleKeyDown(event)}
         />
         <TextInput
-          theme={this.props.theme}
           label="Description"
           className="create-description-input"
           autoFocus={false}
           onChange={event => this.handleDescriptionChange(event)}
           onKeyDown={event => this.handleKeyDown(event)}
         />
-        <CreateButtonDiv>
+        <div>
           <LabelButton
-            theme={this.props.theme}
             className="create-create-button"
             label="Create"
             disabled={!this.state.valid}
             onClick={() => this.create()}
           />
-        </CreateButtonDiv>
-      </ContainingDiv>
+        </div>
+      </div>
     );
   }
 

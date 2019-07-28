@@ -2,13 +2,11 @@ import * as React from 'react';
 
 import ComponentState from '../../types/ComponentState';
 import ComponentData from '../../types/ComponentData';
-import Theme from '../../types/Theme';
 import ExternalLink from '../ui/ExternalLink';
 import VSCodeIcon from '../ui/icon/VSCodeIcon';
 import LabelButton from '../ui/LabelButton';
 
 interface IComponentActionsProps {
-  theme: Theme;
   component: ComponentData;
   editors: string[];
   onClone(name: string): any;
@@ -48,9 +46,6 @@ const renderUseCacheButton = (props: IComponentActionsProps) => {
     return (
       <div className="wrapper">
         <LabelButton
-          theme={props.theme}
-          backgroundColor={props.component.useCache ? props.theme.highlightColour : null}
-          color={props.component.useCache ? props.theme.secondaryTextColour : null}
           className={props.component.useCache ? 'no-use-cache-button' : 'use-cache-button'}
           label="Cache"
           onClick={() => props.onSetUseCache(props.component.name, !props.component.useCache)}
@@ -66,7 +61,6 @@ const renderBuildButton = (props: IComponentActionsProps) => {
     return (
       <div className="wrapper">
         <LabelButton
-          theme={props.theme}
           className="build-button"
           label="Build"
           onClick={() => props.onBuild(props.component.name)}
@@ -82,7 +76,6 @@ const renderInstallButton = (props: IComponentActionsProps) => {
     return (
       <div className="wrapper">
         <LabelButton
-          theme={props.theme}
           className="install-button"
           label="Reinstall"
           onClick={() => props.onInstall(props.component.name)}
@@ -97,7 +90,6 @@ const renderCloneButton = (props: IComponentActionsProps) => {
   return (
     <div className="wrapper">
       <LabelButton
-        theme={props.theme}
         className="clone-button"
         label="Clone"
         onClick={() => props.onClone(props.component.name)}
@@ -123,7 +115,6 @@ const ComponentActions = (props: IComponentActionsProps) => (
       {props.editors.indexOf('code') !== -1 ? (
         <div className="wrapper" key="vs-code-button">
           <LabelButton
-            theme={props.theme}
             className="vs-code-button"
             label="VS Code"
             image={<VSCodeIcon />}
@@ -133,7 +124,6 @@ const ComponentActions = (props: IComponentActionsProps) => (
       ) : null}
       <div className="wrapper">
         <ExternalLink
-          theme={props.theme}
           label="Dependency Graph"
           link={`https://morph-dependency-grapher.test.api.bbc.co.uk/env/test/modules/${props.component.displayName}`}
           black={true}
@@ -141,7 +131,6 @@ const ComponentActions = (props: IComponentActionsProps) => (
       </div>
       <div className="wrapper">
         <ExternalLink
-          theme={props.theme}
           label="GitHub"
           link={`https://github.com/bbc/morph-modules/tree/master/${props.component.displayName}`}
           black={true}

@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import ComponentData from '../../types/ComponentData';
-import Theme from '../../types/Theme';
 import { favouriteComponent, startComponent, stopComponent, updateAndSelectComponent } from '../actions/components';
 import ComponentList from '../components/ComponentList';
 import findOrderedSearchResults from '../helpers/resultsHelper';
@@ -14,7 +13,7 @@ const getSortedComponents = (components: ComponentData[]): ComponentData[] => {
   return components.sort((mA: ComponentData, mB: ComponentData) => {
     if (mA.favorite && !mB.favorite) {
       return -1;
-    } else if (!mA.favorite && mB.favorite) {
+    } if (!mA.favorite && mB.favorite) {
       return 1;
     }
     return mA.name.localeCompare(mB.name);
@@ -46,11 +45,7 @@ const getComponents = (components: ComponentData[], filter: string) => {
 const getUrl = (component: ComponentData) =>
   `${component.url}${Array.isArray(component.history) && component.history.length > 0 ? component.history[0] : ''}`;
 
-const getListItemComponents = (
-  components: ComponentData[],
-  filter: string,
-  theme: Theme,
-): IComponentListItemData[] => {
+const getListItemComponents = (components: ComponentData[], filter: string): IComponentListItemData[] => {
   const componentsList: ComponentData[] = getComponents(components, filter);
   return componentsList.map(componentListItem => ({
     displayName: componentListItem.displayName,
@@ -58,26 +53,22 @@ const getListItemComponents = (
     highlighted: componentListItem.highlighted,
     name: componentListItem.name,
     state: componentListItem.state,
-    theme,
     url: getUrl(componentListItem),
   }));
 };
 
 const componentsSelector = (state: IState) => state.components;
 const filterSelector = (state: IState) => state.ui.filter;
-const themeSelector = (state: IState) => state.ui.theme;
 
 const filteredComponentsSelector = createSelector(
   componentsSelector,
   filterSelector,
-  themeSelector,
   getListItemComponents,
 );
 
 const mapStateToProps = (state: IState) => ({
   components: filteredComponentsSelector(state),
   selectedComponent: state.ui.selectedComponent,
-  theme: state.ui.theme,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

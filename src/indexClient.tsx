@@ -40,7 +40,6 @@ if (!preloadedState) {
     .then(json => {
       store.dispatch(receiveComponents(json.components));
       store.dispatch(receiveEditors(json.editors));
-      store.dispatch(receiveTheme(json.theme));
     });
 }
 
@@ -87,7 +86,6 @@ if (io) {
   socket.on('freshState', (freshState: any) => {
     store.dispatch(receiveComponents(freshState.components));
     store.dispatch(receiveEditors(freshState.editors));
-    store.dispatch(receiveTheme(freshState.theme));
     updateSelected();
   });
 

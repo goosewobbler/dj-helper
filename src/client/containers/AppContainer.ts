@@ -21,7 +21,6 @@ const mapDispatchToProps = (dispatch: any) => ({
 const mapStateToProps = (state: IState) => ({
   cloningName: state.ui.cloningName,
   shouldShowCreateDialog: state.ui.showCreateDialog,
-  theme: state.ui.theme,
 });
 
 const Container = connect(

@@ -6,7 +6,6 @@ import IState from '../types/IState';
 
 const mapStateToProps = (state: IState) => ({
   outOfDate: state.ui.outOfDate,
-  theme: state.ui.theme,
   updated: state.ui.updated,
   updating: state.ui.updating,
 });

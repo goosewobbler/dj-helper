@@ -3,13 +3,10 @@ import thunkMiddleware from 'redux-thunk';
 import combinedReducer from './reducers/combined';
 import IState from './types/IState';
 
-const INITIAL_THEME: any = {};
-
 const createDefaultState = (): IState => ({
   components: [],
   ui: {
     editors: [],
-    theme: INITIAL_THEME,
   },
 });
 

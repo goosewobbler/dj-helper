@@ -1,6 +1,5 @@
 import ComponentData from '../../types/ComponentData';
 import CreateType from './CreateType';
-import ITheme from '../../types/ITheme';
 import IGraphData from './IGraphData';
 
 export default interface IService {
@@ -9,11 +8,10 @@ export default interface IService {
   clone(name: string, cloneName: string, options: { description: string }): Promise<void>;
   create(name: string, type: CreateType, options: { description: string }): Promise<void>;
   fetchDetails(name: string): Promise<void>;
-  getComponentsData(): { components: ComponentData[]; editors: string[]; theme: ITheme };
-  getComponentsSummaryData(): { components: ComponentData[]; editors: string[]; theme: ITheme };
+  getComponentsData(): { components: ComponentData[]; editors: string[] };
+  getComponentsSummaryData(): { components: ComponentData[]; editors: string[] };
   getDependantGraph(name: string): IGraphData;
   getDependencyGraph(name: string): IGraphData;
-  getTheme(): ITheme;
   link(name: string, dependency: string): Promise<void>;
   openInEditor(name: string): Promise<void>;
   promote(name: string, environment: string): Promise<void>;

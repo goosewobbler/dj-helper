@@ -1,5 +1,4 @@
 import ComponentState from '../../types/ComponentState';
-import Theme from '../../types/Theme';
 
 export default interface IComponentListItemData {
   name: string;
@@ -8,5 +7,4 @@ export default interface IComponentListItemData {
   url: string;
   favourite: boolean;
   state: ComponentState;
-  theme: Theme;
 }

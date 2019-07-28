@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import ComponentData from '../../types/IComponentData';
+import ComponentData from '../../types/ComponentData';
 import {
   buildComponent,
   bumpComponent,

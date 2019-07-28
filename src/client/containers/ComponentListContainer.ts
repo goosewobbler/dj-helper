@@ -1,7 +1,7 @@
 import { assign } from 'lodash/fp';
 import { connect } from 'react-redux';
 
-import ComponentData from '../../types/IComponentData';
+import ComponentData from '../../types/ComponentData';
 import { favouriteComponent, startComponent, stopComponent, updateAndSelectComponent } from '../actions/components';
 import ComponentList from '../components/ComponentList';
 import findOrderedSearchResults from '../helpers/resultsHelper';

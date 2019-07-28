@@ -1,4 +1,4 @@
-import ComponentData from '../../types/IComponentData';
+import ComponentData from '../../types/ComponentData';
 
 interface IState {
   components: ComponentData[];

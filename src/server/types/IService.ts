@@ -1,4 +1,4 @@
-import ComponentData from '../../types/IComponentData';
+import ComponentData from '../../types/ComponentData';
 import CreateType from './CreateType';
 
 interface IService {

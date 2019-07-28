@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import ComponentState from '../../types/ComponentState';
-import ComponentData from '../../types/IComponentData';
+import ComponentData from '../../types/ComponentData';
 import ExternalLink from './ExternalLink';
 import IconButton from './IconButton';
 

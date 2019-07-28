@@ -1,7 +1,7 @@
 import { Express } from 'express';
 import { join } from 'path';
 
-import ComponentData from '../../types/IComponentData';
+import ComponentData from '../../types/ComponentData';
 import Service from '../service/Service';
 import ISystem from '../types/ISystem';
 import createApiServer from './ApiServer';

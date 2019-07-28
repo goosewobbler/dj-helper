@@ -1,5 +1,5 @@
 import ComponentHandlers from '../types/ComponentHandlers';
-import ComponentData from '../../types/IComponentData';
+import ComponentData from '../../types/ComponentData';
 
 export default interface ComponentContext {
   component: ComponentData;

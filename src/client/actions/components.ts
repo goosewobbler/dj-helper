@@ -1,5 +1,5 @@
 import ComponentState from '../../types/ComponentState';
-import ComponentData from '../../types/IComponentData';
+import ComponentData from '../../types/ComponentData';
 
 export const receiveComponents = (components: ComponentData[]) => ({
   components,

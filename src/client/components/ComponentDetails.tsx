@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import ComponentData from '../../types/IComponentData';
+import ComponentData from '../../types/ComponentData';
 import ComponentDependency from '../../types/ComponentDependency';
 import ComponentHandlers from '../types/ComponentHandlers';
 import ComponentActions from './ComponentActions';

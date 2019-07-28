@@ -4,7 +4,7 @@ import { join } from 'path';
 import * as socketIo from 'socket.io';
 import createApp from './server/app/app';
 import System from './server/system/System';
-import ComponentData from './types/IComponentData';
+import ComponentData from './types/ComponentData';
 
 const startServer = async () => {
   let sendComponentData: (data: ComponentData) => void;

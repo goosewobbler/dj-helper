@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import ComponentData from '../../types/IComponentData';
+import ComponentData from '../../types/ComponentData';
 import ScrollList from '../ui/ScrollList';
 import ComponentListItem from './ComponentListItem';
 

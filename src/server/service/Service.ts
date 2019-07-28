@@ -1,6 +1,6 @@
 import { join } from 'path';
 import ComponentState from '../../types/ComponentState';
-import ComponentData from '../../types/IComponentData';
+import ComponentData from '../../types/ComponentData';
 import CreateType from '../types/CreateType';
 import IConfig from '../types/IConfig';
 import IRouting from '../types/IRouting';

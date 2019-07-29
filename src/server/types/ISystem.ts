@@ -1,5 +1,5 @@
 import IFileSystem from './IFileSystem';
-import IGitSystem from './IGitSystem';
+import IGitSystem from './GitSystem';
 import IMorphSystem from './IMorphSystem';
 import INetworkSystem from './INetworkSystem';
 import IProcessSystem from './IProcessSystem';

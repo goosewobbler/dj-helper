@@ -1,5 +1,5 @@
 import { randomBytes } from 'crypto';
-import IGitSystem from '../types/IGitSystem';
+import GitSystem from '../types/GitSystem';
 import ProcessSystem from './ProcessSystem';
 
 const checkoutExistingBranch = (directory: string, branchName: string) =>
@@ -50,7 +50,7 @@ const readyToCommit = (directory: string) =>
 const stageFile = (directory: string, path: string) =>
   ProcessSystem.runToCompletion(directory, `git add ${path}`, () => null, console.error);
 
-const GitSystem: IGitSystem = {
+const GitSystem: GitSystem = {
   checkoutExistingBranch,
   checkoutMaster,
   checkoutNewBranch,

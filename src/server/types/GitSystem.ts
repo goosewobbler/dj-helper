@@ -1,4 +1,5 @@
 interface IGitSystem {
+  checkoutMaster(directory: string): Promise<void>;
   checkoutExistingBranch(directory: string, branchName: string): Promise<void>;
   checkoutNewBranch(directory: string, branchName: string): Promise<void>;
   commit(directory: string, message: string): Promise<void>;

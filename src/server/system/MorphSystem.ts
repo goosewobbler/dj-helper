@@ -14,10 +14,10 @@ const promote = async (name: string, environment: string) =>
     version: 'latest',
   });
 
-const MorphSystem: MorphSystem = {
+const MorphSystemExport: MorphSystem = {
   getShrinkwrapped,
   getVersionOnEnvironment,
   promote,
 };
 
-export default MorphSystem;
+export default MorphSystemExport;

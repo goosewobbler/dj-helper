@@ -36,7 +36,9 @@ const renderStateLabel = (state: ComponentState) => {
 const renderRendererLabel = (props: IComponentActionsProps) => {
   return (
     <p className="renderer-label">
-      Node version: {props.component.rendererType}
+      Node version: 
+      {' '}
+      {props.component.rendererType}
     </p>
   );
 };
@@ -126,14 +128,14 @@ const ComponentActions = (props: IComponentActionsProps) => (
         <ExternalLink
           label="Dependency Graph"
           link={`https://morph-dependency-grapher.test.api.bbc.co.uk/env/test/modules/${props.component.displayName}`}
-          black={true}
+          black
         />
       </div>
       <div className="wrapper">
         <ExternalLink
           label="GitHub"
           link={`https://github.com/bbc/morph-modules/tree/master/${props.component.displayName}`}
-          black={true}
+          black
         />
       </div>
     </div>

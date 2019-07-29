@@ -50,7 +50,7 @@ const readyToCommit = (directory: string) =>
 const stageFile = (directory: string, path: string) =>
   ProcessSystem.runToCompletion(directory, `git add ${path}`, () => null, console.error);
 
-const GitSystem: GitSystem = {
+const GitSystemObj: GitSystem = {
   checkoutExistingBranch,
   checkoutMaster,
   checkoutNewBranch,
@@ -62,4 +62,4 @@ const GitSystem: GitSystem = {
   stageFile,
 };
 
-export default GitSystem;
+export default GitSystemObj;

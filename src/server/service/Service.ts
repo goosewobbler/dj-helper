@@ -35,7 +35,7 @@ const createService = async (
   let nextPort = 8083;
   let routing: Routing;
   const editors: string[] = [];
-  const allDependencies: { [Key: string]: Array<{ name: string }> } = {};
+  const allDependencies: { [Key: string]: { name: string }[] } = {};
   let grapher: Grapher;
 
   const acquirePort = () => nextPort++;
@@ -101,13 +101,13 @@ const createService = async (
     grapher = createGrapher(allDependencies);
 
     await system.file.watchDirectory(options.componentsDirectory, async path => {
-      const relativePath = path.replace(options.componentsDirectory + '/', '');
+      const relativePath = path.replace(`${options.componentsDirectory  }/`, '');
       const slashIndex = relativePath.indexOf('/');
       const directoryName = relativePath.substr(0, slashIndex);
       const changedComponent = components.find(component => component.getDirectoryName() === directoryName);
       if (changedComponent && changedComponent.getState() === ComponentState.Running) {
         const isSass = relativePath.indexOf('/sass/') > -1;
-        await changedComponent.build(isSass, relativePath.replace(directoryName + '/', ''));
+        await changedComponent.build(isSass, relativePath.replace(`${directoryName  }/`, ''));
       }
     });
 

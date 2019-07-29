@@ -1,4 +1,4 @@
-interface IProcessSystem {
+export default interface ProcessSystem {
   getCommandLineArgs(): Promise<string[]>;
   getCurrentWorkingDirectory(): Promise<string>;
   log(message: string): void;
@@ -16,5 +16,3 @@ interface IProcessSystem {
     onError: (message: string) => void,
   ): Promise<() => Promise<void>>;
 }
-
-export default IProcessSystem;

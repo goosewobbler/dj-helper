@@ -1,18 +1,18 @@
 import GraphData from '../types/GraphData';
 import Grapher from '../types/Grapher';
 
-interface INode {
+interface Node {
   id: number;
   name: string;
 }
 
-interface IEdge {
+interface Edge {
   from: number;
   to: number;
 }
 
-const Grapher = (dependencies: { [Key: string]: Array<{ name: string }> }): Grapher => {
-  const nodes: INode[] = [];
+const createGrapher = (dependencies: { [Key: string]: { name: string }[] }): Grapher => {
+  const nodes: Node[] = [];
   const edgesDownMap: { [Key: number]: number[] } = [];
   const edgesUpMap: { [Key: number]: number[] } = [];
 
@@ -40,7 +40,7 @@ const Grapher = (dependencies: { [Key: string]: Array<{ name: string }> }): Grap
     });
   });
 
-  const follow = (name: string, edgesMap: { [Key: number]: number[] }, totalNodes: INode[], totalEdges: IEdge[]) => {
+  const follow = (name: string, edgesMap: { [Key: number]: number[] }, totalNodes: Node[], totalEdges: Edge[]) => {
     const node = nodes.find(n => n.name === name);
     if (node && totalNodes.indexOf(node) === -1) {
       totalNodes.push(node);
@@ -56,8 +56,8 @@ const Grapher = (dependencies: { [Key: string]: Array<{ name: string }> }): Grap
   };
 
   const getDependantData = (name: string): GraphData => {
-    const nodesSubset: INode[] = [];
-    const edgesSubset: IEdge[] = [];
+    const nodesSubset: Node[] = [];
+    const edgesSubset: Edge[] = [];
 
     follow(name, edgesUpMap, nodesSubset, edgesSubset);
 
@@ -68,8 +68,8 @@ const Grapher = (dependencies: { [Key: string]: Array<{ name: string }> }): Grap
   };
 
   const getDependencyData = (name: string): GraphData => {
-    const nodesSubset: INode[] = [];
-    const edgesSubset: IEdge[] = [];
+    const nodesSubset: Node[] = [];
+    const edgesSubset: Edge[] = [];
 
     follow(name, edgesDownMap, nodesSubset, edgesSubset);
 
@@ -85,4 +85,4 @@ const Grapher = (dependencies: { [Key: string]: Array<{ name: string }> }): Grap
   };
 };
 
-export default Grapher;
+export default createGrapher;

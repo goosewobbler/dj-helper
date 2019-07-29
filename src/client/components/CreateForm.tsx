@@ -8,7 +8,7 @@ const KEY_ESCAPE = 27;
 const SelectInput = (props: {
   className?: string;
   label: string;
-  options: Array<{ value: string; label: string }>;
+  options: { value: string; label: string }[];
   onChange(event: any): any;
 }) => (
   <div>

@@ -5,12 +5,10 @@ import MorphSystem from './MorphSystem';
 import NetworkSystem from './NetworkSystem';
 import ProcessSystem from './ProcessSystem';
 
-const System: System = {
+export default {
   file: FileSystem,
   git: GitSystem,
   morph: MorphSystem,
   network: NetworkSystem,
   process: ProcessSystem,
-};
-
-export default System;
+} as System;

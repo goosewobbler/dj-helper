@@ -93,7 +93,9 @@ class ComponentListItem extends React.PureComponent<IComponentListItemProps> {
   public static displayName = 'ComponentListItem';
 
   private handleClick: () => void;
+
   private handleStart: () => void;
+
   private handleStop: () => void;
 
   constructor(props: IComponentListItemProps) {

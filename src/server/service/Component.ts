@@ -204,7 +204,7 @@ const createComponent = (
   };
 
   const setFavorite = async (favorite: boolean) => {
-    await state.store(`favorite.${name}`, favorite ? favorite : null);
+    await state.store(`favorite.${name}`, favorite || null);
   };
 
   const request = async (props: { [Key: string]: string }, history: boolean) => {

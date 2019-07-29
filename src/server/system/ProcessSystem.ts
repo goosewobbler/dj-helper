@@ -165,7 +165,7 @@ const runUntilStopped = (
     });
   });
 
-const ProcessSystem: ProcessSystem = {
+const ProcessSystemExport: ProcessSystem = {
   getCommandLineArgs,
   getCurrentWorkingDirectory,
   log,
@@ -174,4 +174,4 @@ const ProcessSystem: ProcessSystem = {
   runUntilStopped,
 };
 
-export default ProcessSystem;
+export default ProcessSystemExport;

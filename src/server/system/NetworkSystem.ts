@@ -12,8 +12,8 @@ const get = (url: string) =>
     }),
   );
 
-const NetworkSystem: NetworkSystem = {
+const NetworkSystemExport: NetworkSystem = {
   get,
 };
 
-export default NetworkSystem;
+export default NetworkSystemExport;

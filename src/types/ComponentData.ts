@@ -11,7 +11,7 @@ export default interface ComponentData {
   history?: string[];
   url?: string;
   type?: ComponentType;
-  dependencies?: IComponentDependency[];
+  dependencies?: ComponentDependency[];
   linking?: string[];
   promoting?: string;
   promotionFailure?: string;

@@ -1,7 +1,7 @@
-import IRouting from '../types/IRouting';
-import ISystem from '../types/ISystem';
+import Routing from '../types/Routing';
+import System from '../types/System';
 
-const Routing = async (routingFilePath: string, system: ISystem): Promise<IRouting> => {
+const createRouting = async (routingFilePath: string, system: System): Promise<Routing> => {
   const routes: { [Key: string]: number } = {};
 
   const write = () => system.file.writeFile(routingFilePath, JSON.stringify(routes, null, 2));
@@ -22,4 +22,4 @@ const Routing = async (routingFilePath: string, system: ISystem): Promise<IRouti
   };
 };
 
-export default Routing;
+export default createRouting;

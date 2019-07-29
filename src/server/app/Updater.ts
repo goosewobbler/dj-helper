@@ -1,9 +1,9 @@
 import { gt } from 'semver';
 import runNpm from '../helpers/runNpm';
-import ISystem from '../types/ISystem';
-import IUpdater from '../types/IUpdater';
+import System from '../types/System';
+import Updater from '../types/Updater';
 
-const Updater = (system: ISystem, currentVersion: string): IUpdater => {
+const createUpdater = (system: System, currentVersion: string): Updater => {
   const fetchNewVersion = async (): Promise<string> => {
     let version: string = null;
     const installPath = '/tmp/morph-developer-console-version';
@@ -69,4 +69,4 @@ const Updater = (system: ISystem, currentVersion: string): IUpdater => {
   };
 };
 
-export default Updater;
+export default createUpdater;

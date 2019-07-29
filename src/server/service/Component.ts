@@ -2,23 +2,23 @@ import { startsWith } from 'lodash/fp';
 import { join } from 'path';
 import * as semver from 'semver';
 
-import IComponentDependency from '../../types/ComponentDependency';
-import IConfig from '../types/IConfig';
-import IRouting from '../types/IRouting';
-import IState from '../types/IState';
-import ISystem from '../types/ISystem';
+import ComponentDependency from '../../types/ComponentDependency';
+import Config from '../types/Config';
+import Routing from '../types/Routing';
+import State from '../types/State';
+import System from '../types/System';
 import ComponentActions from './ComponentActions';
 import ComponentStateMachine from './ComponentStateMachine';
 import openInEditorHelper from './helpers/editor';
 import requestWithRetries from './helpers/request';
 import ComponentType from './types/ComponentType';
-import IComponent from './types/IComponent';
+import Component from './types/Component';
 
-const Component = (
-  system: ISystem,
-  routing: IRouting,
-  config: IConfig,
-  state: IState,
+const createComponent = (
+  system: System,
+  routing: Routing,
+  config: Config,
+  state: State,
   name: string,
   directoryName: string,
   componentPath: string,
@@ -26,14 +26,14 @@ const Component = (
   acquirePort: () => number,
   onUpdate: (name: string) => Promise<void>,
   onReload: (restartOthers: boolean) => void,
-  getOther: (name: string) => IComponent,
+  getOther: (name: string) => Component,
   rendererType: string,
-): IComponent => {
+): Component => {
   let port: number = null;
   let pagePort: number = null;
   let promoting: string = null;
   let promotionFailure: string = null;
-  let dependencies: IComponentDependency[] = [];
+  let dependencies: ComponentDependency[] = [];
   let url: string = null;
   const linking: string[] = [];
   const versions: { int: string; live: string; local: string; test: string } = {
@@ -113,7 +113,7 @@ const Component = (
       Object.keys(packageContents.dependencies || {})
         .filter(startsWith('bbc-morph-'))
         .map(
-          async (dependencyName): Promise<IComponentDependency> => {
+          async (dependencyName): Promise<ComponentDependency> => {
             return {
               ...getDependency(dependencyName),
               displayName: dependencyName.substr(10),
@@ -385,4 +385,4 @@ const Component = (
   };
 };
 
-export default Component;
+export default createComponent;

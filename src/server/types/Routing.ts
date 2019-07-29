@@ -1,5 +1,3 @@
-interface IRouting {
+export default interface Routing {
   updateRoute(componentName: string, port: number): Promise<void>;
 }
-
-export default IRouting;

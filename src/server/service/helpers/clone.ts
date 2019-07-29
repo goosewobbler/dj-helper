@@ -1,9 +1,9 @@
 import { join } from 'path';
 
-import ISystem from '../../types/ISystem';
+import System from '../../types/System';
 
 const clone = async (
-  system: ISystem,
+  system: System,
   path: string,
   name: string,
   clonePath: string,

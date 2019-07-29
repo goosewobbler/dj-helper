@@ -1,7 +1,7 @@
-import ISystem from '../types/ISystem';
+import System from '../types/System';
 
 const runNpm = (
-  system: ISystem,
+  system: System,
   directory: string,
   args: string[],
   onOutput: (message: string) => void,

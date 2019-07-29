@@ -2,13 +2,13 @@ import renderChas from 'chas';
 import { startsWith } from 'lodash/fp';
 
 import ComponentState from '../../../types/ComponentState';
-import IConfig from '../../types/IConfig';
-import IState from '../../types/IState';
-import ISystem from '../../types/ISystem';
+import Config from '../../types/Config';
+import State from '../../types/State';
+import System from '../../types/System';
 import ComponentType from '../types/ComponentType';
 
 const requestWithRetries = async (
-  system: ISystem,
+  system: System,
   name: string,
   type: ComponentType,
   port: number,
@@ -74,9 +74,9 @@ const getNewHistory = (currentHistory: string[], newEntry: string) => {
 };
 
 const request = async (
-  system: ISystem,
-  config: IConfig,
-  state: IState,
+  system: System,
+  config: Config,
+  state: State,
   name: string,
   componentPath: string,
   currentState: ComponentState,

@@ -1,4 +1,4 @@
-interface IUpdater {
+export default interface Updater {
   getStatus(): Promise<{
     currentVersion: string;
     updateAvailable: string;
@@ -7,5 +7,3 @@ interface IUpdater {
   }>;
   update(): Promise<void>;
 }
-
-export default IUpdater;

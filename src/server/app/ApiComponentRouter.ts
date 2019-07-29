@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import CreateType from '../types/CreateType';
-import IService from '../types/IService';
+import Service from '../types/Service';
 
 const createTypeMap: { [Key: string]: CreateType } = {
   data: CreateType.Data,
@@ -12,7 +12,7 @@ const error = (ex: any) => {
   console.error(ex.stack);
 };
 
-const createApiComponentRouter = (service: IService) => {
+const createApiComponentRouter = (service: Service) => {
   const router = Router();
 
   router.get('/', (req: any, res: any) => res.json(service.getComponentsSummaryData()));

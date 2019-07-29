@@ -1,25 +1,25 @@
 import { join } from 'path';
 
 import runNpm from '../helpers/runNpm';
-import IConfig from '../types/IConfig';
-import IRouting from '../types/IRouting';
-import ISystem from '../types/ISystem';
+import Config from '../types/Config';
+import Routing from '../types/Routing';
+import System from '../types/System';
 import packageHash from './helpers/packageHash';
-import IComponent from './types/IComponent';
-import IComponentActions from './types/IComponentActions';
+import Component from './types/Component';
+import ComponentActions from './types/ComponentActions';
 
 const ComponentActions = (
-  system: ISystem,
-  routing: IRouting,
-  config: IConfig,
+  system: System,
+  routing: Routing,
+  config: Config,
   componentPath: string,
   name: string,
   getPort: () => number,
   log: (message: string) => void,
-  getOther: (name: string) => IComponent,
+  getOther: (name: string) => Component,
   getUseCache: () => boolean,
   onReload: (restartOthers: boolean) => void,
-): IComponentActions => {
+): ComponentActions => {
   let stopRunning: () => Promise<void>;
 
   const readPackage = async () => JSON.parse(await system.file.readFile(join(componentPath, 'package.json')));

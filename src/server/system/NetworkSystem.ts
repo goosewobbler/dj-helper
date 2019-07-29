@@ -1,5 +1,5 @@
 import * as request from 'request';
-import INetworkSystem from '../types/INetworkSystem';
+import NetworkSystem from '../types/NetworkSystem';
 
 const get = (url: string) =>
   new Promise<{ body: string; headers: { [Key: string]: string }; statusCode: number }>((resolve, reject) =>
@@ -12,7 +12,7 @@ const get = (url: string) =>
     }),
   );
 
-const NetworkSystem: INetworkSystem = {
+const NetworkSystem: NetworkSystem = {
   get,
 };
 

@@ -5,7 +5,7 @@ import * as ls from 'ls';
 import * as ncp from 'ncp';
 import * as watch from 'node-watch';
 import { join } from 'path';
-import IFileSystem from '../types/IFileSystem';
+import FileSystem from '../types/FileSystem';
 
 const ignore = [
   '/.tscache/',
@@ -117,7 +117,7 @@ const removeSymlink = async (path: string) => {
   }
 };
 
-const FileSystem: IFileSystem = {
+const FileSystem: FileSystem = {
   copyDirectory,
   createSymlink,
   deleteDirectory,

@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import { exec, spawn } from 'child_process';
 import * as stripAnsi from 'strip-ansi';
-import IProcessSystem from '../types/IProcessSystem';
+import ProcessSystem from '../types/ProcessSystem';
 
 const MESSAGE_NAME_PATTERN = /^(\[[^\]]+\]) .+/;
 const MESSAGE_REPLACE_PATTERN = /.*\[\d\d\d\] http.+( {.+})$/;
@@ -165,7 +165,7 @@ const runUntilStopped = (
     });
   });
 
-const ProcessSystem: IProcessSystem = {
+const ProcessSystem: ProcessSystem = {
   getCommandLineArgs,
   getCurrentWorkingDirectory,
   log,

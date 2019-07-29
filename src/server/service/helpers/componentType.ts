@@ -1,8 +1,8 @@
-import IConfig from '../../types/IConfig';
+import Config from '../../types/Config';
 import getDefaultTypeOverride from '../DefaultTypeOverrides';
 import ComponentType from '../types/ComponentType';
 
-const getComponentType = (config: IConfig, packageContents: any, name: string) => {
+const getComponentType = (config: Config, packageContents: any, name: string) => {
   const typeOverride = getDefaultTypeOverride(name) || config.getValue(`typeOverrides.${name}`);
   if (typeOverride) {
     switch (typeOverride) {
@@ -18,7 +18,7 @@ const getComponentType = (config: IConfig, packageContents: any, name: string) =
   const packageDependencies = packageContents.dependencies || {};
   if (packageDependencies['bbc-morph-page-assembler']) {
     return ComponentType.Page;
-  } else if (packageDependencies.react) {
+  } if (packageDependencies.react) {
     return ComponentType.View;
   }
   return ComponentType.Data;

@@ -4,13 +4,13 @@ import * as express from 'express';
 import { readFileSync } from 'graceful-fs';
 import { join } from 'path';
 
-import IConfig from '../types/IConfig';
-import IService from '../types/IService';
-import IUpdater from '../types/IUpdater';
+import Config from '../types/Config';
+import Service from '../types/Service';
+import Updater from '../types/Updater';
 import createApiComponentRouter from './ApiComponentRouter';
 import renderIndex from './indexRenderer';
 
-const createServer = (service: IService, config: IConfig, updater: IUpdater, onUpdated: () => void) => {
+const createServer = (service: Service, config: Config, updater: Updater, onUpdated: () => void) => {
   const app = express();
 
   const publicPath = join(__dirname, '../../../public');

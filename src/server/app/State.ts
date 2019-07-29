@@ -1,7 +1,7 @@
-import IState from '../types/IState';
-import ISystem from '../types/ISystem';
+import State from '../types/State';
+import System from '../types/System';
 
-const State = async (stateFilePath: string, system: ISystem): Promise<IState> => {
+const createState = async (stateFilePath: string, system: System): Promise<State> => {
   let state: { [Key: string]: any } = {};
 
   try {
@@ -27,4 +27,4 @@ const State = async (stateFilePath: string, system: ISystem): Promise<IState> =>
   };
 };
 
-export default State;
+export default createState;

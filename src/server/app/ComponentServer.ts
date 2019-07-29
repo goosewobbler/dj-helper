@@ -1,6 +1,6 @@
 import * as express from 'express';
 
-import IService from '../types/IService';
+import Service from '../types/Service';
 
 const convertPropsString = (propsString: string) => {
   const props: { [Key: string]: string } = {};
@@ -35,12 +35,12 @@ const createViewPage = (response: { head: string[]; bodyInline: string; bodyLast
     '</html>',
   ].join('');
 
-const createComponentServer = (service: IService) => {
+const createComponentServer = (service: Service) => {
   const server = express();
 
   server.get('/data/:name*', async (req, res) => {
     try {
-      const accept = req.headers.accept;
+      const {accept} = req.headers;
       const history = !accept || accept.indexOf('text/html') !== -1;
       const propsString = req.path.replace(`/data/${req.params.name}`, '');
       const { body, headers, statusCode } = await service.request(
@@ -59,7 +59,7 @@ const createComponentServer = (service: IService) => {
 
   server.get('/view/:name*', async (req, res) => {
     try {
-      const accept = req.headers.accept;
+      const {accept} = req.headers;
       const history = !accept || accept.indexOf('text/html') !== -1;
       const propsString = req.path.replace(`/view/${req.params.name}`, '');
       const { body, headers, statusCode } = await service.request(

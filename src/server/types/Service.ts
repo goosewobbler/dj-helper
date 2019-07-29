@@ -1,8 +1,8 @@
 import ComponentData from '../../types/ComponentData';
 import CreateType from './CreateType';
-import IGraphData from './IGraphData';
+import GraphData from './GraphData';
 
-export default interface IService {
+export default interface Service {
   bump(name: string, type: 'patch' | 'minor'): Promise<void>;
   build(name: string): Promise<void>;
   clone(name: string, cloneName: string, options: { description: string }): Promise<void>;
@@ -10,8 +10,8 @@ export default interface IService {
   fetchDetails(name: string): Promise<void>;
   getComponentsData(): { components: ComponentData[]; editors: string[] };
   getComponentsSummaryData(): { components: ComponentData[]; editors: string[] };
-  getDependantGraph(name: string): IGraphData;
-  getDependencyGraph(name: string): IGraphData;
+  getDependantGraph(name: string): GraphData;
+  getDependencyGraph(name: string): GraphData;
   link(name: string, dependency: string): Promise<void>;
   openInEditor(name: string): Promise<void>;
   promote(name: string, environment: string): Promise<void>;

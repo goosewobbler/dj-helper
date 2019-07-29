@@ -1,5 +1,5 @@
 import ComponentState from '../../../types/ComponentState';
-import IComponentDependency from '../../../types/ComponentDependency';
+import ComponentDependency from '../../../types/ComponentDependency';
 import ComponentType from './ComponentType';
 
 interface IComponent {
@@ -15,7 +15,7 @@ interface IComponent {
   getUseCache(): boolean;
   setFavorite(favorite: boolean): Promise<void>;
   setUseCache(useCache: boolean): Promise<void>;
-  getDependencies(): IComponentDependency[];
+  getDependencies(): ComponentDependency[];
   getDependenciesSummary(): Promise<{ name: string }[]>;
   getLatestVersion(): Promise<string>;
   getLinking(): string[];

@@ -1,11 +1,11 @@
 import * as express from 'express';
 import * as url from 'url';
 
-import IConfig from '../types/IConfig';
-import IService from '../types/IService';
+import Config from '../types/Config';
+import Service from '../types/Service';
 import ceefaxStyle from './helpers/ceefaxStyle';
 
-const headScript = (config: IConfig) =>
+const headScript = (config: Config) =>
   `<script src="http://localhost:3333/socket.io/socket.io.js"></script>${
     config.getValue('ceefax') === true ? ceefaxStyle : ''
   }`;
@@ -24,7 +24,7 @@ const extractHtml = (body: string) => {
   }
 };
 
-const createResponse = (config: IConfig, body: string, statusCode: number) => {
+const createResponse = (config: Config, body: string, statusCode: number) => {
   if (statusCode === 404 && (!body || body === '{}')) {
     return `<!doctype html><html lang="en-gb"><head><style>*{margin:0;padding:0;}body{padding:16px;}</style></head><body><pre style="font-size: 48px;">404 😕</pre></body></html>`;
   }
@@ -33,12 +33,12 @@ const createResponse = (config: IConfig, body: string, statusCode: number) => {
     .replace('</body>', `${bodyScript}</body>`);
 };
 
-const createPageServer = (service: IService, config: IConfig, componentName: string) => {
+const createPageServer = (service: Service, config: Config, componentName: string) => {
   const server = express();
 
   server.get('*', async (req, res) => {
     try {
-      const {accept} = req.headers;
+      const { accept } = req.headers;
       const history = !accept || accept.indexOf('text/html') !== -1;
       const query = url.parse(req.url).query || '';
       const path = req.path + (query ? `?${query}` : '');

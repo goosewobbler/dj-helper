@@ -5,9 +5,9 @@ import { Provider } from 'react-redux';
 import App from '../../client/containers/AppContainer';
 import createStore from '../../client/store';
 import IState from '../../client/types/IState';
-import IService from '../types/IService';
+import Service from '../types/Service';
 
-const renderIndex = async (service: IService, template: string, selectedComponent?: string): Promise<string> => {
+const renderIndex = async (service: Service, template: string, selectedComponent?: string): Promise<string> => {
   const summaryData = await service.getComponentsSummaryData();
 
   const initialState: IState = {

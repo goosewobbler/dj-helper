@@ -1,7 +1,7 @@
 import ComponentState from '../../types/ComponentState';
-import IComponentActions from './types/IComponentActions';
+import ComponentActions from './types/ComponentActions';
 
-const ComponentStateMachine = (actions: IComponentActions, onStateChanged: (state: ComponentState) => void) => {
+const ComponentStateMachine = (actions: ComponentActions, onStateChanged: (state: ComponentState) => void) => {
   let currentState: ComponentState = ComponentState.Stopped;
 
   const getState = () => currentState;

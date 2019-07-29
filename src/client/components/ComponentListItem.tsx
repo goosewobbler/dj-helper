@@ -124,7 +124,6 @@ class ComponentListItem extends React.PureComponent<IComponentListItemProps> {
 
     return (
       <div
-        theme={this.props.theme}
         role="button"
         id={createID(this.props.name)}
         highlighted={this.props.selected}

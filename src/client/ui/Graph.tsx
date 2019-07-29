@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import IGraphData from '../../server/types/IGraphData';
+import GraphData from '../../server/types/GraphData';
 import LoadingIcon from './icon/LoadingIcon';
 
 const GraphVis = require('react-graph-vis').default; // tslint:disable-line no-var-requires
@@ -12,10 +12,10 @@ interface IGraphProps {
 }
 
 interface IGraphState {
-  data: IGraphData;
+  data: GraphData;
 }
 
-const convertData = (data: IGraphData) => {
+const convertData = (data: GraphData) => {
   const newNodes = data.nodes.map(node => ({ id: node.id, label: node.name.replace(/^bbc-morph-/, '') }));
   return {
     edges: data.edges,
@@ -109,7 +109,7 @@ class Graph extends React.PureComponent<IGraphProps, IGraphState> {
       const events = {
         doubleClick: (event: any) => {
           const id = event.nodes[0];
-          const {name} = this.state.data.nodes.find(n => n.id === id);
+          const { name } = this.state.data.nodes.find(n => n.id === id);
           this.props.onSelect(name);
         },
       };

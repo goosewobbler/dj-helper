@@ -1,9 +1,9 @@
 import { startsWith } from 'lodash/fp';
 
-import IConfig from '../types/IConfig';
-import ISystem from '../types/ISystem';
+import Config from '../types/Config';
+import System from '../types/System';
 
-const Config = async (configFilePath: string, system: ISystem): Promise<IConfig> => {
+const Config = async (configFilePath: string, system: System): Promise<Config> => {
   let config: { [Key: string]: any } = {};
 
   try {

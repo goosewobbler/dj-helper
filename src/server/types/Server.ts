@@ -1,7 +1,5 @@
 import ComponentData from '../../types/ComponentData';
 
-interface IServer {
+export default interface Server {
   sendComponentData(data: ComponentData): void;
 }
-
-export default IServer;

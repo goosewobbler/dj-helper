@@ -1,7 +1,7 @@
-import IConfig from '../../types/IConfig';
-import ISystem from '../../types/ISystem';
+import Config from '../../types/Config';
+import System from '../../types/System';
 
-const openInEditor = async (system: ISystem, config: IConfig, componentPath: string) => {
+const openInEditor = async (system: System, config: Config, componentPath: string) => {
   const wslPathIdentifier = '/mnt/c/';
 
   // If the path to the morph module directory starts /mnt/c/, we assume we're on Windows Subsystem for Linux

@@ -1,6 +1,6 @@
 import { join } from 'path';
 import CreateType from '../../types/CreateType';
-import ISystem from '../../types/ISystem';
+import System from '../../types/System';
 
 const createTypeDirectories = {
   [CreateType.Data]: 'data',
@@ -8,7 +8,12 @@ const createTypeDirectories = {
   [CreateType.ViewCSS]: 'viewcss',
 };
 
-const create = async (system: ISystem, name: string, type: CreateType, createOptions: { description: string }) => {
+const createComponentFiles = async (
+  system: System,
+  name: string,
+  type: CreateType,
+  createOptions: { description: string },
+) => {
   const packageName = `bbc-morph-${name}`;
   const typeDirectory = createTypeDirectories[type];
   const fromDirectory = join(__dirname, `../../../../templates/${typeDirectory}`);
@@ -40,4 +45,4 @@ const create = async (system: ISystem, name: string, type: CreateType, createOpt
   await system.file.moveDirectory(npmIgnorePath, gitIgnorePath);
 };
 
-export default create;
+export default createComponentFiles;

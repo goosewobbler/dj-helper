@@ -1,5 +1,5 @@
-import IGraphData from '../types/IGraphData';
-import IGrapher from '../types/IGrapher';
+import GraphData from '../types/GraphData';
+import Grapher from '../types/Grapher';
 
 interface INode {
   id: number;
@@ -11,7 +11,7 @@ interface IEdge {
   to: number;
 }
 
-const Grapher = (dependencies: { [Key: string]: Array<{ name: string }> }): IGrapher => {
+const Grapher = (dependencies: { [Key: string]: Array<{ name: string }> }): Grapher => {
   const nodes: INode[] = [];
   const edgesDownMap: { [Key: number]: number[] } = [];
   const edgesUpMap: { [Key: number]: number[] } = [];
@@ -55,7 +55,7 @@ const Grapher = (dependencies: { [Key: string]: Array<{ name: string }> }): IGra
     }
   };
 
-  const getDependantData = (name: string): IGraphData => {
+  const getDependantData = (name: string): GraphData => {
     const nodesSubset: INode[] = [];
     const edgesSubset: IEdge[] = [];
 
@@ -67,7 +67,7 @@ const Grapher = (dependencies: { [Key: string]: Array<{ name: string }> }): IGra
     };
   };
 
-  const getDependencyData = (name: string): IGraphData => {
+  const getDependencyData = (name: string): GraphData => {
     const nodesSubset: INode[] = [];
     const edgesSubset: IEdge[] = [];
 

@@ -1,4 +1,4 @@
-interface IGitSystem {
+export default interface GitSystem {
   checkoutMaster(directory: string): Promise<void>;
   checkoutExistingBranch(directory: string, branchName: string): Promise<void>;
   checkoutNewBranch(directory: string, branchName: string): Promise<void>;
@@ -9,5 +9,3 @@ interface IGitSystem {
   readyToCommit(directory: string): Promise<boolean>;
   stageFile(directory: string, path: string): Promise<void>;
 }
-
-export default IGitSystem;

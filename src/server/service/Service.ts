@@ -4,25 +4,25 @@ import { join } from 'path';
 import ComponentState from '../../types/ComponentState';
 import IComponentData from '../../types/ComponentData';
 import CreateType from '../types/CreateType';
-import IConfig from '../types/IConfig';
-import IGrapher from '../types/IGrapher';
-import IRouting from '../types/IRouting';
-import IService from '../types/IService';
-import IState from '../types/IState';
-import ISystem from '../types/ISystem';
-import Component from './Component';
-import Grapher from './Grapher';
+import Config from '../types/Config';
+import Grapher from '../types/Grapher';
+import Routing from '../types/Routing';
+import Service from '../types/Service';
+import State from '../types/State';
+import System from '../types/System';
+import createComponent from './Component';
+import createGrapher from './Grapher';
 import cloneComponent from './helpers/clone';
 import getComponentType from './helpers/componentType';
-import createComponent from './helpers/create';
-import Routing from './Routing';
+import createComponentFiles from './helpers/createComponentFiles';
+import createRouting from './Routing';
 import ComponentType from './types/ComponentType';
-import IComponent from './types/IComponent';
+import IComponent from './types/Component';
 
-const Service = async (
-  system: ISystem,
-  config: IConfig,
-  state: IState,
+const createService = async (
+  system: System,
+  config: Config,
+  state: State,
   onComponentUpdate: (data: IComponentData) => void,
   onReload: () => void,
   startPageServer: (name: string) => Promise<number>,
@@ -30,13 +30,13 @@ const Service = async (
     componentsDirectory: string;
     routingFilePath: string;
   },
-): Promise<IService> => {
+): Promise<Service> => {
   const components: IComponent[] = [];
   let nextPort = 8083;
-  let routing: IRouting;
+  let routing: Routing;
   const editors: string[] = [];
   const allDependencies: { [Key: string]: Array<{ name: string }> } = {};
-  let grapher: IGrapher;
+  let grapher: Grapher;
 
   const acquirePort = () => nextPort++;
 
@@ -69,7 +69,7 @@ const Service = async (
       return onReload();
     };
 
-    const component = Component(
+    const component = createComponent(
       system,
       routing,
       config,
@@ -89,7 +89,7 @@ const Service = async (
   };
 
   const load = async () => {
-    routing = await Routing(options.routingFilePath, system);
+    routing = await createRouting(options.routingFilePath, system);
 
     const packageDirectories = await system.file.getPackageDirectories(options.componentsDirectory);
 
@@ -98,7 +98,7 @@ const Service = async (
     for (const component of components) {
       allDependencies[component.getName()] = await component.getDependenciesSummary();
     }
-    grapher = Grapher(allDependencies);
+    grapher = createGrapher(allDependencies);
 
     await system.file.watchDirectory(options.componentsDirectory, async path => {
       const relativePath = path.replace(options.componentsDirectory + '/', '');
@@ -166,7 +166,7 @@ const Service = async (
   };
 
   const create = async (name: string, type: CreateType, createOptions: { description: string }) => {
-    await createComponent(system, name, type, createOptions);
+    await createComponentFiles(system, name, type, createOptions);
     await addComponent(name);
   };
 
@@ -235,4 +235,4 @@ const Service = async (
   };
 };
 
-export default Service;
+export default createService;

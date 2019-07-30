@@ -44,7 +44,12 @@ const createGrapher = (dependencies: { [Key: string]: { name: string }[] }): Gra
     });
   });
 
-  const follow = (name: string, edgesMap: { [Key: number]: number[] }, totalNodes: Node[], totalEdges: Edge[]): void => {
+  const follow = (
+    name: string,
+    edgesMap: { [Key: number]: number[] },
+    totalNodes: Node[],
+    totalEdges: Edge[],
+  ): void => {
     const node = nodes.find((n): boolean => n.name === name);
     if (node && totalNodes.indexOf(node) === -1) {
       totalNodes.push(node);
@@ -52,7 +57,7 @@ const createGrapher = (dependencies: { [Key: string]: { name: string }[] }): Gra
         edgesMap[node.id].forEach((e): void => {
           totalEdges.push({ from: node.id, to: e });
 
-          const toNode: Node = nodes.find(n => n.id === e);
+          const toNode: Node = nodes.find((n): boolean => n.id === e);
           follow(toNode.name, edgesMap, totalNodes, totalEdges);
         });
       }

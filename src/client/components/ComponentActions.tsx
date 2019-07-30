@@ -36,10 +36,10 @@ const renderStateLabel = (state: ComponentState) => {
 const renderRendererLabel = (props: ComponentActionsProps) => {
   return (
     <p className="renderer-label">
-Node version:
+      Node version:
       {props.component.rendererType}
     </p>
-);
+  );
 };
 
 const renderUseCacheButton = (props: ComponentActionsProps) => {

@@ -58,9 +58,9 @@ const createService = async (
   const allDependencies: { [Key: string]: { name: string }[] } = {};
   let grapher: Grapher;
 
-  const acquirePort = () => nextPort + 1;
+  const acquirePort = (): number => nextPort + 1;
 
-  const getComponent = (name: string) => components.find(component => component.getName() === name);
+  const getComponent = (name: string): Component => components.find(component => component.getName() === name);
 
   const getData = (name: string): ComponentData => {
     const component = getComponent(name);
@@ -89,7 +89,7 @@ const createService = async (
   };
 
   const restartRunning = () => {
-    const running = components.filter(component => component.getState() === ComponentState.Running);
+    const running = components.filter((component): boolean => component.getState() === ComponentState.Running);
 
     return Promise.all(
       running.map(async component => {

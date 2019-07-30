@@ -1,14 +1,27 @@
 import { join } from 'path';
 
-import runNpm from '../helpers/runNpm';
-import Config from '../types/Config';
-import Routing from '../types/Routing';
-import System from '../types/System';
-import packageHash from './helpers/packageHash';
-import Component from './types/Component';
-import ComponentActions from './types/ComponentActions';
+import { runNpm } from '../helpers/npm';
+import packageHash from '../helpers/packageHash';
 
-const ComponentActions = (
+import { Component } from './component';
+import { Routing } from './routing';
+import { System } from '../system';
+import { Config } from '../app/config';
+
+interface ComponentActions {
+  buildAll(): Promise<void>;
+  buildSass(): Promise<void>;
+  install(): Promise<void>;
+  link(dependency: string): Promise<void>;
+  makeOtherLinkable(name: string): Promise<void>;
+  needsInstall(): Promise<boolean>;
+  run(restartOthers?: boolean): Promise<void>;
+  stop(): Promise<void>;
+  uninstall(): Promise<void>;
+  unlink(dependency: string): Promise<void>;
+}
+
+const createComponentActions = (
   system: System,
   routing: Routing,
   config: Config,
@@ -82,7 +95,7 @@ const ComponentActions = (
   const install = async () => {
     log('Running npm install...');
     const installLog = (message: string) => log(`[npm install] ${message}`);
-    await runNpm(system, componentPath, ['install'], installLog, installLog);
+    await runNpm(componentPath, ['install'], installLog, installLog);
     await updatePackageHash();
     if (await hasBower()) {
       const bowerLog = (message: string) => log(`[bower install] ${message}`);
@@ -179,4 +192,4 @@ const ComponentActions = (
   };
 };
 
-export default ComponentActions;
+export { createComponentActions, ComponentActions };

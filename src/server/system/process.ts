@@ -1,7 +1,25 @@
 import chalk from 'chalk';
 import { exec, spawn } from 'child_process';
 import * as stripAnsi from 'strip-ansi';
-import ProcessSystem from '../types/ProcessSystem';
+
+interface ProcessSystem {
+  getCommandLineArgs(): Promise<string[]>;
+  getCurrentWorkingDirectory(): Promise<string>;
+  log(message: string): void;
+  open(url: string): void;
+  runToCompletion(
+    directory: string,
+    command: string,
+    onOutput: (message: string) => void,
+    onError: (message: string) => void,
+  ): Promise<void>;
+  runUntilStopped(
+    directory: string,
+    command: string,
+    onOutput: (message: string) => void,
+    onError: (message: string) => void,
+  ): Promise<() => Promise<void>>;
+}
 
 const MESSAGE_NAME_PATTERN = /^(\[[^\]]+\]) .+/;
 const MESSAGE_REPLACE_PATTERN = /.*\[\d\d\d\] http.+( {.+})$/;
@@ -165,7 +183,7 @@ const runUntilStopped = (
     });
   });
 
-const ProcessSystemExport: ProcessSystem = {
+const processSystem: ProcessSystem = {
   getCommandLineArgs,
   getCurrentWorkingDirectory,
   log,
@@ -174,4 +192,4 @@ const ProcessSystemExport: ProcessSystem = {
   runUntilStopped,
 };
 
-export default ProcessSystemExport;
+export { processSystem as process, ProcessSystem };

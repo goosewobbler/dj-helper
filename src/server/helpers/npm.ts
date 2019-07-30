@@ -1,7 +1,6 @@
-import System from '../types/System';
+import { system } from '../system';
 
 const runNpm = (
-  system: System,
   directory: string,
   args: string[],
   onOutput: (message: string) => void,
@@ -13,4 +12,4 @@ const runNpm = (
   return system.process.runToCompletion(directory, command, onOutput, onError);
 };
 
-export default runNpm;
+export { runNpm };

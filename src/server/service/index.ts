@@ -1,29 +1,50 @@
 import { get } from 'lodash';
 import { join } from 'path';
 
-import ComponentState from '../../types/ComponentState';
-import IComponentData from '../../types/ComponentData';
-import CreateType from '../types/CreateType';
 import Config from '../types/Config';
-import Grapher from '../types/Grapher';
-import Routing from '../types/Routing';
-import Service from '../types/Service';
-import State from '../types/State';
-import System from '../types/System';
-import createComponent from './Component';
-import createGrapher from './Grapher';
-import cloneComponent from './helpers/clone';
-import getComponentType from './helpers/componentType';
-import createComponentFiles from './helpers/createComponentFiles';
-import createRouting from './Routing';
-import ComponentType from './types/ComponentType';
-import IComponent from './types/Component';
+import { State } from '../../State';
+import cloneComponent from '../helpers/clone';
+import getComponentType from '../helpers/componentType';
+
+import { createComponentFiles } from '../helpers/createComponentFiles';
+import { createRouting, Routing } from './routing';
+import { createGrapher, Grapher, GraphData } from './grapher';
+import { createComponent, Component, ComponentType, ComponentData } from './component';
+import { ComponentState } from './componentStateMachine';
+import { System } from '../system';
+import { ModuleType } from '../../common/types';
+
+interface Service {
+  bump(name: string, type: 'patch' | 'minor'): Promise<void>;
+  build(name: string): Promise<void>;
+  clone(name: string, cloneName: string, options: { description: string }): Promise<void>;
+  create(name: string, type: ModuleType, options: { description: string }): Promise<void>;
+  fetchDetails(name: string): Promise<void>;
+  getComponentsData(): { components: ComponentData[]; editors: string[] };
+  getComponentsSummaryData(): { components: ComponentData[]; editors: string[] };
+  getDependantGraph(name: string): GraphData;
+  getDependencyGraph(name: string): GraphData;
+  link(name: string, dependency: string): Promise<void>;
+  openInEditor(name: string): Promise<void>;
+  promote(name: string, environment: string): Promise<void>;
+  reinstall(name: string): Promise<void>;
+  request(
+    name: string,
+    props: { [Key: string]: string },
+    history: boolean,
+  ): Promise<{ statusCode: number; body: string; headers: { [Key: string]: string } }>;
+  setFavorite(name: string, favorite: boolean): Promise<void>;
+  setUseCache(name: string, useCache: boolean): Promise<void>;
+  start(name: string): Promise<void>;
+  stop(name: string): Promise<void>;
+  unlink(name: string, dependency: string): Promise<void>;
+}
 
 const createService = async (
   system: System,
   config: Config,
   state: State,
-  onComponentUpdate: (data: IComponentData) => void,
+  onComponentUpdate: (data: ComponentData) => void,
   onReload: () => void,
   startPageServer: (name: string) => Promise<number>,
   options: {
@@ -31,7 +52,7 @@ const createService = async (
     routingFilePath: string;
   },
 ): Promise<Service> => {
-  const components: IComponent[] = [];
+  const components: Component[] = [];
   let nextPort = 8083;
   let routing: Routing;
   const editors: string[] = [];
@@ -56,7 +77,7 @@ const createService = async (
     );
   };
 
-  const addComponent = async (componentDirectoryName: string): Promise<IComponent> => {
+  const addComponent = async (componentDirectoryName: string): Promise<Component> => {
     const componentDirectory = join(options.componentsDirectory, componentDirectoryName);
     const packageContents = JSON.parse(await system.file.readFile(join(componentDirectory, 'package.json')));
     const componentType = getComponentType(config, packageContents, packageContents.name);
@@ -117,13 +138,13 @@ const createService = async (
       (message: string) => {
         editors.push('code');
       },
-      () => null,
+      (): void => null,
     );
   };
 
   const getComponent = (name: string) => components.find(component => component.getName() === name);
 
-  const getSummaryData = (name: string): IComponentData => {
+  const getSummaryData = (name: string): ComponentData => {
     const component = getComponent(name);
 
     return {
@@ -136,7 +157,7 @@ const createService = async (
     };
   };
 
-  const getData = (name: string): IComponentData => {
+  const getData = (name: string): ComponentData => {
     const component = getComponent(name);
 
     return {
@@ -165,7 +186,7 @@ const createService = async (
     await addComponent(cloneName);
   };
 
-  const create = async (name: string, type: CreateType, createOptions: { description: string }) => {
+  const create = async (name: string, type: ModuleType, createOptions: { description: string }) => {
     await createComponentFiles(system, name, type, createOptions);
     await addComponent(name);
   };
@@ -235,4 +256,4 @@ const createService = async (
   };
 };
 
-export default createService;
+export { createService, Service };

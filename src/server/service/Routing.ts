@@ -1,5 +1,8 @@
-import Routing from '../types/Routing';
-import System from '../types/System';
+import { System } from '../system';
+
+interface Routing {
+  updateRoute(componentName: string, port: number): Promise<void>;
+}
 
 const createRouting = async (routingFilePath: string, system: System): Promise<Routing> => {
   const routes: { [Key: string]: number } = {};
@@ -22,4 +25,4 @@ const createRouting = async (routingFilePath: string, system: System): Promise<R
   };
 };
 
-export default createRouting;
+export { createRouting, Routing };

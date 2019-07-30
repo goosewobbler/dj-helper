@@ -4,13 +4,13 @@ import * as express from 'express';
 import { readFileSync } from 'graceful-fs';
 import { join } from 'path';
 
-import Config from '../types/Config';
-import Service from '../types/Service';
-import Updater from '../types/Updater';
-import createApiComponentRouter from './ApiComponentRouter';
-import renderIndex from './indexRenderer';
+import { Config } from './config';
+import { Service } from '../service';
+import { Updater } from './updater';
+import { createApiComponentRouter } from './apiComponentRouter';
+import { renderIndex } from './indexRenderer';
 
-const createServer = (service: Service, config: Config, updater: Updater, onUpdated: () => void) => {
+const createApiServer = (service: Service, config: Config, updater: Updater, onUpdated: () => void) => {
   const app = express();
 
   const publicPath = join(__dirname, '../../../public');
@@ -63,4 +63,4 @@ const createServer = (service: Service, config: Config, updater: Updater, onUpda
   return app;
 };
 
-export default createServer;
+export { createApiServer };

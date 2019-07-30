@@ -1,5 +1,5 @@
-import Config from '../../types/Config';
-import System from '../../types/System';
+import { Config } from '../app/config';
+import { System } from '../system';
 
 const openInEditor = async (system: System, config: Config, componentPath: string) => {
   const wslPathIdentifier = '/mnt/c/';
@@ -15,9 +15,9 @@ const openInEditor = async (system: System, config: Config, componentPath: strin
   await system.process.runToCompletion(
     await system.process.getCurrentWorkingDirectory(),
     `code${addToWorkspace ? ' --add' : ''} ${openComponentPath}`,
-    () => null,
-    () => null,
+    (): void => null,
+    (): void => null,
   );
 };
 
-export default openInEditor;
+export { openInEditor };

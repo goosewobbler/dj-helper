@@ -4,4 +4,4 @@ const DefaultTypeOverrides: { [Key: string]: string } = {
 
 const getDefaultTypeOverride = (name: string) => DefaultTypeOverrides[name];
 
-export default getDefaultTypeOverride;
+export { getDefaultTypeOverride };

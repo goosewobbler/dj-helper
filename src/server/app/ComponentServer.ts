@@ -1,6 +1,6 @@
 import * as express from 'express';
 
-import Service from '../types/Service';
+import { Service } from '../service';
 
 const convertPropsString = (propsString: string) => {
   const props: { [Key: string]: string } = {};
@@ -100,4 +100,4 @@ const createComponentServer = (service: Service) => {
   return server;
 };
 
-export default createComponentServer;
+export { createComponentServer };

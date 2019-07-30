@@ -1,14 +1,11 @@
 import * as express from 'express';
 import * as url from 'url';
 
-import Config from '../types/Config';
-import Service from '../types/Service';
-import ceefaxStyle from './helpers/ceefaxStyle';
+import { Config } from './config';
+import { Service } from '../service';
 
 const headScript = (config: Config) =>
-  `<script src="http://localhost:3333/socket.io/socket.io.js"></script>${
-    config.getValue('ceefax') === true ? ceefaxStyle : ''
-  }`;
+  `<script src="http://localhost:3333/socket.io/socket.io.js"></script>`;
 const bodyScript =
   '<script>const socket = io("http://localhost:3333"); socket.on("reload", () => window.location.reload(true));</script>';
 
@@ -67,4 +64,4 @@ const createPageServer = (service: Service, config: Config, componentName: strin
   return server;
 };
 
-export default createPageServer;
+export { createPageServer };

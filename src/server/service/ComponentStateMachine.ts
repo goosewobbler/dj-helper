@@ -1,7 +1,15 @@
-import ComponentState from '../../types/ComponentState';
-import ComponentActions from './types/ComponentActions';
+import { ComponentActions } from './componentActions';
 
-const ComponentStateMachine = (actions: ComponentActions, onStateChanged: (state: ComponentState) => void) => {
+enum ComponentState {
+  Stopped = 1,
+  Starting,
+  Installing,
+  Building,
+  Running,
+  Linking,
+}
+
+const componentStateMachine = (actions: ComponentActions, onStateChanged: (state: ComponentState) => void) => {
   let currentState: ComponentState = ComponentState.Stopped;
 
   const getState = () => currentState;
@@ -119,4 +127,4 @@ const ComponentStateMachine = (actions: ComponentActions, onStateChanged: (state
   };
 };
 
-export default ComponentStateMachine;
+export { componentStateMachine, ComponentState };

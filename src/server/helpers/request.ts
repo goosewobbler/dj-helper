@@ -1,11 +1,11 @@
 import renderChas from 'chas';
 import { startsWith } from 'lodash/fp';
 
-import ComponentState from '../../../types/ComponentState';
-import Config from '../../types/Config';
-import State from '../../types/State';
-import System from '../../types/System';
-import ComponentType from '../types/ComponentType';
+import { Config } from '../app/config';
+import { State } from '../app/State';
+import { System } from '../system';
+import { ComponentType } from '../service/component';
+import { ComponentState } from '../service/componentStateMachine';
 
 const requestWithRetries = async (
   system: System,
@@ -118,4 +118,4 @@ const request = async (
   return requestWithRetries(system, name, type, port, propsString, log, retries);
 };
 
-export default request;
+export { request };

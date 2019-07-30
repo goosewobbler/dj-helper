@@ -1,7 +1,16 @@
 import { gt } from 'semver';
-import runNpm from '../helpers/runNpm';
-import System from '../types/System';
-import Updater from '../types/Updater';
+import { runNpm } from '../helpers/npm';
+import { System } from '../system';
+
+interface Updater {
+  getStatus(): Promise<{
+    currentVersion: string;
+    updateAvailable: string;
+    updated: boolean;
+    updating: boolean;
+  }>;
+  update(): Promise<void>;
+}
 
 const createUpdater = (system: System, currentVersion: string): Updater => {
   const fetchNewVersion = async (): Promise<string> => {
@@ -10,7 +19,6 @@ const createUpdater = (system: System, currentVersion: string): Updater => {
     await system.file.deleteDirectory(installPath);
 
     await runNpm(
-      system,
       installPath,
       ['install', 'git+ssh://git@github.com:bbc/morph-developer-console.git#version'],
       (output: string) => {
@@ -25,7 +33,7 @@ const createUpdater = (system: System, currentVersion: string): Updater => {
           }
         }
       },
-      () => null,
+      (): void => null,
     );
 
     return version;
@@ -52,11 +60,10 @@ const createUpdater = (system: System, currentVersion: string): Updater => {
     updating = true;
     system.process.log('[console] Updating Morph Developer Console...');
     await runNpm(
-      system,
       await system.process.getCurrentWorkingDirectory(),
       ['install', 'git+ssh://git@github.com:bbc/morph-developer-console.git', '--global', '--production'],
-      () => null,
-      () => null,
+      (): void => null,
+      (): void => null,
     );
     system.process.log('[console] Morph Developer Console updated sucessfully. Restart to apply updates.');
     updating = false;
@@ -69,4 +76,4 @@ const createUpdater = (system: System, currentVersion: string): Updater => {
   };
 };
 
-export default createUpdater;
+export { createUpdater, Updater };

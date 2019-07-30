@@ -6,21 +6,21 @@ import TopIcon from './icon/TopIcon';
 
 const ReactListComponent: any = ReactList;
 
-interface IScrollListProps {
+interface ScrollListProps {
   length: number;
   selectedIndex?: number;
   selectedID?: string;
   renderListItem(index: number, key: string): React.ReactElement<any>;
 }
 
-interface IScrollListState {
+interface ScrollListState {
   showScrollToTop: boolean;
 }
 
-class ScrollList extends React.Component<IScrollListProps, IScrollListState> {
+class ScrollList extends React.Component<ScrollListProps, ScrollListState> {
   private listElement: any;
 
-  constructor(props: IScrollListProps) {
+  constructor(props: ScrollListProps) {
     super(props);
 
     this.state = {
@@ -32,7 +32,7 @@ class ScrollList extends React.Component<IScrollListProps, IScrollListState> {
     this.handleScroll = throttle(200, this.handleScroll.bind(this)) as any;
   }
 
-  public componentDidUpdate(prevProps: IScrollListProps) {
+  public componentDidUpdate(prevProps: ScrollListProps) {
     if (
       this.listElement &&
       typeof this.props.selectedIndex === 'number' &&
@@ -86,6 +86,6 @@ class ScrollList extends React.Component<IScrollListProps, IScrollListState> {
   }
 }
 
-const ScrollListAdapter = (props: IScrollListProps) => <ScrollList {...props} />;
+const ScrollListAdapter = (props: ScrollListProps) => <ScrollList {...props} />;
 
 export default ScrollListAdapter;

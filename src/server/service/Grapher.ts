@@ -1,5 +1,18 @@
-import GraphData from '../types/GraphData';
-import Grapher from '../types/Grapher';
+interface Grapher {
+  getDependantData(name: string): GraphData;
+  getDependencyData(name: string): GraphData;
+}
+
+interface GraphData {
+  edges: {
+    from: number;
+    to: number;
+  }[];
+  nodes: {
+    id: number;
+    name: string;
+  }[];
+}
 
 interface Node {
   id: number;
@@ -85,4 +98,4 @@ const createGrapher = (dependencies: { [Key: string]: { name: string }[] }): Gra
   };
 };
 
-export default createGrapher;
+export { createGrapher, Grapher, GraphData }

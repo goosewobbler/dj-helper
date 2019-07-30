@@ -1,6 +1,6 @@
-import Config from '../../types/Config';
-import getDefaultTypeOverride from '../DefaultTypeOverrides';
-import ComponentType from '../types/ComponentType';
+import { Config } from '../app/config';
+import { getDefaultTypeOverride } from './defaultTypeOverrides';
+import { ComponentType } from '../service/component';
 
 const getComponentType = (config: Config, packageContents: any, name: string) => {
   const typeOverride = getDefaultTypeOverride(name) || config.getValue(`typeOverrides.${name}`);
@@ -24,4 +24,4 @@ const getComponentType = (config: Config, packageContents: any, name: string) =>
   return ComponentType.Data;
 };
 
-export default getComponentType;
+export { getComponentType };

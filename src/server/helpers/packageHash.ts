@@ -11,4 +11,4 @@ const packageHash = (packageContents: any) => {
   return hasher(contentsSubset);
 };
 
-export default packageHash;
+export { packageHash };

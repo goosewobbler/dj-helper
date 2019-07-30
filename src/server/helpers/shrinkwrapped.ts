@@ -2,8 +2,7 @@ import { emptyDirSync, readFileSync } from 'fs-extra';
 import { join } from 'path';
 import * as tar from 'tar';
 
-import runNpm from '../../helpers/runNpm';
-import System from '../System';
+import { runNpm } from './npm';
 
 const extract = (directory: string, tarballName: string, file: string) =>
   new Promise<string>((resolve, reject) => {
@@ -34,7 +33,6 @@ const extract = (directory: string, tarballName: string, file: string) =>
 const pack = async (directory: string, packageName: string) => {
   let output = '';
   await runNpm(
-    System,
     directory,
     ['pack', packageName],
     (message: string) => {
@@ -67,4 +65,4 @@ const getShrinkwrap = async (packageName: string): Promise<{ [Key: string]: stri
   return {};
 };
 
-export default getShrinkwrap;
+export { getShrinkwrap };

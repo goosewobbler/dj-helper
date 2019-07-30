@@ -2,17 +2,99 @@ import { startsWith } from 'lodash/fp';
 import { join } from 'path';
 import * as semver from 'semver';
 
-import ComponentDependency from '../../types/ComponentDependency';
-import Config from '../types/Config';
-import Routing from '../types/Routing';
-import State from '../types/State';
-import System from '../types/System';
-import ComponentActions from './ComponentActions';
-import ComponentStateMachine from './ComponentStateMachine';
-import openInEditorHelper from './helpers/editor';
-import requestWithRetries from './helpers/request';
-import ComponentType from './types/ComponentType';
-import Component from './types/Component';
+import { System } from '../system';
+import { Routing } from './routing';
+import { Config } from '../app/config';
+import { State } from '../app/state';
+import { componentStateMachine, ComponentState } from './componentStateMachine';
+import { createComponentActions } from './componentActions';
+import openInEditorHelper from '../helpers/editor';
+import requestWithRetries from '../helpers/request';
+
+enum ComponentType {
+  Page = 1,
+  View,
+  Data,
+}
+
+interface Component {
+  bump(type: 'patch' | 'minor'): Promise<void>;
+  fetchDetails(): Promise<void>;
+  getName(): string;
+  getDirectoryName(): string;
+  getDisplayName(): string;
+  getType(): ComponentType;
+  getURL(): string;
+  getFavorite(): boolean;
+  getHistory(): string[];
+  getUseCache(): boolean;
+  setFavorite(favorite: boolean): Promise<void>;
+  setUseCache(useCache: boolean): Promise<void>;
+  getDependencies(): ComponentDependency[];
+  getDependenciesSummary(): Promise<{ name: string }[]>;
+  getLatestVersion(): Promise<string>;
+  getLinking(): string[];
+  getVersions(): {
+    local: string;
+    int: string;
+    test: string;
+    live: string;
+  };
+  getState(): ComponentState;
+  getPromoting(): string;
+  getPromotionFailure(): string;
+  getRendererType(): string;
+  promote(environment: string): Promise<void>;
+  openInEditor(): Promise<void>;
+  reinstall(): Promise<void>;
+  link(dependency: string): Promise<void>;
+  unlink(dependency: string): Promise<void>;
+  makeLinkable(): Promise<void>;
+  build(isSassOnly?: boolean, path?: string): Promise<void>;
+  setPagePort(pagePort: number): void;
+  start(): Promise<void>;
+  stop(): Promise<void>;
+  request(
+    props: {
+      [Key: string]: string;
+    },
+    history: boolean,
+  ): Promise<{ statusCode: number; body: string; headers: { [Key: string]: string } }>;
+}
+
+interface ComponentData {
+  name: string;
+  displayName: string;
+  highlighted?: any;
+  state: ComponentState;
+  favorite: boolean;
+  history?: string[];
+  url?: string;
+  type?: ComponentType;
+  dependencies?: ComponentDependency[];
+  linking?: string[];
+  promoting?: string;
+  promotionFailure?: string;
+  useCache: boolean;
+  versions?: {
+    int: string;
+    live: string;
+    local: string;
+    test: string;
+  };
+  rendererType: string;
+}
+
+interface ComponentDependency {
+  name: string;
+  displayName: string;
+  has: string;
+  latest: string;
+  linked: boolean;
+  outdated: boolean;
+  version: string;
+  rendererType: string;
+}
 
 const createComponent = (
   system: System,
@@ -251,7 +333,7 @@ const createComponent = (
 
   const openInEditor = () => openInEditorHelper(system, config, componentPath);
 
-  const actions = ComponentActions(
+  const actions = createComponentActions(
     system,
     routing,
     config,
@@ -263,7 +345,7 @@ const createComponent = (
     getUseCache,
     onReload,
   );
-  const stateMachine = ComponentStateMachine(actions, () => updated());
+  const stateMachine = componentStateMachine(actions, () => updated());
 
   const getState = () => stateMachine.getState();
 
@@ -385,4 +467,4 @@ const createComponent = (
   };
 };
 
-export default createComponent;
+export { createComponent, Component, ComponentType, ComponentData, ComponentDependency };

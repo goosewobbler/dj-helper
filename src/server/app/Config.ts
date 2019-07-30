@@ -1,9 +1,14 @@
 import { startsWith } from 'lodash/fp';
 
-import Config from '../types/Config';
-import System from '../types/System';
+import { System } from '../system';
 
-const Config = async (configFilePath: string, system: System): Promise<Config> => {
+interface Config {
+  isFeatureEnabled(feature: string): boolean;
+  getValue(name: string): any;
+  setValue(name: string, value: any): Promise<void>;
+}
+
+const createConfig = async (configFilePath: string, system: System): Promise<Config> => {
   let config: { [Key: string]: any } = {};
 
   try {
@@ -36,4 +41,4 @@ const Config = async (configFilePath: string, system: System): Promise<Config> =
   };
 };
 
-export default Config;
+export { createConfig, Config };

@@ -1,6 +1,5 @@
 import { join } from 'path';
-
-import System from '../../types/System';
+import { System } from '../system';
 
 const clone = async (
   system: System,
@@ -25,4 +24,4 @@ const clone = async (
   await system.file.writeFile(readmePath, readme);
 };
 
-export default clone;
+export { clone };

@@ -5,7 +5,20 @@ import * as ls from 'ls';
 import * as ncp from 'ncp';
 import * as watch from 'node-watch';
 import { join } from 'path';
-import FileSystem from '../types/FileSystem';
+
+interface FileSystem {
+  exists(path: string): Promise<boolean>;
+  getPackageDirectories(directory: string): Promise<string[]>;
+  readFile(path: string): Promise<string>;
+  writeFile(path: string, contents: string): Promise<void>;
+  symbolicLinkExists(path: string): Promise<boolean>;
+  copyDirectory(from: string, to: string, filter: boolean): Promise<void>;
+  deleteDirectory(directory: string): Promise<void>;
+  watchDirectory(directory: string, callback: (path: string) => void): Promise<void>;
+  moveDirectory(from: string, to: string): Promise<void>;
+  createSymlink(from: string, to: string): Promise<void>;
+  removeSymlink(path: string): Promise<void>;
+};
 
 const ignore = [
   '/.tscache/',
@@ -117,7 +130,7 @@ const removeSymlink = async (path: string) => {
   }
 };
 
-const FileSystem: FileSystem = {
+const file: FileSystem = {
   copyDirectory,
   createSymlink,
   deleteDirectory,
@@ -131,4 +144,4 @@ const FileSystem: FileSystem = {
   writeFile,
 };
 
-export default FileSystem;
+export { file, FileSystem };

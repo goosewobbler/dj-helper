@@ -1,16 +1,16 @@
 import { Express } from 'express';
 import { join } from 'path';
-
 import * as appRoot from 'app-root-path';
-import ComponentData from '../../types/ComponentData';
-import Service from '../service/Service';
-import System from '../types/System';
-import createApiServer from './ApiServer';
-import createComponentServer from './ComponentServer';
-import Config from './Config';
-import createPageServer from './PageServer';
-import State from './State';
-import createUpdater from './Updater';
+
+import { createService } from '../service';
+import { System } from '../system';
+import { ComponentData } from '../service/Component';
+import { createApiServer } from './apiServer';
+import { createComponentServer } from './componentServer';
+import { createConfig } from './config';
+import { createPageServer } from './pageServer';
+import { createState } from './state';
+import { createUpdater } from './updater';
 
 const createApp = async (
   system: System,
@@ -30,9 +30,9 @@ const createApp = async (
   const componentsDirectory = devMode ? join(currentWorkingDirectory, '../morph-modules') : currentWorkingDirectory;
   const routingFilePath = `${appRoot}/.routing.json`;
   const configFilePath = join(componentsDirectory, 'morph-developer-console-config.json');
-  const config = await Config(configFilePath, system);
+  const config = await createConfig(configFilePath, system);
   const stateFilePath = join(componentsDirectory, 'morph-developer-console-state.json');
-  const state = await State(stateFilePath, system);
+  const state = await createState(stateFilePath, system);
   const updater = createUpdater(system, currentVersion);
 
   process.env.APP_ROOT_PATH = appRoot.toString();
@@ -48,7 +48,7 @@ const createApp = async (
     return port;
   };
 
-  const service = await Service(system, config, state, onComponentUpdate, onReload, startPageServer, {
+  const service = await createService(system, config, state, onComponentUpdate, onReload, startPageServer, {
     componentsDirectory,
     routingFilePath,
   });
@@ -62,4 +62,4 @@ const createApp = async (
   };
 };
 
-export default createApp;
+export { createApp };

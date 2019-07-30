@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import App from '../../client/containers/AppContainer';
 import createStore from '../../client/store';
 import IState from '../../client/types/IState';
-import Service from '../types/Service';
+import { Service } from '../service';
 
 const renderIndex = async (service: Service, template: string, selectedComponent?: string): Promise<string> => {
   const summaryData = await service.getComponentsSummaryData();
@@ -36,4 +36,4 @@ const renderIndex = async (service: Service, template: string, selectedComponent
     .replace('STATE_PLACEHOLDER', JSON.stringify(preloadedState).replace(/</g, '\\u003c'));
 };
 
-export default renderIndex;
+export { renderIndex };

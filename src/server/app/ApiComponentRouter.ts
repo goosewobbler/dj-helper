@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import CreateType from '../types/CreateType';
-import Service from '../types/Service';
+import { ModuleType } from '../../common/types';
+import { Service } from '../service';
 
-const createTypeMap: { [Key: string]: CreateType } = {
-  data: CreateType.Data,
-  view: CreateType.View,
-  viewcss: CreateType.ViewCSS,
+const moduleTypeMap: { [Key: string]: ModuleType } = {
+  data: ModuleType.Data,
+  view: ModuleType.View,
+  viewcss: ModuleType.ViewCSS,
 };
 
 const error = (ex: any) => {
@@ -91,7 +91,7 @@ const createApiComponentRouter = (service: Service) => {
   });
 
   router.post('/create/:type', (req: any, res: any) => {
-    const type = createTypeMap[req.params.type];
+    const type = moduleTypeMap[req.params.type];
     service
       .create(req.body.name, type, { description: req.body.description })
       .then(() => res.send('👍'))
@@ -101,4 +101,4 @@ const createApiComponentRouter = (service: Service) => {
   return router;
 };
 
-export default createApiComponentRouter;
+export { createApiComponentRouter };

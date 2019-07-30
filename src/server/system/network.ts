@@ -1,5 +1,8 @@
 import * as request from 'request';
-import NetworkSystem from '../types/NetworkSystem';
+
+interface NetworkSystem {
+  get(url: string): Promise<{ body: string; headers: { [Key: string]: string }; statusCode: number }>;
+}
 
 const get = (url: string) =>
   new Promise<{ body: string; headers: { [Key: string]: string }; statusCode: number }>((resolve, reject) =>
@@ -12,8 +15,8 @@ const get = (url: string) =>
     }),
   );
 
-const NetworkSystemExport: NetworkSystem = {
+const network: NetworkSystem = {
   get,
 };
 
-export default NetworkSystemExport;
+export { network, NetworkSystem };

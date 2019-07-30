@@ -1,5 +1,9 @@
-import State from '../types/State';
-import System from '../types/System';
+import { System } from '../system';
+
+interface State {
+  retrieve(key: string): any;
+  store(key: string, value: any): Promise<void>;
+}
 
 const createState = async (stateFilePath: string, system: System): Promise<State> => {
   let state: { [Key: string]: any } = {};
@@ -27,4 +31,4 @@ const createState = async (stateFilePath: string, system: System): Promise<State
   };
 };
 
-export default createState;
+export { createState, State };

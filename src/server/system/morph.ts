@@ -1,9 +1,9 @@
 import * as morphCli from 'morph-cli';
 import * as morphPromote from 'morph-cli/lib/commands/promote'; // tslint:disable-line no-submodule-imports
-import getShrinkwrapped from '../helpers/shrinkwrapped';
+import { getShrinkwrap } from '../helpers/shrinkwrapped';
 
 interface MorphSystem {
-  getShrinkwrapped(name: string): Promise<{ [Key: string]: string }>;
+  getShrinkwrap(name: string): Promise<{ [Key: string]: string }>;
   getVersionOnEnvironment(name: string, environment: string): Promise<string>;
   promote(name: string, environment: string): Promise<void>;
 }
@@ -19,7 +19,7 @@ const promote = async (name: string, environment: string) =>
   });
 
 const morph: MorphSystem = {
-  getShrinkwrapped,
+  getShrinkwrap,
   getVersionOnEnvironment,
   promote,
 };

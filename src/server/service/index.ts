@@ -1,18 +1,18 @@
 import { get } from 'lodash';
 import { join } from 'path';
 
-import Config from '../types/Config';
-import { State } from '../../State';
-import cloneComponent from '../helpers/clone';
-import getComponentType from '../helpers/componentType';
+import { Config } from '../app/config';
+import { State } from '../app/state';
+import { cloneComponent } from '../helpers/clone';
+import { getComponentType } from '../helpers/componentType';
 
 import { createComponentFiles } from '../helpers/createComponentFiles';
 import { createRouting, Routing } from './routing';
 import { createGrapher, Grapher, GraphData } from './grapher';
-import { createComponent, Component, ComponentType, ComponentData } from './component';
+import { createComponent, } from './component';
 import { ComponentState } from './componentStateMachine';
 import { System } from '../system';
-import { ModuleType } from '../../common/types';
+import { ModuleType, Component, ComponentType, ComponentData } from '../../common/types';
 
 interface Service {
   bump(name: string, type: 'patch' | 'minor'): Promise<void>;
@@ -59,7 +59,28 @@ const createService = async (
   const allDependencies: { [Key: string]: { name: string }[] } = {};
   let grapher: Grapher;
 
-  const acquirePort = () => nextPort++;
+  const acquirePort = () => nextPort += 1;
+
+  const getData = (name: string): ComponentData => {
+    const component = getComponent(name);
+
+    return {
+      dependencies: component.getDependencies(),
+      displayName: component.getDisplayName(),
+      favorite: component.getFavorite(),
+      history: component.getHistory(),
+      linking: component.getLinking(),
+      name: component.getName(),
+      promoting: component.getPromoting(),
+      promotionFailure: component.getPromotionFailure(),
+      rendererType: component.getRendererType(),
+      state: component.getState(),
+      type: component.getType(),
+      url: component.getURL(),
+      useCache: component.getUseCache(),
+      versions: component.getVersions(),
+    };
+  };
 
   const onComponentUpdated = async (name: string) => {
     const data = await getData(name);
@@ -154,27 +175,6 @@ const createService = async (
       rendererType: component.getRendererType(),
       state: component.getState(),
       useCache: component.getUseCache(),
-    };
-  };
-
-  const getData = (name: string): ComponentData => {
-    const component = getComponent(name);
-
-    return {
-      dependencies: component.getDependencies(),
-      displayName: component.getDisplayName(),
-      favorite: component.getFavorite(),
-      history: component.getHistory(),
-      linking: component.getLinking(),
-      name: component.getName(),
-      promoting: component.getPromoting(),
-      promotionFailure: component.getPromotionFailure(),
-      rendererType: component.getRendererType(),
-      state: component.getState(),
-      type: component.getType(),
-      url: component.getURL(),
-      useCache: component.getUseCache(),
-      versions: component.getVersions(),
     };
   };
 

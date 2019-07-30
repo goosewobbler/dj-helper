@@ -1,13 +1,5 @@
 import { ComponentActions } from './componentActions';
-
-enum ComponentState {
-  Stopped = 1,
-  Starting,
-  Installing,
-  Building,
-  Running,
-  Linking,
-}
+import { ComponentState } from '../../common/types';
 
 const componentStateMachine = (actions: ComponentActions, onStateChanged: (state: ComponentState) => void) => {
   let currentState: ComponentState = ComponentState.Stopped;

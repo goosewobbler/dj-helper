@@ -6,95 +6,12 @@ import { System } from '../system';
 import { Routing } from './routing';
 import { Config } from '../app/config';
 import { State } from '../app/state';
-import { componentStateMachine, ComponentState } from './componentStateMachine';
+import { componentStateMachine } from './componentStateMachine';
 import { createComponentActions } from './componentActions';
-import openInEditorHelper from '../helpers/editor';
-import requestWithRetries from '../helpers/request';
+import { openInEditor as openInEditorHelper } from '../helpers/editor';
+import { request as requestHelper } from '../helpers/request';
 
-enum ComponentType {
-  Page = 1,
-  View,
-  Data,
-}
-
-interface Component {
-  bump(type: 'patch' | 'minor'): Promise<void>;
-  fetchDetails(): Promise<void>;
-  getName(): string;
-  getDirectoryName(): string;
-  getDisplayName(): string;
-  getType(): ComponentType;
-  getURL(): string;
-  getFavorite(): boolean;
-  getHistory(): string[];
-  getUseCache(): boolean;
-  setFavorite(favorite: boolean): Promise<void>;
-  setUseCache(useCache: boolean): Promise<void>;
-  getDependencies(): ComponentDependency[];
-  getDependenciesSummary(): Promise<{ name: string }[]>;
-  getLatestVersion(): Promise<string>;
-  getLinking(): string[];
-  getVersions(): {
-    local: string;
-    int: string;
-    test: string;
-    live: string;
-  };
-  getState(): ComponentState;
-  getPromoting(): string;
-  getPromotionFailure(): string;
-  getRendererType(): string;
-  promote(environment: string): Promise<void>;
-  openInEditor(): Promise<void>;
-  reinstall(): Promise<void>;
-  link(dependency: string): Promise<void>;
-  unlink(dependency: string): Promise<void>;
-  makeLinkable(): Promise<void>;
-  build(isSassOnly?: boolean, path?: string): Promise<void>;
-  setPagePort(pagePort: number): void;
-  start(): Promise<void>;
-  stop(): Promise<void>;
-  request(
-    props: {
-      [Key: string]: string;
-    },
-    history: boolean,
-  ): Promise<{ statusCode: number; body: string; headers: { [Key: string]: string } }>;
-}
-
-interface ComponentData {
-  name: string;
-  displayName: string;
-  highlighted?: any;
-  state: ComponentState;
-  favorite: boolean;
-  history?: string[];
-  url?: string;
-  type?: ComponentType;
-  dependencies?: ComponentDependency[];
-  linking?: string[];
-  promoting?: string;
-  promotionFailure?: string;
-  useCache: boolean;
-  versions?: {
-    int: string;
-    live: string;
-    local: string;
-    test: string;
-  };
-  rendererType: string;
-}
-
-interface ComponentDependency {
-  name: string;
-  displayName: string;
-  has: string;
-  latest: string;
-  linked: boolean;
-  outdated: boolean;
-  version: string;
-  rendererType: string;
-}
+import { Component, ComponentType, ComponentDependency } from '../../common/types';
 
 const createComponent = (
   system: System,
@@ -227,7 +144,7 @@ const createComponent = (
       }),
     ).catch(console.error);
 
-    const shrinkwrapped = await system.morph.getShrinkwrapped(name);
+    const shrinkwrapped = await system.morph.getShrinkwrap(name);
     dependencies.forEach(dependency => {
       dependency.has = shrinkwrapped[dependency.name] || '';
     });
@@ -290,7 +207,7 @@ const createComponent = (
   };
 
   const request = async (props: { [Key: string]: string }, history: boolean) => {
-    const response = await requestWithRetries(
+    const response = await requestHelper(
       system,
       config,
       state,
@@ -467,4 +384,4 @@ const createComponent = (
   };
 };
 
-export { createComponent, Component, ComponentType, ComponentData, ComponentDependency };
+export { createComponent };

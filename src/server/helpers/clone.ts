@@ -1,7 +1,7 @@
 import { join } from 'path';
 import { System } from '../system';
 
-const clone = async (
+const cloneComponent = async (
   system: System,
   path: string,
   name: string,
@@ -24,4 +24,4 @@ const clone = async (
   await system.file.writeFile(readmePath, readme);
 };
 
-export { clone };
+export { cloneComponent };

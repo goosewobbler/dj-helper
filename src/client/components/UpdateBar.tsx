@@ -21,6 +21,7 @@ const getMessage = (props: UpdateBarProps) => {
     <a
       key="update-message-link"
       target="_blank"
+      rel="noopener noreferrer"
       href="https://github.com/bbc/morph-developer-console/blob/master/docs/whats-new.md"
     >
       what's new

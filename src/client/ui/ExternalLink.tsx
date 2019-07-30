@@ -13,7 +13,7 @@ interface ExternalLinkProps {
 }
 
 const ExternalLink = (props: ExternalLinkProps) => (
-  <a className={props.className} href={props.link} target="_blank" onClick={event => event.stopPropagation()}>
+  <a className={props.className} href={props.link} target="_blank" rel="noopener noreferrer" onClick={event => event.stopPropagation()}>
     <div className="container">
       <ExternalIcon />
     </div>

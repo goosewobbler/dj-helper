@@ -18,7 +18,7 @@ interface FileSystem {
   moveDirectory(from: string, to: string): Promise<void>;
   createSymlink(from: string, to: string): Promise<void>;
   removeSymlink(path: string): Promise<void>;
-};
+}
 
 const ignore = [
   '/.tscache/',

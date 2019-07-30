@@ -34,13 +34,7 @@ const renderStateLabel = (state: ComponentState) => {
 };
 
 const renderRendererLabel = (props: ComponentActionsProps) => {
-  return (
-    <p className="renderer-label">
-      Node version: 
-      {' '}
-      {props.component.rendererType}
-    </p>
-  );
+  return <p className="renderer-label">Node version: {props.component.rendererType}</p>;
 };
 
 const renderUseCacheButton = (props: ComponentActionsProps) => {
@@ -62,11 +56,7 @@ const renderBuildButton = (props: ComponentActionsProps) => {
   if (props.component.state === ComponentState.Running) {
     return (
       <div className="wrapper">
-        <LabelButton
-          className="build-button"
-          label="Build"
-          onClick={() => props.onBuild(props.component.name)}
-        />
+        <LabelButton className="build-button" label="Build" onClick={() => props.onBuild(props.component.name)} />
       </div>
     );
   }
@@ -91,11 +81,7 @@ const renderInstallButton = (props: ComponentActionsProps) => {
 const renderCloneButton = (props: ComponentActionsProps) => {
   return (
     <div className="wrapper">
-      <LabelButton
-        className="clone-button"
-        label="Clone"
-        onClick={() => props.onClone(props.component.name)}
-      />
+      <LabelButton className="clone-button" label="Clone" onClick={() => props.onClone(props.component.name)} />
     </div>
   );
 };
@@ -105,9 +91,7 @@ const ComponentActions = (props: ComponentActionsProps) => (
     <div className="header">
       <h2>{props.component.displayName}</h2>
       {renderRendererLabel(props)}
-      <p className="state-label">
-        {renderStateLabel(props.component.state)}
-      </p>
+      <p className="state-label">{renderStateLabel(props.component.state)}</p>
     </div>
     <div className="actions">
       {renderUseCacheButton(props)}

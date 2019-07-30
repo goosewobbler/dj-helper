@@ -9,7 +9,7 @@ import { getComponentType } from '../helpers/componentType';
 import { createComponentFiles } from '../helpers/createComponentFiles';
 import { createRouting, Routing } from './routing';
 import { createGrapher, Grapher } from './grapher';
-import { createComponent, } from './component';
+import { createComponent } from './component';
 import { ComponentState } from './componentStateMachine';
 import { System } from '../system';
 import { ModuleType, Component, ComponentType, ComponentData, GraphData } from '../../common/types';
@@ -59,7 +59,10 @@ const createService = async (
   const allDependencies: { [Key: string]: { name: string }[] } = {};
   let grapher: Grapher;
 
-  const acquirePort = () => nextPort += 1;
+  const acquirePort = () => {
+    const port = (nextPort += 1);
+    return port;
+  };
 
   const getData = (name: string): ComponentData => {
     const component = getComponent(name);
@@ -97,6 +100,8 @@ const createService = async (
       }),
     );
   };
+
+  const getComponent = (name: string) => components.find(component => component.getName() === name);
 
   const addComponent = async (componentDirectoryName: string): Promise<Component> => {
     const componentDirectory = join(options.componentsDirectory, componentDirectoryName);
@@ -143,13 +148,13 @@ const createService = async (
     grapher = createGrapher(allDependencies);
 
     await system.file.watchDirectory(options.componentsDirectory, async path => {
-      const relativePath = path.replace(`${options.componentsDirectory  }/`, '');
+      const relativePath = path.replace(`${options.componentsDirectory}/`, '');
       const slashIndex = relativePath.indexOf('/');
       const directoryName = relativePath.substr(0, slashIndex);
       const changedComponent = components.find(component => component.getDirectoryName() === directoryName);
       if (changedComponent && changedComponent.getState() === ComponentState.Running) {
         const isSass = relativePath.indexOf('/sass/') > -1;
-        await changedComponent.build(isSass, relativePath.replace(`${directoryName  }/`, ''));
+        await changedComponent.build(isSass, relativePath.replace(`${directoryName}/`, ''));
       }
     });
 
@@ -162,8 +167,6 @@ const createService = async (
       (): void => null,
     );
   };
-
-  const getComponent = (name: string) => components.find(component => component.getName() === name);
 
   const getSummaryData = (name: string): ComponentData => {
     const component = getComponent(name);

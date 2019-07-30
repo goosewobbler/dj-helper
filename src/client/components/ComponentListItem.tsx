@@ -125,12 +125,7 @@ class ComponentListItem extends React.PureComponent<ComponentListItemProps> {
       this.props.highlighted && this.props.highlighted.length > 0 ? this.props.highlighted : this.props.displayName;
 
     return (
-      <div
-        role="button"
-        id={createID(this.props.name)}
-        highlighted={this.props.selected}
-        onClick={this.handleClick}
-      >
+      <div role="button" id={createID(this.props.name)} highlighted={this.props.selected} onClick={this.handleClick}>
         {renderFavouriteButton(this.props)}
         <span className="component-name-label">{name}</span>
         {renderLaunchButton(this.props.component)}

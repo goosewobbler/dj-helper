@@ -1,11 +1,11 @@
 import * as React from 'react';
 
 import ScrollList from '../ui/ScrollList';
-import { ComponentListItem, ComponentListItemProps } from './ComponentListItem';
+import { ComponentListItem } from './ComponentListItem';
 import { ComponentState } from '../../common/types';
 
 interface ComponentListProps {
-  components: ComponentListItemProps[];
+  components: ComponentListItemData[];
   selectedComponent?: string;
   onSelectComponent(name: string): any;
   onFavouriteComponent(name: string, favorite: boolean): any;

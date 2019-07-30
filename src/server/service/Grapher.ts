@@ -89,4 +89,4 @@ const createGrapher = (dependencies: { [Key: string]: { name: string }[] }): Gra
   };
 };
 
-export { createGrapher, Grapher }
+export { createGrapher, Grapher };

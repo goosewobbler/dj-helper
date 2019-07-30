@@ -18,7 +18,8 @@ const getComponentType = (config: Config, packageContents: any, name: string) =>
   const packageDependencies = packageContents.dependencies || {};
   if (packageDependencies['bbc-morph-page-assembler']) {
     return ComponentType.Page;
-  } if (packageDependencies.react) {
+  }
+  if (packageDependencies.react) {
     return ComponentType.View;
   }
   return ComponentType.Data;

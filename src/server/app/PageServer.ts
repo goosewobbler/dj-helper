@@ -4,8 +4,7 @@ import * as url from 'url';
 import { Config } from './config';
 import { Service } from '../service';
 
-const headScript = (config: Config) =>
-  `<script src="http://localhost:3333/socket.io/socket.io.js"></script>`;
+const headScript = (config: Config) => `<script src="http://localhost:3333/socket.io/socket.io.js"></script>`;
 const bodyScript =
   '<script>const socket = io("http://localhost:3333"); socket.on("reload", () => window.location.reload(true));</script>';
 

@@ -13,7 +13,8 @@ const getSortedComponents = (components: ComponentData[]): ComponentData[] => {
   return components.sort((mA: ComponentData, mB: ComponentData) => {
     if (mA.favorite && !mB.favorite) {
       return -1;
-    } if (!mA.favorite && mB.favorite) {
+    }
+    if (!mA.favorite && mB.favorite) {
       return 1;
     }
     return mA.name.localeCompare(mB.name);

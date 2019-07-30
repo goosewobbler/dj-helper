@@ -46,14 +46,15 @@ const push = (directory: string, branchName: string) =>
 
 const readyToCommit = (directory: string) =>
   new Promise<boolean>((resolve, reject) => {
-    process.runToCompletion(
-      directory,
-      'git diff --cached --numstat',
-      message => {
-        resolve(false);
-      },
-      reject,
-    )
+    process
+      .runToCompletion(
+        directory,
+        'git diff --cached --numstat',
+        message => {
+          resolve(false);
+        },
+        reject,
+      )
       .then(() => resolve(true))
       .catch(reject);
   });

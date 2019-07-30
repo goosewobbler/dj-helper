@@ -78,7 +78,7 @@ const startServer = async () => {
   const url = 'http://localhost:3333';
   console.log(`[console] Running at ${url}`);
 
-  io.on('connection', socket => {
+  io.on('connection', () => {
     io.emit('freshState', service.getComponentsData());
   });
 };

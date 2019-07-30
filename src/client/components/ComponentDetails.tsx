@@ -81,7 +81,7 @@ const ComponentDetails = ({ component, editors, handlers }: ComponentDetailsProp
   const componentContextValue: ComponentContext = { component, handlers };
 
   return (
-    <Tabs headings={['Overview', 'Dependencies', 'Dependants']} renderButtons={() =>renderPipelineLinks(component)}>
+    <Tabs headings={['Overview', 'Dependencies', 'Dependants']} renderButtons={() => renderPipelineLinks(component)}>
       <ComponentContextProvider value={componentContextValue}>
         <div className="details">
           <div className="actions">

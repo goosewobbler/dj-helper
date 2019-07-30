@@ -98,11 +98,23 @@ enum ModuleType {
     rendererType: string;
   }
 
+  interface GraphData {
+    edges: {
+      from: number;
+      to: number;
+    }[];
+    nodes: {
+      id: number;
+      name: string;
+    }[];
+  }
+
 export {
-  ModuleType,
   Component,
   ComponentData,
   ComponentDependency,
   ComponentState,
-  ComponentType
+  ComponentType,
+  GraphData,
+  ModuleType,
 }

@@ -8,11 +8,11 @@ import { getComponentType } from '../helpers/componentType';
 
 import { createComponentFiles } from '../helpers/createComponentFiles';
 import { createRouting, Routing } from './routing';
-import { createGrapher, Grapher, GraphData } from './grapher';
+import { createGrapher, Grapher } from './grapher';
 import { createComponent, } from './component';
 import { ComponentState } from './componentStateMachine';
 import { System } from '../system';
-import { ModuleType, Component, ComponentType, ComponentData } from '../../common/types';
+import { ModuleType, Component, ComponentType, ComponentData, GraphData } from '../../common/types';
 
 interface Service {
   bump(name: string, type: 'patch' | 'minor'): Promise<void>;

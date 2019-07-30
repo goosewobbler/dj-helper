@@ -15,7 +15,7 @@ import {
   updating,
 } from './client/actions/components';
 import App from './client/containers/AppContainer';
-import createStore from './client/store';
+import { createStore } from './client/store';
 
 if (process.env.NODE_ENV !== 'production' && typeof window !== 'undefined') {
   Object.defineProperty(React, 'createClass', {

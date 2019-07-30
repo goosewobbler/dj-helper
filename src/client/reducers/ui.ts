@@ -1,4 +1,4 @@
-import ComponentData from '../../types/ComponentData';
+import { ComponentData } from '../../common/types';
 
 interface Action {
   type: string;

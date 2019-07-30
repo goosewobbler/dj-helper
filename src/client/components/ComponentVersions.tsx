@@ -2,8 +2,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import { gte, lt, valid } from 'semver';
 
-import ComponentContext from '../types/ComponentContext';
-import { context } from '../contexts/componentContext';
+import { context, ComponentContext } from '../contexts/componentContext';
 
 const promotionInProgressText = (environment: string) => (environment === 'int' ? 'Bumping' : 'Promoting');
 const promotionActionText = (environment: string) => (environment === 'int' ? 'Bump' : 'Promote');

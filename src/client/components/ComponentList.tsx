@@ -63,4 +63,4 @@ class ComponentList extends React.PureComponent<ComponentListProps> {
   }
 }
 
-export default ComponentList;
+export { ComponentList, ComponentListItemData };

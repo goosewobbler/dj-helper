@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import GraphData from '../../server/types/GraphData';
+import { GraphData } from '../../common/types';
 import LoadingIcon from './icon/LoadingIcon';
 
 const GraphVis = require('react-graph-vis').default; // tslint:disable-line no-var-requires

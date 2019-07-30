@@ -1,4 +1,4 @@
-import ComponentState from '../../types/ComponentState';
+import { ComponentState } from '../../common/types';
 
 interface Action {
   type: string;

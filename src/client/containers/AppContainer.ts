@@ -1,7 +1,8 @@
 import { connect } from 'react-redux';
 import { cloneComponent, createModule, showCloneDialog, showCreateDialog } from '../actions/components';
 import App from '../components/App';
-import IState from '../types/IState';
+
+import { State } from '../store';
 
 const mapDispatchToProps = (dispatch: any) => ({
   cloneComponent: (name: string, cloneName: string, description: string) => {
@@ -18,7 +19,7 @@ const mapDispatchToProps = (dispatch: any) => ({
   },
 });
 
-const mapStateToProps = (state: IState) => ({
+const mapStateToProps = (state: State) => ({
   cloningName: state.ui.cloningName,
   shouldShowCreateDialog: state.ui.showCreateDialog,
 });

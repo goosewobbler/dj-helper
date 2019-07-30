@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import { favouriteComponent, startComponent, stopComponent, updateAndSelectComponent } from '../actions/components';
-import ComponentList from '../components/ComponentList';
+
 import findOrderedSearchResults from '../helpers/resultsHelper';
-import IComponentListItemData from '../types/IComponentListItemData';
+import { ComponentList, ComponentListItemData } from '../components/ComponentList';
 import { ComponentData } from '../../common/types';
-import IState from '../types/IState';
+import { State } from '../store';
 
 const getSortedComponents = (components: ComponentData[]): ComponentData[] => {
   return components.sort((mA: ComponentData, mB: ComponentData) => {
@@ -45,7 +45,7 @@ const getComponents = (components: ComponentData[], filter: string) => {
 const getUrl = (component: ComponentData) =>
   `${component.url}${Array.isArray(component.history) && component.history.length > 0 ? component.history[0] : ''}`;
 
-const getListItemComponents = (components: ComponentData[], filter: string): IComponentListItemData[] => {
+const getListItemComponents = (components: ComponentData[], filter: string): ComponentListItemData[] => {
   const componentsList: ComponentData[] = getComponents(components, filter);
   return componentsList.map(componentListItem => ({
     displayName: componentListItem.displayName,
@@ -57,8 +57,8 @@ const getListItemComponents = (components: ComponentData[], filter: string): ICo
   }));
 };
 
-const componentsSelector = (state: IState) => state.components;
-const filterSelector = (state: IState) => state.ui.filter;
+const componentsSelector = (state: State) => state.components;
+const filterSelector = (state: State) => state.ui.filter;
 
 const filteredComponentsSelector = createSelector(
   componentsSelector,
@@ -66,7 +66,7 @@ const filteredComponentsSelector = createSelector(
   getListItemComponents,
 );
 
-const mapStateToProps = (state: IState) => ({
+const mapStateToProps = (state: State) => ({
   components: filteredComponentsSelector(state),
   selectedComponent: state.ui.selectedComponent,
 });

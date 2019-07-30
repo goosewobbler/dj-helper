@@ -2,9 +2,9 @@ import { connect } from 'react-redux';
 import ComponentListFilter from '../components/ComponentListFilter';
 
 import { filterComponents } from '../actions/components';
-import IState from '../types/IState';
+import { State } from '../store';
 
-const mapStateToProps = (state: IState) => ({});
+const mapStateToProps = (state: State) => ({});
 
 const mapDispatchToProps = (dispatch: any) => ({
   onInput: (filter: string) => dispatch(filterComponents(filter)),

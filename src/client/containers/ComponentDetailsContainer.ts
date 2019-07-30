@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 
-import ComponentData from '../../types/ComponentData';
 import {
   buildComponent,
   bumpComponent,
@@ -14,9 +13,11 @@ import {
   updateAndSelectComponent,
 } from '../actions/components';
 import ComponentDetails from '../components/ComponentDetails';
-import IState from '../types/IState';
 
-const getSelectedComponent = (state: IState): ComponentData => {
+import { ComponentData } from '../../common/types';
+import { State } from '../store';
+
+const getSelectedComponent = (state: State): ComponentData => {
   let found = null;
   if (state.ui && state.ui.selectedComponent) {
     state.components.forEach((component: ComponentData) => {
@@ -28,7 +29,7 @@ const getSelectedComponent = (state: IState): ComponentData => {
   return found;
 };
 
-const mapStateToProps = (state: IState) => ({
+const mapStateToProps = (state: State) => ({
   component: getSelectedComponent(state),
   editors: state.ui.editors,
 });

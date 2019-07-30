@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import State from '../types/IState';
+import { State } from '../store';
 import components from './components';
 import ui from './ui';
 

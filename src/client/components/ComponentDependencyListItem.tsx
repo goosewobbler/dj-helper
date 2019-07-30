@@ -1,13 +1,11 @@
 import * as React from 'react';
 
-import ComponentData from '../../types/ComponentData';
-import ComponentState from '../../types/ComponentState';
-import ComponentDependency from '../../types/ComponentDependency';
-import ComponentContext from '../types/ComponentContext';
 import VersionBox from '../ui/VersionBox';
 import LoadingIcon from '../ui/icon/LoadingIcon';
 import LabelButton from '../ui/LabelButton';
-import { context } from '../contexts/componentContext';
+import { context, ComponentContext } from '../contexts/componentContext';
+
+import { ComponentState, ComponentData, ComponentDependency } from '../../common/types';
 
 interface ComponentDependencyProps {
   dependency: ComponentDependency;

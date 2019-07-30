@@ -2,9 +2,9 @@ import { connect } from 'react-redux';
 import UpdateBar from '../components/UpdateBar';
 
 import { update } from '../actions/components';
-import IState from '../types/IState';
+import { State } from '../store';
 
-const mapStateToProps = (state: IState) => ({
+const mapStateToProps = (state: State) => ({
   outOfDate: state.ui.outOfDate,
   updated: state.ui.updated,
   updating: state.ui.updating,

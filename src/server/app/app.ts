@@ -38,11 +38,6 @@ const createApp = async (
 
   process.env.APP_ROOT_PATH = appRoot.toString();
 
-  const service = await createService(system, config, state, onComponentUpdate, onReload, startPageServer, {
-    componentsDirectory,
-    routingFilePath,
-  });
-
   const startPageServer = async (name: string) => {
     if (name in pageServers) {
       return pageServers[name];
@@ -53,6 +48,11 @@ const createApp = async (
     await startServer(createPageServer(service, config, name), port);
     return port;
   };
+
+  const service = await createService(system, config, state, onComponentUpdate, onReload, startPageServer, {
+    componentsDirectory,
+    routingFilePath,
+  });
 
   return {
     api: createApiServer(service, config, updater, onUpdated),

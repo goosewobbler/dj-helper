@@ -8,10 +8,10 @@ interface MorphSystem {
   promote(name: string, environment: string): Promise<void>;
 }
 
-const getVersionOnEnvironment = async (name: string, environment: string) =>
+const getVersionOnEnvironment = async (name: string, environment: string): Promise<string> =>
   (await morphCli.getVersionOnEnvironment(name, environment)) || '';
 
-const promote = async (name: string, environment: string) =>
+const promote = async (name: string, environment: string): Promise<void> =>
   morphPromote.action({
     environment,
     module: name,

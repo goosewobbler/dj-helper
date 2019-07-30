@@ -20,19 +20,19 @@ const createGrapher = (dependencies: { [Key: string]: { name: string }[] }): Gra
   const edgesDownMap: { [Key: number]: number[] } = [];
   const edgesUpMap: { [Key: number]: number[] } = [];
 
-  const getIdOfNode = (name: string) => {
-    const node = nodes.find(n => n.name === name);
+  const getIdOfNode = (name: string): number => {
+    const node = nodes.find((n): boolean => n.name === name);
     return node ? node.id : null;
   };
 
-  Object.keys(dependencies).forEach((name, index) => {
+  Object.keys(dependencies).forEach((name, index): void => {
     nodes.push({ id: index, name });
   });
 
-  Object.keys(dependencies).forEach((name, index) => {
+  Object.keys(dependencies).forEach((name, index): void => {
     const dependencyDependencies = dependencies[name];
 
-    dependencyDependencies.forEach(dependencyDependency => {
+    dependencyDependencies.forEach((dependencyDependency): void => {
       const to = getIdOfNode(dependencyDependency.name);
 
       if (to !== null) {
@@ -44,15 +44,15 @@ const createGrapher = (dependencies: { [Key: string]: { name: string }[] }): Gra
     });
   });
 
-  const follow = (name: string, edgesMap: { [Key: number]: number[] }, totalNodes: Node[], totalEdges: Edge[]) => {
-    const node = nodes.find(n => n.name === name);
+  const follow = (name: string, edgesMap: { [Key: number]: number[] }, totalNodes: Node[], totalEdges: Edge[]): void => {
+    const node = nodes.find((n): boolean => n.name === name);
     if (node && totalNodes.indexOf(node) === -1) {
       totalNodes.push(node);
       if (Array.isArray(edgesMap[node.id])) {
-        edgesMap[node.id].forEach(e => {
+        edgesMap[node.id].forEach((e): void => {
           totalEdges.push({ from: node.id, to: e });
 
-          const toNode = nodes.find(n => n.id === e);
+          const toNode: Node = nodes.find(n => n.id === e);
           follow(toNode.name, edgesMap, totalNodes, totalEdges);
         });
       }

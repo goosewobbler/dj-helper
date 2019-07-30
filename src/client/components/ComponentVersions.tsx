@@ -16,7 +16,7 @@ const PromoteButton = ({
   buildInProgress: { [key: string]: boolean };
   action: any;
 }) => (
-  <button className={classNames(['promote-button', environment])} onClick={action}>
+  <button type="button" className={classNames(['promote-button', environment])} onClick={action}>
     {buildInProgress[environment] ? (
       <span>{promotionInProgressText(environment)}</span>
     ) : (
@@ -29,7 +29,7 @@ const Environment = ({ version, label, isCurrent }: { label: string; version: st
   if (version === null) {
     return (
       <div className="environment-loading">
-        <img src="/image/icon/gel-icon-loading-white.svg" />
+        <img src="/image/icon/gel-icon-loading-white.svg" alt="loading..." />
       </div>
     );
   }

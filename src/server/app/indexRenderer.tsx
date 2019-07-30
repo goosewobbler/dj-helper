@@ -3,14 +3,13 @@ import { renderToString } from 'react-dom/server'; // tslint:disable-line no-sub
 import { Provider } from 'react-redux';
 
 import App from '../../client/containers/AppContainer';
-import createStore from '../../client/store';
-import IState from '../../client/types/IState';
+import { createStore, State } from '../../client/store';
 import { Service } from '../service';
 
 const renderIndex = async (service: Service, template: string, selectedComponent?: string): Promise<string> => {
   const summaryData = await service.getComponentsSummaryData();
 
-  const initialState: IState = {
+  const initialState: State = {
     components: summaryData.components,
     ui: {
       editors: summaryData.editors,

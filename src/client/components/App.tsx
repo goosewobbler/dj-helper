@@ -11,7 +11,7 @@ import CreateForm from './CreateForm';
 import Dialog from './Dialog';
 import GitHubLink from './GitHubLink';
 
-interface IAppProps {
+interface AppProps {
   shouldShowCreateDialog: boolean;
   cloningName: string;
   onCreate(): any;
@@ -21,7 +21,7 @@ interface IAppProps {
   submitModule(name: string, description: string, type: string): any;
 }
 
-const renderHeader = (props: IAppProps) => [
+const renderHeader = (props: AppProps) => [
   <h1 key="title">Morph Developer Console</h1>,
   <div key="links">
     <LabelButton
@@ -34,14 +34,14 @@ const renderHeader = (props: IAppProps) => [
   </div>,
 ];
 
-const renderCreateDialog = (props: IAppProps) =>
+const renderCreateDialog = (props: AppProps) =>
   props.shouldShowCreateDialog ? (
     <Dialog title="Create a new Morph module" onClose={() => props.showCreateDialog(false)}>
       <CreateForm typeSelectEnabled submitModule={props.submitModule} onClose={() => props.showCreateDialog(false)} />
     </Dialog>
   ) : null;
 
-const renderCloneDialog = (props: IAppProps) =>
+const renderCloneDialog = (props: AppProps) =>
   props.cloningName ? (
     <Dialog title={`Clone ${props.cloningName.replace('bbc-morph-', '')}`} onClose={() => props.hideCloneDialog()}>
       <CreateForm
@@ -52,7 +52,7 @@ const renderCloneDialog = (props: IAppProps) =>
     </Dialog>
   ) : null;
 
-const App = (props: IAppProps) => (
+const App = (props: AppProps) => (
   <AppContainer
     banner={<UpdateBar />}
     header={renderHeader(props)}

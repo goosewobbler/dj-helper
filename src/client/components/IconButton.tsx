@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-interface IIconButtonProps {
+interface IconButtonProps {
   children?: any;
   className?: string;
   label: string;
@@ -13,7 +13,7 @@ const createClickAction = (clickAction: any) => (event: any) => {
   clickAction();
 };
 
-const IconButton = (props: IIconButtonProps) => (
+const IconButton = (props: IconButtonProps) => (
   <button className={props.className} onClick={createClickAction(props.onClick)}>
     {props.children}
     <span>{props.label}</span>

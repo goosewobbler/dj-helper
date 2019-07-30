@@ -1,5 +1,5 @@
 import { app, BrowserWindow } from 'electron';
-import startServer from './indexServer';
+import { startServer } from './indexServer';
 
 let mainWindow: Electron.BrowserWindow;
 

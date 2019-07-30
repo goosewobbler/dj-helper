@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-interface ILabelButtonProps {
+interface LabelButtonProps {
   backgroundColor?: string;
   className?: string;
   color?: string;
@@ -19,14 +19,14 @@ const createClickAction = (clickAction: any) => (event: any) => {
   clickAction();
 };
 
-const renderImage = (props: ILabelButtonProps) => {
+const renderImage = (props: LabelButtonProps) => {
   if (props.image) {
     return <div>{props.image}</div>;
   }
   return null;
 };
 
-const LabelButton = (props: ILabelButtonProps) => (
+const LabelButton = (props: LabelButtonProps) => (
   <button className={props.className} disabled={props.disabled} onClick={createClickAction(props.onClick)}>
     {renderImage(props)}
     <p>{props.label}</p>

@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import ExternalIcon from './icon/ExternalIcon';
 
-interface IExternalLinkProps {
+interface ExternalLinkProps {
   black?: boolean;
   className?: string;
   color?: string;
@@ -12,7 +12,7 @@ interface IExternalLinkProps {
   padding?: string;
 }
 
-const ExternalLink = (props: IExternalLinkProps) => (
+const ExternalLink = (props: ExternalLinkProps) => (
   <a className={props.className} href={props.link} target="_blank" onClick={event => event.stopPropagation()}>
     <div className="container">
       <ExternalIcon />

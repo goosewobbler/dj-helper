@@ -1,20 +1,17 @@
 import * as React from 'react';
 
-interface ITabsProps {
+interface TabsProps {
   children?: any;
   headings: any[];
-  buttons?: {
-    render: any;
-    props: any;
-  };
+  renderButtons: any;
 }
 
-interface ITabsState {
+interface TabsState {
   selectedIndex: number;
 }
 
-class Tabs extends React.Component<ITabsProps, ITabsState> {
-  constructor(props: ITabsProps) {
+class Tabs extends React.Component<TabsProps, TabsState> {
+  constructor(props: TabsProps) {
     super(props);
 
     this.state = {
@@ -29,7 +26,7 @@ class Tabs extends React.Component<ITabsProps, ITabsState> {
       <div>
         <div className="header">
           <ul>{this.renderHeadings()}</ul>
-          {this.props.buttons.render(this.props.buttons.props)}
+          {this.props.renderButtons()}
         </div>
         <div>{panels[this.state.selectedIndex]}</div>
       </div>

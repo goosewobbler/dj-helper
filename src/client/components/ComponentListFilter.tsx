@@ -16,17 +16,17 @@ const renderClearButton = (onClick: () => void) => (
   </button>
 );
 
-interface IComponentListFilterProps {
+interface ComponentListFilterProps {
   onInput(filter: string): null;
 }
 
-interface IComponentListFilterState {
+interface ComponentListFilterState {
   filter: string;
   focussed: boolean;
 }
 
-class ComponentListFilter extends React.Component<IComponentListFilterProps, IComponentListFilterState> {
-  constructor(props: IComponentListFilterProps) {
+class ComponentListFilter extends React.Component<ComponentListFilterProps, ComponentListFilterState> {
+  constructor(props: ComponentListFilterProps) {
     super(props);
     this.state = {
       filter: '',

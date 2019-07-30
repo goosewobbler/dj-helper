@@ -42,24 +42,24 @@ const TextInput = (props: {
   </div>
 );
 
-interface ICreateFormProps {
+interface CreateFormProps {
   typeSelectEnabled: boolean;
   submitModule(name: string, description: string, type: string): any;
   onClose(): any;
 }
 
-interface ICreateFormState {
+interface CreateFormState {
   valid: boolean;
 }
 
-class CreateForm extends React.Component<ICreateFormProps, ICreateFormState> {
+class CreateForm extends React.Component<CreateFormProps, CreateFormState> {
   private name: string;
 
   private description: string;
 
   private type: string;
 
-  constructor(props: ICreateFormProps) {
+  constructor(props: CreateFormProps) {
     super(props);
 
     this.type = 'viewcss';

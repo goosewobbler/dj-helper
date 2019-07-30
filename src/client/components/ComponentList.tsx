@@ -1,11 +1,11 @@
 import * as React from 'react';
 
-import IComponentListItemProps from '../types/IComponentListItemData';
 import ScrollList from '../ui/ScrollList';
-import ComponentListItem from './ComponentListItem';
+import { ComponentListItem, ComponentListItemProps } from './ComponentListItem';
+import { ComponentState } from '../../common/types';
 
-interface IComponentListProps {
-  components: IComponentListItemProps[];
+interface ComponentListProps {
+  components: ComponentListItemProps[];
   selectedComponent?: string;
   onSelectComponent(name: string): any;
   onFavouriteComponent(name: string, favorite: boolean): any;
@@ -13,8 +13,17 @@ interface IComponentListProps {
   onStopComponent(name: string): any;
 }
 
-class ComponentList extends React.PureComponent<IComponentListProps> {
-  constructor(props: IComponentListProps) {
+interface ComponentListItemData {
+  name: string;
+  displayName: string;
+  highlighted?: any[];
+  url: string;
+  favourite: boolean;
+  state: ComponentState;
+}
+
+class ComponentList extends React.PureComponent<ComponentListProps> {
+  constructor(props: ComponentListProps) {
     super(props);
 
     this.renderListItem = this.renderListItem.bind(this);

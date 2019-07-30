@@ -2,9 +2,9 @@ import { Express } from 'express';
 import { Server } from 'http';
 import { join } from 'path';
 import * as socketIo from 'socket.io';
-import createApp from './server/app/app';
-import System from './server/system/System';
-import ComponentData from './types/ComponentData';
+import { createApp } from './server/app/app';
+import { system } from './server/system';
+import { ComponentData } from './common/types';
 
 const startServer = async () => {
   let sendComponentData: (data: ComponentData) => void;
@@ -29,7 +29,7 @@ const startServer = async () => {
     }
   };
 
-  const startServer = async (server: Express, port: number) => {
+  const start = async (server: Express, port: number) => {
     await new Promise(resolve => {
       server.listen(port, () => {
         resolve();
@@ -40,11 +40,11 @@ const startServer = async () => {
   const packageJSON = require(join(__dirname, '../package.json'));
 
   const { api, component, devMode, config, service } = await createApp(
-    System,
+    system,
     onComponentUpdate,
     onReload,
     onUpdated,
-    startServer,
+    start,
     packageJSON.version,
   );
   const apiServer = new Server(api);
@@ -83,4 +83,4 @@ const startServer = async () => {
   });
 };
 
-export default startServer;
+export { startServer };

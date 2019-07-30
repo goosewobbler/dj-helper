@@ -6,7 +6,7 @@ import ExternalLink from '../ui/ExternalLink';
 import VSCodeIcon from '../ui/icon/VSCodeIcon';
 import LabelButton from '../ui/LabelButton';
 
-interface IComponentActionsProps {
+interface ComponentActionsProps {
   component: ComponentData;
   editors: string[];
   onClone(name: string): any;
@@ -33,7 +33,7 @@ const renderStateLabel = (state: ComponentState) => {
   }
 };
 
-const renderRendererLabel = (props: IComponentActionsProps) => {
+const renderRendererLabel = (props: ComponentActionsProps) => {
   return (
     <p className="renderer-label">
       Node version: 
@@ -43,7 +43,7 @@ const renderRendererLabel = (props: IComponentActionsProps) => {
   );
 };
 
-const renderUseCacheButton = (props: IComponentActionsProps) => {
+const renderUseCacheButton = (props: ComponentActionsProps) => {
   if (props.component.state === ComponentState.Stopped || props.component.state === ComponentState.Running) {
     return (
       <div className="wrapper">
@@ -58,7 +58,7 @@ const renderUseCacheButton = (props: IComponentActionsProps) => {
   return null;
 };
 
-const renderBuildButton = (props: IComponentActionsProps) => {
+const renderBuildButton = (props: ComponentActionsProps) => {
   if (props.component.state === ComponentState.Running) {
     return (
       <div className="wrapper">
@@ -73,7 +73,7 @@ const renderBuildButton = (props: IComponentActionsProps) => {
   return null;
 };
 
-const renderInstallButton = (props: IComponentActionsProps) => {
+const renderInstallButton = (props: ComponentActionsProps) => {
   if (props.component.state === ComponentState.Stopped || props.component.state === ComponentState.Running) {
     return (
       <div className="wrapper">
@@ -88,7 +88,7 @@ const renderInstallButton = (props: IComponentActionsProps) => {
   return null;
 };
 
-const renderCloneButton = (props: IComponentActionsProps) => {
+const renderCloneButton = (props: ComponentActionsProps) => {
   return (
     <div className="wrapper">
       <LabelButton
@@ -100,7 +100,7 @@ const renderCloneButton = (props: IComponentActionsProps) => {
   );
 };
 
-const ComponentActions = (props: IComponentActionsProps) => (
+const ComponentActions = (props: ComponentActionsProps) => (
   <div>
     <div className="header">
       <h2>{props.component.displayName}</h2>

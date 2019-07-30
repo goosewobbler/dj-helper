@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-interface IAppContainerProps {
+interface AppContainerProps {
   banner: any;
   dialog: any;
   header: any;
@@ -8,7 +8,7 @@ interface IAppContainerProps {
   rightPanel: any;
 }
 
-const AppContainer = (props: IAppContainerProps) => (
+const AppContainer = (props: AppContainerProps) => (
   <div>
     {props.banner}
     <div className="header">{props.header}</div>

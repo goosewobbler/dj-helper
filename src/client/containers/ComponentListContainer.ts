@@ -2,11 +2,11 @@ import { assign } from 'lodash/fp';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import ComponentData from '../../types/ComponentData';
 import { favouriteComponent, startComponent, stopComponent, updateAndSelectComponent } from '../actions/components';
 import ComponentList from '../components/ComponentList';
 import findOrderedSearchResults from '../helpers/resultsHelper';
 import IComponentListItemData from '../types/IComponentListItemData';
+import { ComponentData } from '../../common/types';
 import IState from '../types/IState';
 
 const getSortedComponents = (components: ComponentData[]): ComponentData[] => {

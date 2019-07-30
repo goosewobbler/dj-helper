@@ -2,11 +2,11 @@ import * as React from 'react';
 
 import GitHubIcon from '../ui/icon/GitHubIcon';
 
-interface IGitHubLinkProps {
+interface GitHubLinkProps {
   link: string;
 }
 
-const GitHubLink = (props: IGitHubLinkProps) => (
+const GitHubLink = (props: GitHubLinkProps) => (
   <a href={props.link} target="_blank">
     <GitHubIcon />
     View on GitHub

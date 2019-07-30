@@ -2,14 +2,14 @@ import * as React from 'react';
 
 import LoadingIcon from '../ui/icon/LoadingIcon';
 
-interface IUpdateBarProps {
+interface UpdateBarProps {
   outOfDate: boolean;
   updating: boolean;
   updated: boolean;
   onUpdate(): any;
 }
 
-const getMessage = (props: IUpdateBarProps) => {
+const getMessage = (props: UpdateBarProps) => {
   if (props.updating) {
     return 'Updating  😟';
   }
@@ -29,7 +29,7 @@ const getMessage = (props: IUpdateBarProps) => {
   ];
 };
 
-const renderButton = (props: IUpdateBarProps) => {
+const renderButton = (props: UpdateBarProps) => {
   if (props.updating) {
     return (
       <span className="loading">
@@ -47,7 +47,7 @@ const renderButton = (props: IUpdateBarProps) => {
   );
 };
 
-const UpdateBar = (props: IUpdateBarProps) =>
+const UpdateBar = (props: UpdateBarProps) =>
   props.outOfDate ? (
     <div className="update-bar">
       <h1 className="update-header">{getMessage(props)}</h1>

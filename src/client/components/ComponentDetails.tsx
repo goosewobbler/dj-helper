@@ -4,15 +4,15 @@ import ComponentDetailsSection from '../ui/ComponentDetailsSection';
 import ExternalLink from '../ui/ExternalLink';
 import Graph from '../ui/Graph';
 import Tabs from '../ui/Tabs';
-import ComponentData from '../../types/ComponentData';
-import ComponentDependency from '../../types/ComponentDependency';
-import ComponentHandlers from '../types/ComponentHandlers';
+
 import ComponentActions from './ComponentActions';
 import ComponentDependencyListItem from './ComponentDependencyListItem';
 import ComponentVersions from './ComponentVersions';
-import { ComponentContext, ComponentContextProvider } from '../contexts/componentContext';
 
-interface IComponentDetailsProps {
+import { ComponentData, ComponentDependency } from '../../common/types';
+import { ComponentContext, ComponentContextProvider, ComponentHandlers } from '../contexts/componentContext';
+
+interface ComponentDetailsProps {
   component?: ComponentData;
   editors: string[];
   handlers: ComponentHandlers;
@@ -29,20 +29,20 @@ const renderDetailsSectionEnd = () => (
 const orderDependencies = (dependencies: ComponentDependency[]) =>
   (dependencies || []).sort((a, b) => a.displayName.localeCompare(b.displayName));
 
-const renderDependencyGraph = (props: IComponentDetailsProps) => {
+const renderDependencyGraph = (handlers: ComponentHandlers) => {
   return (
     <Graph
-      onSelect={props.onSelectComponent}
+      onSelect={handlers.onSelectComponent}
       down
       url={`http://localhost:3333/api/component/${props.component.name}/dependency-graph`}
     />
   );
 };
 
-const renderDependendantGraph = (props: IComponentDetailsProps) => {
+const renderDependendantGraph = (handlers: ComponentHandlers) => {
   return (
     <Graph
-      onSelect={props.onSelectComponent}
+      onSelect={handlers.onSelectComponent}
       down={false}
       url={`http://localhost:3333/api/component/${props.component.name}/dependant-graph`}
     />
@@ -54,8 +54,8 @@ const buildPipelineLink = (rendererType: string) => (env: string) => {
   return `https://ci.user.morph.int.tools.bbc.co.uk/job/morph-asset-${jobPrefix}promote-${env}/`;
 };
 
-const renderPipelineLinks = (props: IComponentDetailsProps) => {
-  const buildEnvLink = buildPipelineLink(props.component.rendererType);
+const renderPipelineLinks = (component: ComponentData) => {
+  const buildEnvLink = buildPipelineLink(component.rendererType);
   return (
     <div key="links">
       <ExternalLink link={buildEnvLink('int')} label="INT Pipeline" black />
@@ -71,7 +71,7 @@ const renderPlaceholder = () => (
   </div>
 );
 
-const ComponentDetails = ({ component, editors, handlers }: IComponentDetailsProps) => {
+const ComponentDetails = ({ component, editors, handlers }: ComponentDetailsProps) => {
   if (!component) {
     return renderPlaceholder();
   }
@@ -81,7 +81,7 @@ const ComponentDetails = ({ component, editors, handlers }: IComponentDetailsPro
   const componentContextValue: ComponentContext = { component, handlers };
 
   return (
-    <Tabs headings={['Overview', 'Dependencies', 'Dependants']} buttons={{ render: renderPipelineLinks, props }}>
+    <Tabs headings={['Overview', 'Dependencies', 'Dependants']} renderButtons={() =>renderPipelineLinks(component)}>
       <ComponentContextProvider value={componentContextValue}>
         <div className="details">
           <div className="actions">
@@ -102,8 +102,8 @@ const ComponentDetails = ({ component, editors, handlers }: IComponentDetailsPro
           }
         </div>
       </ComponentContextProvider>
-      {renderDependencyGraph(props)}
-      {renderDependendantGraph(props)}
+      {renderDependencyGraph(handlers)}
+      {renderDependendantGraph(handlers)}
     </Tabs>
   );
 };

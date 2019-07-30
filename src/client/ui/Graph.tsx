@@ -5,13 +5,13 @@ import LoadingIcon from './icon/LoadingIcon';
 
 const GraphVis = require('react-graph-vis').default; // tslint:disable-line no-var-requires
 
-interface IGraphProps {
+interface GraphProps {
   url: string;
   down: boolean;
   onSelect(name: string): any;
 }
 
-interface IGraphState {
+interface GraphState {
   data: GraphData;
 }
 
@@ -23,8 +23,8 @@ const convertData = (data: GraphData) => {
   };
 };
 
-class Graph extends React.PureComponent<IGraphProps, IGraphState> {
-  constructor(props: IGraphProps) {
+class Graph extends React.PureComponent<GraphProps, GraphState> {
+  constructor(props: GraphProps) {
     super(props);
 
     this.state = {
@@ -42,7 +42,7 @@ class Graph extends React.PureComponent<IGraphProps, IGraphState> {
     }
   }
 
-  public componentWillReceiveProps(nextProps: IGraphProps) {
+  public componentWillReceiveProps(nextProps: GraphProps) {
     if (nextProps.url !== this.props.url) {
       this.setState({ data: null });
     }

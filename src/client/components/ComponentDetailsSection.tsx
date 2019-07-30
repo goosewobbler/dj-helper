@@ -1,13 +1,13 @@
 import * as React from 'react';
 
-interface IComponentDetailsSectionProps {
+interface ComponentDetailsSectionProps {
   children?: any;
   grow?: number;
   label: string;
   end?: React.ReactElement<any>;
 }
 
-const ComponentDetailsSection = (props: IComponentDetailsSectionProps) => (
+const ComponentDetailsSection = (props: ComponentDetailsSectionProps) => (
   <div>
     <div className="header">
       <h3 className="label">{props.label}</h3>

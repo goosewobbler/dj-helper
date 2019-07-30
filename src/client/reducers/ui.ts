@@ -1,6 +1,6 @@
 import ComponentData from '../../types/ComponentData';
 
-interface IAction {
+interface Action {
   type: string;
   component?: ComponentData;
   filter?: string;
@@ -10,7 +10,7 @@ interface IAction {
   show?: boolean;
 }
 
-const reducer = (state: any = {}, action: IAction) => {
+const reducer = (state: any = {}, action: Action) => {
   switch (action.type) {
     case 'RECEIVE_EDITORS': {
       return {

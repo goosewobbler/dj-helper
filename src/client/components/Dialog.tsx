@@ -3,13 +3,13 @@ import * as React from 'react';
 import RemoveIcon from '../ui/icon/RemoveIcon';
 import LabelButton from '../ui/LabelButton';
 
-interface IDialogProps {
+interface DialogProps {
   children?: any;
   title: string;
   onClose(): any;
 }
 
-const Dialog = (props: IDialogProps) => (
+const Dialog = (props: DialogProps) => (
   <div className="dialog">
     <div className="box">
       <div className="header">

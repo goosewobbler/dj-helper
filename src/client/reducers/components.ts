@@ -1,6 +1,6 @@
 import ComponentState from '../../types/ComponentState';
 
-interface IAction {
+interface Action {
   type: string;
   components?: any[];
   component?: any;
@@ -12,7 +12,7 @@ interface IAction {
   dependency?: string;
 }
 
-const reducer = (state: any[] = [], action: IAction) => {
+const reducer = (state: any[] = [], action: Action) => {
   switch (action.type) {
     case 'CREATE_COMPONENT': {
       return [...state, { name: action.name, displayName: action.displayName }];

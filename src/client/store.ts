@@ -1,20 +1,34 @@
 import { applyMiddleware, createStore } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import combinedReducer from './reducers/combined';
-import IState from './types/IState';
+import { ComponentData } from '../common/types';
 
-const createDefaultState = (): IState => ({
+interface State {
+  components: ComponentData[];
+  ui: {
+    cloningName?: string;
+    editors: string[];
+    selectedComponent?: string;
+    filter?: string;
+    outOfDate?: boolean;
+    updating?: boolean;
+    updated?: boolean;
+    showCreateDialog?: boolean;
+  };
+}
+
+const createDefaultState = (): State => ({
   components: [],
   ui: {
     editors: [],
   },
 });
 
-const store = (initialState?: IState) =>
-  createStore<IState, any, any, any>(
+const store = (initialState?: State) =>
+  createStore<State, any, any, any>(
     combinedReducer,
     initialState || createDefaultState(),
     applyMiddleware(thunkMiddleware),
   );
 
-export default store;
+export { store };

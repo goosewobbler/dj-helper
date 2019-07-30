@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-import ComponentState from '../../types/ComponentState';
-import ComponentData from '../../types/ComponentData';
 import ExternalLink from '../ui/ExternalLink';
 import LoadingIcon from '../ui/icon/LoadingIcon';
 import PauseIcon from '../ui/icon/PauseIcon';
@@ -9,9 +7,11 @@ import PlayIcon from '../ui/icon/PlayIcon';
 import StarIcon from '../ui/icon/StarIcon';
 import IconButton from './IconButton';
 
+import { ComponentData, ComponentState } from '../../common/types';
+
 const createID = (componentName: string) => `component-list-item-${componentName}`;
 
-interface IComponentListItemProps {
+interface ComponentListItemProps {
   component: ComponentData;
   selected: boolean;
   onClick?(): null;
@@ -20,7 +20,7 @@ interface IComponentListItemProps {
   onStop?(): null;
 }
 
-const renderFavouriteButton = (props: IComponentListItemProps) => {
+const renderFavouriteButton = (props: ComponentListItemProps) => {
   if (props.component.favorite) {
     return (
       <IconButton className="unfavorite-button" label="Unfavorite" onClick={() => props.onFavourite(props.name, false)}>
@@ -48,7 +48,7 @@ const renderLaunchButton = (component: ComponentData) => {
   return null;
 };
 
-const renderStartStopButton = (props: IComponentListItemProps, handleStart: () => void, handleStop: () => void) => {
+const renderStartStopButton = (props: ComponentListItemProps, handleStart: () => void, handleStop: () => void) => {
   switch (props.state) {
     case ComponentState.Stopped:
       return (
@@ -89,7 +89,7 @@ const renderStartStopButton = (props: IComponentListItemProps, handleStart: () =
   }
 };
 
-class ComponentListItem extends React.PureComponent<IComponentListItemProps> {
+class ComponentListItem extends React.PureComponent<ComponentListItemProps> {
   public static displayName = 'ComponentListItem';
 
   private handleClick: () => void;
@@ -98,14 +98,14 @@ class ComponentListItem extends React.PureComponent<IComponentListItemProps> {
 
   private handleStop: () => void;
 
-  constructor(props: IComponentListItemProps) {
+  constructor(props: ComponentListItemProps) {
     super(props);
     this.handleClick = () => this.props.onClick(this.props.name);
     this.handleStart = () => this.props.onStart(this.props.name);
     this.handleStop = () => this.props.onStop(this.props.name);
   }
 
-  public shouldComponentUpdate(nextProps: IComponentListItemProps, nextState: {}, context: any) {
+  public shouldComponentUpdate(nextProps: ComponentListItemProps, nextState: {}, context: any) {
     if (
       this.props.name !== nextProps.name ||
       this.props.displayName !== nextProps.displayName ||
@@ -140,4 +140,4 @@ class ComponentListItem extends React.PureComponent<IComponentListItemProps> {
   }
 }
 
-export default ComponentListItem;
+export { ComponentListItem, ComponentListItemProps };

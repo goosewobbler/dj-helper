@@ -196,6 +196,23 @@ const createComponent = (
 
   const getHistory = () => state.retrieve(`history.${name}`) || [];
 
+  const actions = createComponentActions(
+    system,
+    routing,
+    config,
+    componentPath,
+    name,
+    getPort,
+    log,
+    getOther,
+    getUseCache,
+    onReload,
+  );
+
+  const stateMachine = componentStateMachine(actions, () => updated());
+
+  const getState = () => stateMachine.getState();
+
   const setUseCache = async (useCache: boolean) => {
     await state.store(`cache.enabled.${name}`, useCache);
     await updated();
@@ -249,22 +266,6 @@ const createComponent = (
   };
 
   const openInEditor = () => openInEditorHelper(system, config, componentPath);
-
-  const actions = createComponentActions(
-    system,
-    routing,
-    config,
-    componentPath,
-    name,
-    getPort,
-    log,
-    getOther,
-    getUseCache,
-    onReload,
-  );
-  const stateMachine = componentStateMachine(actions, () => updated());
-
-  const getState = () => stateMachine.getState();
 
   const reinstall = async () => {
     await stateMachine.reinstall();

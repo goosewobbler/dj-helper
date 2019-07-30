@@ -10,9 +10,8 @@ import { createComponentFiles } from '../helpers/createComponentFiles';
 import { createRouting, Routing } from './routing';
 import { createGrapher, Grapher } from './grapher';
 import { createComponent } from './component';
-import { ComponentState } from './componentStateMachine';
 import { System } from '../system';
-import { ModuleType, Component, ComponentType, ComponentData, GraphData } from '../../common/types';
+import { ModuleType, Component, ComponentType, ComponentData, ComponentState, GraphData } from '../../common/types';
 
 interface Service {
   bump(name: string, type: 'patch' | 'minor'): Promise<void>;
@@ -53,16 +52,15 @@ const createService = async (
   },
 ): Promise<Service> => {
   const components: Component[] = [];
-  let nextPort = 8083;
+  const nextPort = 8083;
   let routing: Routing;
   const editors: string[] = [];
   const allDependencies: { [Key: string]: { name: string }[] } = {};
   let grapher: Grapher;
 
-  const acquirePort = () => {
-    const port = (nextPort += 1);
-    return port;
-  };
+  const acquirePort = () => nextPort + 1;
+
+  const getComponent = (name: string) => components.find(component => component.getName() === name);
 
   const getData = (name: string): ComponentData => {
     const component = getComponent(name);
@@ -100,8 +98,6 @@ const createService = async (
       }),
     );
   };
-
-  const getComponent = (name: string) => components.find(component => component.getName() === name);
 
   const addComponent = async (componentDirectoryName: string): Promise<Component> => {
     const componentDirectory = join(options.componentsDirectory, componentDirectoryName);

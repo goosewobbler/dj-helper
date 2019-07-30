@@ -119,4 +119,4 @@ const componentStateMachine = (actions: ComponentActions, onStateChanged: (state
   };
 };
 
-export { componentStateMachine, ComponentState };
+export { componentStateMachine };

@@ -1,6 +1,6 @@
 import { Config } from '../app/config';
 import { getDefaultTypeOverride } from './defaultTypeOverrides';
-import { ComponentType } from '../service/component';
+import { ComponentType } from '../../common/types';
 
 const getComponentType = (config: Config, packageContents: any, name: string) => {
   const typeOverride = getDefaultTypeOverride(name) || config.getValue(`typeOverrides.${name}`);
@@ -10,7 +10,7 @@ const getComponentType = (config: Config, packageContents: any, name: string) =>
         return ComponentType.Data;
       case 'view':
         return ComponentType.View;
-      case 'page':
+      default:
         return ComponentType.Page;
     }
   }

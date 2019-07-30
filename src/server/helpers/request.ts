@@ -2,10 +2,9 @@ import renderChas from 'chas';
 import { startsWith } from 'lodash/fp';
 
 import { Config } from '../app/config';
-import { State } from '../app/State';
+import { State } from '../app/state';
 import { System } from '../system';
-import { ComponentType } from '../service/component';
-import { ComponentState } from '../service/componentStateMachine';
+import { ComponentType, ComponentState } from '../../common/types';
 
 const requestWithRetries = async (
   system: System,

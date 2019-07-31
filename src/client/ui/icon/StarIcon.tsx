@@ -12,7 +12,7 @@ const renderUnstarred = (colour: string) => (
   </svg>
 );
 
-const StarIcon = (props: { colour?: string; starred: boolean }) =>
-  props.starred ? renderStarred(props.colour) : renderUnstarred(props.colour);
+const StarIcon = ({ colour, starred }: { colour?: string; starred: boolean }) =>
+  starred ? renderStarred(colour) : renderUnstarred(colour);
 
 export default StarIcon;

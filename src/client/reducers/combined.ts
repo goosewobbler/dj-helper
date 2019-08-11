@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
-import { State } from '../store';
 import components from './components';
 import ui from './ui';
+import { AppState } from '../../common/types';
 
-const reducer = combineReducers<State>({
+const reducer = combineReducers<AppState>({
   components,
   ui,
 });

@@ -26,6 +26,15 @@ export const promotingComponent = (name: string, environment: string) => ({
   type: 'PROMOTING_COMPONENT',
 });
 
+export const fetchVersions = (name: string) => {
+  const action = (() => {
+    return fetch(`http://localhost:3333/api/component/${name}/versions`, { method: 'POST' });
+  }) as any;
+
+  action.type = null;
+  return action;
+};
+
 export const updateAndSelectComponent = (name: string, noHistory?: boolean) => {
   const action = ((dispatch: any) => {
     if (!noHistory && (window as any).historyEnabled) {
@@ -105,15 +114,6 @@ export const favouriteComponent = (name: string, favorite: boolean) => (dispatch
     type: 'FAVORITE_COMPONENT',
   });
   fetch(`http://localhost:3333/api/component/${name}/favorite/${favorite}`, { method: 'POST' });
-};
-
-export const fetchVersions = (name: string) => {
-  const action = (() => {
-    return fetch(`http://localhost:3333/api/component/${name}/versions`, { method: 'POST' });
-  }) as any;
-
-  action.type = null;
-  return action;
 };
 
 export const bumpComponent = (name: string, type: string) => (dispatch: any) => {

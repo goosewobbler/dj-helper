@@ -14,8 +14,8 @@ import {
   updated,
   updating,
 } from './client/actions/components';
-import App from './client/components/App/app-container';
-import { createStore } from './client/store';
+import App from './client/components/App';
+import createStore from './client/store';
 import { logError } from './server/helpers/console';
 import { ComponentData, AppStatus, ComponentsData } from './common/types';
 
@@ -63,8 +63,8 @@ if (inputElement) {
 }
 
 if ((module as any).hot) {
-  (module as any).hot.accept('./client/components/App/app-container', (): void => {
-    render(require('./client/components/App/app-container').default);
+  (module as any).hot.accept('./client/components/App', (): void => {
+    render(require('./client/components/App').default);
   });
 }
 

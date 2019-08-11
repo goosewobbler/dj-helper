@@ -19,6 +19,20 @@ enum ComponentState {
   Linking,
 }
 
+interface AppState {
+  components: ComponentData[];
+  ui: {
+    cloningName?: string;
+    editors: string[];
+    selectedComponent?: string;
+    filter?: string;
+    outOfDate?: boolean;
+    updating?: boolean;
+    updated?: boolean;
+    showCreateDialog?: boolean;
+  };
+}
+
 interface Component {
   bump(type: 'patch' | 'minor'): Promise<void>;
   fetchDetails(): Promise<void>;
@@ -178,4 +192,5 @@ export {
   Package,
   Service,
   AppStatus,
+  AppState,
 };

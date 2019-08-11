@@ -44,7 +44,7 @@ if (!preloadedState) {
     });
 }
 
-const render = (Component: any): void =>
+const render = (Component: any): void => {
   ReactDOM.render(
     <AppContainer>
       <Provider store={store}>
@@ -53,6 +53,7 @@ const render = (Component: any): void =>
     </AppContainer>,
     document.getElementById('app'),
   );
+};
 
 render(App);
 
@@ -62,8 +63,8 @@ if (inputElement) {
 }
 
 if ((module as any).hot) {
-  (module as any).hot.accept('./client/containers/AppContainer', (): void => {
-    render(require('./client/containers/AppContainer').default);
+  (module as any).hot.accept('./client/components/App/app-container', (): void => {
+    render(require('./client/components/App/app-container').default);
   });
 }
 

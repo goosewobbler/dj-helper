@@ -14,7 +14,7 @@ import {
   updated,
   updating,
 } from './client/actions/components';
-import App from './client/components/app/app-redux';
+import App from './client/components/App/app-container';
 import { createStore } from './client/store';
 import { logError } from './server/helpers/console';
 import { ComponentData, AppStatus, ComponentsData } from './common/types';

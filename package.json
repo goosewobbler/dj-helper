@@ -49,6 +49,7 @@
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0",
     "strip-ansi": "^5.2.0",
+    "tailwindcss": "^1.1.1",
     "tar": "^4.4.10",
     "why-did-you-update": "^1.0.6"
   },

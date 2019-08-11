@@ -2,7 +2,7 @@ import * as React from 'react';
 import { renderToString } from 'react-dom/server'; // tslint:disable-line no-submodule-imports
 import { Provider } from 'react-redux';
 
-import App from '../../client/containers/AppContainer';
+import App from '../../client/components/app/app-redux';
 import { createStore, State } from '../../client/store';
 import { Service } from '../service';
 
@@ -35,4 +35,4 @@ const renderIndex = async (service: Service, template: string, selectedComponent
     .replace('STATE_PLACEHOLDER', JSON.stringify(preloadedState).replace(/</g, '\\u003c'));
 };
 
-export { renderIndex };
+export default renderIndex;

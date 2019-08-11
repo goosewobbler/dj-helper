@@ -1,15 +1,15 @@
 import * as React from 'react';
 
-import ComponentDetailsContainer from '../containers/ComponentDetailsContainer';
-import ComponentListContainer from '../containers/ComponentListContainer';
-import ComponentListFilterContainer from '../containers/ComponentListFilterContainer';
-import UpdateBar from '../containers/UpdateBarContainer';
-import AppContainer from '../ui/AppContainer';
-import AddIcon from '../ui/icon/AddIcon';
-import LabelButton from '../ui/LabelButton';
-import CreateForm from './CreateForm';
-import Dialog from './Dialog';
-import GitHubLink from './GitHubLink';
+import ComponentDetailsContainer from '../../containers/ComponentDetailsContainer';
+import ComponentListContainer from '../../containers/ComponentListContainer';
+import ComponentListFilterContainer from '../../containers/ComponentListFilterContainer';
+import UpdateBar from '../../containers/UpdateBarContainer';
+import AppContainer from '../../ui/AppContainer';
+import CreateIcon from './create-icon';
+import LabelButton from '../../ui/LabelButton';
+import CreateForm from '../CreateForm';
+import Dialog from '../Dialog';
+import GitHubLink from '../GitHubLink';
 
 interface AppProps {
   shouldShowCreateDialog: boolean;
@@ -27,7 +27,7 @@ const renderHeader = (props: AppProps) => [
     <LabelButton
       className="create-button"
       label="Create"
-      image={<AddIcon />}
+      image={<CreateIcon />}
       onClick={() => props.showCreateDialog(true)}
     />
     <GitHubLink link="https://github.com/bbc/morph-developer-console" />

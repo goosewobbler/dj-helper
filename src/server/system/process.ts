@@ -1,6 +1,7 @@
 import chalk from 'chalk';
 import { exec, spawn } from 'child_process';
-import * as stripAnsi from 'strip-ansi';
+import stripAnsi from 'strip-ansi';
+import { log as consoleLog } from '../helpers/console';
 
 interface ProcessSystem {
   getCommandLineArgs(): Promise<string[]>;
@@ -21,59 +22,79 @@ interface ProcessSystem {
   ): Promise<() => Promise<void>>;
 }
 
-const MESSAGE_NAME_PATTERN = /^(\[[^\]]+\]) .+/;
 const MESSAGE_REPLACE_PATTERN = /.*\[\d\d\d\] http.+( {.+})$/;
-const MESSAGE_STATUS_CODE_PATTERN = /\[(\d\d\d)\]/;
 
-const NAME_COLOURS = [chalk.blue, chalk.magenta, chalk.cyan, chalk.yellow, chalk.white];
+const trim = (s: string | Buffer): string => stripAnsi(s.toString()).trim();
 
-const assignedNameColours: any = {};
-let nextColour = 0;
+const getStatusCode = (message: string): string => {
+  const MESSAGE_STATUS_CODE_PATTERN = /\[(\d\d\d)\]/;
+  const statusMatches = MESSAGE_STATUS_CODE_PATTERN.exec(message);
+  if (!statusMatches) {
+    return null;
+  }
+  return statusMatches[1];
+};
 
-const trim = (s: string | Buffer) => (stripAnsi as any)(s.toString()).trim();
+interface MessageDetails {
+  title?: string;
+  body: string;
+  colour: (message: string) => void;
+}
 
-const log = (message: string) => {
+const getMessageDetails = (message: string): MessageDetails => {
+  const MESSAGE_TITLE_PATTERN = /^(\[[^\]]+\]) .+/;
+  const TITLE_COLOURS = [chalk.blue, chalk.magenta, chalk.cyan, chalk.yellow, chalk.white];
+  const titleMatches = MESSAGE_TITLE_PATTERN.exec(message);
+  const assignedTitleColours: { [key: string]: MessageDetails['colour'] } = {};
+  let nextColour = 0;
+  if (!titleMatches) {
+    return {
+      body: message,
+      colour: TITLE_COLOURS[0],
+    };
+  }
+  const title = titleMatches[1];
+  if (title && !(title in assignedTitleColours)) {
+    assignedTitleColours[title] = TITLE_COLOURS[nextColour % TITLE_COLOURS.length];
+    nextColour += 1;
+  }
+  const colour = assignedTitleColours[title];
+  const body = message.substr(title.length + 1);
+  return {
+    title,
+    body,
+    colour,
+  };
+};
+
+const log = (message: string): void => {
   const removeMatches = MESSAGE_REPLACE_PATTERN.exec(message);
   const shortMessage = trim(removeMatches ? message.replace(removeMatches[1], '') : message);
 
   if (shortMessage) {
-    const statusMatches = MESSAGE_STATUS_CODE_PATTERN.exec(shortMessage);
-    let statusCode = '';
-    if (statusMatches) {
-      statusCode = statusMatches[1];
-    }
-
-    const nameMatches = MESSAGE_NAME_PATTERN.exec(shortMessage);
-    let name = '';
-    let details = shortMessage;
-    if (nameMatches) {
-      name = nameMatches[1];
-      details = shortMessage.substr(name.length + 1);
-    }
-
-    if (name && !(name in assignedNameColours)) {
-      assignedNameColours[name] = NAME_COLOURS[nextColour % NAME_COLOURS.length];
-      nextColour += 1;
-    }
-    const nameColour = assignedNameColours[name] || NAME_COLOURS[0];
+    const statusCode = getStatusCode(shortMessage);
+    const { title, body, colour } = getMessageDetails(shortMessage);
+    let logMessage = '';
 
     if (statusCode === '200') {
-      console.log(nameColour(name) + (name ? ' ' : '') + chalk.green(details));
+      logMessage = colour(title) + (title ? ' ' : '') + chalk.green(body);
     } else if (statusCode === '202') {
-      console.log(nameColour(name) + (name ? ' ' : '') + chalk.yellow(details));
+      logMessage = colour(title) + (title ? ' ' : '') + chalk.yellow(body);
     } else if (statusCode) {
-      console.log(nameColour(name) + (name ? ' ' : '') + chalk.red(details));
+      logMessage = colour(title) + (title ? ' ' : '') + chalk.red(body);
     } else {
-      console.log(nameColour(name) + (name ? ' ' : '') + details);
+      logMessage = colour(title) + (title ? ' ' : '') + body;
     }
+
+    consoleLog(logMessage);
   }
 };
 
-const getCommandLineArgs = () => Promise.resolve(process.argv.slice(1));
+const getCommandLineArgs = (): Promise<string[]> => Promise.resolve(process.argv.slice(1));
 
-const getCurrentWorkingDirectory = () => Promise.resolve(process.cwd());
+const getCurrentWorkingDirectory = (): Promise<string> => Promise.resolve(process.cwd());
 
-const open = (url: string) => {
+const open = (url: string): Promise<void> => {
   spawn('open', [url]);
   return Promise.resolve();
 };
@@ -83,11 +104,11 @@ const runToCompletion = (
   command: string,
   onOutput: (message: string) => void,
   onError: (message: string) => void,
-) =>
-  new Promise<void>(resolve => {
+): Promise<void> =>
+  new Promise((resolve): void => {
     const childProcess = exec(command, { cwd: directory });
 
-    childProcess.stdout.on('data', data => {
+    childProcess.stdout.on('data', (data): void => {
       if (onOutput) {
         const output = trim(data);
         if (output) {
@@ -96,7 +117,7 @@ const runToCompletion = (
       }
     });
 
-    childProcess.stderr.on('data', data => {
+    childProcess.stderr.on('data', (data): void => {
       if (onError) {
         const error = trim(data);
         if (error) {
@@ -105,15 +126,18 @@ const runToCompletion = (
       }
     });
 
-    childProcess.on('error', error => {
+    childProcess.on('error', (error): void => {
       if (onError) {
         onError(error.toString());
       }
     });
 
-    childProcess.on('close', async () => {
-      resolve();
-    });
+    childProcess.on(
+      'close',
+      async (): Promise<void> => {
+        resolve();
+      },
+    );
   });
 
 const runUntilStopped = (
@@ -121,8 +145,8 @@ const runUntilStopped = (
   command: string,
   onOutput: (message: string) => void,
   onError: (message: string) => void,
-) =>
-  new Promise<() => Promise<void>>(resolve => {
+): Promise<() => Promise<void>> =>
+  new Promise((resolve): void => {
     let started = false;
     let stopped = false;
     const commandParts = command.split(' ');
@@ -130,17 +154,17 @@ const runUntilStopped = (
       cwd: directory,
     });
 
-    const start = () => {
+    const start = (): void => {
       if (!started) {
         started = true;
-        setTimeout(() => {
+        setTimeout((): void => {
           resolve(
-            () =>
-              new Promise(resolveStop => {
+            (): Promise<void> =>
+              new Promise((resolveStop): void => {
                 if (stopped) {
                   resolveStop();
                 } else {
-                  childProcess.on('close', () => {
+                  childProcess.on('close', (): void => {
                     resolveStop();
                   });
 
@@ -152,7 +176,7 @@ const runUntilStopped = (
       }
     };
 
-    childProcess.stdout.on('data', data => {
+    childProcess.stdout.on('data', (data): void => {
       if (onOutput) {
         const output = trim(data);
         if (output) {
@@ -162,7 +186,7 @@ const runUntilStopped = (
       start();
     });
 
-    childProcess.stderr.on('data', data => {
+    childProcess.stderr.on('data', (data): void => {
       if (onError) {
         const error = trim(data);
         if (error) {
@@ -172,15 +196,18 @@ const runUntilStopped = (
       start();
     });
 
-    childProcess.on('error', error => {
+    childProcess.on('error', (error): void => {
       if (onError) {
         onError(error.toString());
       }
     });
 
-    childProcess.on('close', async () => {
-      stopped = true;
-    });
+    childProcess.on(
+      'close',
+      async (): Promise<void> => {
+        stopped = true;
+      },
+    );
   });
 
 const processSystem: ProcessSystem = {

@@ -1,7 +1,7 @@
 import { Config } from '../app/config';
 import { System } from '../system';
 
-const openInEditor = async (system: System, config: Config, componentPath: string) => {
+const openInEditor = async (system: System, config: Config, componentPath: string): Promise<void> => {
   const wslPathIdentifier = '/mnt/c/';
 
   // If the path to the morph module directory starts /mnt/c/, we assume we're on Windows Subsystem for Linux
@@ -20,4 +20,4 @@ const openInEditor = async (system: System, config: Config, componentPath: strin
   );
 };
 
-export { openInEditor };
+export default openInEditor;

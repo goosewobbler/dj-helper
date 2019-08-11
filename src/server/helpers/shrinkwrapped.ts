@@ -2,10 +2,10 @@ import { emptyDirSync, readFileSync } from 'fs-extra';
 import { join } from 'path';
 import * as tar from 'tar';
 
-import { runNpm } from './npm';
+import runNpm from './npm';
 
-const extract = (directory: string, tarballName: string, file: string) =>
-  new Promise<string>((resolve, reject) => {
+const extract = (directory: string, tarballName: string, file: string): Promise<string> =>
+  new Promise((resolve, reject): void => {
     const tarballPath = join(directory, tarballName);
 
     tar.extract(
@@ -14,7 +14,7 @@ const extract = (directory: string, tarballName: string, file: string) =>
         file: tarballPath,
       },
       [file],
-      error => {
+      (error): void => {
         if (error) {
           reject(error);
         } else {
@@ -30,23 +30,23 @@ const extract = (directory: string, tarballName: string, file: string) =>
     );
   });
 
-const pack = async (directory: string, packageName: string) => {
+const pack = async (directory: string, packageName: string): Promise<string> => {
   let output = '';
   await runNpm(
     directory,
     ['pack', packageName],
-    (message: string) => {
+    (message: string): void => {
       output = message.toString().trim();
     },
-    (message: string) => null,
+    (): void => null,
   );
   return output;
 };
 
-const getVersions = (raw: string) => {
+const getVersions = (raw: string): { [Key: string]: string } => {
   const shrinkwrap = JSON.parse(raw);
   const has: { [Key: string]: string } = {};
-  Object.keys(shrinkwrap.dependencies).forEach((dependency: string) => {
+  Object.keys(shrinkwrap.dependencies).forEach((dependency: string): void => {
     has[dependency] = shrinkwrap.dependencies[dependency].version;
   });
   return has;
@@ -65,4 +65,4 @@ const getShrinkwrap = async (packageName: string): Promise<{ [Key: string]: stri
   return {};
 };
 
-export { getShrinkwrap };
+export default getShrinkwrap;

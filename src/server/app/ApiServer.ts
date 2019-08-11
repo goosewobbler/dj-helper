@@ -7,10 +7,17 @@ import { join } from 'path';
 import { Config } from './config';
 import { Service } from '../service';
 import { Updater } from './updater';
-import { createApiComponentRouter } from './apiComponentRouter';
-import { renderIndex } from './indexRenderer';
+import createApiComponentRouter from './apiComponentRouter';
+import renderIndex from './indexRenderer';
 
-const createApiServer = (service: Service, config: Config, updater: Updater, onUpdated: () => void) => {
+import { logError } from '../helpers/console';
+
+const createApiServer = (
+  service: Service,
+  config: Config,
+  updater: Updater,
+  onUpdated: () => void,
+): express.Express => {
   const app = express();
 
   const publicPath = join(__dirname, '../../../public');
@@ -21,22 +28,28 @@ const createApiServer = (service: Service, config: Config, updater: Updater, onU
 
   app.use('/api/component', createApiComponentRouter(service));
 
-  app.get('/api/status', async (req, res) => {
-    updater
-      .getStatus()
-      .then(status => res.json(status))
-      .catch(console.error);
-  });
+  app.get(
+    '/api/status',
+    async (req, res): Promise<void> => {
+      updater
+        .getStatus()
+        .then((status): express.Response => res.json(status))
+        .catch(logError);
+    },
+  );
 
-  app.post('/api/update', async (req, res) => {
-    updater
-      .update()
-      .then(onUpdated)
-      .catch(console.error);
-    res.send('🤔');
-  });
+  app.post(
+    '/api/update',
+    async (req, res): Promise<void> => {
+      updater
+        .update()
+        .then(onUpdated)
+        .catch(logError);
+      res.send('🤔');
+    },
+  );
 
-  app.get('/local-push.js', (req, res) => {
+  app.get('/local-push.js', (req, res): void => {
     const pollInterval = String(config.getValue('livePushPollInterval') || 10000);
     const js = readFileSync(join(publicPath, 'local-push.js'), 'utf-8');
     const modifiedJs = js.replace('POLL_INTERVAL_FROM_CONFIG', pollInterval);
@@ -44,13 +57,19 @@ const createApiServer = (service: Service, config: Config, updater: Updater, onU
     res.contentType('application/javascript').send(modifiedJs);
   });
 
-  app.get('/', async (req, res) => {
-    res.send(await renderIndex(service, readFileSync(join(publicPath, 'index.html'), 'utf-8')));
-  });
+  app.get(
+    '/',
+    async (req, res): Promise<void> => {
+      res.send(await renderIndex(service, readFileSync(join(publicPath, 'index.html'), 'utf-8')));
+    },
+  );
 
-  app.get('/component/:name', async (req, res) => {
-    res.send(await renderIndex(service, readFileSync(join(publicPath, 'index.html'), 'utf-8'), req.params.name));
-  });
+  app.get(
+    '/component/:name',
+    async (req, res): Promise<void> => {
+      res.send(await renderIndex(service, readFileSync(join(publicPath, 'index.html'), 'utf-8'), req.params.name));
+    },
+  );
 
   app.use(express.static(publicPath));
 
@@ -63,4 +82,4 @@ const createApiServer = (service: Service, config: Config, updater: Updater, onU
   return app;
 };
 
-export { createApiServer };
+export default createApiServer;

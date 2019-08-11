@@ -1,7 +1,7 @@
 import { join } from 'path';
 
-import { runNpm } from '../helpers/npm';
-import { packageHash } from '../helpers/packageHash';
+import runNpm from '../helpers/npm';
+import packageHash from '../helpers/packageHash';
 
 import { Component } from '../../common/types';
 import { Routing } from './routing';
@@ -35,26 +35,27 @@ const createComponentActions = (
 ): ComponentActions => {
   let stopRunning: () => Promise<void>;
 
-  const readPackage = async () => JSON.parse(await system.file.readFile(join(componentPath, 'package.json')));
+  const readPackage = async (): Promise<{ scripts: { build: string } }> =>
+    JSON.parse(await system.file.readFile(join(componentPath, 'package.json')));
 
-  const hasBuildScript = async () => {
+  const hasBuildScript = async (): Promise<boolean> => {
     const packageContents = await readPackage();
-    return packageContents.scripts && packageContents.scripts.build;
+    return packageContents.scripts && !!packageContents.scripts.build;
   };
 
-  const hasBower = () => system.file.exists(join(componentPath, 'bower.json'));
+  const hasBower = (): Promise<boolean> => system.file.exists(join(componentPath, 'bower.json'));
 
-  const hasGrunt = () => system.file.exists(join(componentPath, 'Gruntfile.js'));
+  const hasGrunt = (): Promise<boolean> => system.file.exists(join(componentPath, 'Gruntfile.js'));
 
-  const calculatePackageHash = async () => packageHash(await readPackage());
+  const calculatePackageHash = async (): Promise<string> => packageHash(await readPackage());
 
-  const updatePackageHash = async () => {
+  const updatePackageHash = async (): Promise<void> => {
     const hash = await calculatePackageHash();
     const mdcFile = JSON.stringify({ hash });
     await system.file.writeFile(join(componentPath, 'node_modules', '.mdc.json'), mdcFile);
   };
 
-  const getPackageHash = async () => {
+  const getPackageHash = async (): Promise<string> => {
     try {
       const packageHashContents = JSON.parse(
         await system.file.readFile(join(componentPath, 'node_modules', '.mdc.json')),
@@ -66,7 +67,7 @@ const createComponentActions = (
     return null;
   };
 
-  const buildAll = async () => {
+  const buildAll = async (): Promise<void> => {
     let command: string;
     let shortName: string;
     if (await hasBuildScript()) {
@@ -78,27 +79,27 @@ const createComponentActions = (
     }
     if (command) {
       log(`Running ${shortName}...`);
-      const buildLog = (message: string) => log(`[${shortName}] ${message}`);
+      const buildLog = (message: string): void => log(`[${shortName}] ${message}`);
       await system.process.runToCompletion(componentPath, command, buildLog, buildLog);
       log('Built.');
     }
   };
 
-  const buildSass = async () => {
+  const buildSass = async (): Promise<void> => {
     const command = join(__dirname, '../../../node_modules/.bin/grunt sass');
     log('Running grunt sass...');
-    const buildLog = (message: string) => log(`[grunt sass] ${message}`);
+    const buildLog = (message: string): void => log(`[grunt sass] ${message}`);
     await system.process.runToCompletion(componentPath, command, buildLog, buildLog);
     log('Built.');
   };
 
-  const install = async () => {
+  const install = async (): Promise<void> => {
     log('Running npm install...');
-    const installLog = (message: string) => log(`[npm install] ${message}`);
+    const installLog = (message: string): void => log(`[npm install] ${message}`);
     await runNpm(componentPath, ['install'], installLog, installLog);
     await updatePackageHash();
     if (await hasBower()) {
-      const bowerLog = (message: string) => log(`[bower install] ${message}`);
+      const bowerLog = (message: string): void => log(`[bower install] ${message}`);
       await system.process.runToCompletion(
         componentPath,
         'node node_modules/bower/bin/bower install',
@@ -109,7 +110,7 @@ const createComponentActions = (
     log('Installed.');
   };
 
-  const link = async (dependency: string) => {
+  const link = async (dependency: string): Promise<void> => {
     log(`Linking ${dependency}...`);
     const otherDirectoryName = getOther(dependency).getDirectoryName();
     const otherPath = join(componentPath, '..', otherDirectoryName);
@@ -120,9 +121,9 @@ const createComponentActions = (
     log(`Linked ${dependency}.`);
   };
 
-  const makeOtherLinkable = async (otherName: string) => getOther(otherName).makeLinkable();
+  const makeOtherLinkable = async (otherName: string): Promise<void> => getOther(otherName).makeLinkable();
 
-  const needsInstall = async () => {
+  const needsInstall = async (): Promise<boolean> => {
     if (config.getValue('installOnStart') === false) {
       return false;
     }
@@ -138,7 +139,7 @@ const createComponentActions = (
     return false;
   };
 
-  const run = async (restartOthers: boolean = false) => {
+  const run = async (restartOthers: boolean = false): Promise<void> => {
     const useCache = getUseCache();
     log('Starting...');
     const command = join(
@@ -148,7 +149,7 @@ const createComponentActions = (
     const stopProcess = await system.process.runUntilStopped(componentPath, command, log, log);
     await onReload(restartOthers);
     await routing.updateRoute(name, getPort());
-    stopRunning = async () => {
+    stopRunning = async (): Promise<void> => {
       await routing.updateRoute(name, null);
       await stopProcess();
     };
@@ -156,7 +157,7 @@ const createComponentActions = (
     log(useCache ? 'Running with cache enabled.' : 'Running.');
   };
 
-  const stop = async () => {
+  const stop = async (): Promise<void> => {
     if (stopRunning) {
       log('Stopping...');
       await stopRunning();
@@ -164,12 +165,12 @@ const createComponentActions = (
     }
   };
 
-  const uninstall = async () => {
+  const uninstall = async (): Promise<void> => {
     log('Deleting node_modules.');
     await system.file.deleteDirectory(join(componentPath, 'node_modules'));
   };
 
-  const unlink = async (dependency: string) => {
+  const unlink = async (dependency: string): Promise<void> => {
     log(`Unlinking ${dependency}...`);
     const nodeModulePath = join(componentPath, 'node_modules', dependency);
     const oldNodeModulePath = `${nodeModulePath}.old`;

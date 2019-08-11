@@ -1,8 +1,8 @@
 import { Config } from '../app/config';
-import { getDefaultTypeOverride } from './defaultTypeOverrides';
-import { ComponentType } from '../../common/types';
+import getDefaultTypeOverride from './defaultTypeOverrides';
+import { ComponentType, Package } from '../../common/types';
 
-const getComponentType = (config: Config, packageContents: any, name: string) => {
+const getComponentType = (config: Config, packageContents: Package, name: string): number => {
   const typeOverride = getDefaultTypeOverride(name) || config.getValue(`typeOverrides.${name}`);
   if (typeOverride) {
     switch (typeOverride) {
@@ -25,4 +25,4 @@ const getComponentType = (config: Config, packageContents: any, name: string) =>
   return ComponentType.Data;
 };
 
-export { getComponentType };
+export default getComponentType;

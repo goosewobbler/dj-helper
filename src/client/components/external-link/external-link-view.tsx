@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import ExternalIcon from './icon/ExternalIcon';
+import ExternalIcon from './external-icon';
 
 interface ExternalLinkProps {
   black?: boolean;

@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-import ExternalLink from '../ui/ExternalLink';
-import VSCodeIcon from '../ui/icon/VSCodeIcon';
-import LabelButton from '../ui/LabelButton';
+import ExternalLink from '../external-link';
+import VSCodeIcon from './vscode-icon';
+import LabelButton from '../../ui/LabelButton';
 
-import { ComponentState, ComponentData } from '../../common/types';
+import { ComponentState, ComponentData } from '../../../common/types';
 
 interface ComponentActionsProps {
   component: ComponentData;

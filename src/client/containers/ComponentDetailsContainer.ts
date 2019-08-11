@@ -12,7 +12,7 @@ import {
   unlinkComponent,
   updateAndSelectComponent,
 } from '../actions/components';
-import ComponentDetails from '../components/ComponentDetails';
+import ComponentDetails from '../components/componentDetails';
 
 import { ComponentData } from '../../common/types';
 import { State } from '../store';
@@ -35,16 +35,18 @@ const mapStateToProps = (state: State) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  onBuild: (name: string) => dispatch(buildComponent(name)),
-  onBumpComponent: (name: string, type: string) => dispatch(bumpComponent(name, type)),
-  onClone: (name: string) => dispatch(showCloneDialog(name)),
-  onInstall: (name: string) => dispatch(installComponent(name)),
-  onLinkComponent: (name: string, dependency: string) => dispatch(linkComponent(name, dependency)),
-  onOpenInCode: (name: string) => dispatch(openInCode(name)),
-  onPromoteComponent: (name: string, environment: string) => dispatch(promoteComponent(name, environment)),
-  onSelectComponent: (name: string) => dispatch(updateAndSelectComponent(name)),
-  onSetUseCache: (name: string, value: boolean) => dispatch(setUseCacheOnComponent(name, value)),
-  onUnlinkComponent: (name: string, dependency: string) => dispatch(unlinkComponent(name, dependency)),
+  handlers: {
+    onBuild: (name: string) => dispatch(buildComponent(name)),
+    onBumpComponent: (name: string, type: string) => dispatch(bumpComponent(name, type)),
+    onClone: (name: string) => dispatch(showCloneDialog(name)),
+    onInstall: (name: string) => dispatch(installComponent(name)),
+    onLinkComponent: (name: string, dependency: string) => dispatch(linkComponent(name, dependency)),
+    onOpenInCode: (name: string) => dispatch(openInCode(name)),
+    onPromoteComponent: (name: string, environment: string) => dispatch(promoteComponent(name, environment)),
+    onSelectComponent: (name: string) => dispatch(updateAndSelectComponent(name)),
+    onSetUseCache: (name: string, value: boolean) => dispatch(setUseCacheOnComponent(name, value)),
+    onUnlinkComponent: (name: string, dependency: string) => dispatch(unlinkComponent(name, dependency)),
+  }
 });
 
 const Container = connect(

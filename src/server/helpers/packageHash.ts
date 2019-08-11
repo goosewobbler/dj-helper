@@ -1,8 +1,9 @@
 import * as hash from 'node-object-hash';
+import { Package } from '../../common/types';
 
 const hasher = hash({ sort: true }).hash;
 
-const packageHash = (packageContents: any) => {
+const packageHash = (packageContents: Package): string => {
   const contentsSubset = {
     dependencies: packageContents.dependencies,
     devDependencies: packageContents.devDependencies,
@@ -11,4 +12,4 @@ const packageHash = (packageContents: any) => {
   return hasher(contentsSubset);
 };
 
-export { packageHash };
+export default packageHash;

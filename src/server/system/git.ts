@@ -1,6 +1,8 @@
 import { randomBytes } from 'crypto';
 import { process } from './process';
 
+import { logError } from '../helpers/console';
+
 interface GitSystem {
   checkoutMaster(directory: string): Promise<void>;
   checkoutExistingBranch(directory: string, branchName: string): Promise<void>;
@@ -13,26 +15,26 @@ interface GitSystem {
   stageFile(directory: string, path: string): Promise<void>;
 }
 
-const checkoutExistingBranch = (directory: string, branchName: string) =>
-  process.runToCompletion(directory, `git checkout ${branchName}`, (): void => null, console.error);
+const checkoutExistingBranch = (directory: string, branchName: string): Promise<void> =>
+  process.runToCompletion(directory, `git checkout ${branchName}`, (): void => null, logError);
 
-const checkoutMaster = (directory: string) =>
-  process.runToCompletion(directory, `git checkout master`, (): void => null, console.error);
+const checkoutMaster = (directory: string): Promise<void> =>
+  process.runToCompletion(directory, `git checkout master`, (): void => null, logError);
 
-const checkoutNewBranch = (directory: string, branchName: string) =>
-  process.runToCompletion(directory, `git checkout -b ${branchName}`, (): void => null, console.error);
+const checkoutNewBranch = (directory: string, branchName: string): Promise<void> =>
+  process.runToCompletion(directory, `git checkout -b ${branchName}`, (): void => null, logError);
 
-const commit = (directory: string, message: string) =>
-  process.runToCompletion(directory, `git commit -m "${message}"`, (): void => null, console.error);
+const commit = (directory: string, message: string): Promise<void> =>
+  process.runToCompletion(directory, `git commit -m "${message}"`, (): void => null, logError);
 
-const getCurrentBranch = (directory: string) =>
-  new Promise<string>((resolve, reject) => {
+const getCurrentBranch = (directory: string): Promise<string> =>
+  new Promise((resolve, reject): void => {
     process.runToCompletion(directory, 'git rev-parse --abbrev-ref HEAD', resolve, reject).catch(reject);
   });
 
-const getRandomBranchName = () =>
-  new Promise<string>((resolve, reject) => {
-    randomBytes(4, (error, buffer) => {
+const getRandomBranchName = (): Promise<string> =>
+  new Promise((resolve, reject): void => {
+    randomBytes(4, (error, buffer): void => {
       if (error) {
         reject(error);
       } else {
@@ -41,26 +43,26 @@ const getRandomBranchName = () =>
     });
   });
 
-const push = (directory: string, branchName: string) =>
-  process.runToCompletion(directory, `git push origin ${branchName}`, (): void => null, console.error);
+const push = (directory: string, branchName: string): Promise<void> =>
+  process.runToCompletion(directory, `git push origin ${branchName}`, (): void => null, logError);
 
-const readyToCommit = (directory: string) =>
-  new Promise<boolean>((resolve, reject) => {
+const readyToCommit = (directory: string): Promise<boolean> =>
+  new Promise((resolve, reject): void => {
     process
       .runToCompletion(
         directory,
         'git diff --cached --numstat',
-        message => {
+        (): void => {
           resolve(false);
         },
         reject,
       )
-      .then(() => resolve(true))
+      .then((): void => resolve(true))
       .catch(reject);
   });
 
-const stageFile = (directory: string, path: string) =>
-  process.runToCompletion(directory, `git add ${path}`, (): void => null, console.error);
+const stageFile = (directory: string, path: string): Promise<void> =>
+  process.runToCompletion(directory, `git add ${path}`, (): void => null, logError);
 
 const git: GitSystem = {
   checkoutExistingBranch,

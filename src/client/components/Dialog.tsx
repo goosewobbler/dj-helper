@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import RemoveIcon from '../ui/icon/RemoveIcon';
+import RemoveIcon from './icons/RemoveIcon';
 import LabelButton from '../ui/LabelButton';
 
 interface DialogProps {

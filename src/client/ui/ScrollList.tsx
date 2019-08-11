@@ -2,7 +2,7 @@ import { throttle } from 'lodash/fp';
 import * as React from 'react';
 import * as ReactList from 'react-list';
 
-import TopIcon from './icon/TopIcon';
+import TopIcon from '../components/icons/TopIcon';
 
 const ReactListComponent: any = ReactList;
 

@@ -1,10 +1,12 @@
 import { ensureDirSync, moveSync } from 'fs-extra';
 import { existsSync, lstatSync, readFileSync, symlinkSync, unlinkSync, writeFileSync } from 'graceful-fs';
 import { some } from 'lodash/fp';
-import * as ls from 'ls';
-import * as ncp from 'ncp';
-import * as watch from 'node-watch';
+import ls from 'ls';
+import { ncp } from 'ncp';
+import watch from 'node-watch';
 import { join } from 'path';
+
+import { logError } from '../helpers/console';
 
 interface FileSystem {
   exists(path: string): Promise<boolean>;
@@ -18,6 +20,11 @@ interface FileSystem {
   moveDirectory(from: string, to: string): Promise<void>;
   createSymlink(from: string, to: string): Promise<void>;
   removeSymlink(path: string): Promise<void>;
+}
+
+interface File {
+  name: string;
+  full: string;
 }
 
 const ignore = [
@@ -42,21 +49,22 @@ const copyIgnore = [
   '/shrinkwrap.yaml',
 ];
 
-const exists = (path: string) => Promise.resolve(existsSync(path));
+const exists = (path: string): Promise<boolean> => Promise.resolve(existsSync(path));
 
-const getPackageDirectories = async (directory: string) =>
-  (ls as any)(join(directory, '*'))
-    .filter((file: any) => lstatSync(file.full).isDirectory())
-    .filter((file: any) => existsSync(join(file.full, 'package.json')))
-    .map((file: any) => file.name);
+const getPackageDirectories = async (directory: string): Promise<string[]> =>
+  ls(join(directory, '*'))
+    .filter((file: File): boolean => lstatSync(file.full).isDirectory())
+    .filter((file: File): boolean => existsSync(join(file.full, 'package.json')))
+    .map((file: File): string => file.name);
 
-const readFile = (path: string) => Promise.resolve(readFileSync(path).toString());
+const readFile = (path: string): Promise<string> => Promise.resolve(readFileSync(path).toString());
 
-const writeFile = (path: string, contents: string) => Promise.resolve(writeFileSync(path, contents));
+const writeFile = (path: string, contents: string): Promise<void> => Promise.resolve(writeFileSync(path, contents));
 
-const symbolicLinkExists = (path: string) => Promise.resolve(existsSync(path) && lstatSync(path).isSymbolicLink());
+const symbolicLinkExists = (path: string): Promise<boolean> =>
+  Promise.resolve(existsSync(path) && lstatSync(path).isSymbolicLink());
 
-const deleteDirectory = async (directory: string) => {
+const deleteDirectory = async (directory: string): Promise<void> => {
   try {
     const to = `/tmp/mdc.deleted.${Date.now()}`;
     moveSync(directory, to);
@@ -70,15 +78,16 @@ const deleteDirectory = async (directory: string) => {
   }
 };
 
-const watchDirectory = (directory: string, callback: (path: string) => void) =>
+const watchDirectory = (directory: string, callback: (path: string) => void): Promise<void> =>
   Promise.resolve(
-    (watch as any)(
+    watch(
       directory,
       {
-        filter: (name: string) => !some((pathToIgnore: string) => name.indexOf(pathToIgnore) > -1, ignore),
+        filter: (name: string): boolean =>
+          !some((pathToIgnore: string): boolean => name.indexOf(pathToIgnore) > -1, ignore),
         recursive: true,
       },
-      (event: string, fileName: string) => {
+      (event: string, fileName: string): void => {
         if (event === 'remove' || lstatSync(fileName).isFile()) {
           const fileChanged = fileName.replace(`${directory}/`, '');
           callback(fileChanged);
@@ -87,16 +96,16 @@ const watchDirectory = (directory: string, callback: (path: string) => void) =>
     ),
   );
 
-const copyDirectory = async (from: string, to: string, filter: boolean) =>
-  new Promise<void>((resolve, reject) =>
-    (ncp as any)(
+const copyDirectory = async (from: string, to: string, filter: boolean): Promise<void> =>
+  new Promise((resolve, reject): void =>
+    ncp(
       from,
       to,
       {
-        filter: (name: string) =>
-          !filter || !some((pathToIgnore: string) => name.indexOf(pathToIgnore) > -1, copyIgnore),
+        filter: (name: string): boolean =>
+          !filter || !some((pathToIgnore: string): boolean => name.indexOf(pathToIgnore) > -1, copyIgnore),
       },
-      (error: any) => {
+      (error: Error): void => {
         if (error) {
           reject(error);
         } else {
@@ -106,27 +115,27 @@ const copyDirectory = async (from: string, to: string, filter: boolean) =>
     ),
   );
 
-const moveDirectory = async (from: string, to: string) => {
+const moveDirectory = async (from: string, to: string): Promise<void> => {
   try {
     moveSync(from, to);
   } catch (ex) {
-    console.error(ex);
+    logError(ex);
   }
 };
 
-const createSymlink = async (from: string, to: string) => {
+const createSymlink = async (from: string, to: string): Promise<void> => {
   try {
     symlinkSync(from, to);
   } catch (ex) {
-    console.error(ex);
+    logError(ex);
   }
 };
 
-const removeSymlink = async (path: string) => {
+const removeSymlink = async (path: string): Promise<void> => {
   try {
     unlinkSync(path);
   } catch (ex) {
-    console.error(ex);
+    logError(ex);
   }
 };
 

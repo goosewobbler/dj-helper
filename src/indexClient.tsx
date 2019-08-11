@@ -14,12 +14,14 @@ import {
   updated,
   updating,
 } from './client/actions/components';
-import App from './client/containers/AppContainer';
+import App from './client/components/app/app-redux';
 import { createStore } from './client/store';
+import { logError } from './server/helpers/console';
+import { ComponentData, AppStatus, ComponentsData } from './common/types';
 
 if (process.env.NODE_ENV !== 'production' && typeof window !== 'undefined') {
   Object.defineProperty(React, 'createClass', {
-    set: nextCreateClass => null,
+    set: (): void => null,
   });
   const { whyDidYouUpdate } = require('why-did-you-update');
   whyDidYouUpdate(React, {
@@ -35,14 +37,14 @@ const store = createStore(preloadedState);
 
 if (!preloadedState) {
   fetch('http://localhost:3333/api/component')
-    .then(response => response.json())
-    .then(json => {
+    .then((response): Promise<ComponentsData> => response.json())
+    .then((json): void => {
       store.dispatch(receiveComponents(json.components));
       store.dispatch(receiveEditors(json.editors));
     });
 }
 
-const render = (Component: any) =>
+const render = (Component: any): void =>
   ReactDOM.render(
     <AppContainer>
       <Provider store={store}>
@@ -60,43 +62,43 @@ if (inputElement) {
 }
 
 if ((module as any).hot) {
-  (module as any).hot.accept('./client/containers/AppContainer', () => {
+  (module as any).hot.accept('./client/containers/AppContainer', (): void => {
     render(require('./client/containers/AppContainer').default);
   });
 }
 
 if (io) {
   const socket = io('http://localhost:3333');
-  socket.on('component', (component: any) => {
+  socket.on('component', (component: ComponentData): void => {
     store.dispatch(receiveComponent(component));
   });
 
-  socket.on('updated', () => {
+  socket.on('updated', (): void => {
     store.dispatch(updated());
   });
 
-  const updateSelected = () => {
+  const updateSelected = (): void => {
     const selected = store.getState().ui.selectedComponent;
     if (selected) {
       store.dispatch(fetchVersions(selected));
     }
   };
 
-  socket.on('freshState', (freshState: any) => {
+  socket.on('freshState', (freshState: any): void => {
     store.dispatch(receiveComponents(freshState.components));
     store.dispatch(receiveEditors(freshState.editors));
     updateSelected();
   });
 
-  setInterval(() => {
+  setInterval((): void => {
     updateSelected();
   }, 60000);
 }
 
-const checkOutOfDate = () => {
+const checkOutOfDate = (): void => {
   fetch('http://localhost:3333/api/status')
-    .then(response => response.json())
-    .then(response => {
+    .then((response): Promise<AppStatus> => response.json())
+    .then((response): void => {
       if (response.updated) {
         store.dispatch(updated());
       } else if (response.updating) {
@@ -106,7 +108,7 @@ const checkOutOfDate = () => {
         store.dispatch(updateAvailable());
       }
     })
-    .catch(console.error);
+    .catch(logError);
 };
 
 checkOutOfDate();
@@ -118,14 +120,14 @@ if (window.location.port === '8080') {
 if (typeof (window as any).historyEnabled === 'undefined') {
   (window as any).historyEnabled = true;
 
-  const selectComponentFromUrl = () => {
+  const selectComponentFromUrl = (): void => {
     const matches = /\/component\/(.+)$/.exec(String(window.document.location));
     if (matches) {
       store.dispatch(updateAndSelectComponent(matches[1], true));
     }
   };
 
-  window.onpopstate = event => {
+  window.onpopstate = (): void => {
     selectComponentFromUrl();
   };
 

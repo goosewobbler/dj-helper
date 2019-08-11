@@ -1,7 +1,8 @@
 import * as React from 'react';
 
 import { GraphData } from '../../common/types';
-import LoadingIcon from './icon/LoadingIcon';
+import LoadingIcon from '../components/icons/LoadingIcon';
+import { logError } from '../../server/helpers/console';
 
 const GraphVis = require('react-graph-vis').default; // tslint:disable-line no-var-requires
 
@@ -58,7 +59,7 @@ class Graph extends React.PureComponent<GraphProps, GraphState> {
       .then(data => {
         this.setState({ data });
       })
-      .catch(console.error);
+      .catch(logError);
   }
 
   private renderGraph() {

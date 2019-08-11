@@ -5,8 +5,8 @@ import ExternalLink from '../ui/ExternalLink';
 import Graph from '../ui/Graph';
 import Tabs from '../ui/Tabs';
 
-import ComponentActions from './ComponentActions';
-import ComponentDependencyListItem from './ComponentDependencyListItem';
+import ComponentActions from './componentActions';
+import ComponentDependencyListItem from './componentDependencyListItem';
 import ComponentVersions from './ComponentVersions';
 
 import { ComponentData, ComponentDependency } from '../../common/types';

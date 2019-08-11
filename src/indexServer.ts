@@ -1,86 +1,69 @@
-import { Express } from 'express';
 import { Server } from 'http';
-import { join } from 'path';
 import * as socketIo from 'socket.io';
-import { createApp } from './server/app/app';
+import createApp from './server/app/app';
 import { system } from './server/system';
+import { log } from './server/helpers/console';
 import { ComponentData } from './common/types';
+import { version } from '../package.json';
 
-const startServer = async () => {
+const startServer = async (): Promise<void> => {
   let sendComponentData: (data: ComponentData) => void;
   let sendReload: () => void;
   let sendUpdated: () => void;
 
-  const onComponentUpdate = (data: ComponentData) => {
+  const onComponentUpdate = (data: ComponentData): void => {
     if (sendComponentData) {
       sendComponentData(data);
     }
   };
 
-  const onReload = () => {
+  const onReload = (): void => {
     if (sendReload) {
       sendReload();
     }
   };
 
-  const onUpdated = () => {
+  const onUpdated = (): void => {
     if (sendUpdated) {
       sendUpdated();
     }
   };
 
-  const start = async (server: Express, port: number) => {
-    await new Promise(resolve => {
-      server.listen(port, () => {
-        resolve();
-      });
-    });
-  };
-
-  const packageJSON = require(join(__dirname, '../package.json'));
-
-  const { api, component, devMode, config, service } = await createApp(
-    system,
-    onComponentUpdate,
-    onReload,
-    onUpdated,
-    start,
-    packageJSON.version,
-  );
+  const { api, component, service } = await createApp(system, onComponentUpdate, onReload, onUpdated, version);
   const apiServer = new Server(api);
   const componentServer = new Server(component);
   const io = socketIo(apiServer);
 
-  sendComponentData = (data: ComponentData) => {
+  sendComponentData = (data: ComponentData): void => {
     io.emit('component', data);
   };
 
-  sendReload = () => {
+  sendReload = (): void => {
     io.emit('reload');
   };
 
-  sendUpdated = () => {
+  sendUpdated = (): void => {
     io.emit('updated');
   };
 
-  await new Promise(resolve => {
-    apiServer.listen(3333, () => {
+  await new Promise((resolve): void => {
+    apiServer.listen(3333, (): void => {
       resolve();
     });
   });
 
-  await new Promise(resolve => {
-    componentServer.listen(4000, () => {
+  await new Promise((resolve): void => {
+    componentServer.listen(4000, (): void => {
       resolve();
     });
   });
 
   const url = 'http://localhost:3333';
-  console.log(`[console] Running at ${url}`);
+  log(`[console] Running at ${url}`);
 
-  io.on('connection', () => {
+  io.on('connection', (): void => {
     io.emit('freshState', service.getComponentsData());
   });
 };
 
-export { startServer };
+export default startServer;

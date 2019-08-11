@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
-import { cloneComponent, createModule, showCloneDialog, showCreateDialog } from '../actions/components';
-import App from '../components/App';
+import { cloneComponent, createModule, showCloneDialog, showCreateDialog } from '../../actions/components';
+import App from './app-view';
 
-import { State } from '../store';
+import { State } from '../../store';
 
 const mapDispatchToProps = (dispatch: any) => ({
   cloneComponent: (name: string, cloneName: string, description: string) => {

@@ -13,7 +13,7 @@ const createComponentFiles = async (
   name: string,
   type: ModuleType,
   createOptions: { description: string },
-) => {
+): Promise<void> => {
   const packageName = `bbc-morph-${name}`;
   const typeDirectory = createTypeDirectories[type];
   const fromDirectory = join(__dirname, `../../../../templates/${typeDirectory}`);
@@ -45,4 +45,4 @@ const createComponentFiles = async (
   await system.file.moveDirectory(npmIgnorePath, gitIgnorePath);
 };
 
-export { createComponentFiles };
+export default createComponentFiles;

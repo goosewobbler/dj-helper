@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import VersionBox from '../ui/VersionBox';
-import LoadingIcon from '../ui/icon/LoadingIcon';
+import LoadingIcon from './icons/LoadingIcon';
 import LabelButton from '../ui/LabelButton';
 import { context, ComponentContext } from '../contexts/componentContext';
 

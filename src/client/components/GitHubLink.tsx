@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import GitHubIcon from '../ui/icon/GitHubIcon';
+import GitHubIcon from './icons/GitHubIcon';
 
 interface GitHubLinkProps {
   link: string;

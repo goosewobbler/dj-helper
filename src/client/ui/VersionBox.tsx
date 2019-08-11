@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import LoadingIcon from './icon/LoadingIcon';
+import LoadingIcon from '../components/icons/LoadingIcon';
 
 const VersionBox = (props: {
   children?: any;

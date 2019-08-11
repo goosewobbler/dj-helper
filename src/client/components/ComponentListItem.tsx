@@ -1,10 +1,10 @@
 import * as React from 'react';
 
 import ExternalLink from '../ui/ExternalLink';
-import LoadingIcon from '../ui/icon/LoadingIcon';
-import PauseIcon from '../ui/icon/PauseIcon';
-import PlayIcon from '../ui/icon/PlayIcon';
-import StarIcon from '../ui/icon/StarIcon';
+import LoadingIcon from './icons/LoadingIcon';
+import PauseIcon from './icons/PauseIcon';
+import PlayIcon from './icons/PlayIcon';
+import StarIcon from './icons/StarIcon';
 import IconButton from './IconButton';
 
 import { ComponentData, ComponentState } from '../../common/types';

@@ -1,14 +1,10 @@
 import { gt } from 'semver';
-import { runNpm } from '../helpers/npm';
+import runNpm from '../helpers/npm';
 import { System } from '../system';
+import { AppStatus } from '../../common/types';
 
 interface Updater {
-  getStatus(): Promise<{
-    currentVersion: string;
-    updateAvailable: string;
-    updated: boolean;
-    updating: boolean;
-  }>;
+  getStatus(): Promise<AppStatus>;
   update(): Promise<void>;
 }
 
@@ -21,7 +17,7 @@ const createUpdater = (system: System, currentVersion: string): Updater => {
     await runNpm(
       installPath,
       ['install', 'git+ssh://git@github.com:bbc/morph-developer-console.git#version'],
-      (output: string) => {
+      (output: string): void => {
         const versionMatches = /morph-developer-console@(\d+).(\d+).(\d+)/.exec(output);
         if (versionMatches) {
           const major = Number(versionMatches[1]);
@@ -56,7 +52,7 @@ const createUpdater = (system: System, currentVersion: string): Updater => {
     };
   };
 
-  const update = async () => {
+  const update = async (): Promise<void> => {
     updating = true;
     system.process.log('[console] Updating Morph Developer Console...');
     await runNpm(

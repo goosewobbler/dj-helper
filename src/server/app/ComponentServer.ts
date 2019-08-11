@@ -1,9 +1,10 @@
 import * as express from 'express';
 
 import { Service } from '../service';
+import { LooseObject } from '../../common/types';
 
-const convertPropsString = (propsString: string) => {
-  const props: { [Key: string]: string } = {};
+const convertPropsString = (propsString: string): LooseObject => {
+  const props: LooseObject = {};
   const parts = propsString.split('/');
 
   for (let i = 1; i < parts.length; i += 2) {
@@ -13,7 +14,7 @@ const convertPropsString = (propsString: string) => {
   return props;
 };
 
-const createViewPage = (response: { head: string[]; bodyInline: string; bodyLast: string[] }) =>
+const createViewPage = (response: { head: string[]; bodyInline: string; bodyLast: string[] }): string =>
   [
     '<!doctype html>',
     '<html class="b-pw-1280">',
@@ -35,69 +36,78 @@ const createViewPage = (response: { head: string[]; bodyInline: string; bodyLast
     '</html>',
   ].join('');
 
-const createComponentServer = (service: Service) => {
+const createComponentServer = (service: Service): express.Express => {
   const server = express();
 
-  server.get('/data/:name*', async (req, res) => {
-    try {
-      const { accept } = req.headers;
-      const history = !accept || accept.indexOf('text/html') !== -1;
-      const propsString = req.path.replace(`/data/${req.params.name}`, '');
-      const { body, headers, statusCode } = await service.request(
-        req.params.name,
-        convertPropsString(propsString),
-        history,
-      );
-      res
-        .status(statusCode)
-        .set(headers)
-        .send(body);
-    } catch (ex) {
-      res.status(500).send(ex.message);
-    }
-  });
-
-  server.get('/view/:name*', async (req, res) => {
-    try {
-      const { accept } = req.headers;
-      const history = !accept || accept.indexOf('text/html') !== -1;
-      const propsString = req.path.replace(`/view/${req.params.name}`, '');
-      const { body, headers, statusCode } = await service.request(
-        req.params.name,
-        convertPropsString(propsString),
-        history,
-      );
-      if (statusCode === 200) {
-        res.send(createViewPage(JSON.parse(body)));
-      } else {
+  server.get(
+    '/data/:name*',
+    async (req, res): Promise<void> => {
+      try {
+        const { accept } = req.headers;
+        const history = !accept || accept.indexOf('text/html') !== -1;
+        const propsString = req.path.replace(`/data/${req.params.name}`, '');
+        const { body, headers, statusCode } = await service.request(
+          req.params.name,
+          convertPropsString(propsString),
+          history,
+        );
         res
           .status(statusCode)
           .set(headers)
           .send(body);
+      } catch (ex) {
+        res.status(500).send(ex.message);
       }
-    } catch (ex) {
-      res.status(500).send(ex.message);
-    }
-  });
+    },
+  );
 
-  server.get('/proxy/:name*', async (req, res) => {
-    try {
-      const propsString = req.path.replace(`/proxy/${req.params.name}`, '');
-      const { body, headers, statusCode } = await service.request(
-        req.params.name,
-        convertPropsString(propsString),
-        false,
-      );
-      res
-        .status(statusCode)
-        .set(headers)
-        .send(body);
-    } catch (ex) {
-      res.status(500).send(ex.message);
-    }
-  });
+  server.get(
+    '/view/:name*',
+    async (req, res): Promise<void> => {
+      try {
+        const { accept } = req.headers;
+        const history = !accept || accept.indexOf('text/html') !== -1;
+        const propsString = req.path.replace(`/view/${req.params.name}`, '');
+        const { body, headers, statusCode } = await service.request(
+          req.params.name,
+          convertPropsString(propsString),
+          history,
+        );
+        if (statusCode === 200) {
+          res.send(createViewPage(JSON.parse(body)));
+        } else {
+          res
+            .status(statusCode)
+            .set(headers)
+            .send(body);
+        }
+      } catch (ex) {
+        res.status(500).send(ex.message);
+      }
+    },
+  );
+
+  server.get(
+    '/proxy/:name*',
+    async (req, res): Promise<void> => {
+      try {
+        const propsString = req.path.replace(`/proxy/${req.params.name}`, '');
+        const { body, headers, statusCode } = await service.request(
+          req.params.name,
+          convertPropsString(propsString),
+          false,
+        );
+        res
+          .status(statusCode)
+          .set(headers)
+          .send(body);
+      } catch (ex) {
+        res.status(500).send(ex.message);
+      }
+    },
+  );
 
   return server;
 };
 
-export { createComponentServer };
+export default createComponentServer;

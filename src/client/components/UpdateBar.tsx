@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import LoadingIcon from '../ui/icon/LoadingIcon';
+import LoadingIcon from './icons/LoadingIcon';
 
 interface UpdateBarProps {
   outOfDate: boolean;

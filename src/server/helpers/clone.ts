@@ -7,7 +7,7 @@ const cloneComponent = async (
   name: string,
   clonePath: string,
   cloneOptions: { description: string },
-) => {
+): Promise<void> => {
   const packageName = `bbc-morph-${name}`;
 
   await system.file.copyDirectory(path, clonePath, true);
@@ -24,4 +24,4 @@ const cloneComponent = async (
   await system.file.writeFile(readmePath, readme);
 };
 
-export { cloneComponent };
+export default cloneComponent;

@@ -1,4 +1,3 @@
-import { startsWith } from 'lodash/fp';
 import { join } from 'path';
 import * as semver from 'semver';
 
@@ -6,12 +5,13 @@ import { System } from '../system';
 import { Routing } from './routing';
 import { Config } from '../app/config';
 import { State } from '../app/state';
-import { componentStateMachine } from './componentStateMachine';
-import { createComponentActions } from './componentActions';
-import { openInEditor as openInEditorHelper } from '../helpers/editor';
-import { request as requestHelper } from '../helpers/request';
+import componentStateMachine from './componentStateMachine';
+import * as createComponentActions from './componentActions';
+import * as openInEditorHelper from '../helpers/editor';
+import * as requestHelper from '../helpers/request';
+import { logError } from '../helpers/console';
 
-import { Component, ComponentType, ComponentDependency } from '../../common/types';
+import { Component, ComponentType, ComponentDependency, Response, Package } from '../../common/types';
 
 const createComponent = (
   system: System,
@@ -42,36 +42,36 @@ const createComponent = (
     test: null,
   };
 
-  const updated = () => onUpdate(name);
+  const updated = (): Promise<void> => onUpdate(name);
 
-  const getDisplayName = () => directoryName;
+  const getDisplayName = (): string => directoryName;
 
-  const log = (message: string) => system.process.log(`[${getDisplayName()}] ${message}`);
+  const log = (message: string): void => system.process.log(`[${getDisplayName()}] ${message}`);
 
-  const getPackagePath = () => join(componentPath, 'package.json');
+  const getPackagePath = (): string => join(componentPath, 'package.json');
 
-  const readPackage = async () => JSON.parse(await system.file.readFile(getPackagePath()));
+  const readPackage = async (): Promise<Package> => JSON.parse(await system.file.readFile(getPackagePath()));
 
-  const getName = () => name;
+  const getName = (): string => name;
 
-  const getRendererType = () => rendererType;
+  const getRendererType = (): string => rendererType;
 
-  const getDirectoryName = () => directoryName;
+  const getDirectoryName = (): string => directoryName;
 
-  const getPort = () => {
+  const getPort = (): number => {
     if (port === null) {
       port = acquirePort();
     }
     return port;
   };
 
-  const setPagePort = (newPagePort: number) => {
+  const setPagePort = (newPagePort: number): void => {
     pagePort = newPagePort;
   };
 
-  const getType = () => componentType;
+  const getType = (): ComponentType => componentType;
 
-  const updateURL = async () => {
+  const updateURL = async (): Promise<void> => {
     const localhost = config.getValue('localhost') || 'localhost';
     const type = getType();
     if (type === ComponentType.Page) {
@@ -85,10 +85,10 @@ const createComponent = (
     }
   };
 
-  const getURL = () => url;
+  const getURL = (): string => url;
 
-  const getDependency = (dependencyName: string): any => {
-    const dependency = dependencies.find(d => d.name === dependencyName);
+  const getDependency = (dependencyName: string): ComponentDependency | { has: null; latest: null; version: null } => {
+    const dependency = dependencies.find((d): boolean => d.name === dependencyName);
     return (
       dependency || {
         has: null,
@@ -98,19 +98,19 @@ const createComponent = (
     );
   };
 
-  const getDependenciesSummary = async () => {
+  const getDependenciesSummary = async (): Promise<{ name: string }[]> => {
     const packageContents = await readPackage();
 
     return Object.keys(packageContents.dependencies || {})
-      .filter(startsWith('bbc-morph-'))
-      .map((dependencyName: string) => ({ name: dependencyName }));
+      .filter((str): boolean => str.startsWith('bbc-morph-'))
+      .map((dependencyName: string): { name: string } => ({ name: dependencyName }));
   };
 
-  const updateDependencies = async () => {
+  const updateDependencies = async (): Promise<void> => {
     const packageContents = await readPackage();
     dependencies = await Promise.all(
       Object.keys(packageContents.dependencies || {})
-        .filter(startsWith('bbc-morph-'))
+        .filter((str): boolean => str.startsWith('bbc-morph-'))
         .map(
           async (dependencyName): Promise<ComponentDependency> => {
             return {
@@ -118,6 +118,8 @@ const createComponent = (
               displayName: dependencyName.substr(10),
               linked: await system.file.symbolicLinkExists(join(componentPath, 'node_modules', dependencyName)),
               name: dependencyName,
+              rendererType: getRendererType(),
+              outdated: false,
             };
           },
         ),
@@ -125,50 +127,48 @@ const createComponent = (
 
     await updated();
 
-    const updateLazy = Promise.all(
-      dependencies.map(async dependency => {
-        const other = getOther(dependency.name);
-        const version = packageContents.dependencies[dependency.name];
-        let latest = null;
-        let outdated = false;
+    const decorateDependency = async (dependency: ComponentDependency): Promise<void> => {
+      const other = getOther(dependency.name);
+      const version = packageContents.dependencies[dependency.name];
+      let latest = null;
+      let outdated = false;
 
-        if (other) {
-          latest = await other.getLatestVersion();
-          outdated = !semver.satisfies(latest, version);
-        }
+      if (other) {
+        latest = await other.getLatestVersion();
+        outdated = !semver.satisfies(latest, version);
+      }
 
-        dependency.version = version;
-        dependency.latest = latest;
-        dependency.outdated = outdated;
-        await updated();
-      }),
-    ).catch(console.error);
+      dependency.version = version;
+      dependency.latest = latest;
+      dependency.outdated = outdated;
+      await updated();
+    };
 
     const shrinkwrapped = await system.morph.getShrinkwrap(name);
-    dependencies.forEach(dependency => {
+    dependencies.forEach((dependency): void => {
       dependency.has = shrinkwrapped[dependency.name] || '';
     });
 
     await updated();
 
-    await updateLazy;
+    await Promise.all(dependencies.map(decorateDependency)).catch(logError);
   };
 
-  const getDependencies = () => dependencies;
+  const getDependencies = (): ComponentDependency[] => dependencies;
 
-  const getLinking = () => [...linking];
+  const getLinking = (): string[] => [...linking];
 
-  const updateLocalVersion = async () => {
+  const updateLocalVersion = async (): Promise<void> => {
     const packageContents = await readPackage();
     versions.local = packageContents.version;
   };
 
-  const fetchEnvironmentVersionAndUpdate = async (environment: 'int' | 'live' | 'test') => {
+  const fetchEnvironmentVersionAndUpdate = async (environment: 'int' | 'live' | 'test'): Promise<void> => {
     versions[environment] = await system.morph.getVersionOnEnvironment(name, environment);
     await updated();
   };
 
-  const updateEnvironmentVersions = async () => {
+  const updateEnvironmentVersions = async (): Promise<void> => {
     await Promise.all([
       fetchEnvironmentVersionAndUpdate('int'),
       fetchEnvironmentVersionAndUpdate('test'),
@@ -176,9 +176,9 @@ const createComponent = (
     ]);
   };
 
-  const fetchDetails = async () => {
+  const fetchDetails = async (): Promise<void> => {
     await Promise.all([
-      (async () => {
+      (async (): Promise<void> => {
         await updateURL();
         await updateLocalVersion();
         await updated();
@@ -188,13 +188,13 @@ const createComponent = (
     ]);
   };
 
-  const getVersions = () => ({ ...versions });
+  const getVersions = (): { local: string; int: string; test: string; live: string } => ({ ...versions });
 
-  const getUseCache = () => Boolean(state.retrieve(`cache.enabled.${name}`));
+  const getUseCache = (): boolean => Boolean(state.retrieve(`cache.enabled.${name}`));
 
-  const getFavorite = () => Boolean(state.retrieve(`favorite.${name}`));
+  const getFavorite = (): boolean => Boolean(state.retrieve(`favorite.${name}`));
 
-  const getHistory = () => state.retrieve(`history.${name}`) || [];
+  const getHistory = (): [] => state.retrieve(`history.${name}`) || [];
 
   const actions = createComponentActions(
     system,
@@ -209,21 +209,21 @@ const createComponent = (
     onReload,
   );
 
-  const stateMachine = componentStateMachine(actions, () => updated());
+  const stateMachine = componentStateMachine(actions, (): Promise<void> => updated());
 
-  const getState = () => stateMachine.getState();
+  const getState = (): number => stateMachine.getState();
 
-  const setUseCache = async (useCache: boolean) => {
+  const setUseCache = async (useCache: boolean): Promise<void> => {
     await state.store(`cache.enabled.${name}`, useCache);
     await updated();
     await stateMachine.restart();
   };
 
-  const setFavorite = async (favorite: boolean) => {
+  const setFavorite = async (favorite: boolean): Promise<void> => {
     await state.store(`favorite.${name}`, favorite || null);
   };
 
-  const request = async (props: { [Key: string]: string }, history: boolean) => {
+  const request = async (props: { [Key: string]: string }, history: boolean): Promise<Response> => {
     const response = await requestHelper(
       system,
       config,
@@ -243,11 +243,11 @@ const createComponent = (
     return response;
   };
 
-  const getPromoting = () => promoting;
+  const getPromoting = (): string => promoting;
 
-  const getPromotionFailure = () => promotionFailure;
+  const getPromotionFailure = (): string => promotionFailure;
 
-  const promote = async (environment: string) => {
+  const promote = async (environment: string): Promise<void> => {
     if (environment === 'test' || environment === 'live') {
       promoting = environment;
       promotionFailure = null;
@@ -265,37 +265,37 @@ const createComponent = (
     }
   };
 
-  const openInEditor = () => openInEditorHelper(system, config, componentPath);
+  const openInEditor = (): Promise<void> => openInEditorHelper(system, config, componentPath);
 
-  const reinstall = async () => {
+  const reinstall = async (): Promise<void> => {
     await stateMachine.reinstall();
     await updateDependencies();
   };
 
-  const link = async (dependency: string) => {
+  const link = async (dependency: string): Promise<void> => {
     linking.push(dependency);
     await stateMachine.link(dependency);
     linking.splice(linking.indexOf(dependency), 1);
     await updateDependencies();
   };
 
-  const unlink = async (dependency: string) => {
+  const unlink = async (dependency: string): Promise<void> => {
     linking.push(dependency);
     await stateMachine.unlink(dependency);
     linking.splice(linking.indexOf(dependency), 1);
     await updateDependencies();
   };
 
-  const makeLinkable = () => stateMachine.makeLinkable();
+  const makeLinkable = (): Promise<void> => stateMachine.makeLinkable();
 
-  const start = async () => {
+  const start = async (): Promise<void> => {
     await updateURL();
     await stateMachine.run();
   };
 
-  const stop = () => stateMachine.stop();
+  const stop = (): Promise<void> => stateMachine.stop();
 
-  const build = async (isSassOnly?: boolean, changedPath?: string) => {
+  const build = async (isSassOnly?: boolean, changedPath?: string): Promise<void> => {
     if (changedPath) {
       log(`Rebuilding due to change in ${changedPath}`);
     }
@@ -307,7 +307,7 @@ const createComponent = (
     }
   };
 
-  const getLatestVersion = async () => {
+  const getLatestVersion = async (): Promise<string> => {
     versions.int = await system.morph.getVersionOnEnvironment(name, 'int');
     return versions.int;
   };
@@ -347,6 +347,7 @@ const createComponent = (
     promoting = null;
     await updateLocalVersion();
     await updated();
+    return null;
   };
 
   return {
@@ -385,4 +386,4 @@ const createComponent = (
   };
 };
 
-export { createComponent };
+export default createComponent;

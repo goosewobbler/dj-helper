@@ -1,18 +1,28 @@
 import * as request from 'request';
+import { Response } from '../../common/types';
 
 interface NetworkSystem {
-  get(url: string): Promise<{ body: string; headers: { [Key: string]: string }; statusCode: number }>;
+  get(url: string): Promise<unknown>;
 }
 
-const get = (url: string) =>
-  new Promise<{ body: string; headers: { [Key: string]: string }; statusCode: number }>((resolve, reject) =>
-    request.get(url, (error, response, body) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve({ body, headers: response.headers as any, statusCode: response.statusCode });
-      }
-    }),
+const get = (url: string): Promise<Response> =>
+  new Promise(
+    (resolve, reject): request.Request =>
+      request.get(
+        url,
+        (
+          error: string,
+          response: { headers: Response['headers']; statusCode: Response['statusCode'] },
+          body: Response['body'],
+        ): void => {
+          if (error) {
+            reject(error);
+          } else {
+            const { headers, statusCode } = response;
+            resolve({ body, headers, statusCode });
+          }
+        },
+      ),
   );
 
 const network: NetworkSystem = {

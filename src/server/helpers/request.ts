@@ -4,7 +4,7 @@ import { startsWith } from 'lodash/fp';
 import { Config } from '../app/config';
 import { State } from '../app/state';
 import { System } from '../system';
-import { ComponentType, ComponentState } from '../../common/types';
+import { ComponentType, ComponentState, Response } from '../../common/types';
 
 const requestWithRetries = async (
   system: System,
@@ -14,13 +14,7 @@ const requestWithRetries = async (
   propsString: string,
   log: (message: string) => void,
   retries: number,
-): Promise<{
-  body: string;
-  headers: {
-    [Key: string]: string;
-  };
-  statusCode: number;
-}> => {
+): Promise<Response> => {
   const requestType = type === ComponentType.Page || type === ComponentType.Data ? 'data' : 'view';
 
   const requestUrl = `http://localhost:${port}/${requestType}/${name}${propsString}`;
@@ -59,7 +53,7 @@ const requestWithRetries = async (
   return { body: modifiedBody, headers, statusCode };
 };
 
-const getNewHistory = (currentHistory: string[], newEntry: string) => {
+const getNewHistory = (currentHistory: string[], newEntry: string): string[] => {
   const currentHistoryWithoutNewEntry = [...currentHistory];
   const indexOfNewEntry = currentHistoryWithoutNewEntry.indexOf(newEntry);
   if (indexOfNewEntry !== -1) {
@@ -84,15 +78,16 @@ const request = async (
   props: { [Key: string]: string },
   log: (message: string) => void,
   history: boolean,
-) => {
+): Promise<Response> => {
   if (currentState !== ComponentState.Running) {
     throw new Error('Component is not running');
   }
 
-  const { version, ...nonVersionProps } = props;
+  const nonVersionProps = Object.keys(props).filter((propName): boolean => propName !== 'version');
 
-  const propsString = Object.keys(nonVersionProps).reduce(
-    (acc, propName) => `${acc}/${encodeURIComponent(propName)}/${encodeURIComponent(nonVersionProps[propName])}`,
+  const propsString = nonVersionProps.reduce(
+    (acc, propName): string =>
+      `${acc}/${encodeURIComponent(propName)}/${encodeURIComponent(nonVersionProps[parseInt(propName)])}`,
     '',
   );
 
@@ -117,4 +112,4 @@ const request = async (
   return requestWithRetries(system, name, type, port, propsString, log, retries);
 };
 
-export { request };
+export default request;

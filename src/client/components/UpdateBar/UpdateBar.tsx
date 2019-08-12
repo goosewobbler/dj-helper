@@ -42,7 +42,7 @@ const renderUpdateLink = (): React.ReactElement => (
   </React.Fragment>
 );
 
-const UpdateBar = ({ updating, updated, onUpdate }: UpdateBarProps) => {
+const UpdateBar = ({ updating, updated, onUpdate }: UpdateBarProps): React.ReactElement => {
   let messageText = 'There is an update available for the Morph Developer Console. See ';
 
   if (updating) {

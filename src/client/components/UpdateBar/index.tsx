@@ -4,13 +4,13 @@ import UpdateBar from './UpdateBar';
 import { update } from '../../actions/components';
 import { AppState } from '../../../common/types';
 
-const mapStateToProps = (state: AppState) => ({
+const mapStateToProps = (state: AppState): {} => ({
   updated: state.ui.updated,
   updating: state.ui.updating,
 });
 
-const mapDispatchToProps = (dispatch: any) => ({
-  onUpdate: () => dispatch(update()),
+const mapDispatchToProps = (dispatch: () => void): {} => ({
+  onUpdate: (): void => dispatch(update()),
 });
 
 const Container = connect(

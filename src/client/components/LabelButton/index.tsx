@@ -14,7 +14,7 @@ interface LabelButtonProps {
   onClick(): any;
 }
 
-const createClickAction = (clickAction: () => void) => (event: any) => {
+const createClickAction = (clickAction: () => void) => (event: any): void => {
   event.stopPropagation();
   clickAction();
 };

@@ -8,7 +8,7 @@ interface IconButtonProps {
   onClick?(): void;
 }
 
-const createClickAction = (clickAction: any) => (event: any) => {
+const createClickAction = (clickAction: () => void) => (event: any): void => {
   event.stopPropagation();
   clickAction();
 };

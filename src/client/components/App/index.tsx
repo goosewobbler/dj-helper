@@ -19,6 +19,7 @@ const mapDispatchToProps = (dispatch: any) => ({
 });
 
 const mapStateToProps = (state: AppState) => ({
+  outOfDate: state.ui.outOfDate,
   cloningName: state.ui.cloningName,
   shouldShowCreateDialog: state.ui.showCreateDialog,
 });

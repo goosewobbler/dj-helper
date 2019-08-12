@@ -113,7 +113,7 @@ const ComponentVersions = (): React.ReactElement => {
     <div>
       {promotionFailure && (
         <p className="promotion-failure">
-          <span role="img" aria-label="Anguished face">
+          <span role="img" aria-label="anguished face">
             😧
           </span>
           &nbsp; Promotion failed:&nbsp;

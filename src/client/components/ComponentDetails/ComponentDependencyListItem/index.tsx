@@ -10,15 +10,20 @@ interface ComponentDependencyProps {
   dependency: ComponentDependency;
 }
 
-const isLinked = (dependencyName: string, component: ComponentData) =>
-  component.dependencies.find(d => d.name === dependencyName).linked;
+const isLinked = (dependencyName: string, component: ComponentData): boolean =>
+  component.dependencies.find((d): boolean => d.name === dependencyName).linked;
 
-const isLinking = (dependencyName: string, component: ComponentData) =>
+const isLinking = (dependencyName: string, component: ComponentData): boolean =>
   (component.linking || []).indexOf(dependencyName) > -1;
 
 const isLinkable = ({ state }: ComponentData) => state === ComponentState.Running;
 
-const renderLinkButton = (dependencyName: string, component: ComponentData, onUnlink: any, onLink: any) => {
+const renderLinkButton = (
+  dependencyName: string,
+  component: ComponentData,
+  onUnlink: any,
+  onLink: any,
+): React.ReactElement => {
   if (isLinking(dependencyName, component)) {
     return (
       <div className="loading">
@@ -51,11 +56,11 @@ const renderLinkButton = (dependencyName: string, component: ComponentData, onUn
   );
 };
 
-const renderVersionBox = (version: string, outdated: boolean) => (
+const renderVersionBox = (version: string, outdated: boolean): React.ReactElement => (
   <VersionBox version={version} bad={outdated} fontSize="14px" height="24px" width="60px" padding="0 4px" />
 );
 
-const ComponentDependencyListItem = ({ dependency }: ComponentDependencyProps) => {
+const ComponentDependencyListItem = ({ dependency }: ComponentDependencyProps): React.ReactElement => {
   const componentContext: ComponentContext = React.useContext(context);
   const { onLinkComponent, onUnlinkComponent, onSelectComponent } = componentContext.handlers;
   const { name, displayName, version, outdated, has, latest } = dependency;

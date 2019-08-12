@@ -43,19 +43,21 @@ const getComponents = (components: ComponentData[], filter: string): ComponentDa
   return getSortedComponents(components);
 };
 
-const getUrl = (component: ComponentData) =>
+const getUrl = (component: ComponentData): string =>
   `${component.url}${Array.isArray(component.history) && component.history.length > 0 ? component.history[0] : ''}`;
 
 const getListItemComponents = (components: ComponentData[], filter: string): ComponentListItemData[] => {
   const componentsList: ComponentData[] = getComponents(components, filter);
-  return componentsList.map(componentListItem => ({
-    displayName: componentListItem.displayName,
-    favourite: componentListItem.favourite,
-    highlighted: componentListItem.highlighted,
-    name: componentListItem.name,
-    state: componentListItem.state,
-    url: getUrl(componentListItem),
-  }));
+  return componentsList.map(
+    (componentListItem): ComponentListItemData => ({
+      displayName: componentListItem.displayName,
+      favourite: componentListItem.favourite,
+      highlighted: componentListItem.highlighted,
+      name: componentListItem.name,
+      state: componentListItem.state,
+      url: getUrl(componentListItem),
+    }),
+  );
 };
 
 const componentsSelector = (state: AppState): ComponentData[] => state.components;

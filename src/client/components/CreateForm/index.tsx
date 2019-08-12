@@ -14,7 +14,7 @@ const SelectInput = ({
   className?: string;
   label: string;
   options: { value: string; label: string }[];
-  onChange(event: any): any;
+  onChange(event: any): void;
 }): React.ReactElement => (
   <div>
     <label>{label}</label>
@@ -31,21 +31,30 @@ const SelectInput = ({
 );
 
 const TextInput = ({
-  label,
+  labelText,
   className,
   autoFocus,
   onChange,
   onKeyDown,
 }: {
   className?: string;
-  label: string;
+  labelText: string;
   autoFocus: boolean;
   onChange(event: any): void;
   onKeyDown(event: any): void;
 }): React.ReactElement => (
   <div>
-    <label>{label}</label>
-    <input className={className} type="text" autoFocus={autoFocus} onChange={onChange} onKeyDown={onKeyDown} />
+    <label for={className}>
+      {labelText}
+      <input
+        id={className}
+        className={className}
+        type="text"
+        autoFocus={autoFocus}
+        onChange={onChange}
+        onKeyDown={onKeyDown}
+      />
+    </label>
   </div>
 );
 
@@ -76,53 +85,9 @@ class CreateForm extends React.Component<CreateFormProps, CreateFormState> {
     };
   }
 
-  public render(): React.ReactElement {
-    const options = [
-      { label: 'React with Grandstand and Sass', value: 'viewcss' },
-      { label: 'React without Grandstand and Sass', value: 'view' },
-      { label: 'Data Template', value: 'data' },
-    ];
-    const { typeSelectEnabled } = this.props;
-    const { valid } = this.state;
-
-    return (
-      <div>
-        {typeSelectEnabled && (
-          <SelectInput
-            className="create-type-select"
-            label="Type"
-            options={options}
-            onChange={(event): void => this.handleTypeChange(event)}
-          />
-        )}
-        <TextInput
-          label="Name"
-          className="create-name-input"
-          autoFocus
-          onChange={(event): void => this.handleNameChange(event)}
-          onKeyDown={(event): void => this.handleKeyDown(event)}
-        />
-        <TextInput
-          label="Description"
-          className="create-description-input"
-          autoFocus={false}
-          onChange={(event): void => this.handleDescriptionChange(event)}
-          onKeyDown={(event): void => this.handleKeyDown(event)}
-        />
-        <div>
-          <LabelButton
-            className="create-create-button"
-            label="Create"
-            disabled={!valid}
-            onClick={() => this.create()}
-          />
-        </div>
-      </div>
-    );
-  }
-
   private create(): void {
-    this.props.submitModule(this.name, this.description, this.type);
+    const { submitModule } = this.props;
+    submitModule(this.name, this.description, this.type);
   }
 
   private updateValid(): void {
@@ -156,6 +121,51 @@ class CreateForm extends React.Component<CreateFormProps, CreateFormState> {
     } else if (event.keyCode === KEY_ESCAPE) {
       onClose();
     }
+  }
+
+  public render(): React.ReactElement {
+    const options = [
+      { label: 'React with Grandstand and Sass', value: 'viewcss' },
+      { label: 'React without Grandstand and Sass', value: 'view' },
+      { label: 'Data Template', value: 'data' },
+    ];
+    const { typeSelectEnabled } = this.props;
+    const { valid } = this.state;
+
+    return (
+      <div>
+        {typeSelectEnabled && (
+          <SelectInput
+            className="create-type-select"
+            label="Type"
+            options={options}
+            onChange={(event): void => this.handleTypeChange(event)}
+          />
+        )}
+        <TextInput
+          labelText="Name"
+          className="create-name-input"
+          autoFocus
+          onChange={(event): void => this.handleNameChange(event)}
+          onKeyDown={(event): void => this.handleKeyDown(event)}
+        />
+        <TextInput
+          labelText="Description"
+          className="create-description-input"
+          autoFocus={false}
+          onChange={(event): void => this.handleDescriptionChange(event)}
+          onKeyDown={(event): void => this.handleKeyDown(event)}
+        />
+        <div>
+          <LabelButton
+            className="create-create-button"
+            label="Create"
+            disabled={!valid}
+            onClick={() => this.create()}
+          />
+        </div>
+      </div>
+    );
   }
 }
 

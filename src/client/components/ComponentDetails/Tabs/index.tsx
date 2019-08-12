@@ -19,22 +19,6 @@ class Tabs extends React.Component<TabsProps, TabsState> {
     };
   }
 
-  public render(): React.ReactElement {
-    const { children, renderButtons } = this.props;
-    const { selectedIndex } = this.state;
-    const panels = Array.isArray(children) ? children : [children];
-
-    return (
-      <div>
-        <div className="header">
-          <ul>{this.renderHeadings()}</ul>
-          {renderButtons()}
-        </div>
-        <div>{panels[selectedIndex]}</div>
-      </div>
-    );
-  }
-
   private renderHeadings(): React.ReactElement[] {
     const { selectedIndex } = this.state;
     const { headings } = this.props;
@@ -52,6 +36,22 @@ class Tabs extends React.Component<TabsProps, TabsState> {
           </button>
         );
       },
+    );
+  }
+
+  public render(): React.ReactElement {
+    const { children, renderButtons } = this.props;
+    const { selectedIndex } = this.state;
+    const panels = Array.isArray(children) ? children : [children];
+
+    return (
+      <div>
+        <div className="header">
+          <ul>{this.renderHeadings()}</ul>
+          {renderButtons()}
+        </div>
+        <div>{panels[selectedIndex]}</div>
+      </div>
     );
   }
 }

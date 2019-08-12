@@ -54,7 +54,7 @@ const UpdateBar = ({ updating, updated, onUpdate }: UpdateBarProps): React.React
     messageText = (
       <React.Fragment>
         Updating
-        <span className="update-emoji" role="img" aria-label="unhappy face">
+        <span className="update-emoji" role="img" aria-label="anguished face">
           😟
         </span>
       </React.Fragment>

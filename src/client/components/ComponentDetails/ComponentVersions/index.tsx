@@ -14,7 +14,7 @@ const PromoteButton = ({
 }: {
   environment: string;
   buildInProgress: { [key: string]: boolean };
-  action: any;
+  action(): void;
 }): React.ReactElement => (
   <button type="button" className={classNames(['promote-button', environment])} onClick={action}>
     {buildInProgress[environment] ? (

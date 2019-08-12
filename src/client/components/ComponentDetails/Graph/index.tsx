@@ -37,13 +37,15 @@ class Graph extends React.PureComponent<GraphProps, GraphState> {
   }
 
   public componentDidUpdate() {
-    if (!this.state.data) {
+    const { data } = this.state;
+    if (!data) {
       this.update();
     }
   }
 
   public componentWillReceiveProps(nextProps: GraphProps) {
-    if (nextProps.url !== this.props.url) {
+    const { url } = this.props;
+    if (nextProps.url !== url) {
       this.setState({ data: null });
     }
   }
@@ -52,26 +54,30 @@ class Graph extends React.PureComponent<GraphProps, GraphState> {
     return <div>{this.renderGraph()}</div>;
   }
 
-  private update() {
-    fetch(this.props.url)
-      .then(res => res.json())
-      .then(data => {
+  private update(): void {
+    const { url } = this.props;
+    fetch(url)
+      .then((res): Promise<GraphData> => res.json())
+      .then((data): void => {
         this.setState({ data });
       })
       .catch(logError);
   }
 
-  private renderGraph() {
-    if (this.state.data) {
+  private renderGraph(): React.ReactElement {
+    const { data } = this.state;
+
+    if (data) {
+      const { down } = this.props;
       const options = {
         edges: {
           arrows: {
             from: {
-              enabled: !this.props.down,
+              enabled: !down,
               scaleFactor: 0.5,
             },
             to: {
-              enabled: this.props.down,
+              enabled: down,
               scaleFactor: 0.5,
             },
           },
@@ -83,7 +89,7 @@ class Graph extends React.PureComponent<GraphProps, GraphState> {
         },
         layout: {
           hierarchical: {
-            direction: this.props.down ? 'UD' : 'DU',
+            direction: down ? 'UD' : 'DU',
             edgeMinimization: true,
             nodeSpacing: 350,
             parentCentralization: true,
@@ -109,23 +115,23 @@ class Graph extends React.PureComponent<GraphProps, GraphState> {
       const events = {
         doubleClick: (event: any) => {
           const id = event.nodes[0];
-          const { name } = this.state.data.nodes.find(n => n.id === id);
+          const { name } = data.nodes.find(n => n.id === id);
           this.props.onSelect(name);
         },
       };
 
-      const currentNode = this.state.data.nodes[0].id;
+      const currentNode = data.nodes[0].id;
 
       return (
         <GraphVis
-          ref={(g: any) => {
+          ref={(g: any): void => {
             if (g) {
               g.Network.focus(currentNode, {
                 scale: 1,
               });
             }
           }}
-          graph={convertData(this.state.data)}
+          graph={convertData(data)}
           events={events}
           options={options}
         />

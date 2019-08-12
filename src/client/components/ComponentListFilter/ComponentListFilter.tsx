@@ -34,6 +34,39 @@ class ComponentListFilter extends React.Component<ComponentListFilterProps, Comp
     };
   }
 
+  private onFocussed(focussed: boolean): void {
+    this.setState({
+      focussed,
+    });
+  }
+
+  private onInput({ target: { value } }: { target: { value: string } }): void {
+    const { onInput } = this.props;
+    this.setState({
+      filter: value,
+    });
+    onInput(value);
+  }
+
+  private onKeyDown({ keyCode }: React.KeyboardEvent<HTMLInputElement>): void {
+    if (keyCode === 27) {
+      this.clearSearchInput();
+    }
+  }
+
+  private clearSearchInput(): void {
+    const { onInput } = this.props;
+    this.setState({
+      filter: '',
+    });
+    onInput('');
+  }
+
+  private renderIcon(): React.ReactElement {
+    const { filter } = this.state;
+    return filter.length > 0 ? renderClearButton((): void => this.clearSearchInput()) : renderSearchButton();
+  }
+
   public render(): React.ReactElement {
     const { filter } = this.state;
     return (
@@ -50,39 +83,6 @@ class ComponentListFilter extends React.Component<ComponentListFilterProps, Comp
         {this.renderIcon()}
       </div>
     );
-  }
-
-  private onFocussed(focussed: boolean): void {
-    this.setState({
-      focussed,
-    });
-  }
-
-  private onInput({ target: { value } }: { target: { value: string } }): void {
-    const { onInput } = this.props;
-    this.setState({
-      filter: value,
-    });
-    onInput(value);
-  }
-
-  private onKeyDown({ keyCode }: React.KeyboardEvent<HTMLInputElement>) {
-    if (keyCode === 27) {
-      this.clearSearchInput();
-    }
-  }
-
-  private clearSearchInput(): void {
-    const { onInput } = this.props;
-    this.setState({
-      filter: '',
-    });
-    onInput('');
-  }
-
-  private renderIcon(): React.ReactElement {
-    const { filter } = this.state;
-    return filter.length > 0 ? renderClearButton(() => this.clearSearchInput()) : renderSearchButton();
   }
 }
 

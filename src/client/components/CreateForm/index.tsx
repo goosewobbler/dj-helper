@@ -5,20 +5,27 @@ import LabelButton from '../LabelButton';
 const KEY_ENTER = 13;
 const KEY_ESCAPE = 27;
 
-const SelectInput = (props: {
+const SelectInput = ({
+  label,
+  className,
+  onChange,
+  options,
+}: {
   className?: string;
   label: string;
   options: { value: string; label: string }[];
   onChange(event: any): any;
 }): React.ReactElement => (
   <div>
-    <label>{props.label}</label>
-    <select className={props.className} onChange={props.onChange}>
-      {props.options.map(option => (
-        <option key={option.value} value={option.value}>
-          {option.label}
-        </option>
-      ))}
+    <label>{label}</label>
+    <select className={className} onChange={onChange}>
+      {options.map(
+        (option): React.ReactElement => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ),
+      )}
     </select>
   </div>
 );
@@ -33,8 +40,8 @@ const TextInput = ({
   className?: string;
   label: string;
   autoFocus: boolean;
-  onChange(event: any): any;
-  onKeyDown(event: any): any;
+  onChange(event: any): void;
+  onKeyDown(event: any): void;
 }): React.ReactElement => (
   <div>
     <label>{label}</label>
@@ -44,8 +51,8 @@ const TextInput = ({
 
 interface CreateFormProps {
   typeSelectEnabled: boolean;
-  submitModule(name: string, description: string, type: string): any;
-  onClose(): any;
+  submitModule(name: string, description: string, type: string): void;
+  onClose(): void;
 }
 
 interface CreateFormState {
@@ -75,38 +82,38 @@ class CreateForm extends React.Component<CreateFormProps, CreateFormState> {
       { label: 'React without Grandstand and Sass', value: 'view' },
       { label: 'Data Template', value: 'data' },
     ];
-
-    const typeSelect = this.props.typeSelectEnabled ? (
-      <SelectInput
-        className="create-type-select"
-        label="Type"
-        options={options}
-        onChange={event => this.handleTypeChange(event)}
-      />
-    ) : null;
+    const { typeSelectEnabled } = this.props;
+    const { valid } = this.state;
 
     return (
       <div>
-        {typeSelect}
+        {typeSelectEnabled && (
+          <SelectInput
+            className="create-type-select"
+            label="Type"
+            options={options}
+            onChange={(event): void => this.handleTypeChange(event)}
+          />
+        )}
         <TextInput
           label="Name"
           className="create-name-input"
           autoFocus
-          onChange={event => this.handleNameChange(event)}
-          onKeyDown={event => this.handleKeyDown(event)}
+          onChange={(event): void => this.handleNameChange(event)}
+          onKeyDown={(event): void => this.handleKeyDown(event)}
         />
         <TextInput
           label="Description"
           className="create-description-input"
           autoFocus={false}
-          onChange={event => this.handleDescriptionChange(event)}
-          onKeyDown={event => this.handleKeyDown(event)}
+          onChange={(event): void => this.handleDescriptionChange(event)}
+          onKeyDown={(event): void => this.handleKeyDown(event)}
         />
         <div>
           <LabelButton
             className="create-create-button"
             label="Create"
-            disabled={!this.state.valid}
+            disabled={!valid}
             onClick={() => this.create()}
           />
         </div>
@@ -114,32 +121,32 @@ class CreateForm extends React.Component<CreateFormProps, CreateFormState> {
     );
   }
 
-  private create() {
+  private create(): void {
     this.props.submitModule(this.name, this.description, this.type);
   }
 
-  private updateValid() {
+  private updateValid(): void {
     this.setState({
       valid: Boolean(this.name && this.description && this.type),
     });
   }
 
-  private handleNameChange(event: any) {
+  private handleNameChange(event: any): void {
     this.name = event.target.value;
     this.updateValid();
   }
 
-  private handleDescriptionChange(event: any) {
+  private handleDescriptionChange(event: any): void {
     this.description = event.target.value;
     this.updateValid();
   }
 
-  private handleTypeChange(event: any) {
+  private handleTypeChange(event: any): void {
     this.type = event.target.value;
     this.updateValid();
   }
 
-  private handleKeyDown(event: any) {
+  private handleKeyDown(event: React.KeyboardEvent): void {
     const { onClose } = this.props;
     if (event.keyCode === KEY_ENTER) {
       const { valid } = this.state;

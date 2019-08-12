@@ -99,7 +99,6 @@ const ComponentDetails = ({ component, editors, handlers }: ComponentDetailsProp
               </ul>
             </ComponentDetailsSection>
           )}
-          }
         </div>
       </ComponentContextProvider>
       {renderDependencyGraph(handlers)}

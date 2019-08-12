@@ -44,7 +44,7 @@ const App = (props: AppProps) => {
     <div>
       {outOfDate && <UpdateBar />}
       <div className="header">
-        <h1 key="title">Morph Developer Console</h1>,
+        <h1 key="title">Morph Developer Console</h1>
         <div key="links">
           <LabelButton
             className="create-button"

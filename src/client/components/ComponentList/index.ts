@@ -9,7 +9,7 @@ import { ComponentList, ComponentListItemData } from './ComponentList';
 import { ComponentData, AppState } from '../../../common/types';
 
 const getSortedComponents = (components: ComponentData[]): ComponentData[] => {
-  return components.sort((mA: ComponentData, mB: ComponentData) => {
+  return components.sort((mA: ComponentData, mB: ComponentData): number => {
     if (mA.favourite && !mB.favourite) {
       return -1;
     }
@@ -21,10 +21,11 @@ const getSortedComponents = (components: ComponentData[]): ComponentData[] => {
 };
 
 const getFilteredComponents = (components: ComponentData[], filter: string): ComponentData[] => {
-  const componentsWithAlternatives = components.map(component =>
-    assign(component, {
-      alternatives: [component.displayName.replace(/-/g, ' ')],
-    }),
+  const componentsWithAlternatives = components.map(
+    (component): ComponentData =>
+      assign(component, {
+        alternatives: [component.displayName.replace(/-/g, ' ')],
+      }),
   );
   const results = findOrderedSearchResults(componentsWithAlternatives, filter);
 

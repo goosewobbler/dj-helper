@@ -54,7 +54,7 @@ const buildPipelineLink = (rendererType: string) => (env: string) => {
   return `https://ci.user.morph.int.tools.bbc.co.uk/job/morph-asset-${jobPrefix}promote-${env}/`;
 };
 
-const renderPipelineLinks = (component: ComponentData) => {
+const renderPipelineLinks = (component: ComponentData): React.ReactElement => {
   const buildEnvLink = buildPipelineLink(component.rendererType);
   return (
     <div key="links">

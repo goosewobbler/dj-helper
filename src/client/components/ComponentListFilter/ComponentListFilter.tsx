@@ -52,13 +52,13 @@ class ComponentListFilter extends React.Component<ComponentListFilterProps, Comp
     );
   }
 
-  private onFocussed(focussed: boolean) {
+  private onFocussed(focussed: boolean): void {
     this.setState({
       focussed,
     });
   }
 
-  private onInput({ target: { value } }: { target: { value: string } }) {
+  private onInput({ target: { value } }: { target: { value: string } }): void {
     const { onInput } = this.props;
     this.setState({
       filter: value,
@@ -72,7 +72,7 @@ class ComponentListFilter extends React.Component<ComponentListFilterProps, Comp
     }
   }
 
-  private clearSearchInput() {
+  private clearSearchInput(): void {
     const { onInput } = this.props;
     this.setState({
       filter: '',
@@ -80,7 +80,7 @@ class ComponentListFilter extends React.Component<ComponentListFilterProps, Comp
     onInput('');
   }
 
-  private renderIcon() {
+  private renderIcon(): React.ReactElement {
     const { filter } = this.state;
     return filter.length > 0 ? renderClearButton(() => this.clearSearchInput()) : renderSearchButton();
   }

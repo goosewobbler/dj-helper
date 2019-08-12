@@ -2,15 +2,15 @@ import * as React from 'react';
 import { ComponentData } from '../../common/types';
 
 interface ComponentHandlers {
-  onOpenInCode(name: string): any;
-  onBuild(name: string): any;
-  onInstall(name: string): any;
-  onSetUseCache(name: string, value: boolean): any;
-  onBumpComponent(name: string, type: string): any;
-  onPromoteComponent(name: string, environment: string): any;
-  onSelectComponent(name: string): any;
-  onLinkComponent(name: string, dependency: string): any;
-  onUnlinkComponent(name: string, dependency: string): any;
+  onOpenInCode(name: string): void;
+  onBuild(name: string): void;
+  onInstall(name: string): void;
+  onSetUseCache(name: string, value: boolean): void;
+  onBumpComponent(name: string, type: string): void;
+  onPromoteComponent(name: string, environment: string): void;
+  onSelectComponent(name: string): void;
+  onLinkComponent(name: string, dependency: string): void;
+  onUnlinkComponent(name: string, dependency: string): void;
 }
 
 interface ComponentContext {

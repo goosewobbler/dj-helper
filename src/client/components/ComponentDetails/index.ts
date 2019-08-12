@@ -8,7 +8,7 @@ import {
   openInCode,
   promoteComponent,
   setUseCacheOnComponent,
-  showCloneDialog,
+  showDialog,
   unlinkComponent,
   updateAndSelectComponent,
 } from '../../actions/components';
@@ -37,7 +37,7 @@ const mapDispatchToProps = (dispatch: any) => ({
   handlers: {
     onBuild: (name: string) => dispatch(buildComponent(name)),
     onBumpComponent: (name: string, type: string) => dispatch(bumpComponent(name, type)),
-    onClone: (name: string) => dispatch(showCloneDialog(name)),
+    onClone: (name: string) => dispatch(showDialog('clone', name)),
     onInstall: (name: string) => dispatch(installComponent(name)),
     onLinkComponent: (name: string, dependency: string) => dispatch(linkComponent(name, dependency)),
     onOpenInCode: (name: string) => dispatch(openInCode(name)),

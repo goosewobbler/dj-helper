@@ -1,9 +1,9 @@
 import * as React from 'react';
 
 interface TabsProps {
-  children?: any;
-  headings: any[];
-  renderButtons: any;
+  children?: React.ReactElement;
+  headings: string[];
+  renderButtons(): React.ReactElement;
 }
 
 interface TabsState {
@@ -19,7 +19,7 @@ class Tabs extends React.Component<TabsProps, TabsState> {
     };
   }
 
-  public render() {
+  public render(): React.ReactElement {
     const { children, renderButtons } = this.props;
     const { selectedIndex } = this.state;
     const panels = Array.isArray(children) ? children : [children];
@@ -35,13 +35,13 @@ class Tabs extends React.Component<TabsProps, TabsState> {
     );
   }
 
-  private renderHeadings() {
+  private renderHeadings(): React.ReactElement[] {
     const { selectedIndex } = this.state;
     const { headings } = this.props;
     return headings.map(
       (heading, index): React.ReactElement => {
         const selected = selectedIndex === index;
-        const onClick = () => {
+        const onClick = (): void => {
           this.setState({
             selectedIndex: index,
           });

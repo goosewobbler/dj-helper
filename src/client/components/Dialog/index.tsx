@@ -3,28 +3,24 @@ import * as React from 'react';
 import RemoveIcon from './RemoveIcon';
 import LabelButton from '../LabelButton';
 
-interface DialogProps {
-  children?: any;
+const Dialog = ({
+  title,
+  onClose,
+  children,
+}: {
+  children?: React.ReactElement;
   title: string;
-  onClose(): any;
-}
-
-const Dialog = (props: DialogProps) => (
+  onClose(): () => void;
+}): React.ReactElement => (
   <div className="dialog">
     <div className="box">
       <div className="header">
-        <h1>{props.title}</h1>
+        <h1>{title}</h1>
         <div>
-          <LabelButton
-            className="dialog-close-button"
-            width="100%"
-            image={<RemoveIcon />}
-            label=""
-            onClick={props.onClose}
-          />
+          <LabelButton className="dialog-close-button" width="100%" image={<RemoveIcon />} label="" onClick={onClose} />
         </div>
       </div>
-      <div className="content">{props.children}</div>
+      <div className="content">{children}</div>
     </div>
   </div>
 );

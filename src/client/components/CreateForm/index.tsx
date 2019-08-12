@@ -10,7 +10,7 @@ const SelectInput = (props: {
   label: string;
   options: { value: string; label: string }[];
   onChange(event: any): any;
-}) => (
+}): React.ReactElement => (
   <div>
     <label>{props.label}</label>
     <select className={props.className} onChange={props.onChange}>
@@ -29,7 +29,7 @@ const TextInput = (props: {
   autoFocus: boolean;
   onChange(event: any): any;
   onKeyDown(event: any): any;
-}) => (
+}): React.ReactElement => (
   <div>
     <label>{props.label}</label>
     <input
@@ -69,7 +69,7 @@ class CreateForm extends React.Component<CreateFormProps, CreateFormState> {
     };
   }
 
-  public render() {
+  public render(): React.ReactElement {
     const options = [
       { label: 'React with Grandstand and Sass', value: 'viewcss' },
       { label: 'React without Grandstand and Sass', value: 'view' },
@@ -140,12 +140,14 @@ class CreateForm extends React.Component<CreateFormProps, CreateFormState> {
   }
 
   private handleKeyDown(event: any) {
+    const { onClose } = this.props;
     if (event.keyCode === KEY_ENTER) {
-      if (this.state.valid) {
+      const { valid } = this.state;
+      if (valid) {
         this.create();
       }
     } else if (event.keyCode === KEY_ESCAPE) {
-      this.props.onClose();
+      onClose();
     }
   }
 }

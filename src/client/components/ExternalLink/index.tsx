@@ -12,10 +12,10 @@ interface ExternalLinkProps {
   padding?: string;
 }
 
-const ExternalLink = (props: ExternalLinkProps) => (
+const ExternalLink = ({ className, link, label }: ExternalLinkProps): React.ReactElement => (
   <a
-    className={props.className}
-    href={props.link}
+    className={className}
+    href={link}
     target="_blank"
     rel="noopener noreferrer"
     onClick={event => event.stopPropagation()}
@@ -23,7 +23,7 @@ const ExternalLink = (props: ExternalLinkProps) => (
     <div className="container">
       <ExternalIcon />
     </div>
-    <span>{props.label}</span>
+    <span>{label}</span>
   </a>
 );
 

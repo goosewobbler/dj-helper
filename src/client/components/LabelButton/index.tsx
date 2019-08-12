@@ -19,17 +19,10 @@ const createClickAction = (clickAction: any) => (event: any) => {
   clickAction();
 };
 
-const renderImage = (props: LabelButtonProps) => {
-  if (props.image) {
-    return <div>{props.image}</div>;
-  }
-  return null;
-};
-
-const LabelButton = (props: LabelButtonProps) => (
-  <button className={props.className} disabled={props.disabled} onClick={createClickAction(props.onClick)}>
-    {renderImage(props)}
-    <p>{props.label}</p>
+const LabelButton = ({ className, disabled, onClick, label, image }: LabelButtonProps) => (
+  <button className={className} disabled={disabled} onClick={createClickAction(onClick)}>
+    {image && <div>{image}</div>}
+    <p>{label}</p>
   </button>
 );
 

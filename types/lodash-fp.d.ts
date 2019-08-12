@@ -1,5 +1,4 @@
 declare module 'lodash/fp' {
-  export function startsWith(a: string, b?: string): any;
   export function contains(): boolean;
   export function lowerCase(a: string): string;
   export function map(f: Function, i: any): any;

@@ -4,7 +4,6 @@ import createApp from './server/app/app';
 import { system } from './server/system';
 import { log } from './server/helpers/console';
 import { ComponentData } from './common/types';
-import { version } from '../package.json';
 
 const startServer = async (): Promise<void> => {
   let sendComponentData: (data: ComponentData) => void;
@@ -29,7 +28,13 @@ const startServer = async (): Promise<void> => {
     }
   };
 
-  const { api, component, service } = await createApp(system, onComponentUpdate, onReload, onUpdated, version);
+  const { api, component, service } = await createApp(
+    system,
+    onComponentUpdate,
+    onReload,
+    onUpdated,
+    process.env.npm_package_version,
+  );
   const apiServer = new Server(api);
   const componentServer = new Server(component);
   const io = socketIo(apiServer);

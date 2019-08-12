@@ -5,7 +5,6 @@ import { update } from '../../actions/components';
 import { AppState } from '../../../common/types';
 
 const mapStateToProps = (state: AppState) => ({
-  outOfDate: state.ui.outOfDate,
   updated: state.ui.updated,
   updating: state.ui.updating,
 });

@@ -11,6 +11,7 @@ import Dialog from '../Dialog';
 import GitHubLink from '../GithubLink';
 
 interface AppProps {
+  outOfDate: boolean;
   shouldShowCreateDialog: boolean;
   cloningName: string;
   onCreate(): any;
@@ -20,52 +21,53 @@ interface AppProps {
   submitModule(name: string, description: string, type: string): any;
 }
 
-const renderHeader = (props: AppProps) => [
-  <h1 key="title">Morph Developer Console</h1>,
-  <div key="links">
-    <LabelButton
-      className="create-button"
-      label="Create"
-      image={<CreateIcon />}
-      onClick={() => props.showCreateDialog(true)}
-    />
-    <GitHubLink link="https://github.com/bbc/morph-developer-console" />
-  </div>,
-];
-
-const renderCreateDialog = (props: AppProps) =>
-  props.shouldShowCreateDialog ? (
-    <Dialog title="Create a new Morph module" onClose={() => props.showCreateDialog(false)}>
-      <CreateForm typeSelectEnabled submitModule={props.submitModule} onClose={() => props.showCreateDialog(false)} />
-    </Dialog>
-  ) : null;
-
-const renderCloneDialog = (props: AppProps) =>
-  props.cloningName ? (
-    <Dialog title={`Clone ${props.cloningName.replace('bbc-morph-', '')}`} onClose={() => props.hideCloneDialog()}>
-      <CreateForm
-        typeSelectEnabled={false}
-        submitModule={(name: string, description: string) => props.cloneComponent(props.cloningName, name, description)}
-        onClose={() => props.hideCloneDialog()}
-      />
-    </Dialog>
-  ) : null;
-
-const App = (props: AppProps) => (
-  <div>
-    <UpdateBar />
-    <div className="header">{renderHeader(props)}</div>
-    <div className="content">
-      <div className="section">
-        <ComponentListFilterContainer key="filter" />
-        <ComponentListContainer key="list" />
-      </div>
-      <div className="section">
-        <ComponentDetailsContainer />
-      </div>
-      {renderCreateDialog(props) || renderCloneDialog(props)}
-    </div>
-  </div>
+const renderCreateDialog = (props: AppProps) => (
+  <Dialog title="Create a new Morph module" onClose={() => props.showCreateDialog(false)}>
+    <CreateForm typeSelectEnabled submitModule={props.submitModule} onClose={() => props.showCreateDialog(false)} />
+  </Dialog>
 );
+
+const renderCloneDialog = (props: AppProps) => (
+  <Dialog title={`Clone ${props.cloningName.replace('bbc-morph-', '')}`} onClose={() => props.hideCloneDialog()}>
+    <CreateForm
+      typeSelectEnabled={false}
+      submitModule={(name: string, description: string) => props.cloneComponent(props.cloningName, name, description)}
+      onClose={() => props.hideCloneDialog()}
+    />
+  </Dialog>
+);
+
+const App = (props: AppProps) => {
+  const { outOfDate, showCreateDialog, shouldShowCreateDialog, cloningName } = props;
+
+  return (
+    <div>
+      {outOfDate && <UpdateBar />}
+      <div className="header">
+        <h1 key="title">Morph Developer Console</h1>,
+        <div key="links">
+          <LabelButton
+            className="create-button"
+            label="Create"
+            image={<CreateIcon />}
+            onClick={() => showCreateDialog(true)}
+          />
+          <GitHubLink link="https://github.com/bbc/morph-developer-console" />
+        </div>
+      </div>
+      <div className="content">
+        <div className="section">
+          <ComponentListFilterContainer key="filter" />
+          <ComponentListContainer key="list" />
+        </div>
+        <div className="section">
+          <ComponentDetailsContainer />
+        </div>
+        {shouldShowCreateDialog && renderCreateDialog(props)}
+        {cloningName && renderCloneDialog(props)}
+      </div>
+    </div>
+  );
+};
 
 export default App;

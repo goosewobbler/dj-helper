@@ -14,13 +14,13 @@ interface LabelButtonProps {
   onClick(): any;
 }
 
-const createClickAction = (clickAction: any) => (event: any) => {
+const createClickAction = (clickAction: () => void) => (event: any) => {
   event.stopPropagation();
   clickAction();
 };
 
-const LabelButton = ({ className, disabled, onClick, label, image }: LabelButtonProps) => (
-  <button className={className} disabled={disabled} onClick={createClickAction(onClick)}>
+const LabelButton = ({ className, disabled, onClick, label, image }: LabelButtonProps): React.ReactElement => (
+  <button type="button" className={className} disabled={disabled} onClick={createClickAction(onClick)}>
     {image && <div>{image}</div>}
     <p>{label}</p>
   </button>

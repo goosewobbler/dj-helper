@@ -18,7 +18,7 @@ const ExternalLink = ({ className, link, label }: ExternalLinkProps): React.Reac
     href={link}
     target="_blank"
     rel="noopener noreferrer"
-    onClick={event => event.stopPropagation()}
+    onClick={(event): void => event.stopPropagation()}
   >
     <div className="container">
       <ExternalIcon />

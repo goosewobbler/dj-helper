@@ -2,25 +2,16 @@ import * as React from 'react';
 
 import LoadingIcon from '../../../LoadingIcon';
 
-const VersionBox = (props: {
-  children?: any;
-  bad?: boolean;
-  fontSize: string;
-  good?: boolean;
-  height: string;
-  padding: string;
-  version: any;
-  width: string;
-}) => {
-  let contents: any = props.children;
+const VersionBox = ({ children, version }: { children?: React.ReactElement; version: string }): React.ReactElement => {
+  let contents: React.ReactElement | string = children;
 
-  if (props.version === null) {
+  if (version === null) {
     contents = (
-      <button disabled>
+      <button type="button" disabled>
         <LoadingIcon />
       </button>
     );
-  } else if (props.version === '') {
+  } else if (version === '') {
     contents = 'N/A';
   }
 

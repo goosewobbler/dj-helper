@@ -1,19 +1,18 @@
 import * as React from 'react';
 
 interface ComponentDetailsSectionProps {
-  children?: any;
-  grow?: number;
+  children?: React.ReactElement;
   label: string;
-  end?: React.ReactElement<any>;
+  end?: React.ReactElement;
 }
 
-const ComponentDetailsSection = (props: ComponentDetailsSectionProps) => (
+const ComponentDetailsSection = ({ label, end, children }: ComponentDetailsSectionProps): React.ReactElement => (
   <div>
     <div className="header">
-      <h3 className="label">{props.label}</h3>
-      {props.end}
+      <h3 className="label">{label}</h3>
+      {end}
     </div>
-    <div className="content">{props.children}</div>
+    <div className="content">{children}</div>
   </div>
 );
 

@@ -13,10 +13,10 @@ const createClickAction = (clickAction: any) => (event: any) => {
   clickAction();
 };
 
-const IconButton = (props: IconButtonProps) => (
-  <button className={props.className} onClick={createClickAction(props.onClick)}>
-    {props.children}
-    <span>{props.label}</span>
+const IconButton = ({ className, onClick, children, label }: IconButtonProps): React.ReactElement => (
+  <button type="button" className={className} onClick={createClickAction(onClick)}>
+    {children}
+    <span>{label}</span>
   </button>
 );
 

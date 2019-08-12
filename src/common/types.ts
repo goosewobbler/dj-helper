@@ -41,10 +41,10 @@ interface Component {
   getDisplayName(): string;
   getType(): ComponentType;
   getURL(): string;
-  getFavorite(): boolean;
+  getFavourite(): boolean;
   getHistory(): string[];
   getUseCache(): boolean;
-  setFavorite(favorite: boolean): Promise<void>;
+  setFavourite(favourite: boolean): Promise<void>;
   setUseCache(useCache: boolean): Promise<void>;
   getDependencies(): ComponentDependency[];
   getDependenciesSummary(): Promise<{ name: string }[]>;
@@ -102,7 +102,7 @@ interface Service {
     props: LooseObject,
     history: boolean,
   ): Promise<{ statusCode: number; body: string; headers: LooseObject }>;
-  setFavorite(name: string, favorite: boolean): Promise<void>;
+  setFavourite(name: string, favourite: boolean): Promise<void>;
   setUseCache(name: string, useCache: boolean): Promise<void>;
   start(name: string): Promise<void>;
   stop(name: string): Promise<void>;
@@ -114,7 +114,7 @@ interface ComponentData {
   displayName: string;
   highlighted?: boolean;
   state: ComponentState;
-  favorite: boolean;
+  favourite: boolean;
   history?: string[];
   url?: string;
   type?: ComponentType;

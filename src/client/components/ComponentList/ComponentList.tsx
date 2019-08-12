@@ -8,7 +8,7 @@ interface ComponentListProps {
   components: ComponentListItemData[];
   selectedComponent?: string;
   onSelectComponent(name: string): any;
-  onFavouriteComponent(name: string, favorite: boolean): any;
+  onFavouriteComponent(name: string, favourite: boolean): any;
   onStartComponent(name: string): any;
   onStopComponent(name: string): any;
 }

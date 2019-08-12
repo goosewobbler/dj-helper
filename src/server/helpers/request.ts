@@ -1,5 +1,4 @@
 import renderChas from 'chas';
-import { startsWith } from 'lodash/fp';
 
 import { Config } from '../app/config';
 import { State } from '../app/state';
@@ -30,8 +29,8 @@ const requestWithRetries = async (
 
   if (
     retries > 0 &&
-    (startsWith('Template had dependencies that required success but were not successful', body) ||
-      startsWith('Template has these missing dependencies', body) ||
+    (body.startsWith('Template had dependencies that required success but were not successful') ||
+      body.startsWith('Template has these missing dependencies') ||
       body.indexOf('ECONNREFUSED') !== -1)
   ) {
     const reason = body.split('\n')[0];

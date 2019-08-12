@@ -1,10 +1,9 @@
 import * as React from 'react';
+import GraphVis from 'react-graph-vis';
 
 import { GraphData } from '../../../../common/types';
 import LoadingIcon from '../../LoadingIcon';
 import { logError } from '../../../../server/helpers/console';
-
-const GraphVis = require('react-graph-vis').default;
 
 interface GraphProps {
   url: string;

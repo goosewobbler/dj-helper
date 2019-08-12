@@ -10,10 +10,10 @@ import { ComponentData, AppState } from '../../../common/types';
 
 const getSortedComponents = (components: ComponentData[]): ComponentData[] => {
   return components.sort((mA: ComponentData, mB: ComponentData) => {
-    if (mA.favorite && !mB.favorite) {
+    if (mA.favourite && !mB.favourite) {
       return -1;
     }
-    if (!mA.favorite && mB.favorite) {
+    if (!mA.favourite && mB.favourite) {
       return 1;
     }
     return mA.name.localeCompare(mB.name);
@@ -49,7 +49,7 @@ const getListItemComponents = (components: ComponentData[], filter: string): Com
   const componentsList: ComponentData[] = getComponents(components, filter);
   return componentsList.map(componentListItem => ({
     displayName: componentListItem.displayName,
-    favourite: componentListItem.favorite,
+    favourite: componentListItem.favourite,
     highlighted: componentListItem.highlighted,
     name: componentListItem.name,
     state: componentListItem.state,
@@ -72,7 +72,7 @@ const mapStateToProps = (state: AppState) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  onFavouriteComponent: (name: string, favorite: boolean) => dispatch(favouriteComponent(name, favorite)),
+  onFavouriteComponent: (name: string, favourite: boolean) => dispatch(favouriteComponent(name, favourite)),
   onSelectComponent: (name: string) => dispatch(updateAndSelectComponent(name)),
   onStartComponent: (name: string) => dispatch(startComponent(name)),
   onStopComponent: (name: string) => dispatch(stopComponent(name)),

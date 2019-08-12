@@ -3,7 +3,7 @@ import ComponentListFilter from './ComponentListFilter';
 
 import { filterComponents } from '../../actions/components';
 
-const mapStateToProps = () => ({});
+const mapStateToProps = (): {} => ({});
 
 const mapDispatchToProps = (dispatch: any) => ({
   onInput: (filter: string) => dispatch(filterComponents(filter)),

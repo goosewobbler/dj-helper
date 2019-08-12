@@ -4,7 +4,7 @@ interface Action {
   type: string;
   components?: any[];
   component?: any;
-  favorite?: boolean;
+  favourite?: boolean;
   name?: string;
   displayName?: string;
   environment?: string;
@@ -56,12 +56,12 @@ const reducer = (state: any[] = [], action: Action) => {
         return component;
       });
     }
-    case 'FAVORITE_COMPONENT': {
+    case 'FAVOURITE_COMPONENT': {
       return state.map(component => {
         if (component.name === action.name) {
           return {
             ...component,
-            favorite: action.favorite,
+            favourite: action.favourite,
           };
         }
         return component;

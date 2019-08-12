@@ -4,8 +4,8 @@ import { gte, lt, valid } from 'semver';
 
 import { context, ComponentContext } from '../../../contexts/componentContext';
 
-const promotionInProgressText = (environment: string) => (environment === 'int' ? 'Bumping' : 'Promoting');
-const promotionActionText = (environment: string) => (environment === 'int' ? 'Bump' : 'Promote');
+const promotionInProgressText = (environment: string): string => (environment === 'int' ? 'Bumping' : 'Promoting');
+const promotionActionText = (environment: string): string => (environment === 'int' ? 'Bump' : 'Promote');
 
 const PromoteButton = ({
   environment,
@@ -15,7 +15,7 @@ const PromoteButton = ({
   environment: string;
   buildInProgress: { [key: string]: boolean };
   action: any;
-}) => (
+}): React.ReactElement => (
   <button type="button" className={classNames(['promote-button', environment])} onClick={action}>
     {buildInProgress[environment] ? (
       <span>{promotionInProgressText(environment)}</span>
@@ -25,7 +25,15 @@ const PromoteButton = ({
   </button>
 );
 
-const Environment = ({ version, label, isCurrent }: { label: string; version: string; isCurrent: boolean }) => {
+const Environment = ({
+  version,
+  label,
+  isCurrent,
+}: {
+  label: string;
+  version: string;
+  isCurrent: boolean;
+}): React.ReactElement => {
   if (version === null) {
     return (
       <div className="environment-loading">
@@ -42,7 +50,7 @@ const Environment = ({ version, label, isCurrent }: { label: string; version: st
   );
 };
 
-const promotionFailureElement = (failure: string) => {
+const promotionFailureElement = (failure: string): React.ReactElement | string => {
   if (!failure.startsWith('http')) {
     return failure;
   }
@@ -54,7 +62,7 @@ const promotionFailureElement = (failure: string) => {
   );
 };
 
-const shouldRenderPromoteButton = (versions: any, buildInProgress: any, fromEnv: string, toEnv: string) => {
+const shouldRenderPromoteButton = (versions: any, buildInProgress: any, fromEnv: string, toEnv: string): boolean => {
   if (!versions[fromEnv] || versions[toEnv] === null || buildInProgress[toEnv]) {
     return false;
   }
@@ -82,7 +90,7 @@ const parseVersions = ({
   live: live === '' ? live : valid(live),
 });
 
-const ComponentVersions = () => {
+const ComponentVersions = (): React.ReactElement => {
   const componentContext: ComponentContext = React.useContext(context);
   const { onBumpComponent, onPromoteComponent } = componentContext.handlers;
   const { versions, promoting, name, promotionFailure } = componentContext.component;

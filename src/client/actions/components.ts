@@ -107,13 +107,13 @@ export const setUseCacheOnComponent = (name: string, value: boolean) => (dispatc
   fetch(`http://localhost:3333/api/component/${name}/cache/${value ? 'true' : 'false'}`, { method: 'POST' });
 };
 
-export const favouriteComponent = (name: string, favorite: boolean) => (dispatch: any) => {
+export const favouriteComponent = (name: string, favourite: boolean) => (dispatch: any) => {
   dispatch({
-    favorite,
+    favourite,
     name,
-    type: 'FAVORITE_COMPONENT',
+    type: 'FAVOURITE_COMPONENT',
   });
-  fetch(`http://localhost:3333/api/component/${name}/favorite/${favorite}`, { method: 'POST' });
+  fetch(`http://localhost:3333/api/component/${name}/favourite/${favourite}`, { method: 'POST' });
 };
 
 export const bumpComponent = (name: string, type: string) => (dispatch: any) => {

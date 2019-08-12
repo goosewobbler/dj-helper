@@ -2,7 +2,7 @@ import { System } from '../system';
 
 interface State {
   retrieve(key: string): string;
-  store(key: string, value: string): Promise<void>;
+  store(key: string, value: string | boolean): Promise<void>;
 }
 
 const createState = async (stateFilePath: string, system: System): Promise<State> => {

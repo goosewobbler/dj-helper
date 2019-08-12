@@ -23,7 +23,13 @@ const SelectInput = (props: {
   </div>
 );
 
-const TextInput = (props: {
+const TextInput = ({
+  label,
+  className,
+  autoFocus,
+  onChange,
+  onKeyDown,
+}: {
   className?: string;
   label: string;
   autoFocus: boolean;
@@ -31,14 +37,8 @@ const TextInput = (props: {
   onKeyDown(event: any): any;
 }): React.ReactElement => (
   <div>
-    <label>{props.label}</label>
-    <input
-      className={props.className}
-      type="text"
-      autoFocus={props.autoFocus}
-      onChange={props.onChange}
-      onKeyDown={props.onKeyDown}
-    />
+    <label>{label}</label>
+    <input className={className} type="text" autoFocus={autoFocus} onChange={onChange} onKeyDown={onKeyDown} />
   </div>
 );
 

@@ -18,18 +18,25 @@ interface ComponentListItemProps {
   onToggleFavourite?(): null;
   onStart?(): null;
   onStop?(): null;
+  name: string;
+  onFavourite?(name: string): null;
+  state: ComponentState;
 }
 
-const renderFavouriteButton = (props: ComponentListItemProps) => {
-  if (props.component.favorite) {
+const renderFavouriteButton = ({
+  component: { favourite },
+  onFavourite,
+  name,
+}: ComponentListItemProps): React.ReactElement => {
+  if (favourite) {
     return (
-      <IconButton className="unfavorite-button" label="Unfavorite" onClick={() => props.onFavourite(props.name, false)}>
+      <IconButton className="unfavourite-button" label="Unfavourite" onClick={() => onFavourite(name, false)}>
         <StarIcon starred />
       </IconButton>
     );
   }
   return (
-    <IconButton className="favorite-button" label="Favorite" onClick={() => props.onFavourite(props.name, true)}>
+    <IconButton className="favourite-button" label="Favourite" onClick={() => onFavourite(name, true)}>
       <StarIcon starred={false} />
     </IconButton>
   );
@@ -48,8 +55,8 @@ const renderLaunchButton = (component: ComponentData) => {
   return null;
 };
 
-const renderStartStopButton = (props: ComponentListItemProps, handleStart: () => void, handleStop: () => void) => {
-  switch (props.state) {
+const renderStartStopButton = ({ state }: ComponentListItemProps, handleStart: () => void, handleStop: () => void) => {
+  switch (state) {
     case ComponentState.Stopped:
       return (
         <IconButton className="start-button" label="Start" onClick={handleStart}>
@@ -100,20 +107,22 @@ class ComponentListItem extends React.PureComponent<ComponentListItemProps> {
 
   constructor(props: ComponentListItemProps) {
     super(props);
-    this.handleClick = () => this.props.onClick(this.props.name);
-    this.handleStart = () => this.props.onStart(this.props.name);
-    this.handleStop = () => this.props.onStop(this.props.name);
+    const { name, onClick, onStart, onStop } = this.props;
+    this.handleClick = () => onClick(name);
+    this.handleStart = () => onStart(name);
+    this.handleStop = () => onStop(name);
   }
 
   public shouldComponentUpdate(nextProps: ComponentListItemProps, nextState: {}, context: any) {
+    const { name, displayName, highlighted, url, favourite, state, selected } = this.props;
     if (
-      this.props.name !== nextProps.name ||
-      this.props.displayName !== nextProps.displayName ||
-      this.props.highlighted !== nextProps.highlighted ||
-      this.props.url !== nextProps.url ||
-      this.props.favourite !== nextProps.favourite ||
-      this.props.state !== nextProps.state ||
-      this.props.selected !== nextProps.selected
+      name !== nextProps.name ||
+      displayName !== nextProps.displayName ||
+      highlighted !== nextProps.highlighted ||
+      url !== nextProps.url ||
+      favourite !== nextProps.favourite ||
+      state !== nextProps.state ||
+      selected !== nextProps.selected
     ) {
       return true;
     }
@@ -121,14 +130,14 @@ class ComponentListItem extends React.PureComponent<ComponentListItemProps> {
   }
 
   public render() {
-    const name: any =
-      this.props.highlighted && this.props.highlighted.length > 0 ? this.props.highlighted : this.props.displayName;
+    const { highlighted, displayName, selected, name, component } = this.props;
+    const name: any = highlighted && highlighted.length > 0 ? highlighted : displayName;
 
     return (
-      <div role="button" id={createID(this.props.name)} highlighted={this.props.selected} onClick={this.handleClick}>
+      <div role="button" id={createID(name)} highlighted={selected} onClick={this.handleClick}>
         {renderFavouriteButton(this.props)}
         <span className="component-name-label">{name}</span>
-        {renderLaunchButton(this.props.component)}
+        {renderLaunchButton(component)}
         {renderStartStopButton(this.props, this.handleStart, this.handleStop)}
       </div>
     );

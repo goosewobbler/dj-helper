@@ -192,7 +192,7 @@ const createComponent = (
 
   const getUseCache = (): boolean => Boolean(state.retrieve(`cache.enabled.${name}`));
 
-  const getFavorite = (): boolean => Boolean(state.retrieve(`favorite.${name}`));
+  const getFavourite = (): boolean => Boolean(state.retrieve(`favourite.${name}`));
 
   const getHistory = (): [] => state.retrieve(`history.${name}`) || [];
 
@@ -213,14 +213,14 @@ const createComponent = (
 
   const getState = (): number => stateMachine.getState();
 
-  const setUseCache = async (useCache: boolean): Promise<void> => {
+  const setUseCache = async (useCache: string): Promise<void> => {
     await state.store(`cache.enabled.${name}`, useCache);
     await updated();
     await stateMachine.restart();
   };
 
-  const setFavorite = async (favorite: boolean): Promise<void> => {
-    await state.store(`favorite.${name}`, favorite || null);
+  const setFavourite = async (favourite: boolean): Promise<void> => {
+    await state.store(`favourite.${name}`, favourite || null);
   };
 
   const request = async (props: { [Key: string]: string }, history: boolean): Promise<Response> => {
@@ -358,7 +358,7 @@ const createComponent = (
     getDependenciesSummary,
     getDirectoryName,
     getDisplayName,
-    getFavorite,
+    getFavourite,
     getHistory,
     getLatestVersion,
     getLinking,
@@ -377,7 +377,7 @@ const createComponent = (
     promote,
     reinstall,
     request,
-    setFavorite,
+    setFavourite,
     setPagePort,
     setUseCache,
     start,

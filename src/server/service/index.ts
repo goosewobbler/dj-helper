@@ -53,7 +53,7 @@ const createService = async (
     return {
       dependencies: component.getDependencies(),
       displayName: component.getDisplayName(),
-      favorite: component.getFavorite(),
+      favourite: component.getFavourite(),
       history: component.getHistory(),
       linking: component.getLinking(),
       name: component.getName(),
@@ -163,7 +163,7 @@ const createService = async (
 
     return {
       displayName: component.getDisplayName(),
-      favorite: component.getFavorite(),
+      favourite: component.getFavourite(),
       name: component.getName(),
       rendererType: component.getRendererType(),
       state: component.getState(),
@@ -212,7 +212,7 @@ const createService = async (
   const reinstall = (name: string): Promise<void> => getComponent(name).reinstall();
   const request = (name: string, props: { [Key: string]: string }, history: boolean): Promise<Response> =>
     getComponent(name).request(props, history);
-  const setFavorite = (name: string, useCache: boolean): Promise<void> => getComponent(name).setFavorite(useCache);
+  const setFavourite = (name: string, useCache: boolean): Promise<void> => getComponent(name).setFavourite(useCache);
   const setUseCache = (name: string, useCache: boolean): Promise<void> => getComponent(name).setUseCache(useCache);
   const stop = (name: string): Promise<void> => getComponent(name).stop();
   const unlink = (name: string, dependency: string): Promise<void> => getComponent(name).unlink(dependency);
@@ -234,7 +234,7 @@ const createService = async (
     promote,
     reinstall,
     request,
-    setFavorite,
+    setFavourite,
     setUseCache,
     stop,
     start: async (name: string): Promise<void> => {

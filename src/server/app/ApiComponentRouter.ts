@@ -49,8 +49,8 @@ const createApiComponentRouter = (service: Service): Router => {
     res.send('🤔');
   });
 
-  router.post('/:name/favorite/:favorite', (req: Request, res: Response): void => {
-    service.setFavorite(req.params.name, req.params.favorite === 'true').catch(logError);
+  router.post('/:name/favourite/:favourite', (req: Request, res: Response): void => {
+    service.setFavourite(req.params.name, req.params.favourite === 'true').catch(logError);
     res.send('🤔');
   });
 

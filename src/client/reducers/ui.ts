@@ -1,4 +1,4 @@
-import { ComponentData } from '../../common/types';
+import { ComponentData, AppState } from '../../common/types';
 
 interface Action {
   type: string;
@@ -8,9 +8,10 @@ interface Action {
   name?: string;
   environment?: string;
   show?: boolean;
+  componentToClone?: string;
 }
 
-const reducer = (state: any = {}, action: Action) => {
+const reducer = (state: AppState['ui'], action: Action): {} => {
   switch (action.type) {
     case 'RECEIVE_EDITORS': {
       return {
@@ -50,16 +51,18 @@ const reducer = (state: any = {}, action: Action) => {
         updating: false,
       };
     }
-    case 'SHOW_CLONE_DIALOG': {
+    case 'SHOW_DIALOG': {
       return {
         ...state,
-        cloningName: action.name,
+        showDialog: action.name,
+        componentToClone: action.componentToClone,
       };
     }
-    case 'SHOW_CREATE_DIALOG': {
+    case 'HIDE_DIALOG': {
       return {
         ...state,
-        showCreateDialog: action.show,
+        showDialog: null,
+        componentToClone: null,
       };
     }
     default:

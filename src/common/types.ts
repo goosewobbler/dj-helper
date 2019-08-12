@@ -22,14 +22,15 @@ enum ComponentState {
 interface AppState {
   components: ComponentData[];
   ui: {
-    cloningName?: string;
+    componentToClone?: string;
     editors: string[];
     selectedComponent?: string;
     filter?: string;
     outOfDate?: boolean;
     updating?: boolean;
     updated?: boolean;
-    showCreateDialog?: boolean;
+    showDialog?: string;
+    hideDialog?: string;
   };
 }
 

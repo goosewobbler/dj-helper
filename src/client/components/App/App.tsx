@@ -12,33 +12,34 @@ import GitHubLink from '../GithubLink';
 
 interface AppProps {
   outOfDate: boolean;
-  shouldShowCreateDialog: boolean;
-  cloningName: string;
-  onCreate(): any;
-  showCreateDialog(show: boolean): any;
-  hideCloneDialog(): any;
-  cloneComponent(name: string, cloneName: string, description: string): any;
-  submitModule(name: string, description: string, type: string): any;
+  showCreateDialog: boolean;
+  showCloneDialog: boolean;
+  componentToClone: string;
+  onCreate(): () => void;
+  showDialog(name: string): () => void;
+  hideDialog(name: string): () => void;
+  cloneComponent(name: string, cloneName: string, description: string): () => void;
+  submitModule(name: string, description: string, type: string): () => void;
 }
 
-const renderCreateDialog = (props: AppProps) => (
-  <Dialog title="Create a new Morph module" onClose={() => props.showCreateDialog(false)}>
-    <CreateForm typeSelectEnabled submitModule={props.submitModule} onClose={() => props.showCreateDialog(false)} />
+const renderCreateDialog = ({ hideDialog, submitModule }: AppProps): React.ReactElement => (
+  <Dialog title="Create a new Morph module" onClose={() => hideDialog('create')}>
+    <CreateForm typeSelectEnabled submitModule={submitModule} onClose={() => hideDialog('create')} />
   </Dialog>
 );
 
-const renderCloneDialog = (props: AppProps) => (
-  <Dialog title={`Clone ${props.cloningName.replace('bbc-morph-', '')}`} onClose={() => props.hideCloneDialog()}>
+const renderCloneDialog = ({ hideDialog, cloneComponent, componentToClone }: AppProps): React.ReactElement => (
+  <Dialog title={`Clone ${componentToClone.replace('bbc-morph-', '')}`} onClose={() => hideDialog('clone')}>
     <CreateForm
       typeSelectEnabled={false}
-      submitModule={(name: string, description: string) => props.cloneComponent(props.cloningName, name, description)}
-      onClose={() => props.hideCloneDialog()}
+      submitModule={(name: string, description: string) => cloneComponent(componentToClone, name, description)}
+      onClose={() => hideDialog('clone')}
     />
   </Dialog>
 );
 
-const App = (props: AppProps) => {
-  const { outOfDate, showCreateDialog, shouldShowCreateDialog, cloningName } = props;
+const App = (props: AppProps): React.ReactElement => {
+  const { outOfDate, showDialog, showCreateDialog, showCloneDialog } = props;
 
   return (
     <div>
@@ -50,7 +51,7 @@ const App = (props: AppProps) => {
             className="create-button"
             label="Create"
             image={<CreateIcon />}
-            onClick={() => showCreateDialog(true)}
+            onClick={() => showDialog('create')}
           />
           <GitHubLink link="https://github.com/bbc/morph-developer-console" />
         </div>
@@ -63,8 +64,8 @@ const App = (props: AppProps) => {
         <div className="section">
           <ComponentDetailsContainer />
         </div>
-        {shouldShowCreateDialog && renderCreateDialog(props)}
-        {cloningName && renderCloneDialog(props)}
+        {showCreateDialog && renderCreateDialog(props)}
+        {showCloneDialog && renderCloneDialog(props)}
       </div>
     </div>
   );

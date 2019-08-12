@@ -1,27 +1,28 @@
 import { connect } from 'react-redux';
-import { cloneComponent, createModule, showCloneDialog, showCreateDialog } from '../../actions/components';
+import { cloneComponent, createModule, showDialog, hideDialog } from '../../actions/components';
 import App from './App';
 import { AppState } from '../../../common/types';
 
-const mapDispatchToProps = (dispatch: any) => ({
+const mapDispatchToProps = (dispatch: any): {} => ({
   cloneComponent: (name: string, cloneName: string, description: string) => {
     dispatch(cloneComponent(name, cloneName, description));
   },
-  hideCloneDialog: () => {
-    dispatch(showCloneDialog(null));
+  hideDialog: (name: string): void => {
+    dispatch(hideDialog(name));
   },
-  showCreateDialog: (show: boolean) => {
-    dispatch(showCreateDialog(show));
+  showDialog: (name: string): void => {
+    dispatch(showDialog(name));
   },
-  submitModule: (name: string, description: string, type: string) => {
+  submitModule: (name: string, description: string, type: string): void => {
     dispatch(createModule(name, description, type));
   },
 });
 
-const mapStateToProps = (state: AppState) => ({
+const mapStateToProps = (state: AppState): {} => ({
   outOfDate: state.ui.outOfDate,
-  cloningName: state.ui.cloningName,
-  shouldShowCreateDialog: state.ui.showCreateDialog,
+  componentToClone: state.ui.componentToClone,
+  showCreateDialog: state.ui.showDialog === 'create',
+  showCloneDialog: state.ui.showDialog === 'clone',
 });
 
 const Container = connect(

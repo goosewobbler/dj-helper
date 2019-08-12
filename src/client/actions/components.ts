@@ -159,14 +159,15 @@ export const update = () => (dispatch: any): void => {
   fetch(`http://localhost:3333/api/update`, { method: 'POST' });
 };
 
-export const showCloneDialog = (name: string): {} => ({
+export const showDialog = (name: string, componentToClone?: string): {} => ({
   name,
-  type: 'SHOW_CLONE_DIALOG',
+  componentToClone,
+  type: 'SHOW_DIALOG',
 });
 
-export const showCreateDialog = (show: boolean): {} => ({
-  show,
-  type: 'SHOW_CREATE_DIALOG',
+export const hideDialog = (name: string): {} => ({
+  name,
+  type: 'HIDE_DIALOG',
 });
 
 export const createComponent = (name: string, displayName: string): {} => ({
@@ -176,7 +177,7 @@ export const createComponent = (name: string, displayName: string): {} => ({
 });
 
 export const createModule = (name: string, description: string, type: string) => (dispatch: any): void => {
-  dispatch(showCreateDialog(false));
+  dispatch(showDialog('create'));
   fetch(`http://localhost:3333/api/component/create/${type}`, {
     body: JSON.stringify({ name, description }),
     headers: {
@@ -192,7 +193,7 @@ export const createModule = (name: string, description: string, type: string) =>
 };
 
 export const cloneComponent = (name: string, createName: string, description: string) => (dispatch: any): void => {
-  dispatch(showCloneDialog(null));
+  dispatch(showDialog('clone', createName));
   fetch(`http://localhost:3333/api/component/${name}/clone`, {
     body: JSON.stringify({ name: createName, description }),
     headers: {

@@ -2,7 +2,10 @@ import { deburr, find, isObject, some, trim } from 'lodash/fp';
 
 const normalise = (value: string): string => deburr(value.toLowerCase());
 
-const getNeedleSubstring = (needle: string, haystack: string) => {
+const getNeedleSubstring = (
+  needle: string,
+  haystack: string,
+): { indexOfFirstNeedleCharacter: number; length: number } => {
   const normalisedNeedle = normalise(needle);
   const normalisedHaystack = normalise(haystack);
   const indexOfFirstNeedleCharacter = normalisedHaystack.indexOf(normalisedNeedle[0]);
@@ -36,11 +39,11 @@ const getMatchesRecursive = (needle: string, haystack: string): (string | { matc
   return [start, { matched }].concat(getMatchesRecursive(needle.substr(length), end)).filter(Boolean);
 };
 
-const getMatches = (needle: string, haystack: string) => {
+const getMatches = (needle: string, haystack: string): (string | { matched: string })[] => {
   const trimmedNeedle = trim(needle);
   const matches = getMatchesRecursive(trimmedNeedle, haystack);
-  const matchedParts = matches.filter(match => typeof match === 'object') as { matched: string }[];
-  const combinedMatchedParts = matchedParts.reduce((acc, match) => acc + match.matched, '');
+  const matchedParts = matches.filter((match): boolean => typeof match === 'object') as { matched: string }[];
+  const combinedMatchedParts = matchedParts.reduce((acc, match): string => acc + match.matched, '');
 
   if (combinedMatchedParts.length !== trimmedNeedle.length) {
     return [haystack];
@@ -49,14 +52,20 @@ const getMatches = (needle: string, haystack: string) => {
   return matches;
 };
 
-const getMatchesWithAlternatives = (needle: string, haystack: string, alternatives: string[]) => {
+const getMatchesWithAlternatives = (
+  needle: string,
+  haystack: string,
+  alternatives: string[],
+): (string | { matched: string })[] => {
   const matches = getMatches(needle, haystack);
 
   if (some(isObject)(matches)) {
     return matches;
   }
 
-  const alternativeMatches = alternatives.map(alternative => getMatches(needle, alternative));
+  const alternativeMatches = alternatives.map((alternative): (string | { matched: string })[] =>
+    getMatches(needle, alternative),
+  );
   return find(some(isObject), alternativeMatches);
 };
 

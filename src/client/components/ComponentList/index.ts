@@ -66,12 +66,12 @@ const filteredComponentsSelector = createSelector(
   getListItemComponents,
 );
 
-const mapStateToProps = (state: AppState) => ({
+const mapStateToProps = (state: AppState): {} => ({
   components: filteredComponentsSelector(state),
   selectedComponent: state.ui.selectedComponent,
 });
 
-const mapDispatchToProps = (dispatch: any) => ({
+const mapDispatchToProps = (dispatch: any): {} => ({
   onFavouriteComponent: (name: string, favourite: boolean) => dispatch(favouriteComponent(name, favourite)),
   onSelectComponent: (name: string) => dispatch(updateAndSelectComponent(name)),
   onStartComponent: (name: string) => dispatch(startComponent(name)),

@@ -39,6 +39,7 @@
     "node-watch": "^0.6.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-graph-vis": "^1.0.2",
     "react-hot-loader": "^4.12.9",
     "react-list": "^0.8.11",
     "react-redux": "^7.1.0",

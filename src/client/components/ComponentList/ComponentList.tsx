@@ -16,7 +16,7 @@ interface ComponentListProps {
 interface ComponentListItemData {
   name: string;
   displayName: string;
-  highlighted?: any[];
+  highlighted?: boolean;
   url: string;
   favourite: boolean;
   state: ComponentState;

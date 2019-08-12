@@ -1,20 +1,22 @@
 import * as React from 'react';
 
 interface IconButtonProps {
-  children?: any;
+  children?: React.ReactElement;
   className?: string;
   label: string;
   loading?: boolean;
   onClick?(): void;
 }
 
-const createClickAction = (clickAction: () => void) => (event: any): void => {
-  event.stopPropagation();
-  clickAction();
-};
-
 const IconButton = ({ className, onClick, children, label }: IconButtonProps): React.ReactElement => (
-  <button type="button" className={className} onClick={createClickAction(onClick)}>
+  <button
+    type="button"
+    className={className}
+    onClick={(event: React.FormEvent): void => {
+      event.stopPropagation();
+      onClick();
+    }}
+  >
     {children}
     <span>{label}</span>
   </button>

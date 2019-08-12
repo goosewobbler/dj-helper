@@ -35,7 +35,7 @@ const getFilteredComponents = (components: ComponentData[], filter: string): Com
   return results;
 };
 
-const getComponents = (components: ComponentData[], filter: string) => {
+const getComponents = (components: ComponentData[], filter: string): ComponentData[] => {
   if (filter) {
     return getFilteredComponents(components, filter);
   }
@@ -57,8 +57,8 @@ const getListItemComponents = (components: ComponentData[], filter: string): Com
   }));
 };
 
-const componentsSelector = (state: AppState) => state.components;
-const filterSelector = (state: AppState) => state.ui.filter;
+const componentsSelector = (state: AppState): ComponentData[] => state.components;
+const filterSelector = (state: AppState): string => state.ui.filter;
 
 const filteredComponentsSelector = createSelector(
   componentsSelector,

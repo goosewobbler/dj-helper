@@ -6,21 +6,24 @@ interface LabelButtonProps {
   color?: string;
   fontSize?: string;
   height?: string;
-  image?: any;
+  image?: React.ReactElement;
   label: string;
   padding?: string;
   width?: string;
   disabled?: boolean;
-  onClick(): any;
+  onClick(): void;
 }
 
-const createClickAction = (clickAction: () => void) => (event: any): void => {
-  event.stopPropagation();
-  clickAction();
-};
-
 const LabelButton = ({ className, disabled, onClick, label, image }: LabelButtonProps): React.ReactElement => (
-  <button type="button" className={className} disabled={disabled} onClick={createClickAction(onClick)}>
+  <button
+    type="button"
+    className={className}
+    disabled={disabled}
+    onClick={(event: React.FormEvent): void => {
+      event.stopPropagation();
+      onClick();
+    }}
+  >
     {image && <div>{image}</div>}
     <p>{label}</p>
   </button>

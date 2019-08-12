@@ -8,7 +8,7 @@ interface UpdateBarProps {
   onUpdate(): () => void;
 }
 
-const renderUpdateMessage = (messageText: string): React.ReactElement => {
+const renderUpdateMessage = (messageText: React.ReactElement): React.ReactElement => {
   return (
     <React.Fragment>
       <span key="update-message-1">{messageText}</span>
@@ -38,18 +38,38 @@ const renderUpdateLink = (): React.ReactElement => (
     >
       what&apos;s new
     </a>
-    <span key="update-message-2">. 👀</span>
+    <span key="update-message-2">
+      .
+      <span className="update-emoji" role="img" aria-label="eyes">
+        👀
+      </span>
+    </span>
   </React.Fragment>
 );
 
 const UpdateBar = ({ updating, updated, onUpdate }: UpdateBarProps): React.ReactElement => {
-  let messageText = 'There is an update available for the Morph Developer Console. See ';
+  let messageText = <React.Fragment>There is an update available for the Morph Developer Console. See </React.Fragment>;
 
   if (updating) {
-    messageText = 'Updating  😟';
+    messageText = (
+      <React.Fragment>
+        Updating
+        <span className="update-emoji" role="img" aria-label="unhappy face">
+          😟
+        </span>
+      </React.Fragment>
+    );
   }
   if (updated) {
-    messageText = 'Morph Developer Console updated sucessfully  🎉  Restart to apply updates.';
+    messageText = (
+      <React.Fragment>
+        Morph Developer Console updated sucessfully
+        <span className="update-emoji" role="img" aria-label="hooray">
+          🎉
+        </span>
+        Restart to apply updates.
+      </React.Fragment>
+    );
   }
 
   return (

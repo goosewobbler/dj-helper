@@ -1,32 +1,33 @@
 import { ComponentState, ComponentData } from '../../common/types';
+import { AnyAction } from 'redux';
 
-export const receiveComponents = (components: ComponentData[]): {} => ({
+export const receiveComponents = (components: ComponentData[]): AnyAction => ({
   components,
   type: 'RECEIVE_COMPONENTS',
 });
 
-export const receiveComponent = (component: ComponentData): {} => ({
+export const receiveComponent = (component: ComponentData): AnyAction => ({
   component,
   type: 'RECEIVE_COMPONENT',
 });
 
-export const receiveEditors = (editors: string[]): {} => ({
+export const receiveEditors = (editors: string[]): AnyAction => ({
   editors,
   type: 'RECEIVE_EDITORS',
 });
 
-export const selectComponent = (name: string): {} => ({
+export const selectComponent = (name: string): AnyAction => ({
   name,
   type: 'SELECT_COMPONENT',
 });
 
-export const promotingComponent = (name: string, environment: string): {} => ({
+export const promotingComponent = (name: string, environment: string): AnyAction => ({
   environment,
   name,
   type: 'PROMOTING_COMPONENT',
 });
 
-export const fetchVersions = (name: string): {} => {
+export const fetchVersions = (name: string): AnyAction => {
   const action = (() => {
     return fetch(`http://localhost:3333/api/component/${name}/versions`, { method: 'POST' });
   }) as any;
@@ -35,7 +36,7 @@ export const fetchVersions = (name: string): {} => {
   return action;
 };
 
-export const updateAndSelectComponent = (name: string, noHistory?: boolean): {} => {
+export const updateAndSelectComponent = (name: string, noHistory?: boolean): AnyAction => {
   const action = ((dispatch: any) => {
     if (!noHistory && (window as any).historyEnabled) {
       window.history.pushState({ name }, null, `/component/${name}`);
@@ -48,37 +49,37 @@ export const updateAndSelectComponent = (name: string, noHistory?: boolean): {} 
   return action;
 };
 
-export const startingComponent = (name: string): {} => ({
+export const startingComponent = (name: string): AnyAction => ({
   name,
   state: ComponentState.Starting,
   type: 'CHANGE_COMPONENT_STATE',
 });
 
-export const stoppingComponent = (name: string): {} => ({
+export const stoppingComponent = (name: string): AnyAction => ({
   name,
   state: ComponentState.Stopped,
   type: 'CHANGE_COMPONENT_STATE',
 });
 
-export const installingComponent = (name: string): {} => ({
+export const installingComponent = (name: string): AnyAction => ({
   name,
   state: ComponentState.Installing,
   type: 'CHANGE_COMPONENT_STATE',
 });
 
-export const buildingComponent = (name: string): {} => ({
+export const buildingComponent = (name: string): AnyAction => ({
   name,
   state: ComponentState.Building,
   type: 'CHANGE_COMPONENT_STATE',
 });
 
-export const linkingComponent = (name: string, dependency: string): {} => ({
+export const linkingComponent = (name: string, dependency: string): AnyAction => ({
   dependency,
   name,
   type: 'LINKING_COMPONENT',
 });
 
-export const filterComponents = (filter: string): {} => ({
+export const filterComponents = (filter: string): AnyAction => ({
   filter,
   type: 'FILTER_COMPONENTS',
 });
@@ -142,15 +143,15 @@ export const unlinkComponent = (name: string, dependency: string) => (dispatch: 
   fetch(`http://localhost:3333/api/component/${name}/unlink/${dependency}`, { method: 'POST' });
 };
 
-export const updateAvailable = (): {} => ({
+export const updateAvailable = (): AnyAction => ({
   type: 'UPDATE_AVAILABLE',
 });
 
-export const updating = (): {} => ({
+export const updating = (): AnyAction => ({
   type: 'UPDATING',
 });
 
-export const updated = (): {} => ({
+export const updated = (): AnyAction => ({
   type: 'UPDATED',
 });
 
@@ -159,18 +160,18 @@ export const update = () => (dispatch: any): void => {
   fetch(`http://localhost:3333/api/update`, { method: 'POST' });
 };
 
-export const showDialog = (name: string, componentToClone?: string): {} => ({
+export const showDialog = (name: string, componentToClone?: string): AnyAction => ({
   name,
   componentToClone,
   type: 'SHOW_DIALOG',
 });
 
-export const hideDialog = (name: string): {} => ({
+export const hideDialog = (name: string): AnyAction => ({
   name,
   type: 'HIDE_DIALOG',
 });
 
-export const createComponent = (name: string, displayName: string): {} => ({
+export const createComponent = (name: string, displayName: string): AnyAction => ({
   displayName,
   name,
   type: 'CREATE_COMPONENT',

@@ -1,10 +1,8 @@
 import { throttle } from 'lodash/fp';
 import * as React from 'react';
-import * as ReactList from 'react-list';
+import ReactList from 'react-list';
 
 import TopIcon from './TopIcon';
-
-const ReactListComponent: any = ReactList;
 
 interface ScrollListProps {
   length: number;
@@ -20,7 +18,7 @@ interface ScrollListState {
 class ScrollList extends React.Component<ScrollListProps, ScrollListState> {
   private listElement: any;
 
-  constructor(props: ScrollListProps) {
+  public constructor(props: ScrollListProps) {
     super(props);
 
     this.state = {
@@ -66,8 +64,8 @@ class ScrollList extends React.Component<ScrollListProps, ScrollListState> {
     return (
       <div>
         <ul onScroll={this.handleScroll}>
-          <ReactListComponent
-            ref={this.handleListRef}
+          <ReactList
+            //             ref={this.handleListRef}
             itemRenderer={renderListItem}
             length={length}
             type="uniform"

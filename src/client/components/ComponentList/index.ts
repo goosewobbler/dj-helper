@@ -1,5 +1,6 @@
 import { assign } from 'lodash/fp';
 import { connect } from 'react-redux';
+import { AnyAction } from 'redux';
 import { createSelector } from 'reselect';
 
 import { favouriteComponent, startComponent, stopComponent, updateAndSelectComponent } from '../../actions/components';
@@ -7,7 +8,6 @@ import { favouriteComponent, startComponent, stopComponent, updateAndSelectCompo
 import findOrderedSearchResults from '../../helpers/resultsHelper';
 import { ComponentList, ComponentListItemData } from './ComponentList';
 import { ComponentData, AppState, Dispatch } from '../../../common/types';
-import { AnyAction } from 'redux';
 
 const getSortedComponents = (components: ComponentData[]): ComponentData[] => {
   return components.sort((mA: ComponentData, mB: ComponentData): number => {

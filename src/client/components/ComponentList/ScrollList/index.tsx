@@ -33,38 +33,14 @@ class ScrollList extends React.Component<ScrollListProps, ScrollListState> {
   }
 
   public componentDidUpdate(prevProps: ScrollListProps): void {
-    if (
-      this.listElement &&
-      typeof this.props.selectedIndex === 'number' &&
-      prevProps.selectedID !== this.props.selectedID
-    ) {
+    const { selectedIndex, selectedID } = this.props;
+    if (this.listElement && typeof selectedIndex === 'number' && prevProps.selectedID !== selectedID) {
       const [firstIndex, lastIndex] = this.listElement.getVisibleRange();
-      if (this.props.selectedIndex < firstIndex || this.props.selectedIndex > lastIndex) {
-        this.listElement.scrollTo(this.props.selectedIndex);
+      if (selectedIndex < firstIndex || selectedIndex > lastIndex) {
+        this.listElement.scrollTo(selectedIndex);
         this.handleScroll();
       }
     }
-  }
-
-  public render(): React.ReactElement {
-    return (
-      <div>
-        <ul onScroll={this.handleScroll}>
-          <ReactListComponent
-            ref={this.handleListRef}
-            itemRenderer={this.props.renderListItem}
-            length={this.props.length}
-            type="uniform"
-            useStaticSize
-            useTranslate3d
-            minSize={20}
-          />
-        </ul>
-        <button onClick={this.handleScrollToTheTop}>
-          <TopIcon />
-        </button>
-      </div>
-    );
   }
 
   private handleListRef(el: React.ReactElement): void {
@@ -84,8 +60,30 @@ class ScrollList extends React.Component<ScrollListProps, ScrollListState> {
       this.setState({ showScrollToTop: firstIndex > 10 });
     }
   }
+
+  public render(): React.ReactElement {
+    const { renderListItem, length } = this.props;
+    return (
+      <div>
+        <ul onScroll={this.handleScroll}>
+          <ReactListComponent
+            ref={this.handleListRef}
+            itemRenderer={renderListItem}
+            length={length}
+            type="uniform"
+            useStaticSize
+            useTranslate3d
+            minSize={20}
+          />
+        </ul>
+        <button type="button" onClick={this.handleScrollToTheTop}>
+          <TopIcon />
+        </button>
+      </div>
+    );
+  }
 }
 
-const ScrollListAdapter = (props: ScrollListProps) => <ScrollList {...props} />;
+const ScrollListAdapter = (props: ScrollListProps): React.ReactElement => <ScrollList {...props} />;
 
 export default ScrollListAdapter;

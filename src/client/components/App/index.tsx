@@ -5,7 +5,7 @@ import App from './App';
 import { AppState, Dispatch } from '../../../common/types';
 
 const mapDispatchToProps = (dispatch: Dispatch): {} => ({
-  cloneComponent: (name: string, cloneName: string, description: string) => {
+  cloneComponent: (name: string, cloneName: string, description: string): void => {
     dispatch(cloneComponent(name, cloneName, description));
   },
   hideDialog: (name: string): void => {

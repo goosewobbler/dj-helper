@@ -58,7 +58,7 @@ const App = (props: AppProps): React.ReactElement => {
             className="create-button"
             label="Create"
             image={<CreateIcon />}
-            onClick={() => showDialog('create')}
+            onClick={(): void => showDialog('create')}
           />
           <GitHubLink link="https://github.com/bbc/morph-developer-console" />
         </div>

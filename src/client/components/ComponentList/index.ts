@@ -6,7 +6,8 @@ import { favouriteComponent, startComponent, stopComponent, updateAndSelectCompo
 
 import findOrderedSearchResults from '../../helpers/resultsHelper';
 import { ComponentList, ComponentListItemData } from './ComponentList';
-import { ComponentData, AppState } from '../../../common/types';
+import { ComponentData, AppState, Dispatch } from '../../../common/types';
+import { AnyAction } from 'redux';
 
 const getSortedComponents = (components: ComponentData[]): ComponentData[] => {
   return components.sort((mA: ComponentData, mB: ComponentData): number => {
@@ -74,16 +75,16 @@ const mapStateToProps = (state: AppState): {} => ({
   selectedComponent: state.ui.selectedComponent,
 });
 
-const mapDispatchToProps = (dispatch: any): {} => ({
-  onFavouriteComponent: (name: string, favourite: boolean) => dispatch(favouriteComponent(name, favourite)),
-  onSelectComponent: (name: string) => dispatch(updateAndSelectComponent(name)),
-  onStartComponent: (name: string) => dispatch(startComponent(name)),
-  onStopComponent: (name: string) => dispatch(stopComponent(name)),
+const mapDispatchToProps = (dispatch: Dispatch): {} => ({
+  onFavouriteComponent: (name: string, favourite: boolean): void => dispatch(favouriteComponent(name, favourite)),
+  onSelectComponent: (name: string): AnyAction => dispatch(updateAndSelectComponent(name)),
+  onStartComponent: (name: string): void => dispatch(startComponent(name)),
+  onStopComponent: (name: string): void => dispatch(stopComponent(name)),
 });
 
 const Container = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(ComponentList as any);
+)(ComponentList);
 
 export default Container;

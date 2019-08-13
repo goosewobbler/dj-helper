@@ -1,5 +1,5 @@
-import { ComponentState, ComponentData } from '../../common/types';
 import { AnyAction } from 'redux';
+import { ComponentState, ComponentData, Dispatch } from '../../common/types';
 
 export const receiveComponents = (components: ComponentData[]): AnyAction => ({
   components,
@@ -37,7 +37,7 @@ export const fetchVersions = (name: string): AnyAction => {
 };
 
 export const updateAndSelectComponent = (name: string, noHistory?: boolean): AnyAction => {
-  const action = ((dispatch: any) => {
+  const action = ((dispatch: Dispatch) => {
     if (!noHistory && (window as any).historyEnabled) {
       window.history.pushState({ name }, null, `/component/${name}`);
     }
@@ -84,22 +84,22 @@ export const filterComponents = (filter: string): AnyAction => ({
   type: 'FILTER_COMPONENTS',
 });
 
-export const startComponent = (name: string) => (dispatch: any): void => {
+export const startComponent = (name: string) => (dispatch: Dispatch): void => {
   dispatch(startingComponent(name));
   fetch(`http://localhost:3333/api/component/${name}/start`, { method: 'POST' });
 };
 
-export const stopComponent = (name: string) => (dispatch: any): void => {
+export const stopComponent = (name: string) => (dispatch: Dispatch): void => {
   dispatch(stoppingComponent(name));
   fetch(`http://localhost:3333/api/component/${name}/stop`, { method: 'POST' });
 };
 
-export const installComponent = (name: string) => (dispatch: any): void => {
+export const installComponent = (name: string) => (dispatch: Dispatch): void => {
   dispatch(installingComponent(name));
   fetch(`http://localhost:3333/api/component/${name}/install`, { method: 'POST' });
 };
 
-export const buildComponent = (name: string) => (dispatch: any): void => {
+export const buildComponent = (name: string) => (dispatch: Dispatch): void => {
   dispatch(buildingComponent(name));
   fetch(`http://localhost:3333/api/component/${name}/build`, { method: 'POST' });
 };
@@ -108,7 +108,7 @@ export const setUseCacheOnComponent = (name: string, value: boolean) => (): void
   fetch(`http://localhost:3333/api/component/${name}/cache/${value ? 'true' : 'false'}`, { method: 'POST' });
 };
 
-export const favouriteComponent = (name: string, favourite: boolean) => (dispatch: any): void => {
+export const favouriteComponent = (name: string, favourite: boolean) => (dispatch: Dispatch): void => {
   dispatch({
     favourite,
     name,
@@ -117,14 +117,14 @@ export const favouriteComponent = (name: string, favourite: boolean) => (dispatc
   fetch(`http://localhost:3333/api/component/${name}/favourite/${favourite}`, { method: 'POST' });
 };
 
-export const bumpComponent = (name: string, type: string) => (dispatch: any): void => {
+export const bumpComponent = (name: string, type: string) => (dispatch: Dispatch): void => {
   dispatch(promotingComponent(name, 'int'));
   fetch(`http://localhost:3333/api/component/${name}/bump/${type}`, { method: 'POST' }).then((): void => {
     dispatch(promotingComponent(name, null));
   });
 };
 
-export const promoteComponent = (name: string, environment: string) => (dispatch: any): void => {
+export const promoteComponent = (name: string, environment: string) => (dispatch: Dispatch): void => {
   dispatch(promotingComponent(name, environment));
   fetch(`http://localhost:3333/api/component/${name}/promote/${environment}`, { method: 'POST' });
 };
@@ -133,12 +133,12 @@ export const openInCode = (name: string) => (): void => {
   fetch(`http://localhost:3333/api/component/${name}/edit`, { method: 'POST' });
 };
 
-export const linkComponent = (name: string, dependency: string) => (dispatch: any): void => {
+export const linkComponent = (name: string, dependency: string) => (dispatch: Dispatch): void => {
   dispatch(linkingComponent(name, dependency));
   fetch(`http://localhost:3333/api/component/${name}/link/${dependency}`, { method: 'POST' });
 };
 
-export const unlinkComponent = (name: string, dependency: string) => (dispatch: any): void => {
+export const unlinkComponent = (name: string, dependency: string) => (dispatch: Dispatch): void => {
   dispatch(linkingComponent(name, dependency));
   fetch(`http://localhost:3333/api/component/${name}/unlink/${dependency}`, { method: 'POST' });
 };
@@ -155,7 +155,7 @@ export const updated = (): AnyAction => ({
   type: 'UPDATED',
 });
 
-export const update = () => (dispatch: any): void => {
+export const update = () => (dispatch: Dispatch): void => {
   dispatch(updating());
   fetch(`http://localhost:3333/api/update`, { method: 'POST' });
 };
@@ -177,7 +177,7 @@ export const createComponent = (name: string, displayName: string): AnyAction =>
   type: 'CREATE_COMPONENT',
 });
 
-export const createModule = (name: string, description: string, type: string) => (dispatch: any): void => {
+export const createModule = (name: string, description: string, type: string) => (dispatch: Dispatch): void => {
   dispatch(showDialog('create'));
   fetch(`http://localhost:3333/api/component/create/${type}`, {
     body: JSON.stringify({ name, description }),
@@ -193,7 +193,7 @@ export const createModule = (name: string, description: string, type: string) =>
   });
 };
 
-export const cloneComponent = (name: string, createName: string, description: string) => (dispatch: any): void => {
+export const cloneComponent = (name: string, createName: string, description: string) => (dispatch: Dispatch): void => {
   dispatch(showDialog('clone', createName));
   fetch(`http://localhost:3333/api/component/${name}/clone`, {
     body: JSON.stringify({ name: createName, description }),

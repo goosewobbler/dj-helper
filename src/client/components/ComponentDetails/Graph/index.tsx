@@ -32,15 +32,8 @@ class Graph extends React.PureComponent<GraphProps, GraphState> {
     };
   }
 
-  public componentDidMount() {
+  public componentDidMount(): void {
     this.update();
-  }
-
-  public componentDidUpdate() {
-    const { data } = this.state;
-    if (!data) {
-      this.update();
-    }
   }
 
   public componentWillReceiveProps(nextProps: GraphProps) {
@@ -50,8 +43,11 @@ class Graph extends React.PureComponent<GraphProps, GraphState> {
     }
   }
 
-  public render() {
-    return <div>{this.renderGraph()}</div>;
+  public componentDidUpdate(): void {
+    const { data } = this.state;
+    if (!data) {
+      this.update();
+    }
   }
 
   private update(): void {
@@ -64,85 +60,92 @@ class Graph extends React.PureComponent<GraphProps, GraphState> {
       .catch(logError);
   }
 
-  private renderGraph(): React.ReactElement {
-    const { data } = this.state;
-
-    if (data) {
-      const { down } = this.props;
-      const options = {
-        edges: {
-          arrows: {
-            from: {
-              enabled: !down,
-              scaleFactor: 0.5,
-            },
-            to: {
-              enabled: down,
-              scaleFactor: 0.5,
-            },
+  public renderGraph(data: GraphData): React.ReactElement {
+    const { down, onSelect } = this.props;
+    const options = {
+      edges: {
+        arrows: {
+          from: {
+            enabled: !down,
+            scaleFactor: 0.5,
           },
-          smooth: {
-            forceDirection: 'vertical',
-            roundness: 1,
-            type: 'cubicBezier',
+          to: {
+            enabled: down,
+            scaleFactor: 0.5,
           },
         },
-        layout: {
-          hierarchical: {
-            direction: down ? 'UD' : 'DU',
-            edgeMinimization: true,
-            nodeSpacing: 350,
-            parentCentralization: true,
-            sortMethod: 'directed',
-          },
-          improvedLayout: true,
+        smooth: {
+          forceDirection: 'vertical',
+          roundness: 1,
+          type: 'cubicBezier',
         },
-        nodes: {
-          color: {},
-          font: {},
-          scaling: {
-            max: 30,
-            min: 30,
-          },
-          shape: 'box',
-          size: 30,
+      },
+      layout: {
+        hierarchical: {
+          direction: down ? 'UD' : 'DU',
+          edgeMinimization: true,
+          nodeSpacing: 350,
+          parentCentralization: true,
+          sortMethod: 'directed',
         },
-        physics: {
-          enabled: false,
+        improvedLayout: true,
+      },
+      nodes: {
+        color: {},
+        font: {},
+        scaling: {
+          max: 30,
+          min: 30,
         },
-      };
+        shape: 'box',
+        size: 30,
+      },
+      physics: {
+        enabled: false,
+      },
+    };
 
-      const events = {
-        doubleClick: (event: any) => {
-          const id = event.nodes[0];
-          const { name } = data.nodes.find(n => n.id === id);
-          this.props.onSelect(name);
-        },
-      };
+    const events = {
+      doubleClick: (event: any): void => {
+        const {
+          nodes: [id],
+        } = event;
+        const { name } = data.nodes.find((n): boolean => n.id === id);
+        onSelect(name);
+      },
+    };
 
-      const currentNode = data.nodes[0].id;
-
-      return (
-        <GraphVis
-          ref={(g: any): void => {
-            if (g) {
-              g.Network.focus(currentNode, {
-                scale: 1,
-              });
-            }
-          }}
-          graph={convertData(data)}
-          events={events}
-          options={options}
-        />
-      );
-    }
+    const currentNode = data.nodes[0].id;
 
     return (
-      <div className="loading">
-        <div>
-          <LoadingIcon />
-        </div>
+      <GraphVis
+        ref={(g: any): void => {
+          if (g) {
+            g.Network.focus(currentNode, {
+              scale: 1,
+            });
+          }
+        }}
+        graph={convertData(data)}
+        events={events}
+        options={options}
+      />
+    );
+  }
+
+  public render(): React.ReactElement {
+    const { data } = this.state;
+    return (
+      <div>
+        {data ? (
+          this.renderGraph(data)
+        ) : (
+          <div className="loading">
+            <div>
+              <LoadingIcon />
+            </div>
+          </div>
+        )}
       </div>
     );
   }

@@ -17,43 +17,36 @@ const SelectInput = ({
   onChange(event: any): void;
 }): React.ReactElement => (
   <div>
-    <label>{label}</label>
-    <select className={className} onChange={onChange}>
-      {options.map(
-        (option): React.ReactElement => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ),
-      )}
-    </select>
+    <label htmlFor={className}>
+      {label}
+      <select id={className} className={className} onChange={onChange}>
+        {options.map(
+          (option): React.ReactElement => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ),
+        )}
+      </select>
+    </label>
   </div>
 );
 
 const TextInput = ({
   labelText,
   className,
-  autoFocus,
   onChange,
   onKeyDown,
 }: {
   className?: string;
   labelText: string;
-  autoFocus: boolean;
   onChange(event: any): void;
   onKeyDown(event: any): void;
 }): React.ReactElement => (
   <div>
-    <label for={className}>
+    <label htmlFor={className}>
       {labelText}
-      <input
-        id={className}
-        className={className}
-        type="text"
-        autoFocus={autoFocus}
-        onChange={onChange}
-        onKeyDown={onKeyDown}
-      />
+      <input id={className} className={className} type="text" onChange={onChange} onKeyDown={onKeyDown} />
     </label>
   </div>
 );
@@ -145,14 +138,12 @@ class CreateForm extends React.Component<CreateFormProps, CreateFormState> {
         <TextInput
           labelText="Name"
           className="create-name-input"
-          autoFocus
           onChange={(event): void => this.handleNameChange(event)}
           onKeyDown={(event): void => this.handleKeyDown(event)}
         />
         <TextInput
           labelText="Description"
           className="create-description-input"
-          autoFocus={false}
           onChange={(event): void => this.handleDescriptionChange(event)}
           onKeyDown={(event): void => this.handleKeyDown(event)}
         />
@@ -161,7 +152,7 @@ class CreateForm extends React.Component<CreateFormProps, CreateFormState> {
             className="create-create-button"
             label="Create"
             disabled={!valid}
-            onClick={() => this.create()}
+            onClick={(): void => this.create()}
           />
         </div>
       </div>

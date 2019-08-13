@@ -1,9 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { AppContainer } from 'react-hot-loader';
 import { Provider } from 'react-redux';
 import * as io from 'socket.io-client';
-
 import {
   fetchVersions,
   receiveComponent,
@@ -17,21 +15,33 @@ import {
 import App from './client/components/App';
 import createStore from './client/store';
 import { logError } from './server/helpers/console';
-import { ComponentData, AppStatus, ComponentsData } from './common/types';
+import { ComponentData, AppStatus, ComponentsData, AppState } from './common/types';
 
-if (process.env.NODE_ENV !== 'production' && typeof window !== 'undefined') {
+declare global {
+  interface Window {
+    historyEnabled: boolean;
+    mdc: { preloadedState: AppState };
+  }
+}
+
+const initDebugMode = async (): Promise<void> => {
   Object.defineProperty(React, 'createClass', {
     set: (): void => null,
   });
-  const { whyDidYouUpdate } = require('why-did-you-update');
+  const { whyDidYouUpdate } = await import('why-did-you-update');
+
   whyDidYouUpdate(React, {
-    include: 'ComponentListItem',
+    include: /ComponentListItem/,
   });
+};
+
+if (process.env.NODE_ENV !== 'production' && typeof window !== 'undefined') {
+  initDebugMode();
 }
 
-const preloadedState = (window as any).__PRELOADED_STATE__;
+const { preloadedState } = window.mdc;
 
-delete (window as any).__PRELOADED_STATE__;
+delete window.mdc.preloadedState;
 
 const store = createStore(preloadedState);
 
@@ -44,28 +54,16 @@ if (!preloadedState) {
     });
 }
 
-const render = (Component: any): void => {
-  ReactDOM.render(
-    <AppContainer>
-      <Provider store={store}>
-        <Component />
-      </Provider>
-    </AppContainer>,
-    document.getElementById('app'),
-  );
-};
-
-render(App);
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root'),
+);
 
 const inputElement = document.getElementById('search-input');
 if (inputElement) {
   inputElement.focus();
-}
-
-if ((module as any).hot) {
-  (module as any).hot.accept('./client/components/App', (): void => {
-    render(require('./client/components/App').default);
-  });
 }
 
 if (io) {
@@ -85,7 +83,7 @@ if (io) {
     }
   };
 
-  socket.on('freshState', (freshState: any): void => {
+  socket.on('freshState', (freshState: ComponentsData): void => {
     store.dispatch(receiveComponents(freshState.components));
     store.dispatch(receiveEditors(freshState.editors));
     updateSelected();
@@ -115,11 +113,11 @@ const checkOutOfDate = (): void => {
 checkOutOfDate();
 
 if (window.location.port === '8080') {
-  (window as any).historyEnabled = false;
+  window.historyEnabled = false;
 }
 
-if (typeof (window as any).historyEnabled === 'undefined') {
-  (window as any).historyEnabled = true;
+if (typeof window.historyEnabled === 'undefined') {
+  window.historyEnabled = true;
 
   const selectComponentFromUrl = (): void => {
     const matches = /\/component\/(.+)$/.exec(String(window.document.location));

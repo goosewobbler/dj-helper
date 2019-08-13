@@ -29,10 +29,10 @@ class ScrollList extends React.Component<ScrollListProps, ScrollListState> {
 
     this.handleListRef = this.handleListRef.bind(this);
     this.handleScrollToTheTop = this.handleScrollToTheTop.bind(this);
-    this.handleScroll = throttle(200, this.handleScroll.bind(this)) as any;
+    this.handleScroll = throttle(200, this.handleScroll.bind(this)) as () => void;
   }
 
-  public componentDidUpdate(prevProps: ScrollListProps) {
+  public componentDidUpdate(prevProps: ScrollListProps): void {
     if (
       this.listElement &&
       typeof this.props.selectedIndex === 'number' &&
@@ -46,7 +46,7 @@ class ScrollList extends React.Component<ScrollListProps, ScrollListState> {
     }
   }
 
-  public render() {
+  public render(): React.ReactElement {
     return (
       <div>
         <ul onScroll={this.handleScroll}>
@@ -67,18 +67,18 @@ class ScrollList extends React.Component<ScrollListProps, ScrollListState> {
     );
   }
 
-  private handleListRef(el: any) {
+  private handleListRef(el: React.ReactElement): void {
     this.listElement = el;
   }
 
-  private handleScrollToTheTop() {
+  private handleScrollToTheTop(): void {
     if (this.listElement) {
       this.listElement.scrollTo(0);
       this.setState({ showScrollToTop: false });
     }
   }
 
-  private handleScroll() {
+  private handleScroll(): void {
     if (this.listElement) {
       const [firstIndex] = this.listElement.getVisibleRange();
       this.setState({ showScrollToTop: firstIndex > 10 });

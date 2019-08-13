@@ -15,31 +15,38 @@ interface AppProps {
   showCreateDialog: boolean;
   showCloneDialog: boolean;
   componentToClone: string;
-  onCreate(): () => void;
-  showDialog(name: string): () => void;
-  hideDialog(name: string): () => void;
-  cloneComponent(name: string, cloneName: string, description: string): () => void;
-  submitModule(name: string, description: string, type: string): () => void;
+  onCreate(): void;
+  showDialog(name: string): void;
+  hideDialog(name: string): void;
+  cloneComponent(name: string, cloneName: string, description: string): void;
+  submitModule(name: string, description: string, type: string): void;
 }
 
-const renderCreateDialog = ({ hideDialog, submitModule }: AppProps): React.ReactElement => (
-  <Dialog title="Create a new Morph module" onClose={() => hideDialog('create')}>
-    <CreateForm typeSelectEnabled submitModule={submitModule} onClose={() => hideDialog('create')} />
-  </Dialog>
-);
+const renderCreateDialog = (
+  hideDialog: AppProps['hideDialog'],
+  submitModule: AppProps['submitModule'],
+): React.ReactElement => {
+  const onClose = (): void => hideDialog('create');
+  return (
+    <Dialog title="Create a new Morph module" onClose={onClose}>
+      <CreateForm typeSelectEnabled submitModule={submitModule} onClose={onClose} />
+    </Dialog>
+  );
+};
 
-const renderCloneDialog = ({ hideDialog, cloneComponent, componentToClone }: AppProps): React.ReactElement => (
-  <Dialog title={`Clone ${componentToClone.replace('bbc-morph-', '')}`} onClose={() => hideDialog('clone')}>
-    <CreateForm
-      typeSelectEnabled={false}
-      submitModule={(name: string, description: string) => cloneComponent(componentToClone, name, description)}
-      onClose={() => hideDialog('clone')}
-    />
-  </Dialog>
-);
+const renderCloneDialog = ({ hideDialog, cloneComponent, componentToClone }: AppProps): React.ReactElement => {
+  const title = `Clone ${componentToClone.replace('bbc-morph-', '')}`;
+  const onClose = (): void => hideDialog('clone');
+  const submitModule = (name: string, description: string): void => cloneComponent(componentToClone, name, description);
+  return (
+    <Dialog title={title} onClose={onClose}>
+      <CreateForm typeSelectEnabled={false} submitModule={submitModule} onClose={onClose} />
+    </Dialog>
+  );
+};
 
 const App = (props: AppProps): React.ReactElement => {
-  const { outOfDate, showDialog, showCreateDialog, showCloneDialog } = props;
+  const { outOfDate, hideDialog, showDialog, submitModule, showCreateDialog, showCloneDialog } = props;
 
   return (
     <div>
@@ -64,7 +71,7 @@ const App = (props: AppProps): React.ReactElement => {
         <div className="section">
           <ComponentDetailsContainer />
         </div>
-        {showCreateDialog && renderCreateDialog(props)}
+        {showCreateDialog && renderCreateDialog(hideDialog, submitModule)}
         {showCloneDialog && renderCloneDialog(props)}
       </div>
     </div>

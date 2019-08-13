@@ -75,10 +75,10 @@ class ComponentListFilter extends React.Component<ComponentListFilterProps, Comp
           value={filter}
           id="search-input"
           placeholder="Search"
-          onKeyDown={event => this.onKeyDown(event)}
-          onFocus={() => this.onFocussed(true)}
-          onBlur={() => this.onFocussed(false)}
-          onChange={event => this.onInput(event)}
+          onKeyDown={(event): void => this.onKeyDown(event)}
+          onFocus={(): void => this.onFocussed(true)}
+          onBlur={(): void => this.onFocussed(false)}
+          onChange={(event): void => this.onInput(event)}
         />
         {this.renderIcon()}
       </div>

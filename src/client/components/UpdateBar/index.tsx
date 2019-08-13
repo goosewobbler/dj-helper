@@ -2,14 +2,14 @@ import { connect } from 'react-redux';
 import UpdateBar from './UpdateBar';
 
 import { update } from '../../actions/components';
-import { AppState } from '../../../common/types';
+import { AppState, Dispatch } from '../../../common/types';
 
 const mapStateToProps = (state: AppState): {} => ({
   updated: state.ui.updated,
   updating: state.ui.updating,
 });
 
-const mapDispatchToProps = (dispatch: () => void): {} => ({
+const mapDispatchToProps = (dispatch: Dispatch): {} => ({
   onUpdate: (): void => dispatch(update()),
 });
 

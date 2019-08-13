@@ -1,9 +1,10 @@
 import { connect } from 'react-redux';
-import { cloneComponent, createModule, showDialog, hideDialog } from '../../actions/components';
+import { hot } from 'react-hot-loader';
+import { cloneComponent, createComponent, showDialog, hideDialog } from '../../actions/components';
 import App from './App';
-import { AppState } from '../../../common/types';
+import { AppState, Dispatch } from '../../../common/types';
 
-const mapDispatchToProps = (dispatch: any): {} => ({
+const mapDispatchToProps = (dispatch: Dispatch): {} => ({
   cloneComponent: (name: string, cloneName: string, description: string) => {
     dispatch(cloneComponent(name, cloneName, description));
   },
@@ -14,7 +15,7 @@ const mapDispatchToProps = (dispatch: any): {} => ({
     dispatch(showDialog(name));
   },
   submitModule: (name: string, description: string, type: string): void => {
-    dispatch(createModule(name, description, type));
+    dispatch(createComponent(name, description, type));
   },
 });
 
@@ -30,4 +31,5 @@ const Container = connect(
   mapDispatchToProps,
 )(App);
 
-export default Container;
+// export default Container;
+export default hot(module)(Container);

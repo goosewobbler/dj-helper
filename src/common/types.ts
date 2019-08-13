@@ -1,3 +1,6 @@
+import { AnyAction } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
+
 enum ModuleType {
   View,
   ViewCSS,
@@ -179,6 +182,8 @@ interface AppStatus {
   updating: boolean;
 }
 
+type Dispatch = ThunkDispatch<AppState, undefined, AnyAction>;
+
 export {
   LooseObject,
   Component,
@@ -194,4 +199,5 @@ export {
   Service,
   AppStatus,
   AppState,
+  Dispatch,
 };

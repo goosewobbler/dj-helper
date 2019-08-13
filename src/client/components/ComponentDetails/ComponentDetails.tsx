@@ -18,7 +18,7 @@ interface ComponentDetailsProps {
   handlers: ComponentHandlers;
 }
 
-const renderDetailsSectionEnd = () => (
+const renderDetailsSectionEnd = (): React.ReactElement => (
   <div className="dependencies-heading">
     <h4>Wants</h4>
     <h4>Bundled</h4>
@@ -26,30 +26,30 @@ const renderDetailsSectionEnd = () => (
   </div>
 );
 
-const orderDependencies = (dependencies: ComponentDependency[]) =>
-  (dependencies || []).sort((a, b) => a.displayName.localeCompare(b.displayName));
+const orderDependencies = (dependencies: ComponentDependency[]): ComponentDependency[] =>
+  (dependencies || []).sort((a, b): number => a.displayName.localeCompare(b.displayName));
 
-const renderDependencyGraph = (handlers: ComponentHandlers) => {
+const renderDependencyGraph = (handlers: ComponentHandlers, componentName: string): React.ReactElement => {
   return (
     <Graph
       onSelect={handlers.onSelectComponent}
       down
-      url={`http://localhost:3333/api/component/${props.component.name}/dependency-graph`}
+      url={`http://localhost:3333/api/component/${componentName}/dependency-graph`}
     />
   );
 };
 
-const renderDependendantGraph = (handlers: ComponentHandlers) => {
+const renderDependendantGraph = (handlers: ComponentHandlers, componentName: string): React.ReactElement => {
   return (
     <Graph
       onSelect={handlers.onSelectComponent}
       down={false}
-      url={`http://localhost:3333/api/component/${props.component.name}/dependant-graph`}
+      url={`http://localhost:3333/api/component/${componentName}/dependant-graph`}
     />
   );
 };
 
-const buildPipelineLink = (rendererType: string) => (env: string) => {
+const buildPipelineLink = (rendererType: string) => (env: string): string => {
   const jobPrefix = rendererType === '10' ? 'modern-' : '';
   return `https://ci.user.morph.int.tools.bbc.co.uk/job/morph-asset-${jobPrefix}promote-${env}/`;
 };
@@ -65,13 +65,13 @@ const renderPipelineLinks = (component: ComponentData): React.ReactElement => {
   );
 };
 
-const renderPlaceholder = () => (
+const renderPlaceholder = (): React.ReactElement => (
   <div className="placeholder">
     <p>No component selected</p>
   </div>
 );
 
-const ComponentDetails = ({ component, editors, handlers }: ComponentDetailsProps) => {
+const ComponentDetails = ({ component, editors, handlers }: ComponentDetailsProps): React.ReactElement => {
   if (!component) {
     return renderPlaceholder();
   }
@@ -91,7 +91,7 @@ const ComponentDetails = ({ component, editors, handlers }: ComponentDetailsProp
             <ComponentVersions />
           </ComponentDetailsSection>
           {hasDependencies && (
-            <ComponentDetailsSection label="Dependencies" grow={1} end={renderDetailsSectionEnd()}>
+            <ComponentDetailsSection label="Dependencies" end={renderDetailsSectionEnd()}>
               <ul>
                 {orderDependencies(dependencies).map((dependency: any) => (
                   <ComponentDependencyListItem dependency={dependency} />
@@ -101,8 +101,8 @@ const ComponentDetails = ({ component, editors, handlers }: ComponentDetailsProp
           )}
         </div>
       </ComponentContextProvider>
-      {renderDependencyGraph(handlers)}
-      {renderDependendantGraph(handlers)}
+      {renderDependencyGraph(handlers, displayName)}
+      {renderDependendantGraph(handlers, displayName)}
     </Tabs>
   );
 };

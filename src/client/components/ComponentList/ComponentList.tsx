@@ -29,19 +29,6 @@ class ComponentList extends React.PureComponent<ComponentListProps> {
     this.renderListItem = this.renderListItem.bind(this);
   }
 
-  public render() {
-    const { components, selectedComponent } = this.props;
-    const selectedIndex = components.findIndex(component => component.name === selectedComponent);
-    return (
-      <ScrollList
-        length={components.length}
-        selectedID={selectedComponent}
-        selectedIndex={selectedIndex}
-        renderListItem={this.renderListItem}
-      />
-    );
-  }
-
   private renderListItem(index: number, key: string) {
     const {
       components,
@@ -67,6 +54,19 @@ class ComponentList extends React.PureComponent<ComponentListProps> {
         onFavourite={onFavouriteComponent}
         onStart={onStartComponent}
         onStop={onStopComponent}
+      />
+    );
+  }
+
+  public render() {
+    const { components, selectedComponent } = this.props;
+    const selectedIndex = components.findIndex(component => component.name === selectedComponent);
+    return (
+      <ScrollList
+        length={components.length}
+        selectedID={selectedComponent}
+        selectedIndex={selectedIndex}
+        renderListItem={this.renderListItem}
       />
     );
   }

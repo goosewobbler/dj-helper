@@ -14,7 +14,7 @@ import {
 } from '../../actions/components';
 import ComponentDetails from './ComponentDetails';
 
-import { ComponentData, AppState } from '../../../common/types';
+import { ComponentData, AppState, Dispatch } from '../../../common/types';
 
 const getSelectedComponent = (state: AppState): ComponentData => {
   let found = null;
@@ -33,7 +33,7 @@ const mapStateToProps = (state: AppState) => ({
   editors: state.ui.editors,
 });
 
-const mapDispatchToProps = (dispatch: any) => ({
+const mapDispatchToProps = (dispatch: Dispatch) => ({
   handlers: {
     onBuild: (name: string) => dispatch(buildComponent(name)),
     onBumpComponent: (name: string, type: string) => dispatch(bumpComponent(name, type)),

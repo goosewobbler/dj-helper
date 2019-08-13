@@ -33,7 +33,8 @@ const findOrderedSearchResults = (items: any[], searchValue: string) => {
     assign(item, {
       highlighted: item.matches.map((match: any, index: number) => {
         if (match.matched) {
-          return <mark key={`match-${index}`}>{match.matched.replace(/ /g, '-')}</mark>;
+          const key = `match-${index}`;
+          return <mark key={key}>{match.matched.replace(/ /g, '-')}</mark>;
         }
 
         return match.replace(/ /g, '-');

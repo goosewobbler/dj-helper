@@ -10,7 +10,7 @@ const Dialog = ({
 }: {
   children?: React.ReactElement;
   title: string;
-  onClose(): () => void;
+  onClose(): void;
 }): React.ReactElement => (
   <div className="dialog">
     <div className="box">

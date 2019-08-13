@@ -105,7 +105,7 @@ class ComponentListItem extends React.PureComponent<ComponentListItemProps> {
 
   private handleStop: () => void;
 
-  constructor(props: ComponentListItemProps) {
+  public constructor(props: ComponentListItemProps) {
     super(props);
     const { name, onClick, onStart, onStop } = this.props;
     this.handleClick = () => onClick(name);

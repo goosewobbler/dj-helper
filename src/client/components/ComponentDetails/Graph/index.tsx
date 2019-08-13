@@ -24,7 +24,7 @@ const convertData = (data: GraphData) => {
 };
 
 class Graph extends React.PureComponent<GraphProps, GraphState> {
-  constructor(props: GraphProps) {
+  public constructor(props: GraphProps) {
     super(props);
 
     this.state = {

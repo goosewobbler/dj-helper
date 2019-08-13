@@ -23,7 +23,7 @@ interface ComponentListItemData {
 }
 
 class ComponentList extends React.PureComponent<ComponentListProps> {
-  constructor(props: ComponentListProps) {
+  public constructor(props: ComponentListProps) {
     super(props);
 
     this.renderListItem = this.renderListItem.bind(this);

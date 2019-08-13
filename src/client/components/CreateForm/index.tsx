@@ -68,7 +68,7 @@ class CreateForm extends React.Component<CreateFormProps, CreateFormState> {
 
   private type: string;
 
-  constructor(props: CreateFormProps) {
+  public constructor(props: CreateFormProps) {
     super(props);
 
     this.type = 'viewcss';

@@ -26,7 +26,7 @@ interface ComponentListFilterState {
 }
 
 class ComponentListFilter extends React.Component<ComponentListFilterProps, ComponentListFilterState> {
-  constructor(props: ComponentListFilterProps) {
+  public constructor(props: ComponentListFilterProps) {
     super(props);
     this.state = {
       filter: '',

@@ -11,7 +11,7 @@ interface TabsState {
 }
 
 class Tabs extends React.Component<TabsProps, TabsState> {
-  constructor(props: TabsProps) {
+  public constructor(props: TabsProps) {
     super(props);
 
     this.state = {

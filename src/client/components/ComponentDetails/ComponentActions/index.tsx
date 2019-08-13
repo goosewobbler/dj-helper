@@ -16,7 +16,7 @@ interface ComponentActionsProps {
   onOpenInCode(name: string): any;
 }
 
-const renderStateLabel = (state: ComponentState) => {
+const renderStateLabel = (state: ComponentState): string => {
   switch (state) {
     case ComponentState.Stopped:
       return 'NOT RUNNING';
@@ -33,7 +33,7 @@ const renderStateLabel = (state: ComponentState) => {
   }
 };
 
-const renderRendererLabel = (props: ComponentActionsProps) => {
+const renderRendererLabel = (props: ComponentActionsProps): React.ReactElement => {
   return (
     <p className="renderer-label">
       Node version:
@@ -42,7 +42,7 @@ const renderRendererLabel = (props: ComponentActionsProps) => {
   );
 };
 
-const renderUseCacheButton = (props: ComponentActionsProps) => {
+const renderUseCacheButton = (props: ComponentActionsProps): React.ReactElement => {
   if (props.component.state === ComponentState.Stopped || props.component.state === ComponentState.Running) {
     return (
       <div className="wrapper">
@@ -57,7 +57,7 @@ const renderUseCacheButton = (props: ComponentActionsProps) => {
   return null;
 };
 
-const renderBuildButton = (props: ComponentActionsProps) => {
+const renderBuildButton = (props: ComponentActionsProps): React.ReactElement => {
   if (props.component.state === ComponentState.Running) {
     return (
       <div className="wrapper">
@@ -68,7 +68,7 @@ const renderBuildButton = (props: ComponentActionsProps) => {
   return null;
 };
 
-const renderInstallButton = (props: ComponentActionsProps) => {
+const renderInstallButton = (props: ComponentActionsProps): React.ReactElement => {
   if (props.component.state === ComponentState.Stopped || props.component.state === ComponentState.Running) {
     return (
       <div className="wrapper">
@@ -83,7 +83,7 @@ const renderInstallButton = (props: ComponentActionsProps) => {
   return null;
 };
 
-const renderCloneButton = (props: ComponentActionsProps) => {
+const renderCloneButton = (props: ComponentActionsProps): React.ReactElement => {
   return (
     <div className="wrapper">
       <LabelButton className="clone-button" label="Clone" onClick={() => props.onClone(props.component.name)} />
@@ -91,44 +91,47 @@ const renderCloneButton = (props: ComponentActionsProps) => {
   );
 };
 
-const ComponentActions = (props: ComponentActionsProps) => (
-  <div>
-    <div className="header">
-      <h2>{props.component.displayName}</h2>
-      {renderRendererLabel(props)}
-      <p className="state-label">{renderStateLabel(props.component.state)}</p>
-    </div>
-    <div className="actions">
-      {renderUseCacheButton(props)}
-      {renderBuildButton(props)}
-      {renderInstallButton(props)}
-      {renderCloneButton(props)}
-      {props.editors.indexOf('code') !== -1 ? (
-        <div className="wrapper" key="vs-code-button">
-          <LabelButton
-            className="vs-code-button"
-            label="VS Code"
-            image={<VSCodeIcon />}
-            onClick={() => props.onOpenInCode(props.component.name)}
+const ComponentActions = (props: ComponentActionsProps): React.ReactElement => {
+  const {
+    editors,
+    component: { displayName, state, name },
+    onOpenInCode,
+  } = props;
+  return (
+    <div>
+      <div className="header">
+        <h2>{displayName}</h2>
+        {renderRendererLabel(props)}
+        <p className="state-label">{renderStateLabel(state)}</p>
+      </div>
+      <div className="actions">
+        {renderUseCacheButton(props)}
+        {renderBuildButton(props)}
+        {renderInstallButton(props)}
+        {renderCloneButton(props)}
+        {editors.indexOf('code') !== -1 ? (
+          <div className="wrapper" key="vs-code-button">
+            <LabelButton
+              className="vs-code-button"
+              label="VS Code"
+              image={<VSCodeIcon />}
+              onClick={() => onOpenInCode(name)}
+            />
+          </div>
+        ) : null}
+        <div className="wrapper">
+          <ExternalLink
+            label="Dependency Graph"
+            link={`https://morph-dependency-grapher.test.api.bbc.co.uk/env/test/modules/${displayName}`}
+            black
           />
         </div>
-      ) : null}
-      <div className="wrapper">
-        <ExternalLink
-          label="Dependency Graph"
-          link={`https://morph-dependency-grapher.test.api.bbc.co.uk/env/test/modules/${props.component.displayName}`}
-          black
-        />
-      </div>
-      <div className="wrapper">
-        <ExternalLink
-          label="GitHub"
-          link={`https://github.com/bbc/morph-modules/tree/master/${props.component.displayName}`}
-          black
-        />
+        <div className="wrapper">
+          <ExternalLink label="GitHub" link={`https://github.com/bbc/morph-modules/tree/master/${displayName}`} black />
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default ComponentActions;

@@ -1,8 +1,18 @@
 import * as React from 'react';
-
+import classNames from 'classnames';
 import LoadingIcon from '../../../LoadingIcon';
 
-const VersionBox = ({ children, version }: { children?: React.ReactElement; version: string }): React.ReactElement => {
+const VersionBox = ({
+  children,
+  version,
+  outdated,
+  fontSize,
+}: {
+  children?: React.ReactElement;
+  version: string;
+  outdated?: boolean;
+  fontSize?: string;
+}): React.ReactElement => {
   let contents: React.ReactElement | string = children;
 
   if (version === null) {
@@ -15,7 +25,12 @@ const VersionBox = ({ children, version }: { children?: React.ReactElement; vers
     contents = 'N/A';
   }
 
-  return <div className="container">{contents}</div>;
+  const classes = ['container'];
+  if (outdated) {
+    classes.push('outdated');
+  }
+
+  return <div className={classNames(classes)}>{contents}</div>;
 };
 
 export default VersionBox;

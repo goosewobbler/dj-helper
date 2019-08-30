@@ -1,5 +1,6 @@
 import { AnyAction } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
+import { IncomingHttpHeaders } from 'http';
 
 enum ModuleType {
   View,
@@ -81,7 +82,7 @@ interface Component {
       [Key: string]: string;
     },
     history: boolean,
-  ): Promise<{ statusCode: number; body: string; headers: { [Key: string]: string } }>;
+  ): Promise<Response>;
 }
 
 interface ComponentsData {
@@ -120,7 +121,7 @@ type ComponentMatch = string | { matched: string };
 interface ComponentData {
   name: string;
   displayName: string;
-  highlighted?: boolean;
+  highlighted?: React.ReactElement[];
   state: ComponentState;
   favourite: boolean;
   history?: StateValue;
@@ -166,7 +167,7 @@ interface GraphData {
 
 interface Response {
   body: string;
-  headers: { [Key: string]: string };
+  headers: IncomingHttpHeaders;
   statusCode: number;
 }
 

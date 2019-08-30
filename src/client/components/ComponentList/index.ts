@@ -2,11 +2,9 @@ import { assign } from 'lodash/fp';
 import { connect } from 'react-redux';
 import { AnyAction } from 'redux';
 import { createSelector } from 'reselect';
-
 import { favouriteComponent, startComponent, stopComponent, updateAndSelectComponent } from '../../actions/components';
-
 import findOrderedSearchResults from '../../helpers/resultsHelper';
-import { ComponentList, ComponentListItemData } from './ComponentList';
+import { ComponentList } from './ComponentList';
 import { ComponentData, AppState, Dispatch } from '../../../common/types';
 
 const getSortedComponents = (components: ComponentData[]): ComponentData[] => {
@@ -47,16 +45,18 @@ const getComponents = (components: ComponentData[], filter: string): ComponentDa
 const getUrl = (component: ComponentData): string =>
   `${component.url}${Array.isArray(component.history) && component.history.length > 0 ? component.history[0] : ''}`;
 
-const getListItemComponents = (components: ComponentData[], filter: string): ComponentListItemData[] => {
+const getListItemComponents = (components: ComponentData[], filter: string): ComponentData[] => {
   const componentsList: ComponentData[] = getComponents(components, filter);
   return componentsList.map(
-    (componentListItem): ComponentListItemData => ({
+    (componentListItem): ComponentData => ({
       displayName: componentListItem.displayName,
       favourite: componentListItem.favourite,
       highlighted: componentListItem.highlighted,
       name: componentListItem.name,
       state: componentListItem.state,
       url: getUrl(componentListItem),
+      useCache: componentListItem.useCache,
+      rendererType: componentListItem.rendererType,
     }),
   );
 };
@@ -70,12 +70,19 @@ const filteredComponentsSelector = createSelector(
   getListItemComponents,
 );
 
-const mapStateToProps = (state: AppState): {} => ({
+const mapStateToProps = (state: AppState): { components: ComponentData[]; selectedComponent: string } => ({
   components: filteredComponentsSelector(state),
   selectedComponent: state.ui.selectedComponent,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch): {} => ({
+const mapDispatchToProps = (
+  dispatch: Dispatch,
+): {
+  onFavouriteComponent: Function;
+  onSelectComponent: Function;
+  onStartComponent: Function;
+  onStopComponent: Function;
+} => ({
   onFavouriteComponent: (name: string, favourite: boolean): void => dispatch(favouriteComponent(name, favourite)),
   onSelectComponent: (name: string): AnyAction => dispatch(updateAndSelectComponent(name)),
   onStartComponent: (name: string): void => dispatch(startComponent(name)),

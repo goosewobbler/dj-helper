@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 interface TabsProps {
-  children?: React.ReactElement;
+  children?: React.ReactElement[];
   headings: string[];
   renderButtons(): React.ReactElement;
 }

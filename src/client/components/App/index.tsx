@@ -5,7 +5,9 @@ import { createComponent } from '../../actions/components';
 import App from './App';
 import { AppState, Dispatch } from '../../../common/types';
 
-const mapDispatchToProps = (dispatch: Dispatch): {} => ({
+const mapDispatchToProps = (
+  dispatch: Dispatch,
+): { hideDialog: Function; showDialog: Function; createComponent: Function; cloneComponent: Function } => ({
   hideDialog: (name: string): void => {
     dispatch(hideDialog(name));
   },
@@ -20,7 +22,9 @@ const mapDispatchToProps = (dispatch: Dispatch): {} => ({
   },
 });
 
-const mapStateToProps = (state: AppState): {} => ({
+const mapStateToProps = (
+  state: AppState,
+): { outOfDate: boolean; componentToClone: string; showCreateDialog: boolean; showCloneDialog: boolean } => ({
   outOfDate: state.ui.outOfDate,
   componentToClone: state.ui.componentToClone,
   showCreateDialog: state.ui.showDialog === 'create',

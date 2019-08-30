@@ -1,25 +1,15 @@
 import * as React from 'react';
-
 import ScrollList from './ScrollList';
 import { ComponentListItem } from './ComponentListItem';
-import { ComponentState } from '../../../common/types';
+import { ComponentData } from '../../../common/types';
 
 interface ComponentListProps {
-  components: ComponentListItemData[];
+  components: ComponentData[];
   selectedComponent?: string;
   onSelectComponent(name: string): void;
   onFavouriteComponent(name: string, favourite: boolean): () => void;
   onStartComponent(name: string): () => void;
   onStopComponent(name: string): () => void;
-}
-
-interface ComponentListItemData {
-  name: string;
-  displayName: string;
-  highlighted?: boolean;
-  url: string;
-  favourite: boolean;
-  state: ComponentState;
 }
 
 class ComponentList extends React.PureComponent<ComponentListProps> {
@@ -67,4 +57,4 @@ class ComponentList extends React.PureComponent<ComponentListProps> {
   }
 }
 
-export { ComponentList, ComponentListItemData };
+export { ComponentList };

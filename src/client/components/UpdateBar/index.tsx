@@ -4,12 +4,12 @@ import UpdateBar from './UpdateBar';
 import { update } from '../../actions/app';
 import { AppState, Dispatch } from '../../../common/types';
 
-const mapStateToProps = (state: AppState): {} => ({
+const mapStateToProps = (state: AppState): { updating: boolean; updated: boolean } => ({
   updated: state.ui.updated,
   updating: state.ui.updating,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch): {} => ({
+const mapDispatchToProps = (dispatch: Dispatch): { onUpdate: Function } => ({
   onUpdate: (): void => dispatch(update()),
 });
 

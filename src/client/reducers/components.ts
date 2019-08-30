@@ -1,4 +1,4 @@
-import { ComponentState, ComponentData } from '../../common/types';
+import { ComponentState, ComponentData, AppState } from '../../common/types';
 
 interface Action {
   type: string;
@@ -12,13 +12,20 @@ interface Action {
   dependency?: string;
 }
 
-const reducer = (
-  state: ComponentData[] = [],
-  action: Action,
-): (ComponentData | { name: string; displayName: string })[] => {
+const reducer = (state: ComponentData[] = [], action: Action): ComponentData[] => {
   switch (action.type) {
     case 'CREATE_COMPONENT': {
-      return [...state, { name: action.name, displayName: action.displayName }];
+      return [
+        ...state,
+        {
+          name: action.name,
+          displayName: action.displayName,
+          state: action.state,
+          favourite: false,
+          useCache: false,
+          rendererType: 'node:10',
+        },
+      ];
     }
     case 'RECEIVE_COMPONENTS': {
       return action.components;

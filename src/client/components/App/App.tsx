@@ -14,7 +14,6 @@ interface AppProps {
   showCreateDialog: boolean;
   showCloneDialog: boolean;
   componentToClone: string;
-  onCreate(): void;
   showDialog(name: string): void;
   hideDialog(name: string): void;
   cloneComponent(name: string, description: string, sourceComponent: string): void;

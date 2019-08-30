@@ -21,8 +21,8 @@ const isLinkable = ({ state }: ComponentData): boolean => state === ComponentSta
 const renderLinkButton = (
   dependencyName: string,
   component: ComponentData,
-  onUnlink: Function,
-  onLink: Function,
+  onUnlink: () => void,
+  onLink: () => void,
 ): React.ReactElement => {
   if (isLinking(dependencyName, component)) {
     return (
@@ -57,7 +57,7 @@ const renderLinkButton = (
 };
 
 const renderVersionBox = (version: string, outdated: boolean): React.ReactElement => (
-  <VersionBox version={version} bad={outdated} fontSize="14px" height="24px" width="60px" padding="0 4px" />
+  <VersionBox version={version} outdated={outdated} />
 );
 
 const ComponentDependencyListItem = ({ dependency }: ComponentDependencyProps): React.ReactElement => {

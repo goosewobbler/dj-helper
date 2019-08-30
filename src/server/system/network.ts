@@ -1,5 +1,6 @@
 import request from 'request';
 import { Response } from '../../common/types';
+import { IncomingHttpHeaders } from 'http';
 
 interface NetworkSystem {
   get(url: string): Promise<Response>;
@@ -9,9 +10,9 @@ const get = (url: string): Promise<Response> =>
   new Promise(
     (resolve, reject): request.Request =>
       request.get(
-        url,
+        { url },
         (
-          error: string,
+          error: string[],
           response: { headers: Response['headers']; statusCode: Response['statusCode'] },
           body: Response['body'],
         ): void => {

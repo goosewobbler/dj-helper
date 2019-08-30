@@ -88,7 +88,7 @@ const parseVersions = ({
   int: string;
   test: string;
   live: string;
-}): {} => ({
+}): { local: string; int: string; test: string; live: string } => ({
   local: valid(local),
   int: int === '' ? int : valid(int),
   test: test === '' ? test : valid(test),
@@ -99,7 +99,7 @@ const ComponentVersions = (): React.ReactElement => {
   const componentContext: ComponentContext = React.useContext(context);
   const { onBumpComponent, onPromoteComponent } = componentContext.handlers;
   const { versions, promoting, name, promotionFailure } = componentContext.component;
-  const parsedVersions: { local: string; int: string; test: string; live: string } = parseVersions(versions);
+  const parsedVersions = parseVersions(versions);
   const { local, int, test, live } = parsedVersions;
 
   const buildInProgress = {

@@ -7,7 +7,7 @@ import { Dispatch } from '../../../common/types';
 
 const mapStateToProps = (): {} => ({});
 
-const mapDispatchToProps = (dispatch: Dispatch): {} => ({
+const mapDispatchToProps = (dispatch: Dispatch): { onInput: Function } => ({
   onInput: (filter: string): AnyAction => dispatch(filterComponents(filter)),
 });
 

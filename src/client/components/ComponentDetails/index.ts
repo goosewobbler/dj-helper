@@ -28,7 +28,7 @@ const getSelectedComponent = (state: AppState): ComponentData => {
   return found;
 };
 
-const mapStateToProps = (state: AppState): {} => ({
+const mapStateToProps = (state: AppState): { component: ComponentData; editors: string[] } => ({
   component: getSelectedComponent(state),
   editors: state.ui.editors,
 });

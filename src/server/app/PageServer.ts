@@ -1,4 +1,4 @@
-import * as express from 'express';
+import express from 'express';
 import * as url from 'url';
 import { Service } from '../../common/types';
 
@@ -57,7 +57,7 @@ const createPageServer = (service: Service, componentName: string): express.Expr
 
         const { body, headers } = await service.request(componentName, props, history);
         const pageStatusCode = Number(headers['x-page-status-code']) || 200;
-        const pageLocation = headers['x-page-location'];
+        const pageLocation = headers['x-page-location'] as string;
         if (pageLocation) {
           res.set('Location', pageLocation);
         }

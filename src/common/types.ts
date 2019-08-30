@@ -22,6 +22,8 @@ enum ComponentState {
   Linking,
 }
 
+type StateValue = string[] | string | boolean;
+
 interface AppState {
   components: ComponentData[];
   ui: {
@@ -46,7 +48,7 @@ interface Component {
   getType(): ComponentType;
   getURL(): string;
   getFavourite(): boolean;
-  getHistory(): string[];
+  getHistory(): StateValue;
   getUseCache(): boolean;
   setFavourite(favourite: boolean): Promise<void>;
   setUseCache(useCache: boolean): Promise<void>;
@@ -113,13 +115,15 @@ interface Service {
   unlink(name: string, dependency: string): Promise<void>;
 }
 
+type ComponentMatch = string | { matched: string };
+
 interface ComponentData {
   name: string;
   displayName: string;
   highlighted?: boolean;
   state: ComponentState;
   favourite: boolean;
-  history?: string[];
+  history?: StateValue;
   url?: string;
   type?: ComponentType;
   dependencies?: ComponentDependency[];
@@ -134,6 +138,8 @@ interface ComponentData {
     test: string;
   };
   rendererType: string;
+  alternatives?: string[];
+  matches?: ComponentMatch[];
 }
 
 interface ComponentDependency {
@@ -189,6 +195,7 @@ export {
   Component,
   ComponentData,
   ComponentDependency,
+  ComponentMatch,
   ComponentState,
   ComponentType,
   ComponentsData,
@@ -197,6 +204,7 @@ export {
   Response,
   Package,
   Service,
+  StateValue,
   AppStatus,
   AppState,
   Dispatch,

@@ -9,18 +9,22 @@ import IconButton from './IconButton';
 
 import { ComponentData, ComponentState } from '../../../../common/types';
 
-const createID = (componentName: string) => `component-list-item-${componentName}`;
+const createID = (componentName: string): string => `component-list-item-${componentName}`;
 
 interface ComponentListItemProps {
   component: ComponentData;
   selected: boolean;
-  onClick?(): null;
-  onToggleFavourite?(): null;
-  onStart?(): null;
-  onStop?(): null;
   name: string;
-  onFavourite?(name: string): null;
+  highlighted: string;
+  displayName: string;
+  url: string;
+  favourite: string;
   state: ComponentState;
+  onFavourite?(name: string, favourite: boolean): () => void;
+  onClick?(name: string): void;
+  onToggleFavourite?(): void;
+  onStart?(name: string): () => void;
+  onStop?(name: string): () => void;
 }
 
 const renderFavouriteButton = ({
@@ -30,19 +34,19 @@ const renderFavouriteButton = ({
 }: ComponentListItemProps): React.ReactElement => {
   if (favourite) {
     return (
-      <IconButton className="unfavourite-button" label="Unfavourite" onClick={() => onFavourite(name, false)}>
+      <IconButton className="unfavourite-button" label="Unfavourite" onClick={(): Function => onFavourite(name, false)}>
         <StarIcon starred />
       </IconButton>
     );
   }
   return (
-    <IconButton className="favourite-button" label="Favourite" onClick={() => onFavourite(name, true)}>
+    <IconButton className="favourite-button" label="Favourite" onClick={(): Function => onFavourite(name, true)}>
       <StarIcon starred={false} />
     </IconButton>
   );
 };
 
-const renderLaunchButton = (component: ComponentData) => {
+const renderLaunchButton = (component: ComponentData): React.ReactElement => {
   const link = `${component.url}${
     Array.isArray(component.history) && component.history.length > 0 ? component.history[0] : ''
   }`;
@@ -55,7 +59,11 @@ const renderLaunchButton = (component: ComponentData) => {
   return null;
 };
 
-const renderStartStopButton = ({ state }: ComponentListItemProps, handleStart: () => void, handleStop: () => void) => {
+const renderStartStopButton = (
+  { state }: ComponentListItemProps,
+  handleStart: () => void,
+  handleStop: () => void,
+): React.ReactElement => {
   switch (state) {
     case ComponentState.Stopped:
       return (
@@ -93,6 +101,8 @@ const renderStartStopButton = ({ state }: ComponentListItemProps, handleStart: (
           <PauseIcon />
         </IconButton>
       );
+    default:
+      return null;
   }
 };
 
@@ -108,12 +118,12 @@ class ComponentListItem extends React.PureComponent<ComponentListItemProps> {
   public constructor(props: ComponentListItemProps) {
     super(props);
     const { name, onClick, onStart, onStop } = this.props;
-    this.handleClick = () => onClick(name);
-    this.handleStart = () => onStart(name);
-    this.handleStop = () => onStop(name);
+    this.handleClick = (): void => onClick(name);
+    this.handleStart = (): Function => onStart(name);
+    this.handleStop = (): Function => onStop(name);
   }
 
-  public shouldComponentUpdate(nextProps: ComponentListItemProps, nextState: {}, context: any) {
+  public shouldComponentUpdate(nextProps: ComponentListItemProps): boolean {
     const { name, displayName, highlighted, url, favourite, state, selected } = this.props;
     if (
       name !== nextProps.name ||
@@ -129,9 +139,9 @@ class ComponentListItem extends React.PureComponent<ComponentListItemProps> {
     return false;
   }
 
-  public render() {
-    const { highlighted, displayName, selected, name, component } = this.props;
-    const name: any = highlighted && highlighted.length > 0 ? highlighted : displayName;
+  public render(): React.ReactElement {
+    const { highlighted, displayName, selected, component } = this.props;
+    const name: string = highlighted && highlighted.length > 0 ? highlighted : displayName;
 
     return (
       <div role="button" id={createID(name)} highlighted={selected} onClick={this.handleClick}>

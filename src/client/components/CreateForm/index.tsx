@@ -14,7 +14,7 @@ const SelectInput = ({
   className?: string;
   label: string;
   options: { value: string; label: string }[];
-  onChange(event: any): void;
+  onChange(event: React.ChangeEvent): void;
 }): React.ReactElement => (
   <div>
     <label htmlFor={className}>
@@ -40,8 +40,8 @@ const TextInput = ({
 }: {
   className?: string;
   labelText: string;
-  onChange(event: any): void;
-  onKeyDown(event: any): void;
+  onChange(event: React.ChangeEvent): void;
+  onKeyDown(event: React.KeyboardEvent): void;
 }): React.ReactElement => (
   <div>
     <label htmlFor={className}>
@@ -89,17 +89,17 @@ class CreateForm extends React.Component<CreateFormProps, CreateFormState> {
     });
   }
 
-  private handleNameChange(event: any): void {
+  private handleNameChange(event: React.BaseSyntheticEvent): void {
     this.name = event.target.value;
     this.updateValid();
   }
 
-  private handleDescriptionChange(event: any): void {
+  private handleDescriptionChange(event: React.BaseSyntheticEvent): void {
     this.description = event.target.value;
     this.updateValid();
   }
 
-  private handleTypeChange(event: any): void {
+  private handleTypeChange(event: React.BaseSyntheticEvent): void {
     this.type = event.target.value;
     this.updateValid();
   }

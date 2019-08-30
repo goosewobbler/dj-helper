@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import UpdateBar from './UpdateBar';
 
-import { update } from '../../actions/components';
+import { update } from '../../actions/app';
 import { AppState, Dispatch } from '../../../common/types';
 
 const mapStateToProps = (state: AppState): {} => ({

@@ -1,17 +1,16 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import * as io from 'socket.io-client';
+import io from 'socket.io-client';
+import { fetchVersions, updateAndSelectComponent } from './client/actions/components';
 import {
-  fetchVersions,
   receiveComponent,
   receiveComponents,
   receiveEditors,
-  updateAndSelectComponent,
   updateAvailable,
   updated,
   updating,
-} from './client/actions/components';
+} from './client/actions/app';
 import App from './client/components/App';
 import createStore from './client/store';
 import { logError } from './server/helpers/console';

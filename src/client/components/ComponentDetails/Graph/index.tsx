@@ -8,15 +8,15 @@ import { logError } from '../../../../server/helpers/console';
 interface GraphProps {
   url: string;
   down: boolean;
-  onSelect(name: string): any;
+  onSelect(name: string): void;
 }
 
 interface GraphState {
   data: GraphData;
 }
 
-const convertData = (data: GraphData) => {
-  const newNodes = data.nodes.map(node => ({ id: node.id, label: node.name.replace(/^bbc-morph-/, '') }));
+const convertData = (data: GraphData): {} => {
+  const newNodes = data.nodes.map((node): {} => ({ id: node.id, label: node.name.replace(/^bbc-morph-/, '') }));
   return {
     edges: data.edges,
     nodes: newNodes,
@@ -36,7 +36,7 @@ class Graph extends React.PureComponent<GraphProps, GraphState> {
     this.update();
   }
 
-  public componentWillReceiveProps(nextProps: GraphProps) {
+  public componentWillReceiveProps(nextProps: GraphProps): void {
     const { url } = this.props;
     if (nextProps.url !== url) {
       this.setState({ data: null });
@@ -106,7 +106,7 @@ class Graph extends React.PureComponent<GraphProps, GraphState> {
     };
 
     const events = {
-      doubleClick: (event: any): void => {
+      doubleClick: (event: { nodes: number[] }): void => {
         const {
           nodes: [id],
         } = event;
@@ -119,12 +119,10 @@ class Graph extends React.PureComponent<GraphProps, GraphState> {
 
     return (
       <GraphVis
-        ref={(g: any): void => {
-          if (g) {
-            g.Network.focus(currentNode, {
-              scale: 1,
-            });
-          }
+        getNetwork={(network: { focus: Function }): void => {
+          network.focus(currentNode, {
+            scale: 1,
+          });
         }}
         graph={convertData(data)}
         events={events}

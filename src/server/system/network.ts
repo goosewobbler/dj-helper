@@ -1,8 +1,8 @@
-import * as request from 'request';
+import request from 'request';
 import { Response } from '../../common/types';
 
 interface NetworkSystem {
-  get(url: string): Promise<unknown>;
+  get(url: string): Promise<Response>;
 }
 
 const get = (url: string): Promise<Response> =>

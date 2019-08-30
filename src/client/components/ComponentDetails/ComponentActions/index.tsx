@@ -5,21 +5,16 @@ import VSCodeIcon from './VSCodeIcon';
 import LabelButton from '../../LabelButton';
 
 import { ComponentState, ComponentData } from '../../../../common/types';
+import { ComponentHandlers } from '../../../contexts/componentContext';
 
 interface ComponentActionsProps {
   component: ComponentData;
   editors: string[];
-  onClone(name: string): any;
-  onSetUseCache(name: string, value: boolean): any;
-  onBuild(name: string): any;
-  onInstall(name: string): any;
-  onOpenInCode(name: string): any;
+  handlers: ComponentHandlers;
 }
 
 const renderStateLabel = (state: ComponentState): string => {
   switch (state) {
-    case ComponentState.Stopped:
-      return 'NOT RUNNING';
     case ComponentState.Building:
       return 'BUILDING';
     case ComponentState.Installing:
@@ -30,92 +25,70 @@ const renderStateLabel = (state: ComponentState): string => {
       return 'STARTING';
     case ComponentState.Running:
       return 'RUNNING';
+    default:
+      return 'NOT RUNNING';
   }
 };
 
-const renderRendererLabel = (props: ComponentActionsProps): React.ReactElement => {
-  return (
-    <p className="renderer-label">
-      Node version:
-      {props.component.rendererType}
-    </p>
-  );
-};
+const renderUseCacheButton = (onClick: () => void, className: string): React.ReactElement => (
+  <div className="wrapper">
+    <LabelButton className={className} label="Cache" onClick={onClick} />
+  </div>
+);
 
-const renderUseCacheButton = (props: ComponentActionsProps): React.ReactElement => {
-  if (props.component.state === ComponentState.Stopped || props.component.state === ComponentState.Running) {
-    return (
-      <div className="wrapper">
-        <LabelButton
-          className={props.component.useCache ? 'no-use-cache-button' : 'use-cache-button'}
-          label="Cache"
-          onClick={() => props.onSetUseCache(props.component.name, !props.component.useCache)}
-        />
-      </div>
-    );
-  }
-  return null;
-};
+const renderBuildButton = (onClick: () => void): React.ReactElement => (
+  <div className="wrapper">
+    <LabelButton className="build-button" label="Build" onClick={onClick} />
+  </div>
+);
 
-const renderBuildButton = (props: ComponentActionsProps): React.ReactElement => {
-  if (props.component.state === ComponentState.Running) {
-    return (
-      <div className="wrapper">
-        <LabelButton className="build-button" label="Build" onClick={() => props.onBuild(props.component.name)} />
-      </div>
-    );
-  }
-  return null;
-};
+const renderInstallButton = (onClick: () => void): React.ReactElement => (
+  <div className="wrapper">
+    <LabelButton className="install-button" label="Reinstall" onClick={onClick} />
+  </div>
+);
 
-const renderInstallButton = (props: ComponentActionsProps): React.ReactElement => {
-  if (props.component.state === ComponentState.Stopped || props.component.state === ComponentState.Running) {
-    return (
-      <div className="wrapper">
-        <LabelButton
-          className="install-button"
-          label="Reinstall"
-          onClick={() => props.onInstall(props.component.name)}
-        />
-      </div>
-    );
-  }
-  return null;
-};
-
-const renderCloneButton = (props: ComponentActionsProps): React.ReactElement => {
-  return (
-    <div className="wrapper">
-      <LabelButton className="clone-button" label="Clone" onClick={() => props.onClone(props.component.name)} />
-    </div>
-  );
-};
+const renderCloneButton = (onClick: () => void): React.ReactElement => (
+  <div className="wrapper">
+    <LabelButton className="clone-button" label="Clone" onClick={onClick} />
+  </div>
+);
 
 const ComponentActions = (props: ComponentActionsProps): React.ReactElement => {
   const {
     editors,
-    component: { displayName, state, name },
-    onOpenInCode,
+    component: { displayName, state, name, useCache, rendererType },
+    handlers: { onOpenInCode, onClone, onInstall, onBuild, onSetUseCache },
   } = props;
+  const shouldDisplayInstallButton = state === ComponentState.Stopped || state === ComponentState.Running;
+  const shouldDisplayBuildButton = state === ComponentState.Running;
+  const shouldDisplayUseCacheButton = state === ComponentState.Stopped || state === ComponentState.Running;
   return (
     <div>
       <div className="header">
         <h2>{displayName}</h2>
-        {renderRendererLabel(props)}
+        <p className="renderer-label">
+          Node version:
+          {rendererType}
+        </p>
         <p className="state-label">{renderStateLabel(state)}</p>
       </div>
       <div className="actions">
-        {renderUseCacheButton(props)}
-        {renderBuildButton(props)}
-        {renderInstallButton(props)}
-        {renderCloneButton(props)}
+        {shouldDisplayUseCacheButton &&
+          renderUseCacheButton(
+            (): void => onSetUseCache(name, !useCache),
+            useCache ? 'no-use-cache-button' : 'use-cache-button',
+          )}
+        {shouldDisplayBuildButton && renderBuildButton((): void => onBuild(name))}
+        {shouldDisplayInstallButton && renderInstallButton((): void => onInstall(name))}
+        {renderCloneButton((): void => onClone(name))}
         {editors.indexOf('code') !== -1 ? (
           <div className="wrapper" key="vs-code-button">
             <LabelButton
               className="vs-code-button"
               label="VS Code"
               image={<VSCodeIcon />}
-              onClick={() => onOpenInCode(name)}
+              onClick={(): void => onOpenInCode(name)}
             />
           </div>
         ) : null}

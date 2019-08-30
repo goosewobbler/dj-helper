@@ -1,114 +1,85 @@
 import { AnyAction } from 'redux';
-import { ComponentState, ComponentData, Dispatch } from '../../common/types';
+import { ThunkAction } from 'redux-thunk';
+import { showDialog } from './app';
+import { ComponentState, Dispatch, AppState } from '../../common/types';
 
-export const receiveComponents = (components: ComponentData[]): AnyAction => ({
-  components,
-  type: 'RECEIVE_COMPONENTS',
-});
-
-export const receiveComponent = (component: ComponentData): AnyAction => ({
-  component,
-  type: 'RECEIVE_COMPONENT',
-});
-
-export const receiveEditors = (editors: string[]): AnyAction => ({
-  editors,
-  type: 'RECEIVE_EDITORS',
-});
-
-export const selectComponent = (name: string): AnyAction => ({
-  name,
-  type: 'SELECT_COMPONENT',
-});
-
-export const promotingComponent = (name: string, environment: string): AnyAction => ({
-  environment,
-  name,
-  type: 'PROMOTING_COMPONENT',
-});
+/* FETCH VERSIONS */
 
 export const fetchVersions = (name: string): AnyAction => {
-  const action = (() => {
-    return fetch(`http://localhost:3333/api/component/${name}/versions`, { method: 'POST' });
-  }) as any;
+  const action = (): Promise<Response> =>
+    fetch(`http://localhost:3333/api/component/${name}/versions`, { method: 'POST' });
 
   action.type = null;
   return action;
 };
 
-export const updateAndSelectComponent = (name: string, noHistory?: boolean): AnyAction => {
-  const action = ((dispatch: Dispatch) => {
-    if (!noHistory && (window as any).historyEnabled) {
-      window.history.pushState({ name }, null, `/component/${name}`);
-    }
-    dispatch(fetchVersions(name));
-    dispatch(selectComponent(name));
-  }) as any;
+/* START */
 
-  action.type = null;
-  return action;
-};
-
-export const startingComponent = (name: string): AnyAction => ({
-  name,
-  state: ComponentState.Starting,
-  type: 'CHANGE_COMPONENT_STATE',
-});
-
-export const stoppingComponent = (name: string): AnyAction => ({
-  name,
-  state: ComponentState.Stopped,
-  type: 'CHANGE_COMPONENT_STATE',
-});
-
-export const installingComponent = (name: string): AnyAction => ({
-  name,
-  state: ComponentState.Installing,
-  type: 'CHANGE_COMPONENT_STATE',
-});
-
-export const buildingComponent = (name: string): AnyAction => ({
-  name,
-  state: ComponentState.Building,
-  type: 'CHANGE_COMPONENT_STATE',
-});
-
-export const linkingComponent = (name: string, dependency: string): AnyAction => ({
-  dependency,
-  name,
-  type: 'LINKING_COMPONENT',
-});
-
-export const filterComponents = (filter: string): AnyAction => ({
-  filter,
-  type: 'FILTER_COMPONENTS',
-});
-
-export const startComponent = (name: string) => (dispatch: Dispatch): void => {
-  dispatch(startingComponent(name));
+export const startComponent = (name: string): ThunkAction<void, AppState, undefined, AnyAction> => (
+  dispatch: Dispatch,
+): void => {
+  dispatch({
+    name,
+    state: ComponentState.Starting,
+    type: 'CHANGE_COMPONENT_STATE',
+  });
   fetch(`http://localhost:3333/api/component/${name}/start`, { method: 'POST' });
 };
 
-export const stopComponent = (name: string) => (dispatch: Dispatch): void => {
-  dispatch(stoppingComponent(name));
+/* STOP */
+
+export const stopComponent = (name: string): ThunkAction<void, AppState, undefined, AnyAction> => (
+  dispatch: Dispatch,
+): void => {
+  dispatch({
+    name,
+    state: ComponentState.Stopped,
+    type: 'CHANGE_COMPONENT_STATE',
+  });
   fetch(`http://localhost:3333/api/component/${name}/stop`, { method: 'POST' });
 };
 
-export const installComponent = (name: string) => (dispatch: Dispatch): void => {
-  dispatch(installingComponent(name));
+/* INSTALL */
+
+export const installComponent = (name: string): ThunkAction<void, AppState, undefined, AnyAction> => (
+  dispatch: Dispatch,
+): void => {
+  dispatch({
+    name,
+    state: ComponentState.Installing,
+    type: 'CHANGE_COMPONENT_STATE',
+  });
   fetch(`http://localhost:3333/api/component/${name}/install`, { method: 'POST' });
 };
 
-export const buildComponent = (name: string) => (dispatch: Dispatch): void => {
-  dispatch(buildingComponent(name));
+/* BUILD */
+
+export const buildComponent = (name: string): ThunkAction<void, AppState, undefined, AnyAction> => (
+  dispatch: Dispatch,
+): void => {
+  dispatch({
+    name,
+    state: ComponentState.Building,
+    type: 'CHANGE_COMPONENT_STATE',
+  });
   fetch(`http://localhost:3333/api/component/${name}/build`, { method: 'POST' });
 };
 
-export const setUseCacheOnComponent = (name: string, value: boolean) => (): void => {
+/* SET USE CACHE */
+
+export const setUseCacheOnComponent = (
+  name: string,
+  value: boolean,
+): ThunkAction<void, AppState, undefined, AnyAction> => (): void => {
   fetch(`http://localhost:3333/api/component/${name}/cache/${value ? 'true' : 'false'}`, { method: 'POST' });
 };
 
-export const favouriteComponent = (name: string, favourite: boolean) => (dispatch: Dispatch): void => {
+/* FAVOURITE */
+
+export const favouriteComponent = (
+  name: string,
+  favourite: boolean,
+): ThunkAction<void, AppState, undefined, AnyAction> => (dispatch: Dispatch): void => {
   dispatch({
     favourite,
     name,
@@ -117,93 +88,109 @@ export const favouriteComponent = (name: string, favourite: boolean) => (dispatc
   fetch(`http://localhost:3333/api/component/${name}/favourite/${favourite}`, { method: 'POST' });
 };
 
-export const bumpComponent = (name: string, type: string) => (dispatch: Dispatch): void => {
+/* PROMOTE & BUMP */
+
+const promotingComponent = (name: string, environment: string): AnyAction => ({
+  environment,
+  name,
+  type: 'PROMOTING_COMPONENT',
+});
+
+export const bumpComponent = (name: string, type: string): ThunkAction<void, AppState, undefined, AnyAction> => (
+  dispatch: Dispatch,
+): void => {
   dispatch(promotingComponent(name, 'int'));
   fetch(`http://localhost:3333/api/component/${name}/bump/${type}`, { method: 'POST' }).then((): void => {
-    dispatch(promotingComponent(name, null));
+    dispatch(promotingComponent(name, null)); // TODO: why are we dispatching again here?
   });
 };
 
-export const promoteComponent = (name: string, environment: string) => (dispatch: Dispatch): void => {
+export const promoteComponent = (
+  name: string,
+  environment: string,
+): ThunkAction<void, AppState, undefined, AnyAction> => (dispatch: Dispatch): void => {
   dispatch(promotingComponent(name, environment));
   fetch(`http://localhost:3333/api/component/${name}/promote/${environment}`, { method: 'POST' });
 };
 
-export const openInCode = (name: string) => (): void => {
+/* OPEN IN CODE */
+
+export const openInCode = (name: string): ThunkAction<void, AppState, undefined, AnyAction> => (): void => {
   fetch(`http://localhost:3333/api/component/${name}/edit`, { method: 'POST' });
 };
 
-export const linkComponent = (name: string, dependency: string) => (dispatch: Dispatch): void => {
+/* LINKING */
+
+const linkingComponent = (name: string, dependency: string): AnyAction => ({
+  dependency,
+  name,
+  type: 'LINKING_COMPONENT',
+});
+
+export const linkComponent = (name: string, dependency: string): ThunkAction<void, AppState, undefined, AnyAction> => (
+  dispatch: Dispatch,
+): void => {
   dispatch(linkingComponent(name, dependency));
   fetch(`http://localhost:3333/api/component/${name}/link/${dependency}`, { method: 'POST' });
 };
 
-export const unlinkComponent = (name: string, dependency: string) => (dispatch: Dispatch): void => {
+export const unlinkComponent = (
+  name: string,
+  dependency: string,
+): ThunkAction<void, AppState, undefined, AnyAction> => (dispatch: Dispatch): void => {
   dispatch(linkingComponent(name, dependency));
   fetch(`http://localhost:3333/api/component/${name}/unlink/${dependency}`, { method: 'POST' });
 };
 
-export const updateAvailable = (): AnyAction => ({
-  type: 'UPDATE_AVAILABLE',
-});
+/* UPDATING & SELECT */
 
-export const updating = (): AnyAction => ({
-  type: 'UPDATING',
-});
+export const updateAndSelectComponent = (name: string, noHistory?: boolean): AnyAction => {
+  const action = (dispatch: Dispatch): void => {
+    if (!noHistory && window.historyEnabled) {
+      window.history.pushState({ name }, null, `/component/${name}`);
+    }
+    dispatch(fetchVersions(name));
+    dispatch({
+      name,
+      type: 'SELECT_COMPONENT',
+    });
+  };
 
-export const updated = (): AnyAction => ({
-  type: 'UPDATED',
-});
-
-export const update = () => (dispatch: Dispatch): void => {
-  dispatch(updating());
-  fetch(`http://localhost:3333/api/update`, { method: 'POST' });
+  action.type = null;
+  return action;
 };
 
-export const showDialog = (name: string, componentToClone?: string): AnyAction => ({
-  name,
-  componentToClone,
-  type: 'SHOW_DIALOG',
-});
+/* CREATION & CLONING */
 
-export const hideDialog = (name: string): AnyAction => ({
-  name,
-  type: 'HIDE_DIALOG',
-});
+export const createComponent = (
+  name: string,
+  description: string,
+  type: string,
+  sourceComponent?: string,
+): ThunkAction<void, AppState, undefined, AnyAction> => (dispatch: Dispatch): void => {
+  let createUrl;
 
-export const createComponent = (name: string, displayName: string): AnyAction => ({
-  displayName,
-  name,
-  type: 'CREATE_COMPONENT',
-});
+  if (sourceComponent) {
+    dispatch(showDialog('clone', sourceComponent));
+    createUrl = `http://localhost:3333/api/component/${sourceComponent}/clone`;
+  } else {
+    dispatch(showDialog('create'));
+    createUrl = `http://localhost:3333/api/component/create/${type}`;
+  }
 
-export const createModule = (name: string, description: string, type: string) => (dispatch: Dispatch): void => {
-  dispatch(showDialog('create'));
-  fetch(`http://localhost:3333/api/component/create/${type}`, {
+  fetch(createUrl, {
     body: JSON.stringify({ name, description }),
     headers: {
       'Content-Type': 'application/json',
-    } as any,
+    },
     method: 'POST',
   }).then((): void => {
     const fullName = `bbc-morph-${name}`;
-    dispatch(createComponent(fullName, name));
-    dispatch(updateAndSelectComponent(fullName));
-    dispatch(installComponent(fullName));
-  });
-};
-
-export const cloneComponent = (name: string, createName: string, description: string) => (dispatch: Dispatch): void => {
-  dispatch(showDialog('clone', createName));
-  fetch(`http://localhost:3333/api/component/${name}/clone`, {
-    body: JSON.stringify({ name: createName, description }),
-    headers: {
-      'Content-Type': 'application/json',
-    } as any,
-    method: 'POST',
-  }).then((): void => {
-    const fullName = `bbc-morph-${createName}`;
-    dispatch(createComponent(fullName, createName));
+    dispatch({
+      name,
+      fullName,
+      type: 'CREATE_COMPONENT',
+    });
     dispatch(updateAndSelectComponent(fullName));
     dispatch(installComponent(fullName));
   });

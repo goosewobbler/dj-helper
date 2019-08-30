@@ -1,4 +1,4 @@
-import * as hash from 'node-object-hash';
+import hash from 'node-object-hash';
 import { Package } from '../../common/types';
 
 const hasher = hash({ sort: true }).hash;

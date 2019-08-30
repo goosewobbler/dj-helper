@@ -35,8 +35,12 @@ const createComponentActions = (
 ): ComponentActions => {
   let stopRunning: () => Promise<void>;
 
-  const readPackage = async (): Promise<{ scripts: { build: string } }> =>
-    JSON.parse(await system.file.readFile(join(componentPath, 'package.json')));
+  const readPackage = async (): Promise<{
+    scripts: { build: string };
+    dependencies: {};
+    devDependencies: {};
+    version: string;
+  }> => JSON.parse(await system.file.readFile(join(componentPath, 'package.json')));
 
   const hasBuildScript = async (): Promise<boolean> => {
     const packageContents = await readPackage();

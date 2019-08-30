@@ -16,18 +16,18 @@ const isLinked = (dependencyName: string, component: ComponentData): boolean =>
 const isLinking = (dependencyName: string, component: ComponentData): boolean =>
   (component.linking || []).indexOf(dependencyName) > -1;
 
-const isLinkable = ({ state }: ComponentData) => state === ComponentState.Running;
+const isLinkable = ({ state }: ComponentData): boolean => state === ComponentState.Running;
 
 const renderLinkButton = (
   dependencyName: string,
   component: ComponentData,
-  onUnlink: any,
-  onLink: any,
+  onUnlink: Function,
+  onLink: Function,
 ): React.ReactElement => {
   if (isLinking(dependencyName, component)) {
     return (
       <div className="loading">
-        <img src="/image/icon/gel-icon-loading.svg" />
+        <img alt="loading" src="/image/icon/gel-icon-loading.svg" />
       </div>
     );
   }
@@ -64,9 +64,9 @@ const ComponentDependencyListItem = ({ dependency }: ComponentDependencyProps): 
   const componentContext: ComponentContext = React.useContext(context);
   const { onLinkComponent, onUnlinkComponent, onSelectComponent } = componentContext.handlers;
   const { name, displayName, version, outdated, has, latest } = dependency;
-  const onLink = () => onLinkComponent(displayName, name);
-  const onUnlink = () => onUnlinkComponent(displayName, name);
-  const onClick = () => onSelectComponent(name);
+  const onLink = (): void => onLinkComponent(displayName, name);
+  const onUnlink = (): void => onUnlinkComponent(displayName, name);
+  const onClick = (): void => onSelectComponent(name);
 
   return (
     <li key={name}>

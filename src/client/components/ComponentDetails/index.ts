@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-
+import { AnyAction } from 'redux';
 import {
   buildComponent,
   bumpComponent,
@@ -8,10 +8,10 @@ import {
   openInCode,
   promoteComponent,
   setUseCacheOnComponent,
-  showDialog,
   unlinkComponent,
   updateAndSelectComponent,
 } from '../../actions/components';
+import { showDialog } from '../../actions/app';
 import ComponentDetails from './ComponentDetails';
 
 import { ComponentData, AppState, Dispatch } from '../../../common/types';
@@ -19,7 +19,7 @@ import { ComponentData, AppState, Dispatch } from '../../../common/types';
 const getSelectedComponent = (state: AppState): ComponentData => {
   let found = null;
   if (state.ui && state.ui.selectedComponent) {
-    state.components.forEach((component: ComponentData) => {
+    state.components.forEach((component: ComponentData): void => {
       if (component.name === state.ui.selectedComponent) {
         found = component;
       }
@@ -28,23 +28,23 @@ const getSelectedComponent = (state: AppState): ComponentData => {
   return found;
 };
 
-const mapStateToProps = (state: AppState) => ({
+const mapStateToProps = (state: AppState): {} => ({
   component: getSelectedComponent(state),
   editors: state.ui.editors,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
+const mapDispatchToProps = (dispatch: Dispatch): { handlers: {} } => ({
   handlers: {
-    onBuild: (name: string) => dispatch(buildComponent(name)),
-    onBumpComponent: (name: string, type: string) => dispatch(bumpComponent(name, type)),
-    onClone: (name: string) => dispatch(showDialog('clone', name)),
-    onInstall: (name: string) => dispatch(installComponent(name)),
-    onLinkComponent: (name: string, dependency: string) => dispatch(linkComponent(name, dependency)),
-    onOpenInCode: (name: string) => dispatch(openInCode(name)),
-    onPromoteComponent: (name: string, environment: string) => dispatch(promoteComponent(name, environment)),
-    onSelectComponent: (name: string) => dispatch(updateAndSelectComponent(name)),
-    onSetUseCache: (name: string, value: boolean) => dispatch(setUseCacheOnComponent(name, value)),
-    onUnlinkComponent: (name: string, dependency: string) => dispatch(unlinkComponent(name, dependency)),
+    onBuild: (name: string): void => dispatch(buildComponent(name)),
+    onBumpComponent: (name: string, type: string): void => dispatch(bumpComponent(name, type)),
+    onClone: (name: string): AnyAction => dispatch(showDialog('clone', name)),
+    onInstall: (name: string): void => dispatch(installComponent(name)),
+    onLinkComponent: (name: string, dependency: string): void => dispatch(linkComponent(name, dependency)),
+    onOpenInCode: (name: string): void => dispatch(openInCode(name)),
+    onPromoteComponent: (name: string, environment: string): void => dispatch(promoteComponent(name, environment)),
+    onSelectComponent: (name: string): AnyAction => dispatch(updateAndSelectComponent(name)),
+    onSetUseCache: (name: string, value: boolean): void => dispatch(setUseCacheOnComponent(name, value)),
+    onUnlinkComponent: (name: string, dependency: string): void => dispatch(unlinkComponent(name, dependency)),
   },
 });
 

@@ -1,5 +1,5 @@
 import { Server } from 'http';
-import * as socketIo from 'socket.io';
+import socketIo from 'socket.io';
 import createApp from './server/app/app';
 import { system } from './server/system';
 import { log } from './server/helpers/console';

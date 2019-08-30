@@ -92,7 +92,7 @@ const request = async (
 
   if (history) {
     const stateKey = `history.${name}`;
-    const currentHistory = state.retrieve(stateKey) || [];
+    const currentHistory = (state.retrieve(stateKey) || []) as string[];
     const newEntry = type === ComponentType.Page ? props.path || '' : propsString;
     await state.store(stateKey, getNewHistory(currentHistory, newEntry));
   }
@@ -107,7 +107,7 @@ const request = async (
     };
   }
 
-  const retries = config.getValue('retries') || 10;
+  const retries = (config.getValue('retries') || 10) as number;
   return requestWithRetries(system, name, type, port, propsString, log, retries);
 };
 

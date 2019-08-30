@@ -1,4 +1,5 @@
 import { deburr, find, isObject, some, trim } from 'lodash/fp';
+import { ComponentMatch } from '../../common/types';
 
 const normalise = (value: string): string => deburr(value.toLowerCase());
 
@@ -25,7 +26,7 @@ const getNeedleSubstring = (
   return { indexOfFirstNeedleCharacter, length };
 };
 
-const getMatchesRecursive = (needle: string, haystack: string): (string | { matched: string })[] => {
+const getMatchesRecursive = (needle: string, haystack: string): ComponentMatch[] => {
   const { indexOfFirstNeedleCharacter, length } = getNeedleSubstring(needle, haystack);
 
   if (length === 0) {
@@ -39,7 +40,7 @@ const getMatchesRecursive = (needle: string, haystack: string): (string | { matc
   return [start, { matched }].concat(getMatchesRecursive(needle.substr(length), end)).filter(Boolean);
 };
 
-const getMatches = (needle: string, haystack: string): (string | { matched: string })[] => {
+const getMatches = (needle: string, haystack: string): ComponentMatch[] => {
   const trimmedNeedle = trim(needle);
   const matches = getMatchesRecursive(trimmedNeedle, haystack);
   const matchedParts = matches.filter((match): boolean => typeof match === 'object') as { matched: string }[];
@@ -52,20 +53,14 @@ const getMatches = (needle: string, haystack: string): (string | { matched: stri
   return matches;
 };
 
-const getMatchesWithAlternatives = (
-  needle: string,
-  haystack: string,
-  alternatives: string[],
-): (string | { matched: string })[] => {
+const getMatchesWithAlternatives = (needle: string, haystack: string, alternatives: string[]): ComponentMatch[] => {
   const matches = getMatches(needle, haystack);
 
   if (some(isObject)(matches)) {
     return matches;
   }
 
-  const alternativeMatches = alternatives.map((alternative): (string | { matched: string })[] =>
-    getMatches(needle, alternative),
-  );
+  const alternativeMatches = alternatives.map((alternative): ComponentMatch[] => getMatches(needle, alternative));
   return find(some(isObject), alternativeMatches);
 };
 

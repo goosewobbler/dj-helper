@@ -62,7 +62,12 @@ const promotionFailureElement = (failure: string): React.ReactElement | string =
   );
 };
 
-const shouldRenderPromoteButton = (versions: any, buildInProgress: any, fromEnv: string, toEnv: string): boolean => {
+const shouldRenderPromoteButton = (
+  versions: { [Key: string]: string },
+  buildInProgress: { [Key: string]: boolean },
+  fromEnv: string,
+  toEnv: string,
+): boolean => {
   if (!versions[fromEnv] || versions[toEnv] === null || buildInProgress[toEnv]) {
     return false;
   }
@@ -83,7 +88,7 @@ const parseVersions = ({
   int: string;
   test: string;
   live: string;
-}) => ({
+}): {} => ({
   local: valid(local),
   int: int === '' ? int : valid(int),
   test: test === '' ? test : valid(test),
@@ -126,7 +131,7 @@ const ComponentVersions = (): React.ReactElement => {
           <PromoteButton
             environment="int"
             buildInProgress={buildInProgress}
-            action={() => onBumpComponent(name, 'patch')}
+            action={(): void => onBumpComponent(name, 'patch')}
           />
         </div>
         <Environment label="INT" version={int} isCurrent={intUpToDate} />
@@ -135,7 +140,7 @@ const ComponentVersions = (): React.ReactElement => {
             <PromoteButton
               environment="test"
               buildInProgress={buildInProgress}
-              action={() => onPromoteComponent(name, 'test')}
+              action={(): void => onPromoteComponent(name, 'test')}
             />
           )}
         </div>
@@ -145,7 +150,7 @@ const ComponentVersions = (): React.ReactElement => {
             <PromoteButton
               environment="live"
               buildInProgress={buildInProgress}
-              action={() => onPromoteComponent(name, 'live')}
+              action={(): void => onPromoteComponent(name, 'live')}
             />
           )}
         </div>

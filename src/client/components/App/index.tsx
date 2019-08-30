@@ -1,21 +1,22 @@
 import { connect } from 'react-redux';
 import { hot } from 'react-hot-loader';
-import { cloneComponent, createComponent, showDialog, hideDialog } from '../../actions/components';
+import { showDialog, hideDialog } from '../../actions/app';
+import { createComponent } from '../../actions/components';
 import App from './App';
 import { AppState, Dispatch } from '../../../common/types';
 
 const mapDispatchToProps = (dispatch: Dispatch): {} => ({
-  cloneComponent: (name: string, cloneName: string, description: string): void => {
-    dispatch(cloneComponent(name, cloneName, description));
-  },
   hideDialog: (name: string): void => {
     dispatch(hideDialog(name));
   },
   showDialog: (name: string): void => {
     dispatch(showDialog(name));
   },
-  submitModule: (name: string, description: string, type: string): void => {
+  createComponent: (name: string, description: string, type: string): void => {
     dispatch(createComponent(name, description, type));
+  },
+  cloneComponent: (name: string, description: string, sourceComponent: string): void => {
+    dispatch(createComponent(name, description, 'clone', sourceComponent));
   },
 });
 

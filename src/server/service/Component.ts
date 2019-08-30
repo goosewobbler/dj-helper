@@ -4,11 +4,11 @@ import * as semver from 'semver';
 import { System } from '../system';
 import { Routing } from './routing';
 import { Config } from '../app/config';
-import { State } from '../app/state';
+import { State, StateValue } from '../app/state';
 import componentStateMachine from './componentStateMachine';
-import * as createComponentActions from './componentActions';
-import * as openInEditorHelper from '../helpers/editor';
-import * as requestHelper from '../helpers/request';
+import { createComponentActions } from './componentActions';
+import openInEditorHelper from '../helpers/editor';
+import requestHelper from '../helpers/request';
 import { logError } from '../helpers/console';
 
 import { Component, ComponentType, ComponentDependency, Response, Package } from '../../common/types';
@@ -194,7 +194,7 @@ const createComponent = (
 
   const getFavourite = (): boolean => Boolean(state.retrieve(`favourite.${name}`));
 
-  const getHistory = (): [] => state.retrieve(`history.${name}`) || [];
+  const getHistory = (): StateValue => state.retrieve(`history.${name}`) || [];
 
   const actions = createComponentActions(
     system,
@@ -213,7 +213,7 @@ const createComponent = (
 
   const getState = (): number => stateMachine.getState();
 
-  const setUseCache = async (useCache: string): Promise<void> => {
+  const setUseCache = async (useCache: boolean): Promise<void> => {
     await state.store(`cache.enabled.${name}`, useCache);
     await updated();
     await stateMachine.restart();

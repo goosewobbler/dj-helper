@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { AnyAction } from 'redux';
 import ComponentListFilter from './ComponentListFilter';
 
-import { filterComponents } from '../../actions/components';
+import { filterComponents } from '../../actions/app';
 import { Dispatch } from '../../../common/types';
 
 const mapStateToProps = (): {} => ({});

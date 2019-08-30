@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 import ComponentDetailsContainer from '../ComponentDetails';
 import ComponentListContainer from '../ComponentList';
 import ComponentListFilterContainer from '../ComponentListFilter';
@@ -18,15 +17,14 @@ interface AppProps {
   onCreate(): void;
   showDialog(name: string): void;
   hideDialog(name: string): void;
-  cloneComponent(name: string, cloneName: string, description: string): void;
-  submitModule(name: string, description: string, type: string): void;
+  cloneComponent(name: string, description: string, sourceComponent: string): void;
+  createComponent(name: string, description: string, type: string): void;
 }
 
-const renderCreateDialog = (
-  hideDialog: AppProps['hideDialog'],
-  submitModule: AppProps['submitModule'],
-): React.ReactElement => {
+const renderCreateDialog = ({ hideDialog, createComponent }: AppProps): React.ReactElement => {
   const onClose = (): void => hideDialog('create');
+  const submitModule = (name: string, description: string, type: string): void =>
+    createComponent(name, description, type);
   return (
     <Dialog title="Create a new Morph module" onClose={onClose}>
       <CreateForm typeSelectEnabled submitModule={submitModule} onClose={onClose} />
@@ -46,7 +44,7 @@ const renderCloneDialog = ({ hideDialog, cloneComponent, componentToClone }: App
 };
 
 const App = (props: AppProps): React.ReactElement => {
-  const { outOfDate, hideDialog, showDialog, submitModule, showCreateDialog, showCloneDialog } = props;
+  const { outOfDate, showDialog, showCreateDialog, showCloneDialog } = props;
 
   return (
     <div>
@@ -71,7 +69,7 @@ const App = (props: AppProps): React.ReactElement => {
         <div className="section">
           <ComponentDetailsContainer />
         </div>
-        {showCreateDialog && renderCreateDialog(hideDialog, submitModule)}
+        {showCreateDialog && renderCreateDialog(props)}
         {showCloneDialog && renderCloneDialog(props)}
       </div>
     </div>

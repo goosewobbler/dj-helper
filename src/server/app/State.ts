@@ -1,12 +1,13 @@
 import { System } from '../system';
+import { StateValue } from '../../common/types';
 
 interface State {
-  retrieve(key: string): string;
-  store(key: string, value: string | boolean): Promise<void>;
+  retrieve(key: string): StateValue;
+  store(key: string, value: StateValue): Promise<void>;
 }
 
 const createState = async (stateFilePath: string, system: System): Promise<State> => {
-  let state: { [Key: string]: string } = {};
+  let state: { [Key: string]: StateValue } = {};
 
   try {
     state = JSON.parse(await system.file.readFile(stateFilePath));
@@ -14,9 +15,9 @@ const createState = async (stateFilePath: string, system: System): Promise<State
     // ignore
   }
 
-  const retrieve = (key: string): string => (key in state ? state[key] : null);
+  const retrieve = (key: string): StateValue => (key in state ? state[key] : null);
 
-  const store = async (key: string, value: string): Promise<void> => {
+  const store = async (key: string, value: StateValue): Promise<void> => {
     if (value === null) {
       delete state[key];
     } else {
@@ -31,4 +32,4 @@ const createState = async (stateFilePath: string, system: System): Promise<State
   };
 };
 
-export { createState, State };
+export { createState, State, StateValue };

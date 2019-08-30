@@ -8,7 +8,7 @@ interface ScrollListProps {
   length: number;
   selectedIndex?: number;
   selectedID?: string;
-  renderListItem(index: number, key: string): React.ReactElement<any>;
+  renderListItem(index: number, key: string): React.ReactElement;
 }
 
 interface ScrollListState {
@@ -16,7 +16,7 @@ interface ScrollListState {
 }
 
 class ScrollList extends React.Component<ScrollListProps, ScrollListState> {
-  private listElement: any;
+  private listElement: ReactList;
 
   public constructor(props: ScrollListProps) {
     super(props);
@@ -41,7 +41,7 @@ class ScrollList extends React.Component<ScrollListProps, ScrollListState> {
     }
   }
 
-  private handleListRef(el: React.ReactElement): void {
+  private handleListRef(el: ReactList): void {
     this.listElement = el;
   }
 
@@ -65,7 +65,7 @@ class ScrollList extends React.Component<ScrollListProps, ScrollListState> {
       <div>
         <ul onScroll={this.handleScroll}>
           <ReactList
-            //             ref={this.handleListRef}
+            ref={this.handleListRef}
             itemRenderer={renderListItem}
             length={length}
             type="uniform"

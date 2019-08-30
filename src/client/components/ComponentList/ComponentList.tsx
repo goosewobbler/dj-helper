@@ -7,10 +7,10 @@ import { ComponentState } from '../../../common/types';
 interface ComponentListProps {
   components: ComponentListItemData[];
   selectedComponent?: string;
-  onSelectComponent(name: string): any;
-  onFavouriteComponent(name: string, favourite: boolean): any;
-  onStartComponent(name: string): any;
-  onStopComponent(name: string): any;
+  onSelectComponent(name: string): void;
+  onFavouriteComponent(name: string, favourite: boolean): () => void;
+  onStartComponent(name: string): () => void;
+  onStopComponent(name: string): () => void;
 }
 
 interface ComponentListItemData {
@@ -29,7 +29,7 @@ class ComponentList extends React.PureComponent<ComponentListProps> {
     this.renderListItem = this.renderListItem.bind(this);
   }
 
-  private renderListItem(index: number, key: string) {
+  private renderListItem(index: number, key: string): React.ReactElement {
     const {
       components,
       selectedComponent,
@@ -43,12 +43,7 @@ class ComponentList extends React.PureComponent<ComponentListProps> {
     return (
       <ComponentListItem
         key={key}
-        name={component.name}
-        displayName={component.displayName}
-        highlighted={component.highlighted}
-        url={component.url}
-        state={component.state}
-        favourite={component.favourite}
+        component={component}
         selected={component.name === selectedComponent}
         onClick={onSelectComponent}
         onFavourite={onFavouriteComponent}
@@ -58,9 +53,9 @@ class ComponentList extends React.PureComponent<ComponentListProps> {
     );
   }
 
-  public render() {
+  public render(): React.ReactElement {
     const { components, selectedComponent } = this.props;
-    const selectedIndex = components.findIndex(component => component.name === selectedComponent);
+    const selectedIndex = components.findIndex((component): boolean => component.name === selectedComponent);
     return (
       <ScrollList
         length={components.length}

@@ -49,7 +49,7 @@ const renderDependendantGraph = (handlers: ComponentHandlers, componentName: str
   );
 };
 
-const buildPipelineLink = (rendererType: string) => (env: string): string => {
+const buildPipelineLink = (rendererType: string): Function => (env: string): string => {
   const jobPrefix = rendererType === '10' ? 'modern-' : '';
   return `https://ci.user.morph.int.tools.bbc.co.uk/job/morph-asset-${jobPrefix}promote-${env}/`;
 };
@@ -81,11 +81,14 @@ const ComponentDetails = ({ component, editors, handlers }: ComponentDetailsProp
   const componentContextValue: ComponentContext = { component, handlers };
 
   return (
-    <Tabs headings={['Overview', 'Dependencies', 'Dependants']} renderButtons={() => renderPipelineLinks(component)}>
+    <Tabs
+      headings={['Overview', 'Dependencies', 'Dependants']}
+      renderButtons={(): React.ReactElement => renderPipelineLinks(component)}
+    >
       <ComponentContextProvider value={componentContextValue}>
         <div className="details">
           <div className="actions">
-            <ComponentActions editors={editors} />
+            <ComponentActions editors={editors} component={component} handlers={handlers} />
           </div>
           <ComponentDetailsSection label="Versions">
             <ComponentVersions />
@@ -93,9 +96,11 @@ const ComponentDetails = ({ component, editors, handlers }: ComponentDetailsProp
           {hasDependencies && (
             <ComponentDetailsSection label="Dependencies" end={renderDetailsSectionEnd()}>
               <ul>
-                {orderDependencies(dependencies).map((dependency: any) => (
-                  <ComponentDependencyListItem dependency={dependency} />
-                ))}
+                {orderDependencies(dependencies).map(
+                  (dependency: ComponentDependency): React.ReactElement => (
+                    <ComponentDependencyListItem dependency={dependency} />
+                  ),
+                )}
               </ul>
             </ComponentDetailsSection>
           )}

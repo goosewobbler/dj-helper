@@ -3,6 +3,7 @@ import { ComponentData } from '../../common/types';
 
 interface ComponentHandlers {
   onOpenInCode(name: string): void;
+  onClone(name: string): void;
   onBuild(name: string): void;
   onInstall(name: string): void;
   onSetUseCache(name: string, value: boolean): void;

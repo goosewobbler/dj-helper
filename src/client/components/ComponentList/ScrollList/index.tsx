@@ -82,6 +82,4 @@ class ScrollList extends React.Component<ScrollListProps, ScrollListState> {
   }
 }
 
-const ScrollListAdapter = (props: ScrollListProps): React.ReactElement => <ScrollList {...props} />;
-
-export default ScrollListAdapter;
+export default ScrollList;

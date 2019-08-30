@@ -4,7 +4,7 @@ import { AnyAction } from 'redux';
 import { createSelector } from 'reselect';
 import { favouriteComponent, startComponent, stopComponent, updateAndSelectComponent } from '../../actions/components';
 import findOrderedSearchResults from '../../helpers/resultsHelper';
-import { ComponentList } from './ComponentList';
+import ComponentList from './ComponentList';
 import { ComponentData, AppState, Dispatch } from '../../../common/types';
 
 const getSortedComponents = (components: ComponentData[]): ComponentData[] => {

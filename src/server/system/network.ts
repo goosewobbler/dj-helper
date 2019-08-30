@@ -1,6 +1,5 @@
 import request from 'request';
 import { Response } from '../../common/types';
-import { IncomingHttpHeaders } from 'http';
 
 interface NetworkSystem {
   get(url: string): Promise<Response>;

@@ -44,7 +44,7 @@ const findOrderedSearchResults = (items: ComponentData[], searchValue: string): 
               return <mark key={key}>{matchAsObject.matched.replace(/ /g, '-')}</mark>;
             }
 
-            return <React.Fragment>{(match as string).replace(/ /g, '-')}</React.Fragment>;
+            return <>{(match as string).replace(/ /g, '-')}</>;
           },
         ),
       }),

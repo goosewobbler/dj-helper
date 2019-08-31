@@ -6,7 +6,6 @@ import { createComponentActions } from './componentActions';
 import openInEditorHelper from '../helpers/editor';
 import requestHelper from '../helpers/request';
 import { logError } from '../helpers/console';
-
 import {
   Component,
   ComponentType,
@@ -76,17 +75,21 @@ const createComponent = (
 
   const getType = (): ComponentType => componentType;
 
+  const setUrl = (domain: string, port: number, path = ''): void => {
+    if (port) {
+      url = `http://${domain}:${port}/${path}`;
+    }
+  };
+
   const updateURL = async (): Promise<void> => {
-    const localhost = config.get('localhost') || 'localhost';
+    const domain = (config.get('localhost') as string) || 'localhost';
     const type = getType();
     if (type === ComponentType.Page) {
-      if (pagePort) {
-        url = `http://${localhost}:${pagePort}`;
-      }
+      setUrl(domain, pagePort);
     } else if (type === ComponentType.View) {
-      url = `http://${localhost}:4000/view/${name}`;
+      setUrl(domain, config.get('componentPort') as number, `view/${name}`);
     } else {
-      url = `http://${localhost}:4000/data/${name}`;
+      setUrl(domain, config.get('componentPort') as number, `data/${name}`);
     }
   };
 

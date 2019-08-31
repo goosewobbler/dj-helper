@@ -123,6 +123,7 @@ class ComponentListItem extends React.PureComponent<ComponentListItemProps> {
     const { component, selected } = this.props;
     const { highlighted, displayName, name, url, favourite, state } = component;
     if (
+      // TODO: sort out this piece of shit
       name !== nextProps.component.name ||
       displayName !== nextProps.component.displayName ||
       highlighted !== nextProps.component.highlighted ||

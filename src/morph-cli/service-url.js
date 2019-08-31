@@ -1,4 +1,5 @@
 import getRouting from './get-routing';
+import getConfig from './get-config';
 
 const buildUrlForViewProxy = uriObject => {
   const viewPath = uriObject.path;
@@ -12,7 +13,9 @@ const buildUrlForViewProxy = uriObject => {
     return null;
   }
 
-  return `http://localhost:4000${viewPath.replace('/view/', '/proxy/')}`;
+  const { componentPort } = getConfig();
+
+  return `http://localhost:${componentPort}${viewPath.replace('/view/', '/proxy/')}`;
 };
 
 export default buildUrlForViewProxy;

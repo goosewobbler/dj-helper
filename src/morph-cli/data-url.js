@@ -1,6 +1,7 @@
 import path from 'path';
 import morphRequestPaths from 'morph-cli/lib/morph-request-paths';
 import getRouting from './get-routing';
+import getConfig from './get-config';
 
 const buildUrlForDataProxy = (currentDep, props, currentModulePath, workspaceRoot, contextId) => {
   const routing = getRouting();
@@ -10,7 +11,8 @@ const buildUrlForDataProxy = (currentDep, props, currentModulePath, workspaceRoo
   let url = 'http://localhost:';
 
   if (routing[currentDep.uri.data]) {
-    url += 4000;
+    const { componentPort } = getConfig();
+    url += componentPort;
   } else if (routing[componentName]) {
     url += routing[componentName];
   } else {

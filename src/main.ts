@@ -5,14 +5,14 @@ import { logError } from './server/helpers/console';
 let mainWindow: Electron.BrowserWindow;
 
 async function createWindow(): Promise<void> {
-  await startServer().catch(logError);
+  const apiPort = await startServer().catch(logError);
 
   mainWindow = new BrowserWindow({
     height: 800,
     width: 1200,
   });
 
-  mainWindow.loadURL(`http://localhost:3333/`);
+  mainWindow.loadURL(`http://localhost:${apiPort}/`);
 
   mainWindow.webContents.openDevTools();
 

@@ -1,12 +1,14 @@
 import { System } from '../system';
 
+type configValue = string | number | boolean;
+
 interface ConfigStore {
-  [Key: string]: string | number | boolean;
+  [Key: string]: configValue;
 }
 
 interface Config {
   getValue(name: string): ConfigStore[string];
-  setValue(name: string, value: string): Promise<void>;
+  setValue(name: string, value: configValue): Promise<void>;
 }
 
 const createConfig = async (configFilePath: string, system: System): Promise<Config> => {
@@ -31,4 +33,4 @@ const createConfig = async (configFilePath: string, system: System): Promise<Con
   };
 };
 
-export { createConfig, Config };
+export { createConfig, Config, configValue };

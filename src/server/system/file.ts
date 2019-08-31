@@ -7,20 +7,7 @@ import watch from 'node-watch';
 import { join } from 'path';
 
 import { logError } from '../helpers/console';
-
-interface FileSystem {
-  exists(path: string): Promise<boolean>;
-  getPackageDirectories(directory: string): Promise<string[]>;
-  readFile(path: string): Promise<string>;
-  writeFile(path: string, contents: string): Promise<void>;
-  symbolicLinkExists(path: string): Promise<boolean>;
-  copyDirectory(from: string, to: string, filter: boolean): Promise<void>;
-  deleteDirectory(directory: string): Promise<void>;
-  watchDirectory(directory: string, callback: (path: string) => void): Promise<void>;
-  moveDirectory(from: string, to: string): Promise<void>;
-  createSymlink(from: string, to: string): Promise<void>;
-  removeSymlink(path: string): Promise<void>;
-}
+import { FileSystem } from '../../common/types';
 
 interface File {
   name: string;
@@ -153,4 +140,4 @@ const file: FileSystem = {
   writeFile,
 };
 
-export { file, FileSystem };
+export default file;

@@ -1,4 +1,4 @@
-import { System } from '../system';
+import { System } from '../../common/types';
 
 type configValue = string | number | boolean;
 

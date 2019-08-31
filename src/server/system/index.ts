@@ -1,16 +1,9 @@
-import { file, FileSystem } from './file';
-import { git, GitSystem } from './git';
-import { morph, MorphSystem } from './morph';
-import { network, NetworkSystem } from './network';
-import { process, ProcessSystem } from './process';
-
-interface System {
-  file: FileSystem;
-  git: GitSystem;
-  morph: MorphSystem;
-  network: NetworkSystem;
-  process: ProcessSystem;
-}
+import file from './file';
+import git from './git';
+import morph from './morph';
+import network from './network';
+import process from './process';
+import { System } from '../../common/types';
 
 const system: System = {
   file,
@@ -20,4 +13,4 @@ const system: System = {
   process,
 };
 
-export { system, System };
+export default system;

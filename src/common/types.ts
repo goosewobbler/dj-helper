@@ -189,6 +189,69 @@ interface AppStatus {
   updating: boolean;
 }
 
+interface FileSystem {
+  exists(path: string): Promise<boolean>;
+  getPackageDirectories(directory: string): Promise<string[]>;
+  readFile(path: string): Promise<string>;
+  writeFile(path: string, contents: string): Promise<void>;
+  symbolicLinkExists(path: string): Promise<boolean>;
+  copyDirectory(from: string, to: string, filter: boolean): Promise<void>;
+  deleteDirectory(directory: string): Promise<void>;
+  watchDirectory(directory: string, callback: (path: string) => void): Promise<void>;
+  moveDirectory(from: string, to: string): Promise<void>;
+  createSymlink(from: string, to: string): Promise<void>;
+  removeSymlink(path: string): Promise<void>;
+}
+
+interface GitSystem {
+  checkoutMaster(directory: string): Promise<void>;
+  checkoutExistingBranch(directory: string, branchName: string): Promise<void>;
+  checkoutNewBranch(directory: string, branchName: string): Promise<void>;
+  commit(directory: string, message: string): Promise<void>;
+  getCurrentBranch(directory: string): Promise<string>;
+  getRandomBranchName(): Promise<string>;
+  push(directory: string, branchName: string): Promise<void>;
+  readyToCommit(directory: string): Promise<boolean>;
+  stageFile(directory: string, path: string): Promise<void>;
+}
+
+interface MorphSystem {
+  getShrinkwrap(name: string): Promise<{ [Key: string]: string }>;
+  getVersionOnEnvironment(name: string, environment: string): Promise<string>;
+  promote(name: string, environment: string): Promise<void>;
+}
+
+interface NetworkSystem {
+  get(url: string): Promise<Response>;
+}
+
+interface ProcessSystem {
+  getCommandLineArgs(): Promise<string[]>;
+  getCurrentWorkingDirectory(): Promise<string>;
+  log(message: string): void;
+  open(url: string): void;
+  runToCompletion(
+    directory: string,
+    command: string,
+    onOutput: (message: string) => void,
+    onError: (message: string) => void,
+  ): Promise<void>;
+  runUntilStopped(
+    directory: string,
+    command: string,
+    onOutput: (message: string) => void,
+    onError: (message: string) => void,
+  ): Promise<() => Promise<void>>;
+}
+
+interface System {
+  file: FileSystem;
+  git: GitSystem;
+  morph: MorphSystem;
+  network: NetworkSystem;
+  process: ProcessSystem;
+}
+
 type Dispatch = ThunkDispatch<AppState, undefined, AnyAction>;
 
 export {
@@ -209,4 +272,10 @@ export {
   AppStatus,
   AppState,
   Dispatch,
+  System,
+  FileSystem,
+  GitSystem,
+  MorphSystem,
+  NetworkSystem,
+  ProcessSystem,
 };

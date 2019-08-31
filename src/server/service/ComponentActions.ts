@@ -2,11 +2,9 @@ import { join } from 'path';
 
 import runNpm from '../helpers/npm';
 import packageHash from '../helpers/packageHash';
-
-import { Component } from '../../common/types';
 import { Routing } from './routing';
-import { System } from '../system';
 import { Config } from '../app/config';
+import { Component, System } from '../../common/types';
 
 interface ComponentActions {
   buildAll(): Promise<void>;

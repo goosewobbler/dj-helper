@@ -1,7 +1,6 @@
 import { gt } from 'semver';
 import runNpm from '../helpers/npm';
-import { System } from '../system';
-import { AppStatus } from '../../common/types';
+import { AppStatus, System } from '../../common/types';
 
 interface Updater {
   getStatus(): Promise<AppStatus>;

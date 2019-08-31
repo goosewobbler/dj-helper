@@ -23,7 +23,7 @@ const createResponseBody = (body: string, statusCode: number): string => {
   }
 };
 
-const appendSocketReloadScript = (responseBody: string, apiPort: configValue) =>
+const appendSocketReloadScript = (responseBody: string, apiPort: configValue): string =>
   responseBody
     .replace('<head>', `<head>${socketIoLibraryScript(apiPort)}`)
     .replace('</body>', `${socketIoPageReloadScript(apiPort)}</body>`);

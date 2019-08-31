@@ -1,19 +1,8 @@
 import { randomBytes } from 'crypto';
-import { process } from './process';
 
+import process from './process';
 import { logError } from '../helpers/console';
-
-interface GitSystem {
-  checkoutMaster(directory: string): Promise<void>;
-  checkoutExistingBranch(directory: string, branchName: string): Promise<void>;
-  checkoutNewBranch(directory: string, branchName: string): Promise<void>;
-  commit(directory: string, message: string): Promise<void>;
-  getCurrentBranch(directory: string): Promise<string>;
-  getRandomBranchName(): Promise<string>;
-  push(directory: string, branchName: string): Promise<void>;
-  readyToCommit(directory: string): Promise<boolean>;
-  stageFile(directory: string, path: string): Promise<void>;
-}
+import { GitSystem } from '../../common/types';
 
 const checkoutExistingBranch = (directory: string, branchName: string): Promise<void> =>
   process.runToCompletion(directory, `git checkout ${branchName}`, (): void => null, logError);
@@ -76,4 +65,4 @@ const git: GitSystem = {
   stageFile,
 };
 
-export { git, GitSystem };
+export default git;

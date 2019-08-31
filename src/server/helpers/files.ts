@@ -3,8 +3,7 @@ import { emptyDirSync, readFileSync } from 'fs-extra';
 import * as tar from 'tar';
 
 import runNpm from './npm';
-import { System } from '../system';
-import { ModuleType } from '../../common/types';
+import { ModuleType, System } from '../../common/types';
 
 const cloneComponentFiles = async (
   system: System,

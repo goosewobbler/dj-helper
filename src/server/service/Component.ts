@@ -1,17 +1,24 @@
 import { join } from 'path';
 import * as semver from 'semver';
 
-import { System } from '../system';
 import { Routing } from './routing';
 import { Config } from '../app/config';
-import { State, StateValue } from '../app/state';
+import { State } from '../app/state';
 import componentStateMachine from './componentStateMachine';
 import { createComponentActions } from './componentActions';
 import openInEditorHelper from '../helpers/editor';
 import requestHelper from '../helpers/request';
 import { logError } from '../helpers/console';
 
-import { Component, ComponentType, ComponentDependency, Response, Package } from '../../common/types';
+import {
+  Component,
+  ComponentType,
+  ComponentDependency,
+  Response,
+  Package,
+  System,
+  StateValue,
+} from '../../common/types';
 
 const createComponent = (
   system: System,

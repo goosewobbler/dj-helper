@@ -1,7 +1,7 @@
 import { Server } from 'http';
 import socketIo from 'socket.io';
 import createApp from './server/app/app';
-import { system } from './server/system';
+import system from './server/system';
 import { log } from './server/helpers/console';
 import { ComponentData } from './common/types';
 import { configValue } from './server/app/config';

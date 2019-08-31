@@ -1,5 +1,4 @@
-import { System } from '../system';
-import { StateValue } from '../../common/types';
+import { StateValue, System } from '../../common/types';
 
 interface State {
   retrieve(key: string): StateValue;
@@ -32,4 +31,4 @@ const createState = async (stateFilePath: string, system: System): Promise<State
   };
 };
 
-export { createState, State, StateValue };
+export { createState, State };

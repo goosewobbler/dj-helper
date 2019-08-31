@@ -2,8 +2,7 @@ import renderChas from 'chas';
 
 import { Config } from '../app/config';
 import { State } from '../app/state';
-import { System } from '../system';
-import { ComponentType, ComponentState, Response } from '../../common/types';
+import { ComponentType, ComponentState, System, Response } from '../../common/types';
 
 const requestWithRetries = async (
   system: System,

@@ -9,7 +9,6 @@ import { createComponentFiles, cloneComponentFiles } from '../helpers/files';
 import { createRouting, Routing } from './routing';
 import { createGrapher, Grapher } from './grapher';
 import createComponent from './component';
-import { System } from '../system';
 import {
   ModuleType,
   Component,
@@ -19,6 +18,7 @@ import {
   GraphData,
   Response,
   Service,
+  System,
 } from '../../common/types';
 
 const createService = async (

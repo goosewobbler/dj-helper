@@ -1,4 +1,4 @@
-import { Config, configValue } from '../app/config';
+import { configValue } from '../app/config';
 
 const socketIoLibraryScript = (apiPort: configValue): string =>
   `<script src="http://localhost:${apiPort}/socket.io/socket.io.js"></script>`;

@@ -1,9 +1,5 @@
 import request from 'request';
-import { Response } from '../../common/types';
-
-interface NetworkSystem {
-  get(url: string): Promise<Response>;
-}
+import { Response, NetworkSystem } from '../../common/types';
 
 const get = (url: string): Promise<Response> =>
   new Promise(
@@ -29,4 +25,4 @@ const network: NetworkSystem = {
   get,
 };
 
-export { network, NetworkSystem };
+export default network;

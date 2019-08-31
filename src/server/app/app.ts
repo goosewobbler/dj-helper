@@ -3,14 +3,13 @@ import { Express } from 'express';
 import * as appRoot from 'app-root-path';
 
 import { createService } from '../service';
-import { System } from '../system';
 import createApiServer from './apiServer';
 import createComponentServer from './componentServer';
 import { createConfig, Config } from './config';
 import { createState } from './state';
 import { createUpdater } from './updater';
 
-import { ComponentData, Service } from '../../common/types';
+import { ComponentData, Service, System } from '../../common/types';
 
 interface App {
   api: Express;

@@ -1,4 +1,4 @@
-import { process } from '../system/process';
+import process from '../system/process';
 
 const runNpm = (
   directory: string,

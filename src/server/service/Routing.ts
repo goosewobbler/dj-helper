@@ -1,4 +1,4 @@
-import { System } from '../system';
+import { System } from '../../common/types';
 
 interface Routing {
   updateRoute(componentName: string, port: number): Promise<void>;

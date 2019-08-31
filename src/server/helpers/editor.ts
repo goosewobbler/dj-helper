@@ -1,5 +1,5 @@
 import { Config } from '../app/config';
-import { System } from '../system';
+import { System } from '../../common/types';
 
 const openInEditor = async (system: System, config: Config, componentPath: string): Promise<void> => {
   const wslPathIdentifier = '/mnt/c/';

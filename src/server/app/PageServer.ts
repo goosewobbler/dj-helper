@@ -1,17 +1,19 @@
 import express from 'express';
 import * as url from 'url';
 import { Service } from '../../common/types';
+import { Config, configValue } from './config';
+import { socketIoLibraryScript, socketIoPageReloadScript } from '../helpers/scripts';
 
-const nextPageServerPort = 4001;
+const nextPageServerPort = 5001;
 const pageServers: { [Key: string]: number } = {};
 
-const headScript = (): string => `<script src="http://localhost:3333/socket.io/socket.io.js"></script>`;
-const bodyScript =
-  '<script>const socket = io("http://localhost:3333"); socket.on("reload", () => window.location.reload(true));</script>';
+const createResponseBody = (body: string, statusCode: number): string => {
+  if (statusCode === 404 && (!body || body === '{}')) {
+    return `<!doctype html><html lang="en-gb"><head><style>*{margin:0;padding:0;}body{padding:16px;}</style></head><body><pre style="font-size: 48px;">404 😕</pre></body></html>`;
+  }
 
-const extractHtml = (body: string): string => {
   // Old versions of morph-cli v15 and below used to incorrectly JSON-encode text/html responses.
-  // As of morph-cli v16.X, this is no logner the case, matching the behaviour of the renderers.
+  // As of morph-cli v16.X, this is no longer the case, matching the behaviour of the renderers.
   // We should support either version.
   try {
     const parsed = JSON.parse(body);
@@ -21,14 +23,10 @@ const extractHtml = (body: string): string => {
   }
 };
 
-const createResponse = (body: string, statusCode: number): string => {
-  if (statusCode === 404 && (!body || body === '{}')) {
-    return `<!doctype html><html lang="en-gb"><head><style>*{margin:0;padding:0;}body{padding:16px;}</style></head><body><pre style="font-size: 48px;">404 😕</pre></body></html>`;
-  }
-  return extractHtml(body)
-    .replace('<head>', `<head>${headScript()}`)
-    .replace('</body>', `${bodyScript}</body>`);
-};
+const appendSocketReloadScript = (responseBody: string, apiPort: configValue) =>
+  responseBody
+    .replace('<head>', `<head>${socketIoLibraryScript(apiPort)}`)
+    .replace('</body>', `${socketIoPageReloadScript(apiPort)}</body>`);
 
 const start = async (server: express.Express, port: number): Promise<void> => {
   await new Promise((resolve): void => {
@@ -38,7 +36,7 @@ const start = async (server: express.Express, port: number): Promise<void> => {
   });
 };
 
-const createPageServer = (service: Service, componentName: string): express.Express => {
+const createPageServer = (service: Service, componentName: string, apiPort: configValue): express.Express => {
   const server = express();
 
   server.get(
@@ -61,11 +59,13 @@ const createPageServer = (service: Service, componentName: string): express.Expr
         if (pageLocation) {
           res.set('Location', pageLocation);
         }
+        const basicResponseBody = createResponseBody(body, pageStatusCode);
+        const responseBody = appendSocketReloadScript(basicResponseBody, apiPort);
         res
           .status(pageStatusCode)
           .set(headers)
           .set('Content-Type', 'text/html')
-          .send(createResponse(body, pageStatusCode));
+          .send(responseBody);
       } catch (ex) {
         res.status(500).send(ex.message);
       }
@@ -75,14 +75,15 @@ const createPageServer = (service: Service, componentName: string): express.Expr
   return server;
 };
 
-const startPageServer = async (service: Service, name: string): Promise<number> => {
+const startPageServer = async (service: Service, name: string, config: Config): Promise<number> => {
   if (name in pageServers) {
     return pageServers[name];
   }
 
+  const apiPort = config.getValue('apiPort');
   const port = nextPageServerPort + 1;
   pageServers[name] = port;
-  await start(createPageServer(service, name), port);
+  await start(createPageServer(service, name, apiPort), port);
   return port;
 };
 

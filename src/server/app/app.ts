@@ -48,7 +48,7 @@ const createApp = async (
 
   return {
     api: createApiServer(service, config, updater, onUpdated),
-    component: createComponentServer(service),
+    component: createComponentServer(service, config),
     config,
     devMode,
     service,

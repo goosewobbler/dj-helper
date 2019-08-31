@@ -32,7 +32,7 @@ const createComponent = (
   getOther: (name: string) => Component,
   rendererType: string,
 ): Component => {
-  let port: number = null;
+  let componentPort: number = null;
   let pagePort: number = null;
   let promoting: string = null;
   let promotionFailure: string = null;
@@ -63,10 +63,10 @@ const createComponent = (
   const getDirectoryName = (): string => directoryName;
 
   const getPort = (): number => {
-    if (port === null) {
-      port = acquirePort();
+    if (componentPort === null) {
+      componentPort = acquirePort();
     }
-    return port;
+    return componentPort;
   };
 
   const setPagePort = (newPagePort: number): void => {

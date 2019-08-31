@@ -16,7 +16,8 @@ export const updated = (): AnyAction => ({
 
 export const update = (): ThunkAction<void, AppState, undefined, AnyAction> => (dispatch: Dispatch): void => {
   dispatch(updating());
-  fetch(`http://localhost:3333/api/update`, { method: 'POST' });
+  const { apiPort } = window.mdc;
+  fetch(`http://localhost:${apiPort}/api/update`, { method: 'POST' });
 };
 
 export const receiveComponents = (components: ComponentData[]): AnyAction => ({

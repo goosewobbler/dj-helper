@@ -5,9 +5,14 @@ import { Provider } from 'react-redux';
 import App from '../../client/components/App';
 import createReduxStore from '../../client/reduxStore';
 import { Service } from '../service';
-import { AppState } from '../../common/types';
+import { AppState, Store } from '../../common/types';
 
-const renderIndex = async (service: Service, template: string, selectedComponent?: string): Promise<string> => {
+const renderIndex = async (
+  service: Service,
+  config: Store,
+  template: string,
+  selectedComponent?: string,
+): Promise<string> => {
   const summaryData = await service.getComponentsSummaryData();
 
   const initialState: AppState = {
@@ -30,9 +35,11 @@ const renderIndex = async (service: Service, template: string, selectedComponent
   );
 
   const preloadedState = reduxStore.getState();
+  const apiPort = config.get('apiPort') as string;
 
   return template
     .replace('HTML_PLACEHOLDER', html)
+    .replace('API_PORT_PLACEHOLDER', apiPort)
     .replace('STATE_PLACEHOLDER', JSON.stringify(preloadedState).replace(/</g, '\\u003c'));
 };
 

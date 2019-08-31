@@ -4,6 +4,7 @@ import { ComponentType, ComponentState, System, Response, Store } from '../../co
 
 const requestWithRetries = async (
   system: System,
+  config: Store,
   name: string,
   type: ComponentType,
   port: number,
@@ -37,14 +38,14 @@ const requestWithRetries = async (
         remainingRetries === 1 ? 'retry' : 'retries'
       } remaining).`,
     );
-    return requestWithRetries(system, name, type, port, propsString, log, remainingRetries);
+    return requestWithRetries(system, config, name, type, port, propsString, log, remainingRetries);
   }
 
   const modifiedBody = body
     .replace(/localhost:8082/g, `localhost:${port}`)
     .replace(/react\.min/g, 'react')
     .replace(/react-dom\.min/g, 'react-dom')
-    .replace(/'live-push' : '[^']+'/g, "'live-push' : '//localhost:3333/local-push'");
+    .replace(/'live-push' : '[^']+'/g, `'live-push' : '//localhost:${config.get('apiPort')}/local-push'`);
 
   return { body: modifiedBody, headers, statusCode };
 };
@@ -105,7 +106,7 @@ const request = async (
   }
 
   const retries = (config.get('retries') || 10) as number;
-  return requestWithRetries(system, name, type, port, propsString, log, retries);
+  return requestWithRetries(system, config, name, type, port, propsString, log, retries);
 };
 
 export default request;

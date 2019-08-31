@@ -54,14 +54,16 @@ const createApiServer = (service: Service, config: Store, updater: Updater, onUp
   app.get(
     '/',
     async (req, res): Promise<void> => {
-      res.send(await renderIndex(service, readFileSync(join(publicPath, 'index.html'), 'utf-8')));
+      res.send(await renderIndex(service, config, readFileSync(join(publicPath, 'index.html'), 'utf-8')));
     },
   );
 
   app.get(
     '/component/:name',
     async (req, res): Promise<void> => {
-      res.send(await renderIndex(service, readFileSync(join(publicPath, 'index.html'), 'utf-8'), req.params.name));
+      res.send(
+        await renderIndex(service, config, readFileSync(join(publicPath, 'index.html'), 'utf-8'), req.params.name),
+      );
     },
   );
 

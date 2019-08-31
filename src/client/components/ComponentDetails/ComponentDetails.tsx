@@ -12,6 +12,8 @@ import ComponentVersions from './ComponentVersions';
 import { ComponentData, ComponentDependency } from '../../../common/types';
 import { ComponentContext, ComponentContextProvider, ComponentHandlers } from '../../contexts/componentContext';
 
+const { apiPort } = window.mdc;
+
 interface ComponentDetailsProps {
   component?: ComponentData;
   editors: string[];
@@ -34,7 +36,7 @@ const renderDependencyGraph = (handlers: ComponentHandlers, componentName: strin
     <Graph
       onSelect={handlers.onSelectComponent}
       down
-      url={`http://localhost:3333/api/component/${componentName}/dependency-graph`}
+      url={`http://localhost:${apiPort}/api/component/${componentName}/dependency-graph`}
     />
   );
 };
@@ -44,7 +46,7 @@ const renderDependendantGraph = (handlers: ComponentHandlers, componentName: str
     <Graph
       onSelect={handlers.onSelectComponent}
       down={false}
-      url={`http://localhost:3333/api/component/${componentName}/dependant-graph`}
+      url={`http://localhost:${apiPort}/api/component/${componentName}/dependant-graph`}
     />
   );
 };

@@ -19,7 +19,7 @@ import { ComponentData, AppStatus, ComponentsData, AppState } from './common/typ
 declare global {
   interface Window {
     historyEnabled: boolean;
-    mdc: { preloadedState: AppState };
+    mdc: { preloadedState: AppState; apiPort: number };
   }
 }
 
@@ -38,14 +38,14 @@ if (process.env.NODE_ENV !== 'production' && typeof window !== 'undefined') {
   initDebugMode();
 }
 
-const { preloadedState } = window.mdc;
+const { preloadedState, apiPort } = window.mdc;
 
 delete window.mdc.preloadedState;
 
 const reduxStore = createReduxStore(preloadedState);
 
 if (!preloadedState) {
-  fetch('http://localhost:3333/api/component')
+  fetch(`http://localhost:${apiPort}/api/component`)
     .then((response): Promise<ComponentsData> => response.json())
     .then((json): void => {
       reduxStore.dispatch(receiveComponents(json.components));
@@ -66,7 +66,7 @@ if (inputElement) {
 }
 
 if (io) {
-  const socket = io('http://localhost:3333');
+  const socket = io(`http://localhost:${apiPort}`);
   socket.on('component', (component: ComponentData): void => {
     reduxStore.dispatch(receiveComponent(component));
   });
@@ -94,7 +94,7 @@ if (io) {
 }
 
 const checkOutOfDate = (): void => {
-  fetch('http://localhost:3333/api/status')
+  fetch(`http://localhost:${apiPort}/api/status`)
     .then((response): Promise<AppStatus> => response.json())
     .then((response): void => {
       if (response.updated) {

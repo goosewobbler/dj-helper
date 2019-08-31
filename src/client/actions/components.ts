@@ -3,11 +3,13 @@ import { ThunkAction } from 'redux-thunk';
 import { showDialog } from './app';
 import { ComponentState, Dispatch, AppState } from '../../common/types';
 
+const { apiPort } = window.mdc;
+
 /* FETCH VERSIONS */
 
 export const fetchVersions = (name: string): AnyAction => {
   const action = (): Promise<Response> =>
-    fetch(`http://localhost:3333/api/component/${name}/versions`, { method: 'POST' });
+    fetch(`http://localhost:${apiPort}/api/component/${name}/versions`, { method: 'POST' });
 
   action.type = null;
   return action;
@@ -23,7 +25,7 @@ export const startComponent = (name: string): ThunkAction<void, AppState, undefi
     state: ComponentState.Starting,
     type: 'CHANGE_COMPONENT_STATE',
   });
-  fetch(`http://localhost:3333/api/component/${name}/start`, { method: 'POST' });
+  fetch(`http://localhost:${apiPort}/api/component/${name}/start`, { method: 'POST' });
 };
 
 /* STOP */
@@ -36,7 +38,7 @@ export const stopComponent = (name: string): ThunkAction<void, AppState, undefin
     state: ComponentState.Stopped,
     type: 'CHANGE_COMPONENT_STATE',
   });
-  fetch(`http://localhost:3333/api/component/${name}/stop`, { method: 'POST' });
+  fetch(`http://localhost:${apiPort}/api/component/${name}/stop`, { method: 'POST' });
 };
 
 /* INSTALL */
@@ -49,7 +51,7 @@ export const installComponent = (name: string): ThunkAction<void, AppState, unde
     state: ComponentState.Installing,
     type: 'CHANGE_COMPONENT_STATE',
   });
-  fetch(`http://localhost:3333/api/component/${name}/install`, { method: 'POST' });
+  fetch(`http://localhost:${apiPort}/api/component/${name}/install`, { method: 'POST' });
 };
 
 /* BUILD */
@@ -62,7 +64,7 @@ export const buildComponent = (name: string): ThunkAction<void, AppState, undefi
     state: ComponentState.Building,
     type: 'CHANGE_COMPONENT_STATE',
   });
-  fetch(`http://localhost:3333/api/component/${name}/build`, { method: 'POST' });
+  fetch(`http://localhost:${apiPort}/api/component/${name}/build`, { method: 'POST' });
 };
 
 /* SET USE CACHE */
@@ -71,7 +73,7 @@ export const setUseCacheOnComponent = (
   name: string,
   value: boolean,
 ): ThunkAction<void, AppState, undefined, AnyAction> => (): void => {
-  fetch(`http://localhost:3333/api/component/${name}/cache/${value ? 'true' : 'false'}`, { method: 'POST' });
+  fetch(`http://localhost:${apiPort}/api/component/${name}/cache/${value ? 'true' : 'false'}`, { method: 'POST' });
 };
 
 /* FAVOURITE */
@@ -85,7 +87,7 @@ export const favouriteComponent = (
     name,
     type: 'FAVOURITE_COMPONENT',
   });
-  fetch(`http://localhost:3333/api/component/${name}/favourite/${favourite}`, { method: 'POST' });
+  fetch(`http://localhost:${apiPort}/api/component/${name}/favourite/${favourite}`, { method: 'POST' });
 };
 
 /* PROMOTE & BUMP */
@@ -100,7 +102,7 @@ export const bumpComponent = (name: string, type: string): ThunkAction<void, App
   dispatch: Dispatch,
 ): void => {
   dispatch(promotingComponent(name, 'int'));
-  fetch(`http://localhost:3333/api/component/${name}/bump/${type}`, { method: 'POST' }).then((): void => {
+  fetch(`http://localhost:${apiPort}/api/component/${name}/bump/${type}`, { method: 'POST' }).then((): void => {
     dispatch(promotingComponent(name, null)); // TODO: why are we dispatching again here?
   });
 };
@@ -110,13 +112,13 @@ export const promoteComponent = (
   environment: string,
 ): ThunkAction<void, AppState, undefined, AnyAction> => (dispatch: Dispatch): void => {
   dispatch(promotingComponent(name, environment));
-  fetch(`http://localhost:3333/api/component/${name}/promote/${environment}`, { method: 'POST' });
+  fetch(`http://localhost:${apiPort}/api/component/${name}/promote/${environment}`, { method: 'POST' });
 };
 
 /* OPEN IN CODE */
 
 export const openInCode = (name: string): ThunkAction<void, AppState, undefined, AnyAction> => (): void => {
-  fetch(`http://localhost:3333/api/component/${name}/edit`, { method: 'POST' });
+  fetch(`http://localhost:${apiPort}/api/component/${name}/edit`, { method: 'POST' });
 };
 
 /* LINKING */
@@ -131,7 +133,7 @@ export const linkComponent = (name: string, dependency: string): ThunkAction<voi
   dispatch: Dispatch,
 ): void => {
   dispatch(linkingComponent(name, dependency));
-  fetch(`http://localhost:3333/api/component/${name}/link/${dependency}`, { method: 'POST' });
+  fetch(`http://localhost:${apiPort}/api/component/${name}/link/${dependency}`, { method: 'POST' });
 };
 
 export const unlinkComponent = (
@@ -139,7 +141,7 @@ export const unlinkComponent = (
   dependency: string,
 ): ThunkAction<void, AppState, undefined, AnyAction> => (dispatch: Dispatch): void => {
   dispatch(linkingComponent(name, dependency));
-  fetch(`http://localhost:3333/api/component/${name}/unlink/${dependency}`, { method: 'POST' });
+  fetch(`http://localhost:${apiPort}/api/component/${name}/unlink/${dependency}`, { method: 'POST' });
 };
 
 /* UPDATING & SELECT */
@@ -172,10 +174,10 @@ export const createComponent = (
 
   if (sourceComponent) {
     dispatch(showDialog('clone', sourceComponent));
-    createUrl = `http://localhost:3333/api/component/${sourceComponent}/clone`;
+    createUrl = `http://localhost:${apiPort}/api/component/${sourceComponent}/clone`;
   } else {
     dispatch(showDialog('create'));
-    createUrl = `http://localhost:3333/api/component/create/${type}`;
+    createUrl = `http://localhost:${apiPort}/api/component/create/${type}`;
   }
 
   fetch(createUrl, {

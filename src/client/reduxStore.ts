@@ -1,4 +1,4 @@
-import { applyMiddleware, createStore as createReduxStore, Store } from 'redux';
+import { applyMiddleware, createStore, Store } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import combinedReducer from './reducers/combined';
 import { AppState, Dispatch } from '../common/types';
@@ -10,11 +10,11 @@ const createDefaultState = (): AppState => ({
   },
 });
 
-const createStore = (initialState?: AppState): Store =>
-  createReduxStore(
+const createReduxStore = (initialState?: AppState): Store =>
+  createStore(
     combinedReducer,
     initialState || createDefaultState(),
     applyMiddleware<Dispatch, AppState>(thunkMiddleware),
   );
 
-export default createStore;
+export default createReduxStore;

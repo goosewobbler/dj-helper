@@ -3,7 +3,7 @@ import { renderToString } from 'react-dom/server'; // tslint:disable-line no-sub
 import { Provider } from 'react-redux';
 
 import App from '../../client/components/App';
-import createStore from '../../client/store';
+import createReduxStore from '../../client/reduxStore';
 import { Service } from '../service';
 import { AppState } from '../../common/types';
 
@@ -21,15 +21,15 @@ const renderIndex = async (service: Service, template: string, selectedComponent
     initialState.ui.selectedComponent = selectedComponent;
   }
 
-  const store = createStore(initialState);
+  const reduxStore = createReduxStore(initialState);
 
   const html = renderToString(
-    <Provider store={store}>
+    <Provider store={reduxStore}>
       <App />
     </Provider>,
   );
 
-  const preloadedState = store.getState();
+  const preloadedState = reduxStore.getState();
 
   return template
     .replace('HTML_PLACEHOLDER', html)

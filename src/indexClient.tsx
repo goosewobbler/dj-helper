@@ -12,7 +12,7 @@ import {
   updating,
 } from './client/actions/app';
 import App from './client/components/App';
-import createStore from './client/store';
+import createReduxStore from './client/reduxStore';
 import { logError } from './server/helpers/console';
 import { ComponentData, AppStatus, ComponentsData, AppState } from './common/types';
 
@@ -42,19 +42,19 @@ const { preloadedState } = window.mdc;
 
 delete window.mdc.preloadedState;
 
-const store = createStore(preloadedState);
+const reduxStore = createReduxStore(preloadedState);
 
 if (!preloadedState) {
   fetch('http://localhost:3333/api/component')
     .then((response): Promise<ComponentsData> => response.json())
     .then((json): void => {
-      store.dispatch(receiveComponents(json.components));
-      store.dispatch(receiveEditors(json.editors));
+      reduxStore.dispatch(receiveComponents(json.components));
+      reduxStore.dispatch(receiveEditors(json.editors));
     });
 }
 
 ReactDOM.render(
-  <Provider store={store}>
+  <Provider store={reduxStore}>
     <App />
   </Provider>,
   document.getElementById('root'),
@@ -68,23 +68,23 @@ if (inputElement) {
 if (io) {
   const socket = io('http://localhost:3333');
   socket.on('component', (component: ComponentData): void => {
-    store.dispatch(receiveComponent(component));
+    reduxStore.dispatch(receiveComponent(component));
   });
 
   socket.on('updated', (): void => {
-    store.dispatch(updated());
+    reduxStore.dispatch(updated());
   });
 
   const updateSelected = (): void => {
-    const selected = store.getState().ui.selectedComponent;
+    const selected = reduxStore.getState().ui.selectedComponent;
     if (selected) {
-      store.dispatch(fetchVersions(selected));
+      reduxStore.dispatch(fetchVersions(selected));
     }
   };
 
   socket.on('freshState', (freshState: ComponentsData): void => {
-    store.dispatch(receiveComponents(freshState.components));
-    store.dispatch(receiveEditors(freshState.editors));
+    reduxStore.dispatch(receiveComponents(freshState.components));
+    reduxStore.dispatch(receiveEditors(freshState.editors));
     updateSelected();
   });
 
@@ -98,12 +98,12 @@ const checkOutOfDate = (): void => {
     .then((response): Promise<AppStatus> => response.json())
     .then((response): void => {
       if (response.updated) {
-        store.dispatch(updated());
+        reduxStore.dispatch(updated());
       } else if (response.updating) {
-        store.dispatch(updating());
+        reduxStore.dispatch(updating());
       }
       if (response.updateAvailable) {
-        store.dispatch(updateAvailable());
+        reduxStore.dispatch(updateAvailable());
       }
     })
     .catch(logError);
@@ -121,7 +121,7 @@ if (typeof window.historyEnabled === 'undefined') {
   const selectComponentFromUrl = (): void => {
     const matches = /\/component\/(.+)$/.exec(String(window.document.location));
     if (matches) {
-      store.dispatch(updateAndSelectComponent(matches[1], true));
+      reduxStore.dispatch(updateAndSelectComponent(matches[1], true));
     }
   };
 

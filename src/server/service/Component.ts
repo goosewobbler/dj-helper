@@ -1,7 +1,6 @@
 import { join } from 'path';
 import * as semver from 'semver';
 
-import { Routing } from './routing';
 import componentStateMachine from './componentStateMachine';
 import { createComponentActions } from './componentActions';
 import openInEditorHelper from '../helpers/editor';
@@ -21,7 +20,7 @@ import {
 
 const createComponent = (
   system: System,
-  routing: Routing,
+  routing: Store,
   config: Store,
   state: Store,
   name: string,

@@ -2,7 +2,6 @@ import { join } from 'path';
 
 import runNpm from '../helpers/npm';
 import packageHash from '../helpers/packageHash';
-import { Routing } from './routing';
 import { Component, System, Store } from '../../common/types';
 
 interface ComponentActions {
@@ -20,7 +19,7 @@ interface ComponentActions {
 
 const createComponentActions = (
   system: System,
-  routing: Routing,
+  routing: Store,
   config: Store,
   componentPath: string,
   name: string,
@@ -149,9 +148,9 @@ const createComponentActions = (
     );
     const stopProcess = await system.process.runUntilStopped(componentPath, command, log, log);
     await onReload(restartOthers);
-    await routing.updateRoute(name, getPort());
+    await routing.set(name, getPort());
     stopRunning = async (): Promise<void> => {
-      await routing.updateRoute(name, null);
+      await routing.set(name, null);
       await stopProcess();
     };
 

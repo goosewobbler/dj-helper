@@ -29,19 +29,17 @@ const createApp = async (
   const devMode = (await system.process.getCommandLineArgs()).indexOf('-D') !== -1;
   const currentWorkingDirectory = await system.process.getCurrentWorkingDirectory();
   const componentsDirectory = devMode ? join(currentWorkingDirectory, '../morph-modules') : currentWorkingDirectory;
-  const routingFilePath = `${appRoot}/.routing.json`;
   const configFilePath = join(componentsDirectory, 'morph-developer-console-config.json');
   const config = await createStore(configFilePath, system);
   const stateFilePath = join(componentsDirectory, 'morph-developer-console-state.json');
   const state = await createStore(stateFilePath, system);
+  const routingFilePath = `${appRoot}/.routing.json`;
+  const routing = await createStore(routingFilePath, system);
   const updater = createUpdater(system, currentVersion);
 
   process.env.APP_ROOT_PATH = appRoot.toString();
 
-  const service = await createService(system, config, state, onComponentUpdate, onReload, {
-    componentsDirectory,
-    routingFilePath,
-  });
+  const service = await createService(system, config, state, routing, onComponentUpdate, onReload, componentsDirectory);
 
   return {
     api: createApiServer(service, config, updater, onUpdated),

@@ -4,7 +4,6 @@ import { join } from 'path';
 import startPageServer from '../app/pageServer';
 import getComponentType from '../helpers/componentType';
 import { createComponentFiles, cloneComponentFiles } from '../helpers/files';
-import { createRouting, Routing } from './routing';
 import { createGrapher, Grapher } from './grapher';
 import createComponent from './component';
 import {
@@ -24,16 +23,13 @@ const createService = async (
   system: System,
   config: Store,
   state: Store,
+  routing: Store,
   onComponentUpdate: (data: ComponentData) => void,
   onReload: () => void,
-  options: {
-    componentsDirectory: string;
-    routingFilePath: string;
-  },
+  componentsDirectory: string,
 ): Promise<Service> => {
   const components: Component[] = [];
   const nextPort = 8083;
-  let routing: Routing;
   const editors: string[] = [];
   const allDependencies: { [Key: string]: { name: string }[] } = {};
   let grapher: Grapher;
@@ -83,7 +79,7 @@ const createService = async (
   };
 
   const addComponent = async (componentDirectoryName: string): Promise<Component> => {
-    const componentDirectory = join(options.componentsDirectory, componentDirectoryName);
+    const componentDirectory = join(componentsDirectory, componentDirectoryName);
     const packageContents = JSON.parse(await system.file.readFile(join(componentDirectory, 'package.json')));
     const componentType = getComponentType(config, packageContents, packageContents.name);
     const rendererType = get(packageContents, 'morph.rendererType', 'node:0.12').replace('node:', '');
@@ -115,9 +111,7 @@ const createService = async (
   };
 
   const load = async (): Promise<void> => {
-    routing = await createRouting(options.routingFilePath, system);
-
-    const packageDirectories = await system.file.getPackageDirectories(options.componentsDirectory);
+    const packageDirectories = await system.file.getPackageDirectories(componentsDirectory);
 
     await Promise.all(packageDirectories.map(addComponent));
 
@@ -129,9 +123,9 @@ const createService = async (
     grapher = createGrapher(allDependencies);
 
     await system.file.watchDirectory(
-      options.componentsDirectory,
+      componentsDirectory,
       async (path): Promise<void> => {
-        const relativePath = path.replace(`${options.componentsDirectory}/`, '');
+        const relativePath = path.replace(`${componentsDirectory}/`, '');
         const slashIndex = relativePath.indexOf('/');
         const directoryName = relativePath.substr(0, slashIndex);
         const changedComponent = components.find(
@@ -169,8 +163,8 @@ const createService = async (
 
   const clone = async (name: string, cloneName: string, cloneOptions: { description: string }): Promise<void> => {
     const componentDirectoryName = getComponent(name).getDirectoryName();
-    const componentDirectory = join(options.componentsDirectory, componentDirectoryName);
-    const clonedComponentDirectory = join(options.componentsDirectory, cloneName);
+    const componentDirectory = join(componentsDirectory, componentDirectoryName);
+    const clonedComponentDirectory = join(componentsDirectory, cloneName);
     await cloneComponentFiles(system, componentDirectory, cloneName, clonedComponentDirectory, cloneOptions);
     await addComponent(cloneName);
   };

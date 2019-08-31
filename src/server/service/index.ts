@@ -240,7 +240,7 @@ const createService = async (
     start: async (name: string): Promise<void> => {
       const component = getComponent(name);
       if (component.getType() === ComponentType.Page) {
-        const port = await startPageServer(service, name);
+        const port = await startPageServer(service, name, config);
         component.setPagePort(port);
       }
       await component.start();

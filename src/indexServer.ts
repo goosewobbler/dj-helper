@@ -4,9 +4,8 @@ import createApp from './server/app/app';
 import system from './server/system';
 import { log } from './server/helpers/console';
 import { ComponentData } from './common/types';
-import { configValue } from './server/app/config';
 
-const startServer = async (): Promise<configValue> => {
+const startServer = async (): Promise<number> => {
   let sendComponentData: (data: ComponentData) => void;
   let sendReload: () => void;
   let sendUpdated: () => void;
@@ -40,17 +39,17 @@ const startServer = async (): Promise<configValue> => {
   const componentServer = new Server(component);
   const io = socketIo(apiServer);
 
-  let apiPort = config.getValue('apiPort');
-  let componentPort = config.getValue('componentPort');
+  let apiPort = config.get('apiPort') as number;
+  let componentPort = config.get('componentPort') as number;
 
   if (!apiPort) {
     apiPort = 4444;
-    config.setValue('apiPort', apiPort);
+    config.set('apiPort', apiPort);
   }
 
   if (!componentPort) {
     componentPort = 4000;
-    config.setValue('componentPort', componentPort);
+    config.set('componentPort', componentPort);
   }
 
   sendComponentData = (data: ComponentData): void => {

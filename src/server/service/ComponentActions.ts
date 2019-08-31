@@ -3,8 +3,7 @@ import { join } from 'path';
 import runNpm from '../helpers/npm';
 import packageHash from '../helpers/packageHash';
 import { Routing } from './routing';
-import { Config } from '../app/config';
-import { Component, System } from '../../common/types';
+import { Component, System, Store } from '../../common/types';
 
 interface ComponentActions {
   buildAll(): Promise<void>;
@@ -22,7 +21,7 @@ interface ComponentActions {
 const createComponentActions = (
   system: System,
   routing: Routing,
-  config: Config,
+  config: Store,
   componentPath: string,
   name: string,
   getPort: () => number,
@@ -126,7 +125,7 @@ const createComponentActions = (
   const makeOtherLinkable = async (otherName: string): Promise<void> => getOther(otherName).makeLinkable();
 
   const needsInstall = async (): Promise<boolean> => {
-    if (config.getValue('installOnStart') === false) {
+    if (config.get('installOnStart') === false) {
       return false;
     }
 

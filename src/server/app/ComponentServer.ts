@@ -1,8 +1,7 @@
 import express from 'express';
 
 import { Service } from '../service';
-import { LooseObject } from '../../common/types';
-import { Config, configValue } from './config';
+import { LooseObject, Store } from '../../common/types';
 import { socketIoLibraryScript, socketIoPageReloadScript } from '../helpers/scripts';
 
 const convertPropsString = (propsString: string): LooseObject => {
@@ -18,7 +17,7 @@ const convertPropsString = (propsString: string): LooseObject => {
 
 const createViewPage = (
   response: { head: string[]; bodyInline: string; bodyLast: string[] },
-  apiPort: configValue,
+  apiPort: number,
 ): string =>
   `<!doctype html>
    <html class="b-pw-1280">
@@ -39,7 +38,7 @@ const createViewPage = (
      </body>
    </html>`;
 
-const createComponentServer = (service: Service, config: Config): express.Express => {
+const createComponentServer = (service: Service, config: Store): express.Express => {
   const server = express();
 
   server.get(
@@ -77,8 +76,8 @@ const createComponentServer = (service: Service, config: Config): express.Expres
           history,
         );
         if (statusCode === 200) {
-          const apiPort = config.getValue('apiPort');
-          res.send(createViewPage(JSON.parse(body), apiPort));
+          const apiPort = config.get('apiPort');
+          res.send(createViewPage(JSON.parse(body), apiPort as number));
         } else {
           res
             .status(statusCode)

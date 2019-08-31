@@ -1,8 +1,6 @@
 import renderChas from 'chas';
 
-import { Config } from '../app/config';
-import { State } from '../app/state';
-import { ComponentType, ComponentState, System, Response } from '../../common/types';
+import { ComponentType, ComponentState, System, Response, Store } from '../../common/types';
 
 const requestWithRetries = async (
   system: System,
@@ -66,8 +64,8 @@ const getNewHistory = (currentHistory: string[], newEntry: string): string[] => 
 
 const request = async (
   system: System,
-  config: Config,
-  state: State,
+  config: Store,
+  state: Store,
   name: string,
   componentPath: string,
   currentState: ComponentState,
@@ -91,12 +89,12 @@ const request = async (
 
   if (history) {
     const stateKey = `history.${name}`;
-    const currentHistory = (state.retrieve(stateKey) || []) as string[];
+    const currentHistory = (state.get(stateKey) || []) as string[];
     const newEntry = type === ComponentType.Page ? props.path || '' : propsString;
-    await state.store(stateKey, getNewHistory(currentHistory, newEntry));
+    await state.set(stateKey, getNewHistory(currentHistory, newEntry));
   }
 
-  if (config.getValue('renderer') === 'chas') {
+  if (config.get('renderer') === 'chas') {
     const chasType = type === ComponentType.View ? 'view' : 'data';
     const response = await renderChas(componentPath, chasType, props);
     return {
@@ -106,7 +104,7 @@ const request = async (
     };
   }
 
-  const retries = (config.getValue('retries') || 10) as number;
+  const retries = (config.get('retries') || 10) as number;
   return requestWithRetries(system, name, type, port, propsString, log, retries);
 };
 

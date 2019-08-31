@@ -2,8 +2,6 @@ import { join } from 'path';
 import * as semver from 'semver';
 
 import { Routing } from './routing';
-import { Config } from '../app/config';
-import { State } from '../app/state';
 import componentStateMachine from './componentStateMachine';
 import { createComponentActions } from './componentActions';
 import openInEditorHelper from '../helpers/editor';
@@ -18,13 +16,14 @@ import {
   Package,
   System,
   StateValue,
+  Store,
 } from '../../common/types';
 
 const createComponent = (
   system: System,
   routing: Routing,
-  config: Config,
-  state: State,
+  config: Store,
+  state: Store,
   name: string,
   directoryName: string,
   componentPath: string,
@@ -79,7 +78,7 @@ const createComponent = (
   const getType = (): ComponentType => componentType;
 
   const updateURL = async (): Promise<void> => {
-    const localhost = config.getValue('localhost') || 'localhost';
+    const localhost = config.get('localhost') || 'localhost';
     const type = getType();
     if (type === ComponentType.Page) {
       if (pagePort) {
@@ -197,11 +196,11 @@ const createComponent = (
 
   const getVersions = (): { local: string; int: string; test: string; live: string } => ({ ...versions });
 
-  const getUseCache = (): boolean => Boolean(state.retrieve(`cache.enabled.${name}`));
+  const getUseCache = (): boolean => Boolean(state.get(`cache.enabled.${name}`));
 
-  const getFavourite = (): boolean => Boolean(state.retrieve(`favourite.${name}`));
+  const getFavourite = (): boolean => Boolean(state.get(`favourite.${name}`));
 
-  const getHistory = (): StateValue => state.retrieve(`history.${name}`) || [];
+  const getHistory = (): StateValue => (state.get(`history.${name}`) as StateValue) || [];
 
   const actions = createComponentActions(
     system,
@@ -221,13 +220,13 @@ const createComponent = (
   const getState = (): number => stateMachine.getState();
 
   const setUseCache = async (useCache: boolean): Promise<void> => {
-    await state.store(`cache.enabled.${name}`, useCache);
+    await state.set(`cache.enabled.${name}`, useCache);
     await updated();
     await stateMachine.restart();
   };
 
   const setFavourite = async (favourite: boolean): Promise<void> => {
-    await state.store(`favourite.${name}`, favourite || null);
+    await state.set(`favourite.${name}`, favourite || null);
   };
 
   const request = async (props: { [Key: string]: string }, history: boolean): Promise<Response> => {

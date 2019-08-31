@@ -254,6 +254,17 @@ interface System {
 
 type Dispatch = ThunkDispatch<AppState, undefined, AnyAction>;
 
+type storedValue = string[] | string | number | boolean;
+
+interface ValueStore {
+  [Key: string]: storedValue;
+}
+
+interface Store {
+  get(key: string): storedValue;
+  set(key: string, value: storedValue): Promise<void>;
+}
+
 export {
   LooseObject,
   Component,
@@ -278,4 +289,7 @@ export {
   MorphSystem,
   NetworkSystem,
   ProcessSystem,
+  Store,
+  storedValue,
+  ValueStore,
 };

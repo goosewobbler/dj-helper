@@ -1,8 +1,6 @@
 import { get } from 'lodash';
 import { join } from 'path';
 
-import { Config } from '../app/config';
-import { State } from '../app/state';
 import startPageServer from '../app/pageServer';
 import getComponentType from '../helpers/componentType';
 import { createComponentFiles, cloneComponentFiles } from '../helpers/files';
@@ -19,12 +17,13 @@ import {
   Response,
   Service,
   System,
+  Store,
 } from '../../common/types';
 
 const createService = async (
   system: System,
-  config: Config,
-  state: State,
+  config: Store,
+  state: Store,
   onComponentUpdate: (data: ComponentData) => void,
   onReload: () => void,
   options: {

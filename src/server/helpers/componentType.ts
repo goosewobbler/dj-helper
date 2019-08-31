@@ -1,12 +1,11 @@
-import { Config } from '../app/config';
-import { ComponentType, Package } from '../../common/types';
+import { ComponentType, Package, Store } from '../../common/types';
 
 const DefaultTypeOverrides: { [Key: string]: string } = {
   'bbc-morph-sport-media-asset-data': 'data',
 };
 
-const getComponentType = (config: Config, packageContents: Package, name: string): number => {
-  const typeOverride = DefaultTypeOverrides[name] || config.getValue(`typeOverrides.${name}`);
+const getComponentType = (config: Store, packageContents: Package, name: string): number => {
+  const typeOverride = DefaultTypeOverrides[name] || config.get(`typeOverrides.${name}`);
   if (typeOverride) {
     switch (typeOverride) {
       case 'data':

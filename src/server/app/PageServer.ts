@@ -1,8 +1,8 @@
 import express from 'express';
 import * as url from 'url';
-import { Service } from '../../common/types';
-import { Config, configValue } from './config';
+
 import { socketIoLibraryScript, socketIoPageReloadScript } from '../helpers/scripts';
+import { Service, Store } from '../../common/types';
 
 const nextPageServerPort = 5001;
 const pageServers: { [Key: string]: number } = {};
@@ -23,7 +23,7 @@ const createResponseBody = (body: string, statusCode: number): string => {
   }
 };
 
-const appendSocketReloadScript = (responseBody: string, apiPort: configValue): string =>
+const appendSocketReloadScript = (responseBody: string, apiPort: number): string =>
   responseBody
     .replace('<head>', `<head>${socketIoLibraryScript(apiPort)}`)
     .replace('</body>', `${socketIoPageReloadScript(apiPort)}</body>`);
@@ -36,7 +36,7 @@ const start = async (server: express.Express, port: number): Promise<void> => {
   });
 };
 
-const createPageServer = (service: Service, componentName: string, apiPort: configValue): express.Express => {
+const createPageServer = (service: Service, componentName: string, apiPort: number): express.Express => {
   const server = express();
 
   server.get(
@@ -75,15 +75,15 @@ const createPageServer = (service: Service, componentName: string, apiPort: conf
   return server;
 };
 
-const startPageServer = async (service: Service, name: string, config: Config): Promise<number> => {
+const startPageServer = async (service: Service, name: string, config: Store): Promise<number> => {
   if (name in pageServers) {
     return pageServers[name];
   }
 
-  const apiPort = config.getValue('apiPort');
+  const apiPort = config.get('apiPort');
   const port = nextPageServerPort + 1;
   pageServers[name] = port;
-  await start(createPageServer(service, name, apiPort), port);
+  await start(createPageServer(service, name, apiPort as number), port);
   return port;
 };
 

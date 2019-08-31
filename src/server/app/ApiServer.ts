@@ -4,20 +4,14 @@ import express from 'express';
 import { readFileSync } from 'graceful-fs';
 import { join } from 'path';
 
-import { Config } from './config';
 import { Service } from '../service';
 import { Updater } from './updater';
 import createApiComponentRouter from './apiComponentRouter';
 import renderIndex from './indexRenderer';
-
 import { logError } from '../helpers/console';
+import { Store } from '../../common/types';
 
-const createApiServer = (
-  service: Service,
-  config: Config,
-  updater: Updater,
-  onUpdated: () => void,
-): express.Express => {
+const createApiServer = (service: Service, config: Store, updater: Updater, onUpdated: () => void): express.Express => {
   const app = express();
 
   const publicPath = join(__dirname, '../../../public');
@@ -50,7 +44,7 @@ const createApiServer = (
   );
 
   app.get('/local-push.js', (req, res): void => {
-    const pollInterval = String(config.getValue('livePushPollInterval') || 10000);
+    const pollInterval = String(config.get('livePushPollInterval') || 10000);
     const js = readFileSync(join(publicPath, 'local-push.js'), 'utf-8');
     const modifiedJs = js.replace('POLL_INTERVAL_FROM_CONFIG', pollInterval);
 

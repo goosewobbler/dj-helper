@@ -5,16 +5,14 @@ import * as appRoot from 'app-root-path';
 import { createService } from '../service';
 import createApiServer from './apiServer';
 import createComponentServer from './componentServer';
-import { createConfig, Config } from './config';
-import { createState } from './state';
 import { createUpdater } from './updater';
-
-import { ComponentData, Service, System } from '../../common/types';
+import { ComponentData, Service, System, Store } from '../../common/types';
+import createStore from '../helpers/store';
 
 interface App {
   api: Express;
   component: Express;
-  config: Config;
+  config: Store;
   devMode: boolean;
   service: Service;
 }
@@ -33,9 +31,9 @@ const createApp = async (
   const componentsDirectory = devMode ? join(currentWorkingDirectory, '../morph-modules') : currentWorkingDirectory;
   const routingFilePath = `${appRoot}/.routing.json`;
   const configFilePath = join(componentsDirectory, 'morph-developer-console-config.json');
-  const config = await createConfig(configFilePath, system);
+  const config = await createStore(configFilePath, system);
   const stateFilePath = join(componentsDirectory, 'morph-developer-console-state.json');
-  const state = await createState(stateFilePath, system);
+  const state = await createStore(stateFilePath, system);
   const updater = createUpdater(system, currentVersion);
 
   process.env.APP_ROOT_PATH = appRoot.toString();

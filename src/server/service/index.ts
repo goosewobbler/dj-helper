@@ -4,11 +4,8 @@ import { join } from 'path';
 import { Config } from '../app/config';
 import { State } from '../app/state';
 import startPageServer from '../app/pageServer';
-
-import cloneComponent from '../helpers/clone';
 import getComponentType from '../helpers/componentType';
-import createComponentFiles from '../helpers/createComponentFiles';
-
+import { createComponentFiles, cloneComponentFiles } from '../helpers/files';
 import { createRouting, Routing } from './routing';
 import { createGrapher, Grapher } from './grapher';
 import createComponent from './component';
@@ -175,7 +172,7 @@ const createService = async (
     const componentDirectoryName = getComponent(name).getDirectoryName();
     const componentDirectory = join(options.componentsDirectory, componentDirectoryName);
     const clonedComponentDirectory = join(options.componentsDirectory, cloneName);
-    await cloneComponent(system, componentDirectory, cloneName, clonedComponentDirectory, cloneOptions);
+    await cloneComponentFiles(system, componentDirectory, cloneName, clonedComponentDirectory, cloneOptions);
     await addComponent(cloneName);
   };
 

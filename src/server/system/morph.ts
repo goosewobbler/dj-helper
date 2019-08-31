@@ -1,6 +1,6 @@
 import * as morphCli from 'morph-cli';
 import * as morphPromote from 'morph-cli/lib/commands/promote'; // tslint:disable-line no-submodule-imports
-import getShrinkwrap from '../helpers/shrinkwrapped';
+import { getShrinkwrap } from '../helpers/files';
 
 interface MorphSystem {
   getShrinkwrap(name: string): Promise<{ [Key: string]: string }>;

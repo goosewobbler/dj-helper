@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import io from 'socket.io-client';
@@ -55,9 +55,9 @@ if (!preloadedState) {
 
 ReactDOM.render(
   <Provider store={reduxStore}>
-    <App />
+    <App apiPort={apiPort} />
   </Provider>,
-  document.getElementById('root'),
+  document.getElementById('app'),
 );
 
 const inputElement = document.getElementById('search-input');

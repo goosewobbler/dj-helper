@@ -10,6 +10,7 @@ import Dialog from '../Dialog';
 import GitHubLink from '../GithubLink';
 import { setApiPort } from '../../helpers/apiPortHelper';
 import { AppContextProvider, AppContext } from '../../contexts/appContext';
+import Spacer from '../Spacer';
 
 interface AppProps {
   apiPort: number;
@@ -54,26 +55,28 @@ const App = (props: AppProps): ReactElement => {
 
   return (
     <AppContextProvider value={appContextValue}>
-      <div>
+      <div className="flex flex-col flex-grow">
         {outOfDate && <UpdateBar />}
-        <div className="header">
+        <div className="header flex items-center flex-shrink-0 p-3 justify-between shadow-md border-b">
           <h1 key="title">Morph Developer Console</h1>
-          <div key="links">
+          <div key="links" className="flex flex-shrink-0 height h-10 mr-4">
             <LabelButton
-              className="create-button"
+              className="create-button flex items-center justify-center flex-shrink-0 bg-transparent rounded p-8 text-sm"
               label="Create"
               image={<CreateIcon />}
               onClick={(): void => showDialog('create')}
             />
+            <Spacer />
             <GitHubLink link="https://github.com/bbc/morph-developer-console" />
           </div>
         </div>
-        <div className="content">
-          <div className="section">
+        <Spacer />
+        <div className="content flex flex-grow">
+          <div className="section flex flex-col flex-grow-0 flex-shrink-0 p-2 overflow-hidden flex-basis-30">
             <ComponentListFilterContainer key="filter" />
             <ComponentListContainer key="list" />
           </div>
-          <div className="section">
+          <div className="section flex flex-col flex-grow-0 flex-shrink-0 p-2 overflow-hidden flex-basis-70">
             <ComponentDetailsContainer />
           </div>
           {showCreateDialog && renderCreateDialog(props)}

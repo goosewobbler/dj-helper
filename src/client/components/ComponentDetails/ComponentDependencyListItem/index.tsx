@@ -5,6 +5,7 @@ import LabelButton from '../../LabelButton';
 import { context, ComponentContext } from '../../../contexts/componentContext';
 
 import { ComponentState, ComponentData, ComponentDependency } from '../../../../common/types';
+import Spacer from '../../Spacer';
 
 interface ComponentDependencyProps {
   dependency: ComponentDependency;
@@ -72,9 +73,13 @@ const ComponentDependencyListItem = ({ dependency }: ComponentDependencyProps): 
     <li key={name}>
       <div className="component-dependency" onClick={onClick}>
         <span className="component-name-label">{name}</span>
+        <Spacer fill />
         {renderLinkButton(name, componentContext.component, onUnlink, onLink)}
+        <Spacer />
         {renderVersionBox(version, outdated)}
+        <Spacer />
         {renderVersionBox(has, has && latest && has !== latest)}
+        <Spacer />
         {renderVersionBox(latest, false)}
       </div>
     </li>

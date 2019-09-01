@@ -6,6 +6,7 @@ import PlayIcon from './PlayIcon';
 import StarIcon from './StarIcon';
 import IconButton from './IconButton';
 import { ComponentData, ComponentState } from '../../../../common/types';
+import Spacer from '../../Spacer';
 
 const createID = (componentName: string): string => `component-list-item-${componentName}`;
 
@@ -145,8 +146,11 @@ class ComponentListItem extends React.PureComponent<ComponentListItemProps> {
     return (
       <div role="button" id={createID(name)} onClick={this.handleClick}>
         {renderFavouriteButton(this.props)}
+        <Spacer />
         <span className="component-name-label">{labelText}</span>
+        <Spacer />
         {renderLaunchButton(component)}
+        <Spacer />
         {renderStartStopButton(this.props, this.handleStart, this.handleStop)}
       </div>
     );

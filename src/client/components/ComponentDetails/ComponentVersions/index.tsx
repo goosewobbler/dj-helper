@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { gte, lt, valid } from 'semver';
 
 import { context, ComponentContext } from '../../../contexts/componentContext';
+import Spacer from '../../Spacer';
 
 const promotionInProgressText = (environment: string): string => (environment === 'int' ? 'Bumping' : 'Promoting');
 const promotionActionText = (environment: string): string => (environment === 'int' ? 'Bump' : 'Promote');
@@ -45,6 +46,7 @@ const Environment = ({
   return (
     <div className={classNames(['environment-version', isCurrent && 'current'])}>
       <p className="version-label">{version || 'N/A'}</p>
+      <Spacer space={4} />
       <p className="environment-label">{label}</p>
     </div>
   );
@@ -117,13 +119,16 @@ const ComponentVersions = (): React.ReactElement => {
   return (
     <div>
       {promotionFailure && (
-        <p className="promotion-failure">
-          <span role="img" aria-label="anguished face">
-            😧
-          </span>
-          &nbsp; Promotion failed:&nbsp;
-          {promotionFailureElement(promotionFailure)}
-        </p>
+        <>
+          <p className="promotion-failure">
+            <span role="img" aria-label="anguished face">
+              😧
+            </span>
+            &nbsp; Promotion failed:&nbsp;
+            {promotionFailureElement(promotionFailure)}
+          </p>
+          <Spacer space={16} />
+        </>
       )}
       <div className="environment">
         <Environment label="LOCAL" version={local} isCurrent={localUpToDate} />

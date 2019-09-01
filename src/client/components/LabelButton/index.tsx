@@ -24,7 +24,7 @@ const LabelButton = ({ className, disabled, onClick, label, image }: LabelButton
       onClick();
     }}
   >
-    {image && <div>{image}</div>}
+    {image && <div className={`inline-flex h-3 w-3 ${label ? 'mr-2 ml-1' : 'm-0'}`}>{image}</div>}
     <p>{label}</p>
   </button>
 );

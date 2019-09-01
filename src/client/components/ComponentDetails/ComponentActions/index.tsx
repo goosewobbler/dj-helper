@@ -6,6 +6,7 @@ import LabelButton from '../../LabelButton';
 
 import { ComponentState, ComponentData } from '../../../../common/types';
 import { ComponentHandlers } from '../../../contexts/componentContext';
+import Spacer from '../../Spacer';
 
 interface ComponentActionsProps {
   component: ComponentData;
@@ -73,7 +74,9 @@ const ComponentActions = (props: ComponentActionsProps): ReactElement => {
         </p>
         <p className="state-label">{renderStateLabel(state)}</p>
       </div>
+      <Spacer />
       <div className="actions">
+        <Spacer fill />
         {shouldDisplayUseCacheButton &&
           renderUseCacheButton(
             (): void => onSetUseCache(name, !useCache),

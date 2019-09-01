@@ -11,14 +11,14 @@ interface IconButtonProps {
 const IconButton = ({ className, onClick, children, label }: IconButtonProps): React.ReactElement => (
   <button
     type="button"
-    className={className}
+    className={`${className} h-4 w-4 flex-shrink-0 border-none bg-transparent outline-none`}
     onClick={(event: React.FormEvent): void => {
       event.stopPropagation();
       onClick();
     }}
   >
     {children}
-    <span>{label}</span>
+    <span className="text-transparent text-hidden">{label}</span>
   </button>
 );
 

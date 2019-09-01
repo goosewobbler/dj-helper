@@ -12,6 +12,7 @@ import ComponentVersions from './ComponentVersions';
 import { ComponentData, ComponentDependency } from '../../../common/types';
 import { ComponentContext, ComponentContextProvider, ComponentHandlers } from '../../contexts/componentContext';
 import { getApiPort } from '../../helpers/apiPortHelper';
+import Spacer from '../Spacer';
 
 interface ComponentDetailsProps {
   component?: ComponentData;
@@ -22,7 +23,9 @@ interface ComponentDetailsProps {
 const renderDetailsSectionEnd = (): ReactElement => (
   <div className="dependencies-heading">
     <h4>Wants</h4>
+    <Spacer />
     <h4>Bundled</h4>
+    <Spacer />
     <h4>Latest</h4>
   </div>
 );
@@ -97,7 +100,7 @@ const ComponentDetails = ({ component, editors, handlers }: ComponentDetailsProp
             <ComponentVersions />
           </ComponentDetailsSection>
           {hasDependencies && (
-            <ComponentDetailsSection label="Dependencies" end={renderDetailsSectionEnd()}>
+            <ComponentDetailsSection label="Dependencies" end={renderDetailsSectionEnd()} grow>
               <ul>
                 {orderDependencies(dependencies).map(
                   (dependency: ComponentDependency): ReactElement => (

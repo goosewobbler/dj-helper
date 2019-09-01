@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { ReactElement, useContext } from 'react';
 
 import VersionBox from './VersionBox';
 import LabelButton from '../../LabelButton';
@@ -23,7 +23,7 @@ const renderLinkButton = (
   component: ComponentData,
   onUnlink: () => void,
   onLink: () => void,
-): React.ReactElement => {
+): ReactElement => {
   if (isLinking(dependencyName, component)) {
     return (
       <div className="loading">
@@ -56,12 +56,12 @@ const renderLinkButton = (
   );
 };
 
-const renderVersionBox = (version: string, outdated: boolean): React.ReactElement => (
+const renderVersionBox = (version: string, outdated: boolean): ReactElement => (
   <VersionBox version={version} outdated={outdated} />
 );
 
-const ComponentDependencyListItem = ({ dependency }: ComponentDependencyProps): React.ReactElement => {
-  const componentContext: ComponentContext = React.useContext(context);
+const ComponentDependencyListItem = ({ dependency }: ComponentDependencyProps): ReactElement => {
+  const componentContext: ComponentContext = useContext(context);
   const { onLinkComponent, onUnlinkComponent, onSelectComponent } = componentContext.handlers;
   const { name, displayName, version, outdated, has, latest } = dependency;
   const onLink = (): void => onLinkComponent(displayName, name);

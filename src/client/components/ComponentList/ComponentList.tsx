@@ -7,9 +7,9 @@ interface ComponentListProps {
   components: ComponentData[];
   selectedComponent?: string;
   onSelectComponent(name: string): void;
-  onFavouriteComponent(name: string, favourite: boolean): () => void;
-  onStartComponent(name: string): () => void;
-  onStopComponent(name: string): () => void;
+  onFavouriteComponent(name: string, favourite: boolean): void;
+  onStartComponent(name: string): void;
+  onStopComponent(name: string): void;
 }
 
 class ComponentList extends React.PureComponent<ComponentListProps> {

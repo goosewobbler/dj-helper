@@ -12,11 +12,11 @@ const createID = (componentName: string): string => `component-list-item-${compo
 interface ComponentListItemProps {
   component: ComponentData;
   selected: boolean;
-  onFavourite?(name: string, favourite: boolean): () => void;
+  onFavourite?(name: string, favourite: boolean): void;
   onClick?(name: string): void;
   onToggleFavourite?(): void;
-  onStart?(name: string): () => void;
-  onStop?(name: string): () => void;
+  onStart?(name: string): void;
+  onStop?(name: string): void;
 }
 
 const renderFavouriteButton = ({
@@ -25,13 +25,13 @@ const renderFavouriteButton = ({
 }: ComponentListItemProps): React.ReactElement => {
   if (favourite) {
     return (
-      <IconButton className="unfavourite-button" label="Unfavourite" onClick={(): Function => onFavourite(name, false)}>
+      <IconButton className="unfavourite-button" label="Unfavourite" onClick={(): void => onFavourite(name, false)}>
         <StarIcon starred />
       </IconButton>
     );
   }
   return (
-    <IconButton className="favourite-button" label="Favourite" onClick={(): Function => onFavourite(name, true)}>
+    <IconButton className="favourite-button" label="Favourite" onClick={(): void => onFavourite(name, true)}>
       <StarIcon starred={false} />
     </IconButton>
   );
@@ -115,8 +115,8 @@ class ComponentListItem extends React.PureComponent<ComponentListItemProps> {
       onStop,
     } = this.props;
     this.handleClick = (): void => onClick(name);
-    this.handleStart = (): Function => onStart(name);
-    this.handleStop = (): Function => onStop(name);
+    this.handleStart = (): void => onStart(name);
+    this.handleStop = (): void => onStop(name);
   }
 
   public shouldComponentUpdate(nextProps: ComponentListItemProps): boolean {

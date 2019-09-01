@@ -1,6 +1,6 @@
 import { join } from 'path';
 import { Express } from 'express';
-import * as appRoot from 'app-root-path';
+import appRoot from 'app-root-path';
 
 import { createService } from '../service';
 import createApiServer from './apiServer';

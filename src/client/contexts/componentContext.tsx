@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { createContext } from 'react';
 import { ComponentData } from '../../common/types';
 
 interface ComponentHandlers {
@@ -19,7 +19,7 @@ interface ComponentContext {
   handlers: ComponentHandlers;
 }
 
-const context = React.createContext<ComponentContext | null>(null);
+const context = createContext<ComponentContext | null>(null);
 const ComponentContextProvider = context.Provider;
 const ComponentContextConsumer = context.Consumer;
 

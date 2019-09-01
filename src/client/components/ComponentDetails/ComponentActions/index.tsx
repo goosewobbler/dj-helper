@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { ReactElement } from 'react';
 
 import ExternalLink from '../../ExternalLink';
 import VSCodeIcon from './VSCodeIcon';
@@ -30,31 +30,31 @@ const renderStateLabel = (state: ComponentState): string => {
   }
 };
 
-const renderUseCacheButton = (onClick: () => void, className: string): React.ReactElement => (
+const renderUseCacheButton = (onClick: () => void, className: string): ReactElement => (
   <div className="wrapper">
     <LabelButton className={className} label="Cache" onClick={onClick} />
   </div>
 );
 
-const renderBuildButton = (onClick: () => void): React.ReactElement => (
+const renderBuildButton = (onClick: () => void): ReactElement => (
   <div className="wrapper">
     <LabelButton className="build-button" label="Build" onClick={onClick} />
   </div>
 );
 
-const renderInstallButton = (onClick: () => void): React.ReactElement => (
+const renderInstallButton = (onClick: () => void): ReactElement => (
   <div className="wrapper">
     <LabelButton className="install-button" label="Reinstall" onClick={onClick} />
   </div>
 );
 
-const renderCloneButton = (onClick: () => void): React.ReactElement => (
+const renderCloneButton = (onClick: () => void): ReactElement => (
   <div className="wrapper">
     <LabelButton className="clone-button" label="Clone" onClick={onClick} />
   </div>
 );
 
-const ComponentActions = (props: ComponentActionsProps): React.ReactElement => {
+const ComponentActions = (props: ComponentActionsProps): ReactElement => {
   const {
     editors,
     component: { displayName, state, name, useCache, rendererType },

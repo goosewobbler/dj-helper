@@ -6,7 +6,6 @@ let mainWindow: Electron.BrowserWindow;
 
 async function createWindow(): Promise<void> {
   const apiPort = await startServer().catch(logError);
-
   mainWindow = new BrowserWindow({
     height: 800,
     width: 1200,

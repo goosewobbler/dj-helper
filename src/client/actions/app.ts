@@ -1,6 +1,7 @@
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { ComponentData, Dispatch, AppState } from '../../common/types';
+import { getApiPort } from '../helpers/apiPortHelper';
 
 export const updateAvailable = (): AnyAction => ({
   type: 'UPDATE_AVAILABLE',
@@ -16,7 +17,7 @@ export const updated = (): AnyAction => ({
 
 export const update = (): ThunkAction<void, AppState, undefined, AnyAction> => (dispatch: Dispatch): void => {
   dispatch(updating());
-  const { apiPort } = window.mdc;
+  const apiPort = getApiPort();
   fetch(`http://localhost:${apiPort}/api/update`, { method: 'POST' });
 };
 

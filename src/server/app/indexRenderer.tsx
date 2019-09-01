@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { renderToString } from 'react-dom/server'; // tslint:disable-line no-submodule-imports
+import { renderToString } from 'react-dom/server';
 import { Provider } from 'react-redux';
 
 import App from '../../client/components/App';
@@ -27,19 +27,17 @@ const renderIndex = async (
   }
 
   const reduxStore = createReduxStore(initialState);
-
+  const apiPort = config.get('apiPort') as number;
   const html = renderToString(
     <Provider store={reduxStore}>
-      <App />
+      <App apiPort={apiPort} />
     </Provider>,
   );
 
   const preloadedState = reduxStore.getState();
-  const apiPort = config.get('apiPort') as string;
-
   return template
     .replace('HTML_PLACEHOLDER', html)
-    .replace('API_PORT_PLACEHOLDER', apiPort)
+    .replace('API_PORT_PLACEHOLDER', apiPort.toString())
     .replace('STATE_PLACEHOLDER', JSON.stringify(preloadedState).replace(/</g, '\\u003c'));
 };
 

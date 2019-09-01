@@ -2,12 +2,12 @@ import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { showDialog } from './app';
 import { ComponentState, Dispatch, AppState } from '../../common/types';
-
-const { apiPort } = window.mdc;
+import { getApiPort } from '../helpers/apiPortHelper';
 
 /* FETCH VERSIONS */
 
 export const fetchVersions = (name: string): AnyAction => {
+  const apiPort = getApiPort();
   const action = (): Promise<Response> =>
     fetch(`http://localhost:${apiPort}/api/component/${name}/versions`, { method: 'POST' });
 
@@ -25,6 +25,7 @@ export const startComponent = (name: string): ThunkAction<void, AppState, undefi
     state: ComponentState.Starting,
     type: 'CHANGE_COMPONENT_STATE',
   });
+  const apiPort = getApiPort();
   fetch(`http://localhost:${apiPort}/api/component/${name}/start`, { method: 'POST' });
 };
 
@@ -38,6 +39,7 @@ export const stopComponent = (name: string): ThunkAction<void, AppState, undefin
     state: ComponentState.Stopped,
     type: 'CHANGE_COMPONENT_STATE',
   });
+  const apiPort = getApiPort();
   fetch(`http://localhost:${apiPort}/api/component/${name}/stop`, { method: 'POST' });
 };
 
@@ -51,6 +53,7 @@ export const installComponent = (name: string): ThunkAction<void, AppState, unde
     state: ComponentState.Installing,
     type: 'CHANGE_COMPONENT_STATE',
   });
+  const apiPort = getApiPort();
   fetch(`http://localhost:${apiPort}/api/component/${name}/install`, { method: 'POST' });
 };
 
@@ -64,6 +67,7 @@ export const buildComponent = (name: string): ThunkAction<void, AppState, undefi
     state: ComponentState.Building,
     type: 'CHANGE_COMPONENT_STATE',
   });
+  const apiPort = getApiPort();
   fetch(`http://localhost:${apiPort}/api/component/${name}/build`, { method: 'POST' });
 };
 
@@ -73,6 +77,7 @@ export const setUseCacheOnComponent = (
   name: string,
   value: boolean,
 ): ThunkAction<void, AppState, undefined, AnyAction> => (): void => {
+  const apiPort = getApiPort();
   fetch(`http://localhost:${apiPort}/api/component/${name}/cache/${value ? 'true' : 'false'}`, { method: 'POST' });
 };
 
@@ -87,6 +92,7 @@ export const favouriteComponent = (
     name,
     type: 'FAVOURITE_COMPONENT',
   });
+  const apiPort = getApiPort();
   fetch(`http://localhost:${apiPort}/api/component/${name}/favourite/${favourite}`, { method: 'POST' });
 };
 
@@ -102,6 +108,7 @@ export const bumpComponent = (name: string, type: string): ThunkAction<void, App
   dispatch: Dispatch,
 ): void => {
   dispatch(promotingComponent(name, 'int'));
+  const apiPort = getApiPort();
   fetch(`http://localhost:${apiPort}/api/component/${name}/bump/${type}`, { method: 'POST' }).then((): void => {
     dispatch(promotingComponent(name, null)); // TODO: why are we dispatching again here?
   });
@@ -112,12 +119,14 @@ export const promoteComponent = (
   environment: string,
 ): ThunkAction<void, AppState, undefined, AnyAction> => (dispatch: Dispatch): void => {
   dispatch(promotingComponent(name, environment));
+  const apiPort = getApiPort();
   fetch(`http://localhost:${apiPort}/api/component/${name}/promote/${environment}`, { method: 'POST' });
 };
 
 /* OPEN IN CODE */
 
 export const openInCode = (name: string): ThunkAction<void, AppState, undefined, AnyAction> => (): void => {
+  const apiPort = getApiPort();
   fetch(`http://localhost:${apiPort}/api/component/${name}/edit`, { method: 'POST' });
 };
 
@@ -133,6 +142,7 @@ export const linkComponent = (name: string, dependency: string): ThunkAction<voi
   dispatch: Dispatch,
 ): void => {
   dispatch(linkingComponent(name, dependency));
+  const apiPort = getApiPort();
   fetch(`http://localhost:${apiPort}/api/component/${name}/link/${dependency}`, { method: 'POST' });
 };
 
@@ -141,6 +151,7 @@ export const unlinkComponent = (
   dependency: string,
 ): ThunkAction<void, AppState, undefined, AnyAction> => (dispatch: Dispatch): void => {
   dispatch(linkingComponent(name, dependency));
+  const apiPort = getApiPort();
   fetch(`http://localhost:${apiPort}/api/component/${name}/unlink/${dependency}`, { method: 'POST' });
 };
 
@@ -174,9 +185,11 @@ export const createComponent = (
 
   if (sourceComponent) {
     dispatch(showDialog('clone', sourceComponent));
+    const apiPort = getApiPort();
     createUrl = `http://localhost:${apiPort}/api/component/${sourceComponent}/clone`;
   } else {
     dispatch(showDialog('create'));
+    const apiPort = getApiPort();
     createUrl = `http://localhost:${apiPort}/api/component/create/${type}`;
   }
 

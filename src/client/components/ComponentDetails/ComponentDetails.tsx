@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { ReactElement } from 'react';
 
 import ComponentDetailsSection from './ComponentDetailsSection';
 import ExternalLink from '../ExternalLink';
@@ -11,8 +11,7 @@ import ComponentVersions from './ComponentVersions';
 
 import { ComponentData, ComponentDependency } from '../../../common/types';
 import { ComponentContext, ComponentContextProvider, ComponentHandlers } from '../../contexts/componentContext';
-
-const { apiPort } = window.mdc;
+import { getApiPort } from '../../helpers/apiPortHelper';
 
 interface ComponentDetailsProps {
   component?: ComponentData;
@@ -20,7 +19,7 @@ interface ComponentDetailsProps {
   handlers: ComponentHandlers;
 }
 
-const renderDetailsSectionEnd = (): React.ReactElement => (
+const renderDetailsSectionEnd = (): ReactElement => (
   <div className="dependencies-heading">
     <h4>Wants</h4>
     <h4>Bundled</h4>
@@ -31,7 +30,8 @@ const renderDetailsSectionEnd = (): React.ReactElement => (
 const orderDependencies = (dependencies: ComponentDependency[]): ComponentDependency[] =>
   (dependencies || []).sort((a, b): number => a.displayName.localeCompare(b.displayName));
 
-const renderDependencyGraph = (handlers: ComponentHandlers, componentName: string): React.ReactElement => {
+const renderDependencyGraph = (handlers: ComponentHandlers, componentName: string): ReactElement => {
+  const apiPort = getApiPort();
   return (
     <Graph
       onSelect={handlers.onSelectComponent}
@@ -41,7 +41,8 @@ const renderDependencyGraph = (handlers: ComponentHandlers, componentName: strin
   );
 };
 
-const renderDependendantGraph = (handlers: ComponentHandlers, componentName: string): React.ReactElement => {
+const renderDependendantGraph = (handlers: ComponentHandlers, componentName: string): ReactElement => {
+  const apiPort = getApiPort();
   return (
     <Graph
       onSelect={handlers.onSelectComponent}
@@ -56,7 +57,7 @@ const buildPipelineLink = (rendererType: string): Function => (env: string): str
   return `https://ci.user.morph.int.tools.bbc.co.uk/job/morph-asset-${jobPrefix}promote-${env}/`;
 };
 
-const renderPipelineLinks = (component: ComponentData): React.ReactElement => {
+const renderPipelineLinks = (component: ComponentData): ReactElement => {
   const buildEnvLink = buildPipelineLink(component.rendererType);
   return (
     <div key="links">
@@ -67,13 +68,13 @@ const renderPipelineLinks = (component: ComponentData): React.ReactElement => {
   );
 };
 
-const renderPlaceholder = (): React.ReactElement => (
+const renderPlaceholder = (): ReactElement => (
   <div className="placeholder">
     <p>No component selected</p>
   </div>
 );
 
-const ComponentDetails = ({ component, editors, handlers }: ComponentDetailsProps): React.ReactElement => {
+const ComponentDetails = ({ component, editors, handlers }: ComponentDetailsProps): ReactElement => {
   if (!component) {
     return renderPlaceholder();
   }
@@ -85,7 +86,7 @@ const ComponentDetails = ({ component, editors, handlers }: ComponentDetailsProp
   return (
     <Tabs
       headings={['Overview', 'Dependencies', 'Dependants']}
-      renderButtons={(): React.ReactElement => renderPipelineLinks(component)}
+      renderButtons={(): ReactElement => renderPipelineLinks(component)}
     >
       <ComponentContextProvider value={componentContextValue}>
         <div className="details">
@@ -99,7 +100,7 @@ const ComponentDetails = ({ component, editors, handlers }: ComponentDetailsProp
             <ComponentDetailsSection label="Dependencies" end={renderDetailsSectionEnd()}>
               <ul>
                 {orderDependencies(dependencies).map(
-                  (dependency: ComponentDependency): React.ReactElement => (
+                  (dependency: ComponentDependency): ReactElement => (
                     <ComponentDependencyListItem dependency={dependency} />
                   ),
                 )}

@@ -1,6 +1,9 @@
 import { app, BrowserWindow } from 'electron';
 import startServer from './indexServer';
 import { logError } from './server/helpers/console';
+import electronReload from 'electron-reload';
+
+electronReload('../public');
 
 let mainWindow: Electron.BrowserWindow;
 

@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.flex-basis-4 {
+  flex-basis: 4;
+}
+
+.flex-basis-8 {
+  flex-basis: 8;
+}
+
+.flex-basis-16 {
+  flex-basis: 16;
+}
+
+.flex-basis-30 {
+  flex-basis: 30;
+}
+
+.flex-basis-70 {
+  flex-basis: 70;
+}
+
+.text-hidden {
+  font-size: 0;
+  line-height: 0;
+}

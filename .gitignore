@@ -1,6 +1,7 @@
 lib
 node_modules
 public/bundle.*
+public/tailwind.css
 .vscode
 package-lock.json
 npm-debug.log

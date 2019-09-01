@@ -15,6 +15,7 @@ import App from './client/components/App';
 import createReduxStore from './client/reduxStore';
 import { logError } from './server/helpers/console';
 import { ComponentData, AppStatus, ComponentsData, AppState } from './common/types';
+// import './tailwind.css';
 
 declare global {
   interface Window {

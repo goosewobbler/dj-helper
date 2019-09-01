@@ -59,13 +59,13 @@ const log = (message: string): void => {
     let logMessage = '';
 
     if (statusCode === '200') {
-      logMessage = colour(title) + (title ? ' ' : '') + chalk.green(body);
+      logMessage = (title ? `${colour(title)} ` : '') + chalk.green(body);
     } else if (statusCode === '202') {
-      logMessage = colour(title) + (title ? ' ' : '') + chalk.yellow(body);
+      logMessage = (title ? `${colour(title)} ` : '') + chalk.yellow(body);
     } else if (statusCode) {
-      logMessage = colour(title) + (title ? ' ' : '') + chalk.red(body);
+      logMessage = (title ? `${colour(title)} ` : '') + chalk.red(body);
     } else {
-      logMessage = colour(title) + (title ? ' ' : '') + body;
+      logMessage = (title ? `${colour(title)} ` : '') + body;
     }
 
     consoleLog(logMessage);

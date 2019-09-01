@@ -11,7 +11,7 @@ interface Action {
   componentToClone?: string;
 }
 
-const reducer = (state: AppState['ui'], action: Action): AppState['ui'] => {
+const reducer = (state: AppState['ui'] = { editors: [] }, action: Action): AppState['ui'] => {
   switch (action.type) {
     case 'RECEIVE_EDITORS': {
       return {

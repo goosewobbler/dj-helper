@@ -9,7 +9,7 @@
     "plugin:import/warnings",
     "plugin:import/typescript"
   ],
-  "plugins": ["jest", "import", "prettier", "@typescript-eslint"],
+  "plugins": ["jest", "import", "prettier", "@typescript-eslint", "react-hooks"],
   "env": {
     "jest": true,
     "node": true,

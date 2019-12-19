@@ -1,9 +1,7 @@
 lib
 node_modules
-public/bundle.*
-public/tailwind.css
+public
+dist
 .vscode
-package-lock.json
-npm-debug.log
 .DS_Store
 .routing.json

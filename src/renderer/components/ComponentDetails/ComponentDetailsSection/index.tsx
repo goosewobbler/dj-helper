@@ -1,0 +1,24 @@
+import * as React from 'react';
+
+interface ComponentDetailsSectionProps {
+  children?: React.ReactElement;
+  grow?: boolean;
+  label: string;
+  end?: React.ReactElement;
+}
+
+const ComponentDetailsSection = ({ label, end, children, grow }: ComponentDetailsSectionProps): React.ReactElement => {
+  const additionalFlexClasses = grow ? 'flex-grow flex-shrink' : 'flex-grow-0 flex-shrink-0';
+  const flexClasses = `flex flex-col ${additionalFlexClasses}`;
+  return (
+    <div className={flexClasses}>
+      <div className="header">
+        <h3 className="label">{label}</h3>
+        {end}
+      </div>
+      <div className={`content ${flexClasses}`}>{children}</div>
+    </div>
+  );
+};
+
+export default ComponentDetailsSection;

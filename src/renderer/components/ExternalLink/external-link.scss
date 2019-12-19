@@ -1,0 +1,17 @@
+a.external-link {
+  border: '1px solid rgba(0, 0, 0, 0.3)';
+  border-radius: '4px';
+  color: 'black';
+  flex-shrink: 0;
+  font-size: '16px';
+  text-decoration: 'none';
+  height: auto;
+  padding: 8px;
+}
+
+.image-container {
+  display: 'inline-flex';
+  height: '12px';
+  margin: '0 8px 0 4px';
+  width: '12px';
+}

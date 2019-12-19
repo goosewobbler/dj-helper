@@ -36,18 +36,18 @@ interface AppState {
     updating?: boolean;
     updated?: boolean;
     showDialog?: string;
-    hideDialog?: string;
+    hideDialog?: boolean;
   };
 }
 
 interface Component {
-  bump(type: 'patch' | 'minor'): Promise<void>;
+  bump(type: BumpType): Promise<void>;
   fetchDetails(): Promise<void>;
   getName(): string;
   getDirectoryName(): string;
   getDisplayName(): string;
   getType(): ComponentType;
-  getURL(): string;
+  getURL(): string | null;
   getFavourite(): boolean;
   getHistory(): StateValue;
   getUseCache(): boolean;
@@ -57,15 +57,10 @@ interface Component {
   getDependenciesSummary(): Promise<{ name: string }[]>;
   getLatestVersion(): Promise<string>;
   getLinking(): string[];
-  getVersions(): {
-    local: string;
-    int: string;
-    test: string;
-    live: string;
-  };
+  getVersions(): Versions;
   getState(): ComponentState;
-  getPromoting(): string;
-  getPromotionFailure(): string;
+  getPromoting(): string | null;
+  getPromotionFailure(): string | null;
   getRendererType(): string;
   promote(environment: string): Promise<void>;
   openInEditor(): Promise<void>;
@@ -77,12 +72,7 @@ interface Component {
   setPagePort(pagePort: number): void;
   start(): Promise<void>;
   stop(): Promise<void>;
-  request(
-    props: {
-      [Key: string]: string;
-    },
-    history: boolean,
-  ): Promise<Response>;
+  request(props: LooseObject, history: boolean): Promise<Response>;
 }
 
 interface ComponentsData {
@@ -90,8 +80,13 @@ interface ComponentsData {
   editors: string[];
 }
 
+enum BumpType {
+  patch = 'patch',
+  minor = 'minor',
+}
+
 interface Service {
-  bump(name: string, type: 'patch' | 'minor'): Promise<void>;
+  bump(name: string, type: BumpType): Promise<void>;
   build(name: string): Promise<void>;
   clone(name: string, cloneName: string, options: { description: string }): Promise<void>;
   create(name: string, type: ModuleType, options: { description: string }): Promise<void>;
@@ -104,11 +99,7 @@ interface Service {
   openInEditor(name: string): Promise<void>;
   promote(name: string, environment: string): Promise<void>;
   reinstall(name: string): Promise<void>;
-  request(
-    name: string,
-    props: LooseObject,
-    history: boolean,
-  ): Promise<{ statusCode: number; body: string; headers: LooseObject }>;
+  request(name: string, props: LooseObject, history: boolean): Promise<Response>;
   setFavourite(name: string, favourite: boolean): Promise<void>;
   setUseCache(name: string, useCache: boolean): Promise<void>;
   start(name: string): Promise<void>;
@@ -132,12 +123,7 @@ interface ComponentData {
   promoting?: string;
   promotionFailure?: string;
   useCache: boolean;
-  versions?: {
-    int: string;
-    live: string;
-    local: string;
-    test: string;
-  };
+  versions?: Versions;
   rendererType: string;
   alternatives?: string[];
   matches?: ComponentMatch[];
@@ -146,12 +132,12 @@ interface ComponentData {
 interface ComponentDependency {
   name: string;
   displayName: string;
-  has: string;
-  latest: string;
+  has: string | null;
+  latest: string | null;
   linked: boolean;
   outdated: boolean;
-  version: string;
-  rendererType: string;
+  version: string | null;
+  rendererType: string | null;
 }
 
 interface GraphData {
@@ -261,12 +247,27 @@ interface ValueStore {
 }
 
 interface Store {
-  get(key: string): storedValue;
-  set(key: string, value: storedValue): Promise<void>;
+  get(key: string): storedValue | null;
+  set(key: string, value: storedValue | null): Promise<void>;
 }
 
+// type EnvironmentValues = 'int' | 'local' | 'live' | 'test';
+// enum EnvironmentValues {
+//   int = 'int',
+//   local = 'local',
+//   live = 'live',
+//   test = 'test',
+// }
+
+type Versions = {
+  [key: string]: string | null;
+};
+// type Versions = { [key in EnvironmentValues]: string | null };
+
 export {
+  Versions,
   LooseObject,
+  BumpType,
   Component,
   ComponentData,
   ComponentDependency,

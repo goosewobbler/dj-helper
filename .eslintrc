@@ -1,24 +1,41 @@
 {
-  "extends": [
-    "airbnb",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "prettier",
-    "prettier/@typescript-eslint",
-    "plugin:import/errors",
-    "plugin:import/warnings",
-    "plugin:import/typescript"
-  ],
-  "plugins": ["jest", "import", "prettier", "@typescript-eslint", "react-hooks"],
+  "extends": ["airbnb", "prettier", "plugin:import/errors", "plugin:import/warnings"],
+  "plugins": ["import", "prettier"],
   "env": {
-    "jest": true,
     "node": true,
     "es6": true
   },
   "rules": {
-    "radix": "off",
-    "no-param-reassign": ["error", { "props": false }],
-    "react/jsx-filename-extension": ["warn", { "extensions": [".tsx", ".jsx"] }]
+    "radix": "off"
   },
-  "parser": "@typescript-eslint/parser"
+  "overrides": [
+    {
+      "files": ["**/*.ts", "**/*.tsx"],
+      "env": { "jest": true, "browser": true, "es6": true, "node": true },
+      "extends": [
+        "airbnb",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "prettier",
+        "prettier/@typescript-eslint",
+        "plugin:import/errors",
+        "plugin:import/warnings",
+        "plugin:import/typescript"
+      ],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "ecmaFeatures": { "jsx": true },
+        "ecmaVersion": 2018,
+        "sourceType": "module",
+        "project": "./tsconfig.json"
+      },
+      "plugins": ["jest", "import", "prettier", "@typescript-eslint", "react-hooks"],
+      "rules": {
+        "import/extensions": ["error", "never"],
+        "react/jsx-filename-extension": ["warn", { "extensions": [".tsx"] }],
+        "typescript-eslint/no-non-null-assertion": "off" // temporary
+      },
+      "settings": { "react": { "version": "detect" } }
+    }
+  ]
 }

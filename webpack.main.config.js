@@ -13,10 +13,7 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.json'],
-    alias: {
-      'rx.virtualtime': 'empty',
-      // uws$: path.resolve(__dirname, 'path/to/file.js')
-    },
+    alias: {},
   },
   node: {
     child_process: 'empty',

@@ -1,3 +1,13 @@
+const babelPlugins = [
+  '@babel/plugin-proposal-optional-chaining',
+  ['@babel/plugin-proposal-decorators', { legacy: true }],
+  ['@babel/plugin-proposal-class-properties', { loose: true }], // remove once we're class-free
+];
+
+if (process.env.NODE_ENV === 'development') {
+  babelPlugins.push('react-refresh/babel'); // 'react-hot-loader/babel'
+}
+
 module.exports = [
   // Add support for native node modules
   {
@@ -10,12 +20,15 @@ module.exports = [
     },
   },
   {
-    test: /\.tsx?$/,
-    exclude: /(node_modules|.webpack)/,
+    test: /\.(j|t)s(x)?$/,
+    exclude: /node_modules/,
     use: {
-      loader: 'ts-loader',
+      loader: 'babel-loader',
       options: {
-        transpileOnly: true,
+        cacheDirectory: true,
+        babelrc: false,
+        presets: ['@babel/preset-env', '@babel/preset-typescript', '@babel/preset-react'],
+        plugins: babelPlugins,
       },
     },
   },

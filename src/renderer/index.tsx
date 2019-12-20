@@ -54,8 +54,6 @@ ReactDOM.render(
   document.getElementById('app'),
 );
 
-console.log('wut');
-
 const inputElement = document.getElementById('search-input');
 if (inputElement) {
   inputElement.focus();

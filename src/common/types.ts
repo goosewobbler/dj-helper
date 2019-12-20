@@ -85,28 +85,6 @@ enum BumpType {
   minor = 'minor',
 }
 
-interface Service {
-  bump(name: string, type: BumpType): Promise<void>;
-  build(name: string): Promise<void>;
-  clone(name: string, cloneName: string, options: { description: string }): Promise<void>;
-  create(name: string, type: ModuleType, options: { description: string }): Promise<void>;
-  fetchDetails(name: string): Promise<void>;
-  getComponentsData(): ComponentsData;
-  getComponentsSummaryData(): ComponentsData;
-  getDependantGraph(name: string): GraphData;
-  getDependencyGraph(name: string): GraphData;
-  link(name: string, dependency: string): Promise<void>;
-  openInEditor(name: string): Promise<void>;
-  promote(name: string, environment: string): Promise<void>;
-  reinstall(name: string): Promise<void>;
-  request(name: string, props: LooseObject, history: boolean): Promise<Response>;
-  setFavourite(name: string, favourite: boolean): Promise<void>;
-  setUseCache(name: string, useCache: boolean): Promise<void>;
-  start(name: string): Promise<void>;
-  stop(name: string): Promise<void>;
-  unlink(name: string, dependency: string): Promise<void>;
-}
-
 type ComponentMatch = string | { matched: string };
 
 interface ComponentData {
@@ -263,6 +241,28 @@ type Versions = {
   [key: string]: string | null;
 };
 // type Versions = { [key in EnvironmentValues]: string | null };
+
+interface Service {
+  bump(name: string, type: BumpType): Promise<void>;
+  build(name: string): Promise<void>;
+  clone(name: string, cloneName: string, options: { description: string }): Promise<void>;
+  create(name: string, type: ModuleType, options: { description: string }): Promise<void>;
+  fetchDetails(name: string): Promise<void>;
+  getComponentsData(): ComponentsData;
+  getComponentsSummaryData(): ComponentsData;
+  getDependantGraph(name: string): GraphData;
+  getDependencyGraph(name: string): GraphData;
+  link(name: string, dependency: string): Promise<void>;
+  openInEditor(name: string): Promise<void>;
+  promote(name: string, environment: string): Promise<void>;
+  reinstall(name: string): Promise<void>;
+  request(name: string, props: LooseObject, history: boolean): Promise<Response>;
+  setFavourite(name: string, favourite: boolean): Promise<void>;
+  setUseCache(name: string, useCache: boolean): Promise<void>;
+  start(name: string): Promise<void>;
+  stop(name: string): Promise<void>;
+  unlink(name: string, dependency: string): Promise<void>;
+}
 
 export {
   Versions,

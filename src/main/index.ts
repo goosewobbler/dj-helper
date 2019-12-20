@@ -2,9 +2,9 @@ import { app, BrowserWindow } from 'electron';
 import startServer from './server';
 import { logError } from './helpers/console';
 
-if (module.hot) {
-  module.hot.accept();
-}
+// if (module.hot) {
+//   module.hot.accept();
+// }
 
 let mainWindow: Electron.BrowserWindow;
 

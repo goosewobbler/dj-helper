@@ -6,8 +6,8 @@ import { createService } from '../service';
 import createApiServer from './apiServer';
 import createComponentServer from './componentServer';
 import { createUpdater } from './updater';
-import { ComponentData, Service, System, Store } from '../../common/types';
 import createStore from '../helpers/store';
+import { ComponentData, Service, System, Store } from '../../common/types';
 
 interface App {
   api: Express;

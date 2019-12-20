@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+h1 {
+  color: red;
+}
+
 .flex-basis-4 {
   flex-basis: 4;
 }

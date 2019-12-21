@@ -1,14 +1,12 @@
-const fs = require('fs-extra');
+import fs from 'fs-extra';
+import buildUrlForDataProxy from '../../src/morph-cli/data-url';
 
-let buildUrlForDataProxy;
-const routingFilePath = `${__dirname  }/../../.routing.json`;
+const routingFilePath = `${__dirname}/../../.routing.json`;
 
 describe('Data URL', () => {
   beforeAll(() => {
     global.window.define = jest.fn();
     global.window.requirejs = jest.fn();
-
-    buildUrlForDataProxy = require('../../src/morph-cli/data-url');
   });
 
   beforeEach(async () => {

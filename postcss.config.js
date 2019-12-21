@@ -25,15 +25,32 @@ const purgecss = require('@fullhuman/postcss-purgecss');
 const cssnano = require('cssnano');
 const autoprefixer = require('autoprefixer');
 
-module.exports = {
-  plugins: [
-    tailwindcss('./tailwind.config.js'),
-    cssnano({
-      preset: 'default',
-    }),
+const plugins = [tailwindcss('./tailwind.config.js'), autoprefixer()];
+
+if (process.env.NODE_ENV === 'production') {
+  plugins.push(
     purgecss({
       content: ['./src/**/*.tsx', './src/**/*.ts', './public/index.html'],
     }),
-    autoprefixer(),
-  ],
+    cssnano({
+      preset: 'default',
+    }),
+  );
+}
+
+// require('postcss-import')({
+//   plugins: [
+//       require('stylelint')
+//   ]
+// }),
+// require('tailwindcss')('./tailwind.config.js'),
+// require('postcss-preset-env')({
+//   autoprefixer: { grid: true },
+//   features: {
+//       'nesting-rules': true
+//   }
+// })
+
+module.exports = {
+  plugins,
 };

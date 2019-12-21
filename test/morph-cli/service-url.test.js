@@ -1,7 +1,7 @@
-var buildUrlForViewProxy = require('../../src/morph-cli/service-url');
-var fs = require('fs-extra');
+const fs = require('fs-extra');
+const buildUrlForViewProxy = require('../../src/morph-cli/service-url');
 
-const routingFilePath = __dirname + '/../../.routing.json';
+const routingFilePath = `${__dirname  }/../../.routing.json`;
 
 describe('Service proxy URL', async () => {
   beforeEach(async () => {
@@ -17,7 +17,7 @@ describe('Service proxy URL', async () => {
       'other-module': 8080,
     });
 
-    var result = buildUrlForViewProxy({
+    const result = buildUrlForViewProxy({
       path: '/view/mock-module',
     });
 
@@ -29,7 +29,7 @@ describe('Service proxy URL', async () => {
       'mock-module': 8080,
     });
 
-    var result = buildUrlForViewProxy({
+    const result = buildUrlForViewProxy({
       path: '/view/mock-module',
     });
 

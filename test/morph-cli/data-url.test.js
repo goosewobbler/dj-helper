@@ -1,7 +1,7 @@
-var fs = require('fs-extra');
+const fs = require('fs-extra');
 
-var buildUrlForDataProxy;
-const routingFilePath = __dirname + '/../../.routing.json';
+let buildUrlForDataProxy;
+const routingFilePath = `${__dirname  }/../../.routing.json`;
 
 describe('Data URL', () => {
   beforeAll(() => {
@@ -24,7 +24,7 @@ describe('Data URL', () => {
       'other-module': 8080,
     });
 
-    var result = buildUrlForDataProxy(
+    const result = buildUrlForDataProxy(
       {
         uri: {
           data: 'mock-module',
@@ -44,7 +44,7 @@ describe('Data URL', () => {
       'mock-module': 8080,
     });
 
-    var result = buildUrlForDataProxy(
+    const result = buildUrlForDataProxy(
       {
         uri: {
           data: 'mock-module',
@@ -68,7 +68,7 @@ describe('Data URL', () => {
       return '/workspace/mock-module';
     });
 
-    var result = buildUrlForDataProxy(
+    const result = buildUrlForDataProxy(
       {
         uri: {
           data: 'mock-module',

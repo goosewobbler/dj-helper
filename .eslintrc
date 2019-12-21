@@ -13,7 +13,12 @@
   "overrides": [
     {
       "files": ["**/*.ts", "**/*.tsx"],
-      "env": { "jest": true, "browser": true, "es6": true, "node": true },
+      "env": {
+        "jest": true,
+        "browser": true,
+        "es6": true,
+        "node": true
+      },
       "extends": [
         "airbnb",
         "plugin:@typescript-eslint/recommended",
@@ -35,12 +40,19 @@
       "rules": {
         "import/extensions": ["error", "never"],
         "react/jsx-filename-extension": ["warn", { "extensions": [".tsx"] }],
-        "typescript-eslint/no-non-null-assertion": "off" // temporary
+        "@typescript-eslint/no-non-null-assertion": "off" // temporary
       },
       "settings": {
+        "import/parsers": {
+          "@typescript-eslint/parser": [".ts", ".tsx"]
+        },
         "import/resolver": {
+          "node": {},
           "webpack": {
             "config": "webpack.main.config.js"
+          },
+          "typescript": {
+            "alwaysTryTypes": true
           }
         },
         "react": { "version": "detect" }

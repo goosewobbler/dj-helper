@@ -1,7 +1,6 @@
 import express from 'express';
 
-import { Service } from '../service';
-import { LooseObject, Store } from '../../common/types';
+import { LooseObject, Service, Store } from '../../common/types';
 import { socketIoLibraryScript, socketIoPageReloadScript } from '../helpers/scripts';
 
 const convertPropsString = (propsString: string): LooseObject => {

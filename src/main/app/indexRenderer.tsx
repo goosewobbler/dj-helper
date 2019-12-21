@@ -4,8 +4,7 @@ import { Provider } from 'react-redux';
 
 import App from '../../renderer/components/App';
 import createReduxStore from '../../renderer/reduxStore';
-import { Service } from '../service';
-import { AppState, Store } from '../../common/types';
+import { AppState, Store, Service } from '../../common/types';
 
 const renderIndex = async (
   service: Service,

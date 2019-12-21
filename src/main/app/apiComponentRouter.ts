@@ -1,6 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { ModuleType, BumpType } from '../../common/types';
-import { Service } from '../service';
+import { ModuleType, BumpType, Service } from '../../common/types';
 import { logError } from '../helpers/console';
 
 const moduleTypeMap: { [Key: string]: ModuleType } = {

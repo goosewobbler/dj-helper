@@ -4,12 +4,11 @@ import express from 'express';
 import { readFileSync } from 'graceful-fs';
 import { join } from 'path';
 
-import { Service } from '../service';
 import { Updater } from './updater';
 import createApiComponentRouter from './apiComponentRouter';
 import renderIndex from './indexRenderer';
 import { logError } from '../helpers/console';
-import { Store } from '../../common/types';
+import { Service, Store } from '../../common/types';
 
 const createApiServer = (service: Service, config: Store, updater: Updater, onUpdated: () => void): express.Express => {
   const app = express();

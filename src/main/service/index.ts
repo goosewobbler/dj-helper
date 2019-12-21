@@ -244,4 +244,4 @@ const createService = async (
   return service;
 };
 
-export { createService, Service };
+export default createService;

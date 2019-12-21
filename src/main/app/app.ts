@@ -2,7 +2,7 @@ import { join } from 'path';
 import { Express } from 'express';
 import appRoot from 'app-root-path';
 
-import { createService } from '../service';
+import createService from '../service';
 import createApiServer from './apiServer';
 import createComponentServer from './componentServer';
 import { createUpdater } from './updater';

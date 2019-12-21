@@ -4,9 +4,11 @@ module.exports = {
    * This is the main entry point for your application, it's the first file
    * that runs in the main process.
    */
+  mode: process.env.NODE_ENV,
   entry: './src/main/index.ts',
   output: {
-    filename: './dist/main.prod.js',
+    path: `${__dirname}/dist`,
+    filename: 'main.prod.js',
   },
   module: {
     rules: require('./webpack.rules'),

@@ -1,4 +1,6 @@
 /* eslint global-require: off */
+var nodeExternals = require('webpack-node-externals');
+
 module.exports = {
   /**
    * This is the main entry point for your application, it's the first file
@@ -24,4 +26,5 @@ module.exports = {
     net: 'empty',
     tls: 'empty',
   },
+  externals: [nodeExternals()],
 };

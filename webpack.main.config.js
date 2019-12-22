@@ -22,6 +22,10 @@ module.exports = {
     alias: {},
   },
   target: 'electron-main',
+  node: {
+    __dirname: false,
+    __filename: false,
+  },
   // node: {
   // child_process: 'empty',
   // fs: 'empty',

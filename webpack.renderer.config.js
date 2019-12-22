@@ -8,6 +8,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const rules = require('./webpack.rules');
 const plugins = require('./webpack.renderer.plugins');
 
+const isDev = process.env.NODE_ENV === 'development';
+
 plugins.push(
   new HtmlWebPackPlugin({
     template: './public/index.html',
@@ -25,7 +27,7 @@ rules.push({
     {
       loader: MiniCssExtractPlugin.loader,
       options: {
-        hmr: process.env.NODE_ENV === 'development',
+        hmr: isDev,
       },
     },
     {
@@ -48,16 +50,18 @@ rules.push({
   ],
 });
 
+const baseEntry = [`webpack-dev-server/client?http://localhost:${port}/`, 'webpack/hot/only-dev-server'];
+
 module.exports = {
   mode: process.env.NODE_ENV,
-  devtool: 'source-map',
+  devtool: isDev ? 'inline-source-map' : 'source-map',
   entry: {
-    renderer: './src/renderer/index.tsx',
-    styles: './src/renderer/css/tailwind.src.css',
+    renderer: [...baseEntry, './src/renderer/index.tsx'],
+    styles: [...baseEntry, './src/renderer/css/tailwind.src.css'],
   },
   output: {
-    path: `${__dirname}/dist`,
-    filename: '[name].prod.js',
+    publicPath: `http://localhost:${port}/dist/`,
+    filename: '[name].dev.js',
   },
   module: {
     rules,
@@ -67,6 +71,10 @@ module.exports = {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
   },
   target: 'electron-renderer',
+  node: {
+    __dirname: false,
+    __filename: false,
+  },
   devServer: {
     port,
     publicPath,

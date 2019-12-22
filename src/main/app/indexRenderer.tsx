@@ -6,13 +6,8 @@ import App from '../../renderer/components/App';
 import createReduxStore from '../../renderer/reduxStore';
 import { AppState, Store, Service } from '../../common/types';
 
-const renderIndex = async (
-  service: Service,
-  config: Store,
-  template: string,
-  selectedComponent?: string,
-): Promise<string> => {
-  const summaryData = await service.getComponentsSummaryData();
+const renderIndex = (service: Service, config: Store, template: string, selectedComponent?: string): string => {
+  const summaryData = service.getComponentsSummaryData();
 
   const initialState: AppState = {
     components: summaryData.components,

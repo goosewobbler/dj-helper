@@ -11,7 +11,7 @@ const createUpdater = (system: System, currentVersion: string): Updater => {
   const fetchNewVersion = async (): Promise<string> => {
     let version: string | null = null;
     const installPath = '/tmp/morph-developer-console-version';
-    await system.file.deleteDirectory(installPath);
+    system.file.deleteDirectory(installPath);
 
     await runNpm(
       installPath,

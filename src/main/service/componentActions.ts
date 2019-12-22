@@ -8,7 +8,7 @@ interface ComponentActions {
   buildAll(): Promise<void>;
   buildSass(): Promise<void>;
   install(): Promise<void>;
-  link(dependency: string): Promise<void>;
+  link(dependency: string): void;
   makeOtherLinkable(name: string): Promise<void>;
   needsInstall(): Promise<boolean>;
   run(restartOthers?: boolean): Promise<void>;
@@ -110,7 +110,7 @@ const createComponentActions = (
     log('Installed.');
   };
 
-  const link = async (dependency: string): Promise<void> => {
+  const link = (dependency: string): void => {
     log(`Linking ${dependency}...`);
     const otherDirectoryName = getOther(dependency).getDirectoryName();
     const otherPath = join(componentPath, '..', otherDirectoryName);

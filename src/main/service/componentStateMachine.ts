@@ -69,7 +69,7 @@ const componentStateMachine = (
   const reinstall = async (): Promise<void> => {
     changeState(ComponentState.Installing);
     await actions.stop();
-    await actions.uninstall();
+    actions.uninstall();
     await actions.install();
     changeState(ComponentState.Building);
     await actions.buildAll();
@@ -82,7 +82,7 @@ const componentStateMachine = (
     changeState(ComponentState.Linking);
     await actions.stop();
     await actions.makeOtherLinkable(dependency);
-    await actions.link(dependency);
+    actions.link(dependency);
     changeState(ComponentState.Building);
     await actions.buildAll();
     changeState(ComponentState.Starting);
@@ -93,7 +93,7 @@ const componentStateMachine = (
   const unlink = async (dependency: string): Promise<void> => {
     changeState(ComponentState.Linking);
     await actions.stop();
-    await actions.unlink(dependency);
+    actions.unlink(dependency);
     changeState(ComponentState.Building);
     await actions.buildAll();
     changeState(ComponentState.Starting);

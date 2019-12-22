@@ -129,7 +129,7 @@ const createComponentFiles = async (
 
   const npmIgnorePath = join(toDirectory, '.npmignore');
   const gitIgnorePath = join(toDirectory, '.gitignore');
-  await system.file.moveDirectory(npmIgnorePath, gitIgnorePath);
+  system.file.moveDirectory(npmIgnorePath, gitIgnorePath);
 };
 
 export { cloneComponentFiles, getShrinkwrap, createComponentFiles };

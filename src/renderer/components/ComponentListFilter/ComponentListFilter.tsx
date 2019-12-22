@@ -69,10 +69,11 @@ class ComponentListFilter extends React.Component<ComponentListFilterProps, Comp
   }
 
   public render(): React.ReactElement {
-    const { filter } = this.state;
+    const { filter, focussed } = this.state;
     return (
       <div>
         <input
+          className={focussed ? 'focussed' : ''}
           value={filter}
           id="search-input"
           placeholder="Search"

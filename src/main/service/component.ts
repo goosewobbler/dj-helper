@@ -189,7 +189,7 @@ const createComponent = (
   const fetchDetails = async (): Promise<void> => {
     await Promise.all([
       (async (): Promise<void> => {
-        await updateURL();
+        updateURL();
         await updateLocalVersion();
         await updated();
         await updateEnvironmentVersions();
@@ -299,7 +299,7 @@ const createComponent = (
   const makeLinkable = (): Promise<void> => stateMachine.makeLinkable();
 
   const start = async (): Promise<void> => {
-    await updateURL();
+    updateURL();
     await stateMachine.run();
   };
 
@@ -352,7 +352,7 @@ const createComponent = (
 
     log(`Bumped to version ${newVersion} on branch ${newBranch}.`);
 
-    await system.process.open(`https://github.com/bbc/morph-modules/compare/${newBranch}?expand=1`);
+    system.process.open(`https://github.com/bbc/morph-modules/compare/${newBranch}?expand=1`);
 
     promoting = null;
     await updateLocalVersion();

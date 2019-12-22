@@ -10,7 +10,7 @@ const mapStateToProps = (state: AppState): { updating: boolean; updated: boolean
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): { onUpdate: () => void } => ({
-  onUpdate: () => dispatch(update()),
+  onUpdate: (): void => dispatch(update()),
 });
 
 const Container = connect(mapStateToProps, mapDispatchToProps)(UpdateBar);

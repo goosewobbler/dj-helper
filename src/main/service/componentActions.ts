@@ -139,7 +139,7 @@ const createComponentActions = (
     return false;
   };
 
-  const run = async (restartOthers: boolean = false): Promise<void> => {
+  const run = async (restartOthers = false): Promise<void> => {
     const useCache = getUseCache();
     log('Starting...');
     const command = join(

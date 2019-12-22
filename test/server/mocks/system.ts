@@ -15,7 +15,7 @@ const createMockSystem = (): any => {
   } = {};
   const deletedDirectories: string[] = [];
   const watchCallbacks: { [Key: string]: (path: string) => void } = {};
-  let currentWorkingDirectory: string = '/cwd/';
+  let currentWorkingDirectory = '/cwd/';
   const promoted: { [Key: string]: string[] } = { test: [], live: [] };
   const promotionFailures: Array<{ name: string; environment: string; failure: string }> = [];
   const runCommands: Array<{ command: string; directory: string }> = [];
@@ -168,7 +168,7 @@ const createMockSystem = (): any => {
   const withGetResponse = (
     url: string,
     body: string,
-    statusCode: number = 200,
+    statusCode = 200,
     headers: { [Key: string]: string } = {},
   ) => {
     getRequests[url] = { body, headers, statusCode };
@@ -178,7 +178,7 @@ const createMockSystem = (): any => {
   const withEphemeralGetResponse = (
     url: string,
     body: string,
-    statusCode: number = 200,
+    statusCode = 200,
     headers: { [Key: string]: string } = {},
   ) => {
     ephemeralGetRequests[url] = ephemeralGetRequests[url] || [];

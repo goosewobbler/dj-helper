@@ -5,7 +5,7 @@ const Spacer = ({ fill, space }: { fill?: boolean; space?: number }): ReactEleme
   const flexBasisSpaceValues = [4, 16];
   const flexBasis = flexBasisSpaceValues.includes(space!) ? `flex-basis-${space}` : 'flex-basis-8';
 
-  return <div className={`flex-shrink-0 ${flexGrow} ${flexBasis}`}></div>;
+  return <div className={`flex-shrink-0 ${flexGrow} ${flexBasis}`} />;
 };
 
 export default Spacer;

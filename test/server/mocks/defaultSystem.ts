@@ -30,7 +30,7 @@ const bazPackage = {
   version: '2.2.0',
 };
 
-const createDefaultMockSystem = (componentsDirectory: string = '/test/components') => {
+const createDefaultMockSystem = (componentsDirectory = '/test/components') => {
   const systemBuilder = createMockSystem()
     .withCurrentWorkingDirectory(componentsDirectory)
     .withGetPackageDirectories(componentsDirectory, ['foo', 'bar', 'baz'])

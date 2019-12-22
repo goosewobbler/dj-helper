@@ -5,7 +5,7 @@ import mockFetch from './mocks/fetch';
 
 const render = (versions: { int: string; live: string; local: string; test: string }) => {
   mockFetch();
-  const wrapper = renderApp([
+  const {wrapper} = renderApp([
     {
       displayName: 'bar',
       favorite: false,
@@ -24,7 +24,7 @@ const render = (versions: { int: string; live: string; local: string; test: stri
       useCache: false,
       versions,
     },
-  ]).wrapper;
+  ]);
 
   const componentListItem = wrapper.find(ComponentListItem).at(1);
   componentListItem.simulate('click');

@@ -37,6 +37,7 @@ Please follow the format of existing entries, the types of change are:
 `Changed`: Using ESLint instead of TSLint for linting
 `Changed`: Using TailwindCSS / PostCSS / Webpack instead of Glamorous for styling
 `Changed`: Using Babel instead of TSC for TypeScript transpilation
+`Changed`: Using React Refresh instead of `react-hot-reload` for HMR
 `Changed`: Faster, more streamlined and modern build toolchain built around Webpack
 `Changed`: More sensible directory structure
 `Changed`: Better type sharing

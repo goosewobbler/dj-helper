@@ -2,8 +2,20 @@
 const plugins = require('./webpack.main.plugins');
 
 const isDev = process.env.NODE_ENV === 'development';
+const externals = [];
+
+if (isDev) {
+  externals.push((context, request, callback) => {
+    if (request[0] == '.') {
+      callback();
+    } else {
+      callback(null, `require('${request}')`);
+    }
+  });
+}
 
 module.exports = {
+  context: __dirname,
   /**
    * This is the main entry point for your application, it's the first file
    * that runs in the main process.
@@ -25,9 +37,10 @@ module.exports = {
   },
   target: 'electron-main',
   node: {
-    __dirname: false,
-    __filename: false,
+    __dirname: true,
+    __filename: true,
   },
+  externals,
   // node: {
   // child_process: 'empty',
   // fs: 'empty',

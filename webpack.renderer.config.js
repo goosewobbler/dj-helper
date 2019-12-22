@@ -50,9 +50,22 @@ rules.push({
   ],
 });
 
+const externals = [];
+
+if (isDev) {
+  externals.push((context, request, callback) => {
+    if (request[0] == '.') {
+      callback();
+    } else {
+      callback(null, `require('${request}')`);
+    }
+  });
+}
+
 const baseEntry = [`webpack-dev-server/client?http://localhost:${port}/`, 'webpack/hot/only-dev-server'];
 
 module.exports = {
+  context: __dirname,
   mode: process.env.NODE_ENV,
   devtool: isDev ? 'inline-source-map' : 'source-map',
   entry: {
@@ -72,9 +85,10 @@ module.exports = {
   },
   target: 'electron-renderer',
   node: {
-    __dirname: false,
-    __filename: false,
+    __dirname: true,
+    __filename: true,
   },
+  externals,
   devServer: {
     port,
     publicPath,

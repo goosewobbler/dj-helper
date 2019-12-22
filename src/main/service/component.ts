@@ -357,7 +357,6 @@ const createComponent = (
     promoting = null;
     await updateLocalVersion();
     await updated();
-    
   };
 
   return {

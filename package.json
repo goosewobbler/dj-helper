@@ -25,6 +25,7 @@
     "dev:start-main": "cross-env START_HOT=1 NODE_ENV=development electron src/main/index.ts",
     "dev:start-renderer": "cross-env NODE_ENV=development webpack-dev-server --config webpack.renderer.config.js",
     "lint": "concurrently 'yarn lint:js' 'yarn lint:ts'",
+    "lint:fix": "concurrently 'yarn lint:js --fix' 'yarn lint:ts --fix'",
     "lint:js": "eslint --config '.eslintrc.js.json' '**/*.js'",
     "lint:ts": "eslint --config '.eslintrc.ts.json' '**/*.ts{,x}'",
     "typecheck": "tsc --noEmit"

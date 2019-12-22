@@ -48,7 +48,7 @@ const createComponent = (
     test: null,
   };
 
-  const updated = (): Promise<void> => onUpdate(name);
+  const updated = (): void => onUpdate(name);
 
   const getDisplayName = (): string => directoryName;
 
@@ -135,7 +135,7 @@ const createComponent = (
         ),
     );
 
-    await updated();
+    updated();
 
     const decorateDependency = async (dependency: ComponentDependency): Promise<void> => {
       const other = getOther(dependency.name);
@@ -151,7 +151,7 @@ const createComponent = (
       dependency.version = version;
       dependency.latest = latest!;
       dependency.outdated = outdated;
-      await updated();
+      updated();
     };
 
     const shrinkwrapped = await system.morph.getShrinkwrap(name);
@@ -175,7 +175,7 @@ const createComponent = (
 
   const fetchEnvironmentVersionAndUpdate = async (environment: 'int' | 'live' | 'test'): Promise<void> => {
     versions[environment] = await system.morph.getVersionOnEnvironment(name, environment);
-    await updated();
+    updated();
   };
 
   const updateEnvironmentVersions = async (): Promise<void> => {
@@ -225,7 +225,7 @@ const createComponent = (
 
   const setUseCache = async (useCache: boolean): Promise<void> => {
     await state.set(`cache.enabled.${name}`, useCache);
-    await updated();
+    updated();
     await stateMachine.restart();
   };
 
@@ -248,7 +248,7 @@ const createComponent = (
       history,
     );
     if (history) {
-      await updated();
+      updated();
     }
     return response;
   };
@@ -261,7 +261,7 @@ const createComponent = (
     if (environment === 'test' || environment === 'live') {
       promoting = environment;
       promotionFailure = null;
-      await updated();
+      updated();
       try {
         await system.morph.promote(name, environment);
         await updateEnvironmentVersions();
@@ -269,7 +269,7 @@ const createComponent = (
         promotionFailure = failure;
       }
       promoting = null;
-      await updated();
+      updated();
     } else {
       throw new Error('Invalid environment');
     }
@@ -325,14 +325,14 @@ const createComponent = (
   const bump = async (type: BumpType): Promise<void> => {
     promoting = 'int';
     promotionFailure = null;
-    await updated();
+    updated();
 
     const canBump = await system.git.readyToCommit(componentPath);
     if (!canBump) {
       promoting = null;
       promotionFailure = 'Cannot bump when files are already staged for commit.';
       log(promotionFailure);
-      await updated();
+      updated();
       return;
     }
 
@@ -356,7 +356,7 @@ const createComponent = (
 
     promoting = null;
     await updateLocalVersion();
-    await updated();
+    updated();
   };
 
   return {

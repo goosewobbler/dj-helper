@@ -1,5 +1,4 @@
 /* eslint global-require: off */
-const nodeExternals = require('webpack-node-externals');
 const plugins = require('./webpack.main.plugins');
 
 module.exports = {
@@ -29,5 +28,5 @@ module.exports = {
   // net: 'empty',
   // tls: 'empty',
   // },
-  // externals: [nodeExternals()],
+  // externals: [],
 };

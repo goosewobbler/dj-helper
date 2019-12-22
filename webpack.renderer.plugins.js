@@ -6,7 +6,13 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const isDev = process.env.NODE_ENV === 'development';
 
 const plugins = [
-  new BundleAnalyzerPlugin({ analyzerMode: 'static', openAnalyzer: !isDev }),
+  new BundleAnalyzerPlugin({
+    analyzerMode: 'static',
+    generateStatsFile: true,
+    openAnalyzer: !isDev,
+    reportFilename: 'report.renderer.html',
+    statsFilename: 'stats.renderer.json',
+  }),
   new ForkTsCheckerWebpackPlugin({
     async: false,
   }),

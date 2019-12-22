@@ -7,7 +7,13 @@ const isDev = process.env.NODE_ENV === 'development';
 
 const plugins = [
   new CleanWebpackPlugin(),
-  new BundleAnalyzerPlugin({ analyzerMode: 'static', openAnalyzer: !isDev }),
+  new BundleAnalyzerPlugin({
+    analyzerMode: 'static',
+    generateStatsFile: true,
+    openAnalyzer: !isDev,
+    reportFilename: 'report.main.html',
+    statsFilename: 'stats.main.json',
+  }),
   new ForkTsCheckerWebpackPlugin({
     async: false,
   }),

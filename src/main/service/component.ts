@@ -29,7 +29,7 @@ const createComponent = (
   componentPath: string,
   componentType: ComponentType,
   acquirePort: () => number,
-  onUpdate: (name: string) => Promise<void>,
+  onUpdate: (name: string) => void,
   onReload: (restartOthers: boolean) => void,
   getOther: (name: string) => Component,
   rendererType: string,

@@ -114,32 +114,28 @@ const createService = async (
   };
 
   const load = async (): Promise<void> => {
-    const packageDirectories = await system.file.getPackageDirectories(componentsDirectory);
+    const packageDirectories = system.file.getPackageDirectories(componentsDirectory);
 
     await Promise.all(packageDirectories.map(addComponent));
-
-    components.forEach(
-      async (component: Component): Promise<void> => {
-        allDependencies[component.getName()] = await component.getDependenciesSummary();
-      },
+    await Promise.all(
+      components.map(
+        async (component: Component): Promise<void> => {
+          allDependencies[component.getName()] = await component.getDependenciesSummary();
+        },
+      ),
     );
     grapher = createGrapher(allDependencies);
 
-    await system.file.watchDirectory(
-      componentsDirectory,
-      async (path): Promise<void> => {
-        const relativePath = path.replace(`${componentsDirectory}/`, '');
-        const slashIndex = relativePath.indexOf('/');
-        const directoryName = relativePath.substr(0, slashIndex);
-        const changedComponent = components.find(
-          (component): boolean => component.getDirectoryName() === directoryName,
-        );
-        if (changedComponent && changedComponent.getState() === ComponentState.Running) {
-          const isSass = relativePath.includes('/sass/');
-          await changedComponent.build(isSass, relativePath.replace(`${directoryName}/`, ''));
-        }
-      },
-    );
+    await system.file.watchDirectory(componentsDirectory, (path): void => {
+      const relativePath = path.replace(`${componentsDirectory}/`, '');
+      const slashIndex = relativePath.indexOf('/');
+      const directoryName = relativePath.substr(0, slashIndex);
+      const changedComponent = components.find((component): boolean => component.getDirectoryName() === directoryName);
+      if (changedComponent && changedComponent.getState() === ComponentState.Running) {
+        const isSass = relativePath.includes('/sass/');
+        changedComponent.build(isSass, relativePath.replace(`${directoryName}/`, ''));
+      }
+    });
 
     await system.process.runToCompletion(
       await system.process.getCurrentWorkingDirectory(),

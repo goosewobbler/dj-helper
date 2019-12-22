@@ -10,6 +10,11 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 module.exports = [
+  {
+    enforce: 'pre',
+    test: /\.js$/,
+    loader: 'source-map-loader',
+  },
   // Add support for native node modules
   {
     test: /\.node$/,

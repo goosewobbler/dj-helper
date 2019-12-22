@@ -7,6 +7,7 @@ module.exports = {
    * that runs in the main process.
    */
   mode: process.env.NODE_ENV,
+  devtool: 'source-map',
   entry: './src/main/index.ts',
   output: {
     path: `${__dirname}/dist`,

@@ -50,6 +50,7 @@ rules.push({
 
 module.exports = {
   mode: process.env.NODE_ENV,
+  devtool: 'source-map',
   entry: {
     renderer: './src/renderer/index.tsx',
     styles: './src/renderer/css/tailwind.src.css',

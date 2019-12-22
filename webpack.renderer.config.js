@@ -1,4 +1,5 @@
 /* eslint global-require: off */
+const nodeExternals = require('webpack-node-externals');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // const tailwind = require('tailwindcss');
@@ -60,4 +61,5 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
   },
+  externals: [nodeExternals()],
 };

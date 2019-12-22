@@ -21,12 +21,13 @@ module.exports = {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.json'],
     alias: {},
   },
-  node: {
-    child_process: 'empty',
-    fs: 'empty',
-    module: 'empty',
-    net: 'empty',
-    tls: 'empty',
-  },
-  externals: [nodeExternals()],
+  target: 'electron-main',
+  // node: {
+  // child_process: 'empty',
+  // fs: 'empty',
+  // module: 'empty',
+  // net: 'empty',
+  // tls: 'empty',
+  // },
+  // externals: [nodeExternals()],
 };

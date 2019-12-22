@@ -61,5 +61,6 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
   },
-  externals: [nodeExternals()],
+  target: 'electron-renderer',
+  // externals: [nodeExternals()],
 };

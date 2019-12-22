@@ -22,9 +22,9 @@ const plugins = [
   }),
 ];
 
-if (isDev) {
-  const ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
-  plugins.push(new ReactRefreshPlugin());
-}
+// if (isDev) {
+//   const ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+//   plugins.push(new ReactRefreshPlugin());
+// }
 
 module.exports = plugins;

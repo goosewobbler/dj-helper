@@ -6,7 +6,7 @@ const babelPlugins = [
 ];
 
 if (process.env.NODE_ENV === 'development') {
-  babelPlugins.push('react-refresh/babel'); // 'react-hot-loader/babel'
+  babelPlugins.push('react-hot-loader/babel');
 }
 
 module.exports = [

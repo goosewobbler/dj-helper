@@ -24,7 +24,9 @@
     "start": "cross-env NODE_ENV=production electron ./dist/main.prod.js",
     "dev:start-main": "cross-env START_HOT=1 NODE_ENV=development electron src/main/index.ts",
     "dev:start-renderer": "cross-env NODE_ENV=development webpack-dev-server --config webpack.renderer.config.js",
-    "lint": "eslint ."
+    "lint": "yarn lint:js && yarn lint:ts",
+    "lint:js": "eslint --config '.eslintrc.js.json' '**/*.js'",
+    "lint:ts": "eslint --config '.eslintrc.ts.json' '**/*.ts{,x}'"
   },
   "dependencies": {
     "app-root-path": "^3.0.0",
@@ -110,6 +112,7 @@
     "electron-builder": "^21.2.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.7.0",
     "eslint-config-typescript": "^3.0.0",
     "eslint-import-resolver-typescript": "^2.0.0",

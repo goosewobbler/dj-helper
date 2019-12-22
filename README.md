@@ -25,6 +25,10 @@ It is recommended to use Yarn with Electron projects. You will need to explicitl
 
 `yarn --registry https://npm.morph.int.tools.bbc.co.uk install`
 
+## Development
+
+Start the development server with `yarn dev`.
+
 ## Development Issues
 
 Documentation of issues encountered during development.

@@ -18,5 +18,5 @@
     "noImplicitAny": true,
     "resolveJsonModule": true
   },
-  "include": ["./src/**/*.ts", "./src/**/*.tsx", "./types/**/*.ts"]
+  "include": ["./src/**/*.ts", "./src/**/*.tsx", "./test/**/*.ts", "./test/**/*.tsx", "./types/**/*.ts"]
 }

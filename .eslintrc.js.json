@@ -1,0 +1,11 @@
+{
+  "extends": ["airbnb", "prettier", "plugin:import/errors", "plugin:import/warnings"],
+  "plugins": ["import", "prettier"],
+  "env": {
+    "es6": true,
+    "node": true
+  },
+  "rules": {
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": ["webpack.*.js"] }]
+  }
+}

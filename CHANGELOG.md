@@ -27,7 +27,7 @@ Please follow the format of existing entries, the types of change are:
 
 ## [4.0.0] - NO TICKET
 
-Current aspirations marked with `*`, these items can be seen as a TODO for the 4.0.0 release.
+Items marked with `*` can be seen as current aspirations for the 4.0.0 release and some may be dropped.
 
 `Added`: Documentation for development `*`
 `Added`: ADRs for all design decisions made `*`
@@ -45,5 +45,6 @@ Current aspirations marked with `*`, these items can be seen as a TODO for the 4
 `Changed`: Better type sharing
 `Changed`: No more lazy typing with `any`
 `Changed`: Enabled strict type checking
+`Changed`: Class-based components replaced with hooks `*`
 `Fixed`: Memory leaks due to large number of circular dependencies
 `Fixed`: ~3k linting errors

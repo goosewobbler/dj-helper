@@ -26,7 +26,8 @@
     "dev:start-renderer": "cross-env NODE_ENV=development webpack-dev-server --config webpack.renderer.config.js",
     "lint": "concurrently 'yarn lint:js' 'yarn lint:ts'",
     "lint:js": "eslint --config '.eslintrc.js.json' '**/*.js'",
-    "lint:ts": "eslint --config '.eslintrc.ts.json' '**/*.ts{,x}'"
+    "lint:ts": "eslint --config '.eslintrc.ts.json' '**/*.ts{,x}'",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "app-root-path": "^3.0.0",

@@ -47,7 +47,7 @@ module.exports = {
   mode: process.env.NODE_ENV,
   entry: {
     app: './src/renderer/index.tsx',
-    // styles: './src/renderer/css/tailwind.src.css',
+    styles: './src/renderer/css/tailwind.src.css',
   },
   output: {
     path: `${__dirname}/dist`,

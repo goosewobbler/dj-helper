@@ -1,5 +1,6 @@
 /* eslint global-require: off */
-var nodeExternals = require('webpack-node-externals');
+const nodeExternals = require('webpack-node-externals');
+const plugins = require('./webpack.main.plugins');
 
 module.exports = {
   /**
@@ -15,6 +16,7 @@ module.exports = {
   module: {
     rules: require('./webpack.rules'),
   },
+  plugins,
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.json'],
     alias: {},

@@ -5,7 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // const tailwind = require('tailwindcss');
 // const autoprefixer = require('autoprefixer');
 const rules = require('./webpack.rules');
-const plugins = require('./webpack.plugins');
+const plugins = require('./webpack.renderer.plugins');
 
 plugins.push(
   new HtmlWebPackPlugin({

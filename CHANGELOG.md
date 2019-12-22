@@ -27,17 +27,19 @@ Please follow the format of existing entries, the types of change are:
 
 ## [4.0.0] - NO TICKET
 
-`Added`: Documentation for development
-`Added`: ADRs for design decisions made
+Current aspirations marked with `*`, these items can be seen as a TODO for the 4.0.0 release.
+
+`Added`: Documentation for development `*`
+`Added`: ADRs for all design decisions made `*`
 `Added`: This changelog
 `Added`: Webpack bundle analysis
-`Added`: Missing typedefs for some dependencies
+`Added`: All missing typedefs for dependencies
 `Added`: Concurrent linting of js and ts(x) files
-`Changed`: Runs in Electron instead of a browser tab
-`Changed`: Using ESLint instead of TSLint for linting
-`Changed`: Using TailwindCSS / PostCSS / Webpack instead of Glamorous for styling
-`Changed`: Using Babel instead of TSC for TypeScript transpilation
-`Changed`: Using React Refresh instead of `react-hot-reload` for HMR
+`Changed`: Runs in Electron instead of a browser tab `*`
+`Changed`: Using `eslint` instead of `tslint` for linting
+`Changed`: Using `tailwindcss` invoked through `postcss` & `webpack` instead of Glamorous for styling `*`
+`Changed`: Using `babel` instead of TSC for TypeScript transpilation
+`Changed`: Using React Refresh instead of `react-hot-reload` for HMR `*`
 `Changed`: Faster, more streamlined and modern build toolchain built around Webpack
 `Changed`: More sensible directory structure
 `Changed`: Better type sharing

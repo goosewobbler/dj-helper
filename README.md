@@ -1,5 +1,14 @@
 # Morph Developer Console
 
+MDC was the original Morph Developer GUI. This is intended to be the rebirth of MDC with the following improvements:
+
+- Now an Electron app
+- Documentation
+- Modern tooling
+- Much better use of TypeScript
+- Better code quality
+- Better performance
+
 ## Install
 
 It is recommended to use Yarn with Electron projects. You will need to explicitly set `cafile`, `cert` and `key` config values using `yarn config set`. Once yarn has these config values you can install using the following:

@@ -2,17 +2,6 @@
 const plugins = require('./webpack.main.plugins');
 
 const isDev = process.env.NODE_ENV === 'development';
-const externals = [];
-
-if (isDev) {
-  externals.push((context, request, callback) => {
-    if (request[0] == '.') {
-      callback();
-    } else {
-      callback(null, `require('${request}')`);
-    }
-  });
-}
 
 module.exports = {
   context: __dirname,
@@ -40,7 +29,15 @@ module.exports = {
     __dirname: true,
     __filename: true,
   },
-  externals,
+  externals: [
+    (context, request, callback) => {
+      if (request[0] == '.') {
+        callback();
+      } else {
+        callback(null, `require('${request}')`);
+      }
+    },
+  ],
   // node: {
   // child_process: 'empty',
   // fs: 'empty',

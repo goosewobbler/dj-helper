@@ -50,18 +50,6 @@ rules.push({
   ],
 });
 
-const externals = [];
-
-if (isDev) {
-  externals.push((context, request, callback) => {
-    if (request[0] == '.') {
-      callback();
-    } else {
-      callback(null, `require('${request}')`);
-    }
-  });
-}
-
 const baseEntry = [`webpack-dev-server/client?http://localhost:${port}/`, 'webpack/hot/only-dev-server'];
 
 module.exports = {
@@ -88,7 +76,6 @@ module.exports = {
     __dirname: true,
     __filename: true,
   },
-  externals,
   devServer: {
     port,
     publicPath,
@@ -122,5 +109,13 @@ module.exports = {
       }
     },
   },
-  // externals: [],
+  externals: [
+    (context, request, callback) => {
+      if (request[0] == '.') {
+        callback();
+      } else {
+        callback(null, `require('${request}')`);
+      }
+    },
+  ],
 };

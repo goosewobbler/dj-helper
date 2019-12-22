@@ -61,7 +61,7 @@ const getMatchesWithAlternatives = (needle: string, haystack: string, alternativ
   }
 
   const alternativeMatches = alternatives.map((alternative): ComponentMatch[] => getMatches(needle, alternative));
-  return find(some(isObject), alternativeMatches);
+  return find(some(isObject), alternativeMatches)!;
 };
 
 export default getMatchesWithAlternatives;

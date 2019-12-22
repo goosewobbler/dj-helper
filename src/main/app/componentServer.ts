@@ -45,7 +45,7 @@ const createComponentServer = (service: Service, config: Store): express.Express
     async (req, res): Promise<void> => {
       try {
         const { accept } = req.headers;
-        const history = !accept || accept.indexOf('text/html') !== -1;
+        const history = !accept || accept.includes('text/html');
         const propsString = req.path.replace(`/data/${req.params.name}`, '');
         const { body, headers, statusCode } = await service.request(
           req.params.name,
@@ -67,7 +67,7 @@ const createComponentServer = (service: Service, config: Store): express.Express
     async (req, res): Promise<void> => {
       try {
         const { accept } = req.headers;
-        const history = !accept || accept.indexOf('text/html') !== -1;
+        const history = !accept || accept.includes('text/html');
         const propsString = req.path.replace(`/view/${req.params.name}`, '');
         const { body, headers, statusCode } = await service.request(
           req.params.name,

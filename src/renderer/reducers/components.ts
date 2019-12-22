@@ -31,7 +31,7 @@ const reducer = (state: ComponentData[] = [], action: Action): ComponentData[] =
       return action.components!;
     }
     case 'RECEIVE_COMPONENT': {
-      return state.filter((component): boolean => component.name !== action!.component!.name).concat(action.component!);
+      return state.filter((component): boolean => component.name !== action.component!.name).concat(action.component!);
     }
     case 'CHANGE_COMPONENT_STATE': {
       return state.map(

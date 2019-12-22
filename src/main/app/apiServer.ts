@@ -24,7 +24,7 @@ const createApiServer = (service: Service, config: Store, updater: Updater, onUp
   app.get(
     '/api/status',
     async (req, res): Promise<void> => {
-      updater
+      await updater
         .getStatus()
         .then((status): express.Response => res.json(status))
         .catch(logError);
@@ -34,11 +34,11 @@ const createApiServer = (service: Service, config: Store, updater: Updater, onUp
   app.post(
     '/api/update',
     async (req, res): Promise<void> => {
-      updater
+      res.send('🤔');
+      await updater
         .update()
         .then(onUpdated)
         .catch(logError);
-      res.send('🤔');
     },
   );
 

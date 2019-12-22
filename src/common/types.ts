@@ -155,16 +155,16 @@ interface AppStatus {
 
 interface FileSystem {
   exists(path: string): Promise<boolean>;
-  getPackageDirectories(directory: string): Promise<string[]>;
+  getPackageDirectories(directory: string): string[];
   readFile(path: string): Promise<string>;
   writeFile(path: string, contents: string): Promise<void>;
   symbolicLinkExists(path: string): Promise<boolean>;
   copyDirectory(from: string, to: string, filter: boolean): Promise<void>;
-  deleteDirectory(directory: string): Promise<void>;
+  deleteDirectory(directory: string): void;
   watchDirectory(directory: string, callback: (path: string) => void): Promise<void>;
-  moveDirectory(from: string, to: string): Promise<void>;
-  createSymlink(from: string, to: string): Promise<void>;
-  removeSymlink(path: string): Promise<void>;
+  moveDirectory(from: string, to: string): void;
+  createSymlink(from: string, to: string): void;
+  removeSymlink(path: string): void;
 }
 
 interface GitSystem {

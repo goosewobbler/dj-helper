@@ -85,7 +85,7 @@ const ComponentActions = (props: ComponentActionsProps): ReactElement => {
         {shouldDisplayBuildButton && renderBuildButton((): void => onBuild(name))}
         {shouldDisplayInstallButton && renderInstallButton((): void => onInstall(name))}
         {renderCloneButton((): void => onClone(name))}
-        {editors.indexOf('code') !== -1 ? (
+        {editors.includes('code') ? (
           <div className="wrapper" key="vs-code-button">
             <LabelButton
               className="vs-code-button"

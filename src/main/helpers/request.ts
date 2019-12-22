@@ -29,7 +29,7 @@ const requestWithRetries = async (
     retries > 0 &&
     (body.startsWith('Template had dependencies that required success but were not successful') ||
       body.startsWith('Template has these missing dependencies') ||
-      body.indexOf('ECONNREFUSED') !== -1)
+      body.includes('ECONNREFUSED'))
   ) {
     const reason = body.split('\n')[0];
     const remainingRetries = retries - 1;

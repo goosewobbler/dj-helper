@@ -26,7 +26,7 @@ const createApp = async (
 ): Promise<App> => {
   system.process.log(`Morph Developer Console v${currentVersion} is starting...`);
 
-  const devMode = (await system.process.getCommandLineArgs()).indexOf('-D') !== -1;
+  const devMode = (await system.process.getCommandLineArgs()).includes('-D');
   const currentWorkingDirectory = await system.process.getCurrentWorkingDirectory();
   const componentsDirectory = devMode ? join(currentWorkingDirectory, '../morph-modules') : currentWorkingDirectory;
   const configFilePath = join(componentsDirectory, 'morph-developer-console-config.json');

@@ -83,7 +83,7 @@ const createComponent = (
     }
   };
 
-  const updateURL = async (): Promise<void> => {
+  const updateURL = (): void => {
     const domain = (config.get('localhost') as string) || 'localhost';
     const type = getType();
     if (type === ComponentType.Page) {
@@ -219,7 +219,7 @@ const createComponent = (
     onReload,
   );
 
-  const stateMachine = componentStateMachine(actions, (): Promise<void> => updated());
+  const stateMachine = componentStateMachine(actions, (): void => updated());
 
   const getState = (): number => stateMachine.getState();
 

@@ -15,7 +15,7 @@ const isLinked = (dependencyName: string, component: ComponentData): boolean =>
   component?.dependencies?.find((d): boolean => d.name === dependencyName)!.linked;
 
 const isLinking = (dependencyName: string, component: ComponentData): boolean =>
-  (component.linking || []).indexOf(dependencyName) > -1;
+  (component.linking || []).includes(dependencyName);
 
 const isLinkable = ({ state }: ComponentData): boolean => state === ComponentState.Running;
 

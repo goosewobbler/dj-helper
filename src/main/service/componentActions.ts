@@ -13,8 +13,8 @@ interface ComponentActions {
   needsInstall(): Promise<boolean>;
   run(restartOthers?: boolean): Promise<void>;
   stop(): Promise<void>;
-  uninstall(): Promise<void>;
-  unlink(dependency: string): Promise<void>;
+  uninstall(): void;
+  unlink(dependency: string): void;
 }
 
 const createComponentActions = (
@@ -116,8 +116,8 @@ const createComponentActions = (
     const otherPath = join(componentPath, '..', otherDirectoryName);
     const nodeModulePath = join(componentPath, 'node_modules', dependency);
     const oldNodeModulePath = `${nodeModulePath}.old`;
-    await system.file.moveDirectory(nodeModulePath, oldNodeModulePath);
-    await system.file.createSymlink(otherPath, nodeModulePath);
+    system.file.moveDirectory(nodeModulePath, oldNodeModulePath);
+    system.file.createSymlink(otherPath, nodeModulePath);
     log(`Linked ${dependency}.`);
   };
 
@@ -147,7 +147,7 @@ const createComponentActions = (
       `../../../node_modules/morph-cli/bin/morph.js develop${useCache ? ' --cache' : ''} --port ${getPort()}`,
     );
     const stopProcess = await system.process.runUntilStopped(componentPath, command, log, log);
-    await onReload(restartOthers);
+    onReload(restartOthers);
     await routing.set(name, getPort());
     stopRunning = async (): Promise<void> => {
       await routing.set(name, null);
@@ -165,17 +165,17 @@ const createComponentActions = (
     }
   };
 
-  const uninstall = async (): Promise<void> => {
+  const uninstall = (): void => {
     log('Deleting node_modules.');
-    await system.file.deleteDirectory(join(componentPath, 'node_modules'));
+    system.file.deleteDirectory(join(componentPath, 'node_modules'));
   };
 
-  const unlink = async (dependency: string): Promise<void> => {
+  const unlink = (dependency: string): void => {
     log(`Unlinking ${dependency}...`);
     const nodeModulePath = join(componentPath, 'node_modules', dependency);
     const oldNodeModulePath = `${nodeModulePath}.old`;
-    await system.file.removeSymlink(nodeModulePath);
-    await system.file.moveDirectory(oldNodeModulePath, nodeModulePath);
+    system.file.removeSymlink(nodeModulePath);
+    system.file.moveDirectory(oldNodeModulePath, nodeModulePath);
     log(`Unlinked ${dependency}.`);
   };
 

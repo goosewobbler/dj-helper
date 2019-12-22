@@ -38,7 +38,7 @@ const copyIgnore = [
 
 const exists = (path: string): Promise<boolean> => Promise.resolve(existsSync(path));
 
-const getPackageDirectories = async (directory: string): Promise<string[]> =>
+const getPackageDirectories = (directory: string): string[] =>
   ls(join(directory, '*'))
     .filter((file: File): boolean => lstatSync(file.full).isDirectory())
     .filter((file: File): boolean => existsSync(join(file.full, 'package.json')))
@@ -51,7 +51,7 @@ const writeFile = (path: string, contents: string): Promise<void> => Promise.res
 const symbolicLinkExists = (path: string): Promise<boolean> =>
   Promise.resolve(existsSync(path) && lstatSync(path).isSymbolicLink());
 
-const deleteDirectory = async (directory: string): Promise<void> => {
+const deleteDirectory = (directory: string): void => {
   try {
     const to = `/tmp/mdc.deleted.${Date.now()}`;
     moveSync(directory, to);
@@ -71,7 +71,7 @@ const watchDirectory = (directory: string, callback: (path: string) => void): Pr
       directory,
       {
         filter: (name: string): boolean =>
-          !some((pathToIgnore: string): boolean => name.indexOf(pathToIgnore) > -1, ignore),
+          !some((pathToIgnore: string): boolean => name.includes(pathToIgnore), ignore),
         recursive: true,
       },
       (event: string, fileName: string): void => {
@@ -90,7 +90,7 @@ const copyDirectory = async (from: string, to: string, filter: boolean): Promise
       to,
       {
         filter: (name: string): boolean =>
-          !filter || !some((pathToIgnore: string): boolean => name.indexOf(pathToIgnore) > -1, copyIgnore),
+          !filter || !some((pathToIgnore: string): boolean => name.includes(pathToIgnore), copyIgnore),
       },
       (error: Error | Error[] | WriteStream | null): void => {
         if (error) {
@@ -102,7 +102,7 @@ const copyDirectory = async (from: string, to: string, filter: boolean): Promise
     ),
   );
 
-const moveDirectory = async (from: string, to: string): Promise<void> => {
+const moveDirectory = (from: string, to: string): void => {
   try {
     moveSync(from, to);
   } catch (ex) {
@@ -110,7 +110,7 @@ const moveDirectory = async (from: string, to: string): Promise<void> => {
   }
 };
 
-const createSymlink = async (from: string, to: string): Promise<void> => {
+const createSymlink = (from: string, to: string): void => {
   try {
     symlinkSync(from, to);
   } catch (ex) {
@@ -118,7 +118,7 @@ const createSymlink = async (from: string, to: string): Promise<void> => {
   }
 };
 
-const removeSymlink = async (path: string): Promise<void> => {
+const removeSymlink = (path: string): void => {
   try {
     unlinkSync(path);
   } catch (ex) {

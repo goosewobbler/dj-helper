@@ -44,7 +44,7 @@ const createPageServer = (service: Service, componentName: string, apiPort: numb
     async (req, res): Promise<void> => {
       try {
         const { accept } = req.headers;
-        const history = !accept || accept.indexOf('text/html') !== -1;
+        const history = !accept || accept.includes('text/html');
         const query = url.parse(req.url).query || '';
         const path = req.path + (query ? `?${query}` : '');
 

@@ -114,12 +114,9 @@ const runToCompletion = (
       }
     });
 
-    childProcess.on(
-      'close',
-      async (): Promise<void> => {
-        resolve();
-      },
-    );
+    childProcess.on('close', (): void => {
+      resolve();
+    });
   });
 
 const runUntilStopped = (
@@ -184,12 +181,9 @@ const runUntilStopped = (
       }
     });
 
-    childProcess.on(
-      'close',
-      async (): Promise<void> => {
-        stopped = true;
-      },
-    );
+    childProcess.on('close', (): void => {
+      stopped = true;
+    });
   });
 
 const processSystem: ProcessSystem = {

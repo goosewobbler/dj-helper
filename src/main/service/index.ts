@@ -63,8 +63,8 @@ const createService = async (
     };
   };
 
-  const onComponentUpdated = async (name: string): Promise<void> => {
-    const data = await getData(name);
+  const onComponentUpdated = (name: string): void => {
+    const data = getData(name);
     onComponentUpdate(data);
   };
 
@@ -135,7 +135,7 @@ const createService = async (
           (component): boolean => component.getDirectoryName() === directoryName,
         );
         if (changedComponent && changedComponent.getState() === ComponentState.Running) {
-          const isSass = relativePath.indexOf('/sass/') > -1;
+          const isSass = relativePath.includes('/sass/');
           await changedComponent.build(isSass, relativePath.replace(`${directoryName}/`, ''));
         }
       },

@@ -159,7 +159,7 @@ const createComponent = (
       dependency.has = shrinkwrapped[dependency.name] || '';
     });
 
-    await updated();
+    updated();
 
     await Promise.all(dependencies.map(decorateDependency)).catch(logError);
   };
@@ -191,7 +191,7 @@ const createComponent = (
       (async (): Promise<void> => {
         updateURL();
         await updateLocalVersion();
-        await updated();
+        updated();
         await updateEnvironmentVersions();
       })(),
       updateDependencies(),

@@ -1,7 +1,6 @@
 /* eslint global-require: off */
 const path = require('path');
 const spawn = require('child_process').spawn;
-const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // const tailwind = require('tailwindcss');
 // const autoprefixer = require('autoprefixer');
@@ -9,13 +8,6 @@ const rules = require('./webpack.rules');
 const plugins = require('./webpack.renderer.plugins');
 
 const isDev = process.env.NODE_ENV === 'development';
-
-plugins.push(
-  new HtmlWebPackPlugin({
-    template: './public/index.html',
-    filename: './index.html',
-  }),
-);
 
 const port = process.env.PORT || 1212;
 const publicPath = `http://localhost:${port}/dist`;
@@ -58,11 +50,11 @@ module.exports = {
   devtool: isDev ? 'inline-source-map' : 'source-map',
   entry: {
     renderer: [...baseEntry, './src/renderer/index.tsx'],
-    styles: [...baseEntry, './src/renderer/css/tailwind.src.css'],
   },
   output: {
-    publicPath: `http://localhost:${port}/dist/`,
-    filename: '[name].dev.js',
+    path: `${__dirname}/dist`,
+    publicPath,
+    filename: `[name].${isDev ? 'dev' : 'prod'}.js`,
   },
   module: {
     rules,
@@ -70,6 +62,7 @@ module.exports = {
   plugins,
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
+    //    modules: [path.join(__dirname, 'node_modules')],
   },
   target: 'electron-renderer',
   node: {

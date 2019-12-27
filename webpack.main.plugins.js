@@ -17,4 +17,9 @@ const plugins = [
   }),
 ];
 
+if (isDev) {
+  // const CopyPlugin = require('copy-webpack-plugin');
+  // plugins.push(new CopyPlugin([{ from: './src/index.html', to: './index.html' }]));
+}
+
 module.exports = plugins;

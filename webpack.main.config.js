@@ -1,10 +1,11 @@
 /* eslint global-require: off */
 const plugins = require('./webpack.main.plugins');
+const rules = require('./webpack.rules');
 
 const isDev = process.env.NODE_ENV === 'development';
 
 module.exports = {
-  context: __dirname,
+  // context: __dirname,
   /**
    * This is the main entry point for your application, it's the first file
    * that runs in the main process.
@@ -17,11 +18,12 @@ module.exports = {
     filename: `main.${isDev ? 'dev' : 'prod'}.js`,
   },
   module: {
-    rules: require('./webpack.rules'),
+    rules,
   },
   plugins,
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.json'],
+    //    modules: [path.join(__dirname, 'node_modules')],
     alias: {},
   },
   target: 'electron-main',

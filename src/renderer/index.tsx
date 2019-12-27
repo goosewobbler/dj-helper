@@ -8,7 +8,7 @@ import App from './components/App';
 import createReduxStore from './reduxStore';
 import { logError } from '../main/helpers/console';
 import { ComponentData, AppStatus, ComponentsData, AppState } from '../common/types';
-// import './css/tailwind.src.css';
+import '../css/tailwind.src.css';
 
 declare global {
   interface Window {

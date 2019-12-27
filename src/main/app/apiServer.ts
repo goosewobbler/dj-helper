@@ -13,7 +13,7 @@ import { Service, Store } from '../../common/types';
 const createApiServer = (service: Service, config: Store, updater: Updater, onUpdated: () => void): express.Express => {
   const app = express();
 
-  const publicPath = join(__dirname, '../../../public');
+  const publicPath = join(__dirname, '../../../dist');
   const staticPath = join(__dirname, '../../../static');
 
   app.use(cors());

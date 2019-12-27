@@ -1,6 +1,7 @@
 import React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { AppContainer } from 'react-hot-loader';
 import io from 'socket.io-client';
 import { fetchVersions, updateAndSelectComponent } from './actions/components';
 import { receiveComponent, receiveComponents, receiveEditors, updateAvailable, updated, updating } from './actions/app';
@@ -47,16 +48,27 @@ if (!preloadedState) {
     });
 }
 
-ReactDOM.render(
-  <Provider store={reduxStore}>
-    <App apiPort={apiPort} />
-  </Provider>,
-  document.getElementById('app'),
-);
+const render = (Component: any) =>
+  ReactDOM.render(
+    <AppContainer>
+      <Provider store={reduxStore}>
+        <Component />
+      </Provider>
+    </AppContainer>,
+    document.getElementById('app'),
+  );
+
+render(App);
 
 const inputElement = document.getElementById('search-input');
 if (inputElement) {
   inputElement.focus();
+}
+
+if (module.hot) {
+  module.hot.accept('./components/App', () => {
+    render(require('./components/App').default);
+  });
 }
 
 if (io) {

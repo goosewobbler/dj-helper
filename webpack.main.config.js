@@ -23,8 +23,8 @@ module.exports = {
   plugins,
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.json'],
-    //    modules: [path.join(__dirname, 'node_modules')],
-    alias: {},
+    // modules: [path.join(__dirname, 'node_modules')],
+    // alias: {},
   },
   target: 'electron-main',
   node: {

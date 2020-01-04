@@ -13,7 +13,12 @@ async function createWindow(): Promise<void> {
   mainWindow = new BrowserWindow({
     height: 800,
     width: 1200,
+    webPreferences: {
+      nodeIntegration: true,
+    },
   });
+
+  console.log(`Server running on ${apiPort}`);
 
   mainWindow.loadURL(`http://localhost:${apiPort}/`);
 

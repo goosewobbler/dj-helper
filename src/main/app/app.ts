@@ -24,9 +24,12 @@ const createApp = async (
   onUpdated: () => void,
   currentVersion: string,
 ): Promise<App> => {
-  system.process.log(`Morph Developer Console v${currentVersion} is starting...`);
+  const devMode = process.env.NODE_ENV === 'development';
 
-  const devMode = (await system.process.getCommandLineArgs()).includes('-D');
+  system.process.log(
+    `Morph Developer Console v${currentVersion} is starting${devMode ? ' in development mode' : ''}...`,
+  );
+
   const currentWorkingDirectory = await system.process.getCurrentWorkingDirectory();
   const componentsDirectory = devMode ? join(currentWorkingDirectory, '../morph-modules') : currentWorkingDirectory;
   const configFilePath = join(componentsDirectory, 'morph-developer-console-config.json');
@@ -36,6 +39,8 @@ const createApp = async (
   const routingFilePath = `${appRoot}/.routing.json`;
   const routing = await createStore(routingFilePath, system);
   const updater = createUpdater(system, currentVersion);
+
+  system.process.log(`Components directory: ${componentsDirectory}`);
 
   process.env.APP_ROOT_PATH = appRoot.toString();
 

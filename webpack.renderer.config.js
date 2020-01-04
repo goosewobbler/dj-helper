@@ -20,6 +20,7 @@ rules.push({
       loader: MiniCssExtractPlugin.loader,
       options: {
         hmr: isDev,
+        reloadAll: true,
       },
     },
     {
@@ -42,6 +43,7 @@ rules.push({
   ],
 });
 
+// const baseEntry = ['webpack/hot/dev-server'];
 const baseEntry = [`webpack-dev-server/client?http://localhost:${port}/`, 'webpack/hot/only-dev-server'];
 
 module.exports = {
@@ -73,7 +75,7 @@ module.exports = {
     port,
     publicPath,
     compress: true,
-    stats: 'errors-only',
+    // stats: 'errors-only',
     inline: true,
     lazy: false,
     hot: true,
@@ -90,7 +92,7 @@ module.exports = {
     },
     before() {
       if (process.env.START_HOT) {
-        console.log('Starting Main Process...');
+        console.log('\nStarting Main Process...');
         spawn('yarn', ['dev:start-main'], {
           shell: true,
           env: process.env,
@@ -103,7 +105,7 @@ module.exports = {
   },
   externals: [
     (context, request, callback) => {
-      if (request[0] == '.') {
+      if (request[0] == '.' || request.includes('webpack-dev-server')) {
         callback();
       } else {
         callback(null, `require('${request}')`);

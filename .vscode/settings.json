@@ -1,0 +1,12 @@
+{
+  "http.proxySupport": "off",
+  "eslint.probe": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+  "vsicons.associations.files": [
+    {
+      "icon": "webpack",
+      "extensions": ["webpack.main.plugins.js", "webpack.renderer.plugins.js"],
+      "filename": true,
+      "format": "svg"
+    }
+  ]
+}

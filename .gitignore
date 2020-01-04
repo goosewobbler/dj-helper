@@ -2,7 +2,6 @@ lib
 node_modules
 public
 dist
-.vscode
 .DS_Store
 .routing.json
 yarn-error.log

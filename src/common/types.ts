@@ -190,7 +190,6 @@ interface NetworkSystem {
 }
 
 interface ProcessSystem {
-  getCommandLineArgs(): Promise<string[]>;
   getCurrentWorkingDirectory(): Promise<string>;
   log(message: string): void;
   open(url: string): void;

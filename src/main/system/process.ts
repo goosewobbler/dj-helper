@@ -72,8 +72,6 @@ const log = (message: string): void => {
   }
 };
 
-const getCommandLineArgs = (): Promise<string[]> => Promise.resolve(process.argv.slice(1));
-
 const getCurrentWorkingDirectory = (): Promise<string> => Promise.resolve(process.cwd());
 
 const open = (url: string): Promise<void> => {
@@ -187,7 +185,6 @@ const runUntilStopped = (
   });
 
 const processSystem: ProcessSystem = {
-  getCommandLineArgs,
   getCurrentWorkingDirectory,
   log,
   open,

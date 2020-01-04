@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
+const { ProgressPlugin, HotModuleReplacementPlugin } = require('webpack');
 
 const isDev = process.env.NODE_ENV === 'development';
 let templateParameters = {
@@ -21,6 +22,8 @@ if (isDev && process.env.START_HOT) {
 }
 
 const plugins = [
+  new ProgressPlugin(),
+  new HotModuleReplacementPlugin(),
   new BundleAnalyzerPlugin({
     analyzerMode: 'static',
     generateStatsFile: true,
@@ -32,8 +35,8 @@ const plugins = [
     async: false,
   }),
   new MiniCssExtractPlugin({
-    filename: '[name].css',
-    chunkFilename: '[id].css',
+    filename: isDev ? '[name].css' : '[name].[hash].css',
+    chunkFilename: isDev ? '[id].css' : '[id].[hash].css',
   }),
   new HtmlWebpackPlugin({
     filename: 'index.html',

@@ -73,7 +73,6 @@ module.exports = {
     port,
     publicPath,
     compress: true,
-    noInfo: true,
     stats: 'errors-only',
     inline: true,
     lazy: false,

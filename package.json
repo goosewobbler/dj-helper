@@ -22,10 +22,8 @@
     "dev:build-main": "cross-env NODE_ENV=development webpack --config webpack.main.config.js --colors",
     "dev:start-main": "cross-env START_HOT=1 NODE_ENV=development electron -r @babel/register ./dist/main.dev.js",
     "dev:start-renderer": "cross-env NODE_ENV=development webpack-dev-server --config webpack.renderer.config.js",
-    "lint": "concurrently 'yarn lint:js' 'yarn lint:ts'",
-    "lint:fix": "concurrently 'yarn lint:js --fix' 'yarn lint:ts --fix'",
-    "lint:js": "eslint --config '.eslintrc.js.json' '**/*.js'",
-    "lint:ts": "eslint --config '.eslintrc.ts.json' '**/*.ts{,x}'",
+    "lint": "eslint '**/*.[j|t]s{,x}'",
+    "lint:fix": "yarn lint --fix'",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

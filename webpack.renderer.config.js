@@ -1,6 +1,6 @@
-/* eslint global-require: off */
+/* eslint global-require: off,no-console: off */
 const path = require('path');
-const spawn = require('child_process').spawn;
+const { spawn } = require('child_process');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // const tailwind = require('tailwindcss');
 // const autoprefixer = require('autoprefixer');
@@ -105,7 +105,7 @@ module.exports = {
   },
   externals: [
     (context, request, callback) => {
-      if (request[0] == '.' || request.includes('webpack-dev-server')) {
+      if (request[0] === '.' || request.includes('webpack-dev-server')) {
         callback();
       } else {
         callback(null, `require('${request}')`);

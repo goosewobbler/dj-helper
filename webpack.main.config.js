@@ -33,7 +33,7 @@ module.exports = {
   },
   externals: [
     (context, request, callback) => {
-      if (request[0] == '.') {
+      if (request[0] === '.') {
         callback();
       } else {
         callback(null, `require('${request}')`);

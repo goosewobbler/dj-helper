@@ -6,6 +6,7 @@
     "node": true
   },
   "rules": {
+    "import/extensions": ["error", "never"],
     "import/no-extraneous-dependencies": ["error", { "devDependencies": ["webpack.*.js"] }]
   },
   "overrides": [
@@ -39,7 +40,14 @@
       },
       "rules": {
         "radix": "off",
-        "import/extensions": ["error", "never"],
+        "import/extensions": [
+          "error",
+          {
+            "ts": "never",
+            "tsx": "never",
+            "css": "always"
+          }
+        ],
         "react/jsx-filename-extension": ["warn", { "extensions": [".tsx"] }],
         "@typescript-eslint/no-non-null-assertion": "off"
       },

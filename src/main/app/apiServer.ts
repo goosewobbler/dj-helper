@@ -3,13 +3,11 @@ import cors from 'cors';
 import express from 'express';
 import { readFileSync } from 'graceful-fs';
 import { join } from 'path';
-import { Updater } from './updater';
 import createApiComponentRouter from './apiComponentRouter';
 import renderIndex from './indexRenderer';
-import { logError } from '../helpers/console';
 import { Service, Store } from '../../common/types';
 
-const createApiServer = (service: Service, config: Store, updater: Updater, onUpdated: () => void): express.Express => {
+const createApiServer = (service: Service, config: Store): express.Express => {
   const app = express();
 
   const publicPath = join(__dirname, '../../../dist');
@@ -19,17 +17,6 @@ const createApiServer = (service: Service, config: Store, updater: Updater, onUp
   app.use(json());
 
   app.use('/api/component', createApiComponentRouter(service));
-
-  app.post(
-    '/api/update',
-    async (req, res): Promise<void> => {
-      res.send('🤔');
-      await updater
-        .update()
-        .then(onUpdated)
-        .catch(logError);
-    },
-  );
 
   app.get('/', (req, res): void => {
     res.send(renderIndex(service, config, readFileSync(join(publicPath, 'index.html'), 'utf-8')));

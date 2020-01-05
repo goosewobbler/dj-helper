@@ -5,7 +5,6 @@ import appRoot from 'app-root-path';
 import createService from '../service';
 import createApiServer from './apiServer';
 import createComponentServer from './componentServer';
-import { createUpdater } from './updater';
 import createStore from '../helpers/store';
 import { ComponentData, Service, System, Store } from '../../common/types';
 import setupRendererComms from './rendererComms';
@@ -40,7 +39,6 @@ const createApp = async (
   const state = await createStore(stateFilePath, system);
   const routingFilePath = `${appRoot}/.routing.json`;
   const routing = await createStore(routingFilePath, system);
-  const updater = createUpdater(system, currentVersion);
 
   system.process.log(`Components directory: ${componentsDirectory}`);
 
@@ -48,10 +46,10 @@ const createApp = async (
 
   const service = await createService(system, config, state, routing, onComponentUpdate, onReload, componentsDirectory);
 
-  setupRendererComms(mainWindow, updater);
+  setupRendererComms(mainWindow);
 
   return {
-    api: createApiServer(service, config, updater, onUpdated),
+    api: createApiServer(service, config),
     component: createComponentServer(service, config),
     config,
     devMode,

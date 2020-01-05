@@ -8,6 +8,8 @@ const moduleTypeMap: { [Key: string]: ModuleType } = {
   viewcss: ModuleType.ViewCSS,
 };
 
+/* CAN REPLACE ALL OF THIS WITH INTER-PROCESS COMMS */
+
 const createApiComponentRouter = (service: Service): Router => {
   const router = Router();
 

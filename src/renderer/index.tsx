@@ -1,3 +1,4 @@
+import { ipcRenderer } from 'electron';
 import React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider, ConnectedComponent } from 'react-redux';
@@ -7,7 +8,6 @@ import { fetchVersions, updateAndSelectComponent } from './actions/components';
 import { receiveComponent, receiveComponents, receiveEditors, updateAvailable, updated, updating } from './actions/app';
 import App from './components/App';
 import createReduxStore from './reduxStore';
-import { logError } from '../main/helpers/console';
 import { ComponentData, AppStatus, ComponentsData, AppState } from '../common/types';
 import '../css/tailwind.src.css';
 
@@ -101,19 +101,17 @@ if (io) {
 }
 
 const checkOutOfDate = (): void => {
-  fetch(`http://localhost:${apiPort}/api/status`)
-    .then((response): Promise<AppStatus> => response.json())
-    .then((response): void => {
-      if (response.updated) {
-        reduxStore.dispatch(updated());
-      } else if (response.updating) {
-        reduxStore.dispatch(updating());
-      }
-      if (response.updateAvailable) {
-        reduxStore.dispatch(updateAvailable());
-      }
-    })
-    .catch(logError);
+  ipcRenderer.once('app-version-status', (event, appStatus: AppStatus): void => {
+    if (appStatus.updated) {
+      reduxStore.dispatch(updated());
+    } else if (appStatus.updating) {
+      reduxStore.dispatch(updating());
+    }
+    if (appStatus.updateAvailable) {
+      reduxStore.dispatch(updateAvailable());
+    }
+  });
+  ipcRenderer.send('get-app-version-status');
 };
 
 checkOutOfDate();

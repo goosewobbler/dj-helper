@@ -1,4 +1,5 @@
-window.define('live-push', [], function() {
+/* eslint-disable no-console */
+window.define('live-push', [], () => {
   const intervals = {};
   const onMomentCallbacks = [];
   const consoleAvailable = !!window.console && !window.jasmine;
@@ -9,7 +10,7 @@ window.define('live-push', [], function() {
   }
 
   function callbackAllOnMomentCallbacks(moment) {
-    onMomentCallbacks.forEach(function(callback) {
+    onMomentCallbacks.forEach(callback => {
       callback(moment);
     });
   }
@@ -23,7 +24,7 @@ window.define('live-push', [], function() {
 
     const xhr = new XMLHttpRequest();
     xhr.open('GET', url, true);
-    xhr.onreadystatechange = function() {
+    xhr.onreadystatechange = () => {
       let responseBody;
       if (xhr.readyState === 4) {
         const responseCode = xhr.status;
@@ -48,7 +49,7 @@ window.define('live-push', [], function() {
     xhr.send(null);
   }
 
-  exports.subscribe = function(topic) {
+  exports.subscribe = topic => {
     if (intervals[topic]) {
       return;
     }
@@ -63,7 +64,7 @@ window.define('live-push', [], function() {
     }
   };
 
-  exports.unsubscribe = function(topic) {
+  exports.unsubscribe = topic => {
     if (intervals[topic]) {
       clearInterval(intervals[topic]);
       delete intervals[topic];
@@ -74,24 +75,24 @@ window.define('live-push', [], function() {
     }
   };
 
-  exports.start = function() {};
+  exports.start = () => {};
 
-  exports.get = function(topic, count, callback) {
+  exports.get = (topic, count, callback) => {
     if (consoleAvailable) {
       console.info('Morph Live Push Local: get (XHR):', topic);
     }
 
-    fetch(topic, true, function(moment) {
+    fetch(topic, true, moment => {
       const moments = moment ? [moment] : [];
       callback(JSON.stringify({ moments }));
     });
   };
 
-  exports.on = function(channel, callback) {
+  exports.on = (channel, callback) => {
     onMomentCallbacks.push(callback);
   };
 
-  exports.getInstance = function() {
+  exports.getInstance = () => {
     if (consoleAvailable) {
       console.info('Morph Live Push Local: getting instance...');
     }

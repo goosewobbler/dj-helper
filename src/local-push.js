@@ -1,3 +1,4 @@
+/* global window, XMLHttpRequest */
 /* eslint-disable no-console */
 window.define('live-push', [], () => {
   const intervals = {};
@@ -55,7 +56,7 @@ window.define('live-push', [], () => {
     }
 
     const poll = fetch.bind(this, topic, false, callbackAllOnMomentCallbacks);
-    intervals[topic] = setInterval(poll, POLL_INTERVAL_FROM_CONFIG);
+    intervals[topic] = setInterval(poll, POLL_INTERVAL_FROM_CONFIG); //eslint-disable-line
     poll();
 
     if (consoleAvailable) {

@@ -5,7 +5,7 @@ import system from './system';
 import { log } from './helpers/console';
 import { ComponentData } from '../common/types';
 
-const startServer = async (): Promise<number> => {
+const startServer = async (mainWindow: Electron.BrowserWindow): Promise<number> => {
   let sendComponentData: (data: ComponentData) => void;
   let sendReload: () => void;
   let sendUpdated: () => void;
@@ -29,6 +29,7 @@ const startServer = async (): Promise<number> => {
   };
 
   const { api, component, service, config } = await createApp(
+    mainWindow,
     system,
     onComponentUpdate,
     onReload,

@@ -6,8 +6,17 @@ import { logError } from './helpers/console';
 if (module.hot) {
   module.hot.accept();
 }
+const isDev = process.env.NODE_ENV === 'development';
 
 let mainWindow: Electron.BrowserWindow;
+
+if (process.env.NODE_ENV === 'production') {
+  import('source-map-support').then(sourceMapSupport => sourceMapSupport.install());
+}
+
+if (isDev || process.env.DEBUG_PROD === 'true') {
+  import('electron-debug').then(electronDebug => electronDebug.default());
+}
 
 async function createWindow(): Promise<void> {
   mainWindow = new BrowserWindow({

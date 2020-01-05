@@ -1,6 +1,6 @@
 import React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
+import { Provider, ConnectedComponent } from 'react-redux';
 import { AppContainer } from 'react-hot-loader';
 import io from 'socket.io-client';
 import { fetchVersions, updateAndSelectComponent } from './actions/components';
@@ -48,7 +48,7 @@ if (!preloadedState) {
     });
 }
 
-const render = (Component: any) =>
+const render = (Component: ConnectedComponent<any, any>): void => {
   ReactDOM.render(
     <AppContainer>
       <Provider store={reduxStore}>
@@ -57,6 +57,7 @@ const render = (Component: any) =>
     </AppContainer>,
     document.getElementById('app'),
   );
+};
 
 render(App);
 

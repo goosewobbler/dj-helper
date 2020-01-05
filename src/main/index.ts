@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { app, BrowserWindow } from 'electron';
 import startServer from './server';
 import { logError } from './helpers/console';

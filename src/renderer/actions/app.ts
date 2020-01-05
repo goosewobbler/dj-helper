@@ -1,25 +1,5 @@
 import { AnyAction } from 'redux';
-import { ThunkAction } from 'redux-thunk';
-import { ComponentData, Dispatch, AppState } from '../../common/types';
-import { getApiPort } from '../helpers/apiPortHelper';
-
-export const updateAvailable = (): AnyAction => ({
-  type: 'UPDATE_AVAILABLE',
-});
-
-export const updating = (): AnyAction => ({
-  type: 'UPDATING',
-});
-
-export const updated = (): AnyAction => ({
-  type: 'UPDATED',
-});
-
-export const update = (): ThunkAction<void, AppState, undefined, AnyAction> => (dispatch: Dispatch): void => {
-  dispatch(updating());
-  const apiPort = getApiPort();
-  fetch(`http://localhost:${apiPort}/api/update`, { method: 'POST' });
-};
+import { ComponentData } from '../../common/types';
 
 export const receiveComponents = (components: ComponentData[]): AnyAction => ({
   components,

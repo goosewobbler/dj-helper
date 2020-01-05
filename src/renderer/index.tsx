@@ -4,11 +4,11 @@ import * as ReactDOM from 'react-dom';
 import { Provider, ConnectedComponent } from 'react-redux';
 import { AppContainer } from 'react-hot-loader';
 import io from 'socket.io-client';
-import { fetchVersions, updateAndSelectComponent } from './actions/components';
-import { receiveComponent, receiveComponents, receiveEditors, updateAvailable, updated, updating } from './actions/app';
+import { fetchVersions } from './actions/components';
+import { receiveComponent, receiveComponents, receiveEditors } from './actions/app';
 import App from './components/App';
 import createReduxStore from './reduxStore';
-import { ComponentData, AppStatus, ComponentsData, AppState } from '../common/types';
+import { ComponentData, ComponentsData, AppState } from '../common/types';
 import '../css/tailwind.src.css';
 
 declare global {
@@ -40,12 +40,11 @@ delete window.mdc.preloadedState;
 const reduxStore = createReduxStore(preloadedState);
 
 if (!preloadedState) {
-  fetch(`http://localhost:${apiPort}/api/component`)
-    .then((response): Promise<ComponentsData> => response.json())
-    .then((json): void => {
-      reduxStore.dispatch(receiveComponents(json.components));
-      reduxStore.dispatch(receiveEditors(json.editors));
-    });
+  ipcRenderer.once('components-data', (event, componentsData: ComponentsData): void => {
+    reduxStore.dispatch(receiveComponents(componentsData.components));
+    reduxStore.dispatch(receiveEditors(componentsData.editors));
+  });
+  ipcRenderer.send('get-components-data');
 }
 
 const render = (Component: ConnectedComponent<any, any>): void => {
@@ -78,10 +77,6 @@ if (io) {
     reduxStore.dispatch(receiveComponent(component));
   });
 
-  socket.on('updated', (): void => {
-    reduxStore.dispatch(updated());
-  });
-
   const updateSelected = (): void => {
     const selected = reduxStore.getState().ui.selectedComponent;
     if (selected) {
@@ -98,41 +93,4 @@ if (io) {
   setInterval((): void => {
     updateSelected();
   }, 60000);
-}
-
-const checkOutOfDate = (): void => {
-  ipcRenderer.once('app-version-status', (event, appStatus: AppStatus): void => {
-    if (appStatus.updated) {
-      reduxStore.dispatch(updated());
-    } else if (appStatus.updating) {
-      reduxStore.dispatch(updating());
-    }
-    if (appStatus.updateAvailable) {
-      reduxStore.dispatch(updateAvailable());
-    }
-  });
-  ipcRenderer.send('get-app-version-status');
-};
-
-checkOutOfDate();
-
-if (window.location.port === '8080') {
-  window.historyEnabled = false;
-}
-
-if (typeof window.historyEnabled === 'undefined') {
-  window.historyEnabled = true;
-
-  const selectComponentFromUrl = (): void => {
-    const matches = /\/component\/(.+)$/.exec(String(window.document.location));
-    if (matches) {
-      reduxStore.dispatch(updateAndSelectComponent(matches[1], true));
-    }
-  };
-
-  window.onpopstate = (): void => {
-    selectComponentFromUrl();
-  };
-
-  selectComponentFromUrl();
 }

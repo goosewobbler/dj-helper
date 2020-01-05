@@ -1,13 +1,14 @@
+import { ipcRenderer } from 'electron';
 import * as React from 'react';
 import GraphVis from 'react-graph-vis';
 
 import { GraphData } from '../../../../common/types';
 import LoadingIcon from '../../LoadingIcon';
-import { logError } from '../../../../main/helpers/console';
 
 interface GraphProps {
-  url: string;
   down: boolean;
+  type: 'dependency' | 'dependant';
+  componentName: string;
   onSelect(name: string): void;
 }
 
@@ -36,12 +37,12 @@ class Graph extends React.PureComponent<GraphProps, GraphState> {
     this.update();
   }
 
-  public componentWillReceiveProps(nextProps: GraphProps): void {
-    const { url } = this.props;
-    if (nextProps.url !== url) {
-      this.setState({ data: null });
-    }
-  }
+  // public componentWillReceiveProps(nextProps: GraphProps): void {
+  //   const { url } = this.props;
+  //   if (nextProps.url !== url) {
+  //     this.setState({ data: null });
+  //   }
+  // }
 
   public componentDidUpdate(): void {
     const { data } = this.state;
@@ -51,13 +52,11 @@ class Graph extends React.PureComponent<GraphProps, GraphState> {
   }
 
   private update(): void {
-    const { url } = this.props;
-    fetch(url)
-      .then((res): Promise<GraphData> => res.json())
-      .then((data): void => {
-        this.setState({ data });
-      })
-      .catch(logError);
+    const { componentName, type } = this.props;
+    ipcRenderer.once(`${type}-graph`, (event, graphData: GraphData): void => {
+      this.setState({ data: graphData });
+    });
+    ipcRenderer.send(`get-${type}-graph`, componentName);
   }
 
   public renderGraph(data: GraphData): React.ReactElement {

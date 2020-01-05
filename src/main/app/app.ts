@@ -46,7 +46,7 @@ const createApp = async (
 
   const service = await createService(system, config, state, routing, onComponentUpdate, onReload, componentsDirectory);
 
-  setupRendererComms(mainWindow);
+  setupRendererComms(mainWindow, service);
 
   return {
     api: createApiServer(service, config),

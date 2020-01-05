@@ -2,13 +2,11 @@ import React, { ReactElement } from 'react';
 import ComponentDetailsContainer from '../ComponentDetails';
 import ComponentListContainer from '../ComponentList';
 import ComponentListFilterContainer from '../ComponentListFilter';
-import UpdateBar from '../UpdateBar';
 import CreateIcon from '../CreateIcon';
 import LabelButton from '../LabelButton';
 import CreateForm from '../CreateForm';
 import Dialog from '../Dialog';
 import GitHubLink from '../GithubLink';
-import { setApiPort } from '../../helpers/apiPortHelper';
 import { AppContextProvider, AppContext } from '../../contexts/appContext';
 import Spacer from '../Spacer';
 
@@ -45,16 +43,12 @@ const renderCloneDialog = ({ hideDialog, cloneComponent, componentToClone }: App
 };
 
 const App = (props: AppProps): ReactElement => {
-  const { outOfDate, showDialog, showCreateDialog, showCloneDialog, apiPort } = props;
+  const { showDialog, showCreateDialog, showCloneDialog, apiPort } = props;
   const appContextValue: AppContext = { apiPort };
-
-  // TODO: remove hacky singleton and try to do this in a more elegant way - after CSS & Hooks reworks
-  setApiPort(apiPort);
 
   return (
     <AppContextProvider value={appContextValue}>
       <div className="flex flex-col flex-grow">
-        {outOfDate && <UpdateBar />}
         <div className="header flex items-center flex-shrink-0 p-3 justify-between shadow-md border-b">
           <h1 key="title">Morph Developer Console</h1>
           <div key="links" className="flex flex-shrink-0 height h-10 mr-4">

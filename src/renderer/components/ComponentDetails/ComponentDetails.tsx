@@ -11,7 +11,6 @@ import ComponentVersions from './ComponentVersions';
 
 import { ComponentData, ComponentDependency } from '../../../common/types';
 import { ComponentContext, ComponentContextProvider, ComponentHandlers } from '../../contexts/componentContext';
-import { getApiPort } from '../../helpers/apiPortHelper';
 import Spacer from '../Spacer';
 
 interface ComponentDetailsProps {
@@ -34,25 +33,11 @@ const orderDependencies = (dependencies: ComponentDependency[]): ComponentDepend
   (dependencies || []).sort((a, b): number => a.displayName.localeCompare(b.displayName));
 
 const renderDependencyGraph = (handlers: ComponentHandlers, componentName: string): ReactElement => {
-  const apiPort = getApiPort();
-  return (
-    <Graph
-      onSelect={handlers.onSelectComponent}
-      down
-      url={`http://localhost:${apiPort}/api/component/${componentName}/dependency-graph`}
-    />
-  );
+  return <Graph onSelect={handlers.onSelectComponent} down componentName={componentName} type="dependency" />;
 };
 
 const renderDependendantGraph = (handlers: ComponentHandlers, componentName: string): ReactElement => {
-  const apiPort = getApiPort();
-  return (
-    <Graph
-      onSelect={handlers.onSelectComponent}
-      down={false}
-      url={`http://localhost:${apiPort}/api/component/${componentName}/dependant-graph`}
-    />
-  );
+  return <Graph onSelect={handlers.onSelectComponent} down={false} componentName={componentName} type="dependant" />;
 };
 
 const buildPipelineLink = (rendererType: string): Function => (env: string): string => {

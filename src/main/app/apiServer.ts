@@ -3,7 +3,6 @@ import cors from 'cors';
 import express from 'express';
 import { readFileSync } from 'graceful-fs';
 import { join } from 'path';
-import createApiComponentRouter from './apiComponentRouter';
 import renderIndex from './indexRenderer';
 import { Service, Store } from '../../common/types';
 
@@ -15,8 +14,6 @@ const createApiServer = (service: Service, config: Store): express.Express => {
 
   app.use(cors());
   app.use(json());
-
-  app.use('/api/component', createApiComponentRouter(service));
 
   app.get('/', (req, res): void => {
     res.send(renderIndex(service, config, readFileSync(join(publicPath, 'index.html'), 'utf-8')));

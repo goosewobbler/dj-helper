@@ -1,15 +1,13 @@
+import { ipcRenderer } from 'electron';
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { showDialog } from './app';
 import { ComponentState, Dispatch, AppState } from '../../common/types';
-import { getApiPort } from '../helpers/apiPortHelper';
 
 /* FETCH VERSIONS */
 
 export const fetchVersions = (name: string): AnyAction => {
-  const apiPort = getApiPort();
-  const action = (): Promise<Response> =>
-    fetch(`http://localhost:${apiPort}/api/component/${name}/versions`, { method: 'POST' });
+  const action = (): void => ipcRenderer.send('update-component-versions', name);
 
   action.type = '';
   return action;
@@ -25,8 +23,7 @@ export const startComponent = (name: string): ThunkAction<void, AppState, undefi
     state: ComponentState.Starting,
     type: 'CHANGE_COMPONENT_STATE',
   });
-  const apiPort = getApiPort();
-  fetch(`http://localhost:${apiPort}/api/component/${name}/start`, { method: 'POST' });
+  ipcRenderer.send('start-component', name);
 };
 
 /* STOP */
@@ -39,8 +36,7 @@ export const stopComponent = (name: string): ThunkAction<void, AppState, undefin
     state: ComponentState.Stopped,
     type: 'CHANGE_COMPONENT_STATE',
   });
-  const apiPort = getApiPort();
-  fetch(`http://localhost:${apiPort}/api/component/${name}/stop`, { method: 'POST' });
+  ipcRenderer.send('stop-component', name);
 };
 
 /* INSTALL */
@@ -53,8 +49,7 @@ export const installComponent = (name: string): ThunkAction<void, AppState, unde
     state: ComponentState.Installing,
     type: 'CHANGE_COMPONENT_STATE',
   });
-  const apiPort = getApiPort();
-  fetch(`http://localhost:${apiPort}/api/component/${name}/install`, { method: 'POST' });
+  ipcRenderer.send('install-component', name);
 };
 
 /* BUILD */
@@ -67,8 +62,7 @@ export const buildComponent = (name: string): ThunkAction<void, AppState, undefi
     state: ComponentState.Building,
     type: 'CHANGE_COMPONENT_STATE',
   });
-  const apiPort = getApiPort();
-  fetch(`http://localhost:${apiPort}/api/component/${name}/build`, { method: 'POST' });
+  ipcRenderer.send('build-component', name);
 };
 
 /* SET USE CACHE */
@@ -77,8 +71,7 @@ export const setUseCacheOnComponent = (
   name: string,
   value: boolean,
 ): ThunkAction<void, AppState, undefined, AnyAction> => (): void => {
-  const apiPort = getApiPort();
-  fetch(`http://localhost:${apiPort}/api/component/${name}/cache/${value ? 'true' : 'false'}`, { method: 'POST' });
+  ipcRenderer.send('cache-component', name, value);
 };
 
 /* FAVOURITE */
@@ -92,8 +85,7 @@ export const favouriteComponent = (
     name,
     type: 'FAVOURITE_COMPONENT',
   });
-  const apiPort = getApiPort();
-  fetch(`http://localhost:${apiPort}/api/component/${name}/favourite/${favourite}`, { method: 'POST' });
+  ipcRenderer.send('favourite-component', name, favourite);
 };
 
 /* PROMOTE & BUMP */
@@ -108,10 +100,8 @@ export const bumpComponent = (name: string, type: string): ThunkAction<void, App
   dispatch: Dispatch,
 ): void => {
   dispatch(promotingComponent(name, 'int'));
-  const apiPort = getApiPort();
-  fetch(`http://localhost:${apiPort}/api/component/${name}/bump/${type}`, { method: 'POST' }).then((): void => {
-    dispatch(promotingComponent(name, null)); // TODO: why are we dispatching again here?
-  });
+  ipcRenderer.once('component-bumped', () => dispatch(promotingComponent(name, null)));
+  ipcRenderer.send('bump-component', name, type);
 };
 
 export const promoteComponent = (
@@ -119,15 +109,13 @@ export const promoteComponent = (
   environment: string,
 ): ThunkAction<void, AppState, undefined, AnyAction> => (dispatch: Dispatch): void => {
   dispatch(promotingComponent(name, environment));
-  const apiPort = getApiPort();
-  fetch(`http://localhost:${apiPort}/api/component/${name}/promote/${environment}`, { method: 'POST' });
+  ipcRenderer.send('promote-component', name, environment);
 };
 
 /* OPEN IN CODE */
 
 export const openInCode = (name: string): ThunkAction<void, AppState, undefined, AnyAction> => (): void => {
-  const apiPort = getApiPort();
-  fetch(`http://localhost:${apiPort}/api/component/${name}/edit`, { method: 'POST' });
+  ipcRenderer.send('edit-component', name);
 };
 
 /* LINKING */
@@ -142,8 +130,7 @@ export const linkComponent = (name: string, dependency: string): ThunkAction<voi
   dispatch: Dispatch,
 ): void => {
   dispatch(linkingComponent(name, dependency));
-  const apiPort = getApiPort();
-  fetch(`http://localhost:${apiPort}/api/component/${name}/link/${dependency}`, { method: 'POST' });
+  ipcRenderer.send('link-component', name, dependency);
 };
 
 export const unlinkComponent = (
@@ -151,17 +138,13 @@ export const unlinkComponent = (
   dependency: string,
 ): ThunkAction<void, AppState, undefined, AnyAction> => (dispatch: Dispatch): void => {
   dispatch(linkingComponent(name, dependency));
-  const apiPort = getApiPort();
-  fetch(`http://localhost:${apiPort}/api/component/${name}/unlink/${dependency}`, { method: 'POST' });
+  ipcRenderer.send('unlink-component', name, dependency);
 };
 
 /* UPDATING & SELECT */
 
-export const updateAndSelectComponent = (name: string, noHistory?: boolean): AnyAction => {
+export const updateAndSelectComponent = (name: string): AnyAction => {
   const action = (dispatch: Dispatch): void => {
-    if (!noHistory && window.historyEnabled) {
-      window.history.pushState({ name }, '', `/component/${name}`);
-    }
     dispatch(fetchVersions(name));
     dispatch({
       name,
@@ -171,35 +154,15 @@ export const updateAndSelectComponent = (name: string, noHistory?: boolean): Any
 
   action.type = '';
   return action;
-};
+}; // TODO: split into separate handlers
 
-/* CREATION & CLONING */
-
-export const createComponent = (
+/* CREATION & CLONING */ export const createComponent = (
   name: string,
   description: string,
   type: string,
   sourceComponent?: string,
 ): ThunkAction<void, AppState, undefined, AnyAction> => (dispatch: Dispatch): void => {
-  let createUrl;
-
-  if (sourceComponent) {
-    dispatch(showDialog('clone', sourceComponent));
-    const apiPort = getApiPort();
-    createUrl = `http://localhost:${apiPort}/api/component/${sourceComponent}/clone`;
-  } else {
-    dispatch(showDialog('create'));
-    const apiPort = getApiPort();
-    createUrl = `http://localhost:${apiPort}/api/component/create/${type}`;
-  }
-
-  fetch(createUrl, {
-    body: JSON.stringify({ name, description }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    method: 'POST',
-  }).then((): void => {
+  const responseHandler = (): void => {
     const fullName = `bbc-morph-${name}`;
     dispatch({
       name,
@@ -208,5 +171,15 @@ export const createComponent = (
     });
     dispatch(updateAndSelectComponent(fullName));
     dispatch(installComponent(fullName));
-  });
+  };
+
+  if (sourceComponent) {
+    dispatch(showDialog('clone', sourceComponent));
+    ipcRenderer.once('component-cloned', responseHandler);
+    ipcRenderer.send('clone-component', sourceComponent, name, description);
+  } else {
+    dispatch(showDialog('create'));
+    ipcRenderer.once('component-created', responseHandler);
+    ipcRenderer.send('create-component', name, type, description);
+  }
 };

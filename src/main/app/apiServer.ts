@@ -3,7 +3,6 @@ import cors from 'cors';
 import express from 'express';
 import { readFileSync } from 'graceful-fs';
 import { join } from 'path';
-
 import { Updater } from './updater';
 import createApiComponentRouter from './apiComponentRouter';
 import renderIndex from './indexRenderer';
@@ -21,16 +20,6 @@ const createApiServer = (service: Service, config: Store, updater: Updater, onUp
 
   app.use('/api/component', createApiComponentRouter(service));
 
-  app.get(
-    '/api/status',
-    async (req, res): Promise<void> => {
-      await updater
-        .getStatus()
-        .then((status): express.Response => res.json(status))
-        .catch(logError);
-    },
-  );
-
   app.post(
     '/api/update',
     async (req, res): Promise<void> => {
@@ -42,20 +31,20 @@ const createApiServer = (service: Service, config: Store, updater: Updater, onUp
     },
   );
 
-  app.get('/local-push.js', (req, res): void => {
-    const pollInterval = String(config.get('livePushPollInterval') || 10000);
-    const js = readFileSync(join(publicPath, 'local-push.js'), 'utf-8');
-    const modifiedJs = js.replace('POLL_INTERVAL_FROM_CONFIG', pollInterval);
-
-    res.contentType('application/javascript').send(modifiedJs);
-  });
-
   app.get('/', (req, res): void => {
     res.send(renderIndex(service, config, readFileSync(join(publicPath, 'index.html'), 'utf-8')));
   });
 
   app.get('/component/:name', (req, res): void => {
     res.send(renderIndex(service, config, readFileSync(join(publicPath, 'index.html'), 'utf-8'), req.params.name));
+  });
+
+  app.get('/local-push.js', (req, res): void => {
+    const pollInterval = String(config.get('livePushPollInterval') || 10000);
+    const js = readFileSync(join(publicPath, 'local-push.js'), 'utf-8');
+    const modifiedJs = js.replace('POLL_INTERVAL_FROM_CONFIG', pollInterval);
+
+    res.contentType('application/javascript').send(modifiedJs);
   });
 
   app.use(express.static(publicPath));

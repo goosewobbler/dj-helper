@@ -13,7 +13,6 @@ import '../css/tailwind.src.css';
 
 declare global {
   interface Window {
-    historyEnabled: boolean;
     mdc: { preloadedState: AppState; apiPort: number };
   }
 }

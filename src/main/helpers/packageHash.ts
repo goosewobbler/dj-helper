@@ -1,7 +1,7 @@
-import hash from 'node-object-hash';
+import nodeObjectHash from 'node-object-hash';
 import { Package } from '../../common/types';
 
-const hasher = hash({ sort: true }).hash;
+const { hash } = nodeObjectHash({ sort: true });
 
 const packageHash = (packageContents: Package): string => {
   const contentsSubset = {
@@ -9,7 +9,7 @@ const packageHash = (packageContents: Package): string => {
     devDependencies: packageContents.devDependencies,
     version: packageContents.version,
   };
-  return hasher(contentsSubset);
+  return hash(contentsSubset);
 };
 
 export default packageHash;

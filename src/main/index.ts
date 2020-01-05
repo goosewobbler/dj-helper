@@ -14,6 +14,7 @@ async function createWindow(): Promise<void> {
   mainWindow = new BrowserWindow({
     height: 800,
     width: 1200,
+    show: false,
     webPreferences: {
       nodeIntegration: true,
     },
@@ -23,7 +24,10 @@ async function createWindow(): Promise<void> {
 
   mainWindow.loadURL(`http://localhost:${apiPort}/`);
 
-  mainWindow.webContents.openDevTools();
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show();
+    mainWindow.webContents.openDevTools();
+  });
 
   // Emitted when the window is closed.
   mainWindow.on('closed', (): void => {

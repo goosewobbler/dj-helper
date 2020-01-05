@@ -10,7 +10,6 @@ if (module.hot) {
 let mainWindow: Electron.BrowserWindow;
 
 async function createWindow(): Promise<void> {
-  const apiPort = await startServer().catch(logError);
   mainWindow = new BrowserWindow({
     height: 800,
     width: 1200,
@@ -19,6 +18,8 @@ async function createWindow(): Promise<void> {
       nodeIntegration: true,
     },
   });
+
+  const apiPort = await startServer(mainWindow).catch(logError);
 
   console.log(`Server running on ${apiPort}`);
 

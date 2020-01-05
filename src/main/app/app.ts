@@ -8,6 +8,7 @@ import createComponentServer from './componentServer';
 import { createUpdater } from './updater';
 import createStore from '../helpers/store';
 import { ComponentData, Service, System, Store } from '../../common/types';
+import setupRendererComms from './rendererComms';
 
 interface App {
   api: Express;
@@ -18,6 +19,7 @@ interface App {
 }
 
 const createApp = async (
+  mainWindow: Electron.BrowserWindow,
   system: System,
   onComponentUpdate: (data: ComponentData) => void,
   onReload: () => void,
@@ -27,7 +29,7 @@ const createApp = async (
   const devMode = process.env.NODE_ENV === 'development';
 
   system.process.log(
-    `Morph Developer Console v${currentVersion} is starting${devMode ? ' in development mode' : ''}...`,
+    `Morph Developer Console v${currentVersion} is starting${devMode ? ' in development mode...' : '...'}`,
   );
 
   const currentWorkingDirectory = await system.process.getCurrentWorkingDirectory();
@@ -45,6 +47,8 @@ const createApp = async (
   process.env.APP_ROOT_PATH = appRoot.toString();
 
   const service = await createService(system, config, state, routing, onComponentUpdate, onReload, componentsDirectory);
+
+  setupRendererComms(mainWindow, updater);
 
   return {
     api: createApiServer(service, config, updater, onUpdated),

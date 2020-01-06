@@ -47,10 +47,10 @@ const renderLinkButton = (
     <LabelButton
       className={className}
       label={label}
-      padding="0 4px"
-      fontSize="12px"
-      height="24px"
-      width="50px"
+      padding="px-1"
+      fontSize="xs"
+      height="6"
+      width="12"
       onClick={onClick}
       backgroundColor="white"
     />

@@ -8,11 +8,13 @@ import { AppState, Store, Service } from '../../common/types';
 
 const renderIndex = (service: Service, config: Store, template: string, selectedComponent?: string): string => {
   const summaryData = service.getComponentsSummaryData();
+  const theme = service.getTheme();
 
   const initialState: AppState = {
     components: summaryData.components,
     ui: {
       editors: summaryData.editors,
+      theme,
     },
   };
 
@@ -29,10 +31,15 @@ const renderIndex = (service: Service, config: Store, template: string, selected
   );
 
   const preloadedState = reduxStore.getState();
+  const extraCSS = `mark{background-color:${theme.highlightColour};}`;
+  const preloadedStateString = JSON.stringify(preloadedState).replace(/</g, '\\u003c');
+  const apiPortString = apiPort.toString();
+
   return template
     .replace('HTML_PLACEHOLDER', html)
-    .replace('API_PORT_PLACEHOLDER', apiPort.toString())
-    .replace('STATE_PLACEHOLDER', JSON.stringify(preloadedState).replace(/</g, '\\u003c'));
+    .replace('/* CSS_PLACEHOLDER */', extraCSS)
+    .replace('/* API_PORT_PLACEHOLDER */', `window.mdc.apiPort = ${apiPortString}`)
+    .replace('/* STATE_PLACEHOLDER */', `window.mdc.preloadedState = ${preloadedStateString}`);
 };
 
 export default renderIndex;

@@ -5,6 +5,7 @@ import startPageServer from '../app/pageServer';
 import getComponentType from '../helpers/componentType';
 import { createComponentFiles, cloneComponentFiles } from '../helpers/files';
 import { createGrapher, Grapher } from './grapher';
+import createTheme from '../app/theme';
 import createComponent from './component';
 import {
   ModuleType,
@@ -20,6 +21,7 @@ import {
   BumpType,
   LooseObject,
   ComponentsData,
+  Theme,
 } from '../../common/types';
 
 const createService = async (
@@ -33,6 +35,7 @@ const createService = async (
 ): Promise<Service> => {
   const components: Component[] = [];
   const nextPort = 8083;
+  const theme = createTheme(config);
   const editors: string[] = [];
   const allDependencies: { [Key: string]: { name: string }[] } = {};
   let grapher: Grapher;
@@ -191,7 +194,7 @@ const createService = async (
   const getDependantGraph = (name: string): GraphData => grapher.getDependantData(name);
 
   const getDependencyGraph = (name: string): GraphData => grapher.getDependencyData(name);
-
+  const getTheme = (): Theme => theme.getValues();
   const bump = (name: string, type: BumpType): Promise<void> => getComponent(name).bump(type);
   const build = (name: string): Promise<void> => getComponent(name).build();
   const fetchDetails = (name: string): Promise<void> => getComponent(name).fetchDetails();
@@ -218,6 +221,7 @@ const createService = async (
     getComponentsSummaryData,
     getDependantGraph,
     getDependencyGraph,
+    getTheme,
     link,
     openInEditor,
     promote,

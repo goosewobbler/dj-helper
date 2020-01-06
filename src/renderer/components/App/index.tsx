@@ -3,7 +3,7 @@ import { hot } from 'react-hot-loader';
 import { showDialog, hideDialog } from '../../actions/app';
 import { createComponent } from '../../actions/components';
 import App from './App';
-import { AppState, Dispatch } from '../../../common/types';
+import { AppState, Dispatch, Theme } from '../../../common/types';
 
 const mapDispatchToProps = (
   dispatch: Dispatch,
@@ -27,13 +27,18 @@ const mapDispatchToProps = (
   },
 });
 
-const mapStateToProps = (
-  state: AppState,
-): { outOfDate: boolean; componentToClone: string; showCreateDialog: boolean; showCloneDialog: boolean } => ({
-  outOfDate: state.ui.outOfDate!,
+type AppProps = {
+  componentToClone: string;
+  showCreateDialog: boolean;
+  showCloneDialog: boolean;
+  theme: Theme;
+};
+
+const mapStateToProps = (state: AppState): AppProps => ({
   componentToClone: state.ui.componentToClone!,
   showCreateDialog: state.ui.showDialog === 'create',
   showCloneDialog: state.ui.showDialog === 'clone',
+  theme: state.ui.theme,
 });
 
 const Container = connect(mapStateToProps, mapDispatchToProps)(App);

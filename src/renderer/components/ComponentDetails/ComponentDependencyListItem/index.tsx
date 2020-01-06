@@ -68,10 +68,11 @@ const ComponentDependencyListItem = ({ dependency }: ComponentDependencyProps): 
   const onLink = (): void => onLinkComponent(displayName, name);
   const onUnlink = (): void => onUnlinkComponent(displayName, name);
   const onClick = (): void => onSelectComponent(name);
+  const onKeyPress = (): void => onSelectComponent(name);
 
   return (
     <li key={name}>
-      <div className="component-dependency" onClick={onClick}>
+      <div className="component-dependency" onClick={onClick} role="link" onKeyPress={onKeyPress} tabIndex={0}>
         <span className="component-name-label">{name}</span>
         <Spacer fill />
         {renderLinkButton(name, componentContext.component, onUnlink, onLink)}

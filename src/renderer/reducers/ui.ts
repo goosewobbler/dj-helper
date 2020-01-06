@@ -11,7 +11,7 @@ interface Action {
   componentToClone?: string;
 }
 
-const reducer = (state: AppState['ui'] = { editors: [] }, action: Action): AppState['ui'] => {
+const reducer = (state: AppState['ui'], action: Action): AppState['ui'] => {
   switch (action.type) {
     case 'RECEIVE_EDITORS': {
       return {
@@ -29,26 +29,6 @@ const reducer = (state: AppState['ui'] = { editors: [] }, action: Action): AppSt
       return {
         ...state,
         filter: action.filter,
-      };
-    }
-    case 'UPDATE_AVAILABLE': {
-      return {
-        ...state,
-        outOfDate: true,
-      };
-    }
-    case 'UPDATING': {
-      return {
-        ...state,
-        updated: false,
-        updating: true,
-      };
-    }
-    case 'UPDATED': {
-      return {
-        ...state,
-        updated: true,
-        updating: false,
       };
     }
     case 'SHOW_DIALOG': {

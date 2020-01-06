@@ -66,7 +66,7 @@ if (inputElement) {
 
 if (module.hot) {
   module.hot.accept('./components/App', () => {
-    render(require('./components/App').default);
+    import('./components/App').then(hotApp => render(hotApp.default));
   });
 }
 

@@ -30,7 +30,7 @@ const createComponent = (
   componentType: ComponentType,
   acquirePort: () => number,
   onUpdate: (name: string) => void,
-  onReload: (restartOthers: boolean) => void,
+  onReload: (restartOthers: boolean) => Promise<void>,
   getOther: (name: string) => Component,
   rendererType: string,
 ): Component => {

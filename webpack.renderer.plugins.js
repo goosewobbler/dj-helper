@@ -45,8 +45,8 @@ const plugins = [
     alwaysWriteToDisk: true,
     templateParameters,
   }),
-  // new HtmlWebpackInjector(),
   new HtmlWebpackHarddiskPlugin(),
+  // new HtmlWebpackInjector(),
 ];
 
 module.exports = plugins;

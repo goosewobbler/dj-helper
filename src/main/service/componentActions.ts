@@ -27,7 +27,7 @@ const createComponentActions = (
   log: (message: string) => void,
   getOther: (name: string) => Component,
   getUseCache: () => boolean,
-  onReload: (restartOthers: boolean) => void,
+  onReload: (restartOthers: boolean) => Promise<void>,
 ): ComponentActions => {
   let stopRunning: () => Promise<void>;
 

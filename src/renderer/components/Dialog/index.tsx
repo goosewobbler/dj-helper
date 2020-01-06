@@ -17,7 +17,7 @@ const Dialog = ({
       <div className="header">
         <h1>{title}</h1>
         <div>
-          <LabelButton className="dialog-close-button" width="100%" image={<RemoveIcon />} label="" onClick={onClose} />
+          <LabelButton className="dialog-close-button" width="full" image={<RemoveIcon />} label="" onClick={onClose} />
         </div>
       </div>
       <div className="content">{children}</div>

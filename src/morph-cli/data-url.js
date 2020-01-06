@@ -3,7 +3,7 @@ import morphRequestPaths from 'morph-cli/lib/morph-request-paths';
 import getRouting from './get-routing';
 import getConfig from './get-config';
 
-const buildUrlForDataProxy = (currentDep, props, currentModulePath, workspaceRoot, contextId) => {
+function buildUrlForDataProxy(currentDep, props, currentModulePath, contextId) {
   const routing = getRouting();
   const directory = path.basename(process.cwd());
   const componentName = `bbc-morph-${directory}`;
@@ -19,17 +19,13 @@ const buildUrlForDataProxy = (currentDep, props, currentModulePath, workspaceRoo
     return null;
   }
 
-  if (workspaceRoot) {
-    url += morphRequestPaths.pathForTemplateDependency(currentDep, props, currentModulePath);
-  } else {
-    url += morphRequestPaths.pathForDataRequest(currentDep, props);
-  }
+  url += morphRequestPaths.pathForDataRequest(currentDep, props);
 
   if (contextId) {
     url += `?contextId=${contextId}`;
   }
 
   return url;
-};
+}
 
 export default buildUrlForDataProxy;

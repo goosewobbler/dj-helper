@@ -20,11 +20,15 @@ if (isDev || process.env.DEBUG_PROD === 'true') {
 }
 
 const installExtensions = async (): Promise<string | void> => {
-  const installer = await import('electron-devtools-installer');
-  const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-  const extensions = ['REACT_DEVELOPER_TOOLS', 'REACT_PERF', 'REDUX_DEVTOOLS'];
+  const electronDevtoolsInstaller = await import('electron-devtools-installer');
+  const { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS, REACT_PERF } = electronDevtoolsInstaller;
+  const installer = electronDevtoolsInstaller.default;
+  const forceDownload = true; // !!process.env.UPGRADE_EXTENSIONS;
+  const extensions = [REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS, REACT_PERF];
 
-  return installer.default(extensions, forceDownload).catch(logError);
+  return installer(extensions, forceDownload)
+    .then(name => console.log(`Added Extension:  ${name}`))
+    .catch(err => console.log('An error occurred: ', err));
 };
 
 async function createWindow(): Promise<void> {

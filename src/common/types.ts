@@ -30,7 +30,7 @@ interface AppState {
   ui: {
     componentToClone?: string;
     editors: string[];
-    theme: Theme;
+    theme?: Theme;
     selectedComponent?: string;
     filter?: string;
     updating?: boolean;

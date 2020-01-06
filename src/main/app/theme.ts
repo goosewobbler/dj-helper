@@ -1,4 +1,4 @@
-import { Theme, Config } from '../../common/types';
+import { Theme, Store } from '../../common/types';
 
 const DEFAULT_VALUES: Theme = {
   buildingColour: 'rgb(203, 117, 255)',
@@ -46,10 +46,10 @@ const THEME_PRESETS: { [Key: string]: Theme } = {
   dark: DARK_THEME_PRESET,
 };
 
-const Theme = (config: Config): { getValues(): Theme } => {
-  const themePreset: string = config.getValue('themePreset') || '';
-  const themePresetOverrides = THEME_PRESETS[themePreset] || {};
-  const themeOverrides = config.getValue('themeOverrides') || {};
+const createTheme = (config: Store): { getValues(): Theme } => {
+  const themePreset = config.get('themePreset') || '';
+  const themePresetOverrides = THEME_PRESETS[themePreset as string] || {};
+  const themeOverrides = config.get('themeOverrides') || {};
   const values = { ...DEFAULT_VALUES, ...themePresetOverrides, ...themeOverrides };
 
   return {
@@ -59,4 +59,4 @@ const Theme = (config: Config): { getValues(): Theme } => {
   };
 };
 
-export default Theme;
+export default createTheme;

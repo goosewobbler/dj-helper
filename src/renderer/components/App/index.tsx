@@ -38,7 +38,7 @@ const mapStateToProps = (state: AppState): AppProps => ({
   componentToClone: state.ui.componentToClone!,
   showCreateDialog: state.ui.showDialog === 'create',
   showCloneDialog: state.ui.showDialog === 'clone',
-  theme: state.ui.theme,
+  theme: state.ui.theme!,
 });
 
 const Container = connect(mapStateToProps, mapDispatchToProps)(App);

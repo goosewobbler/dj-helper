@@ -1,4 +1,4 @@
-import { ComponentData, AppState } from '../../common/types';
+import { ComponentData, AppState, Theme } from '../../common/types';
 
 interface Action {
   type: string;
@@ -9,10 +9,17 @@ interface Action {
   environment?: string;
   show?: boolean;
   componentToClone?: string;
+  theme?: Theme;
 }
 
-const reducer = (state: AppState['ui'], action: Action): AppState['ui'] => {
+const reducer = (state: AppState['ui'] = { editors: [] }, action: Action): AppState['ui'] => {
   switch (action.type) {
+    case 'RECEIVE_THEME': {
+      return {
+        ...state,
+        theme: action.theme,
+      };
+    }
     case 'RECEIVE_EDITORS': {
       return {
         ...state,

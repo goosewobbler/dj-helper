@@ -1,4 +1,6 @@
 import express from 'express';
+import { readFileSync } from 'graceful-fs';
+import { join } from 'path';
 
 import { LooseObject, Service, Store } from '../../common/types';
 import { socketIoLibraryScript, socketIoPageReloadScript } from '../helpers/scripts';
@@ -16,7 +18,7 @@ const convertPropsString = (propsString: string): LooseObject => {
 
 const createViewPage = (
   response: { head: string[]; bodyInline: string; bodyLast: string[] },
-  apiPort: number,
+  componentPort: number,
 ): string =>
   `<!doctype html>
    <html class="b-pw-1280">
@@ -24,8 +26,8 @@ const createViewPage = (
        <meta charset="utf-8">
        <meta http-equiv="x-ua-compatible" content="ie=edge">
        <meta name="viewport" content="width=device-width, initial-scale=1">
-       <link rel="shortcut icon" type="image/png" href="http://localhost:${apiPort}/image/icon/morph.png"/>
-       ${socketIoLibraryScript(apiPort)}
+       <link rel="shortcut icon" type="image/png" href="http://localhost:${componentPort}/image/icon/morph.png"/>
+       ${socketIoLibraryScript(componentPort)}
        ${(response.head || []).join('')}
        <style>body {font-size: 62.5%;line-height: 1;}</style>
      </head>
@@ -33,12 +35,21 @@ const createViewPage = (
        ${response.bodyInline}
        <script src="//m.int.files.bbci.co.uk/modules/vendor/requirejs/2.1.20/require.min.js"></script>
        ${(response.bodyLast || []).join('')}
-       ${socketIoPageReloadScript(apiPort)}
+       ${socketIoPageReloadScript(componentPort)}
      </body>
    </html>`;
 
 const createComponentServer = (service: Service, config: Store): express.Express => {
   const server = express();
+
+  server.get('/local-push.js', (req, res): void => {
+    const publicPath = join(__dirname, '../../../dist');
+    const pollInterval = String(config.get('livePushPollInterval') || 10000);
+    const js = readFileSync(join(publicPath, 'local-push.js'), 'utf-8');
+    const modifiedJs = js.replace('POLL_INTERVAL_FROM_CONFIG', pollInterval);
+
+    res.contentType('application/javascript').send(modifiedJs);
+  });
 
   server.get(
     '/data/:name*',
@@ -75,8 +86,8 @@ const createComponentServer = (service: Service, config: Store): express.Express
           history,
         );
         if (statusCode === 200) {
-          const apiPort = config.get('apiPort');
-          res.send(createViewPage(JSON.parse(body), apiPort as number));
+          const componentPort = config.get('componentPort');
+          res.send(createViewPage(JSON.parse(body), componentPort as number));
         } else {
           res
             .status(statusCode)

@@ -13,7 +13,7 @@ import { Theme } from '../../../common/types';
 
 interface AppProps {
   theme: Theme;
-  apiPort: number;
+  componentPort: number;
   showCreateDialog: boolean;
   showCloneDialog: boolean;
   componentToClone: string;
@@ -44,8 +44,8 @@ const renderCloneDialog = ({ hideDialog, cloneComponent, componentToClone }: App
 };
 
 const App = (props: AppProps): ReactElement => {
-  const { showDialog, showCreateDialog, showCloneDialog, theme, apiPort } = props;
-  const appContextValue: AppContext = { apiPort, theme };
+  const { showDialog, showCreateDialog, showCloneDialog, theme, componentPort } = props;
+  const appContextValue: AppContext = { componentPort, theme };
 
   return (
     <AppContextProvider value={appContextValue}>

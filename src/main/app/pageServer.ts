@@ -23,10 +23,10 @@ const createResponseBody = (body: string, statusCode: number): string => {
   }
 };
 
-const appendSocketReloadScript = (responseBody: string, apiPort: number): string =>
+const appendSocketReloadScript = (responseBody: string, componentPort: number): string =>
   responseBody
-    .replace('<head>', `<head>${socketIoLibraryScript(apiPort)}`)
-    .replace('</body>', `${socketIoPageReloadScript(apiPort)}</body>`);
+    .replace('<head>', `<head>${socketIoLibraryScript(componentPort)}`)
+    .replace('</body>', `${socketIoPageReloadScript(componentPort)}</body>`);
 
 const start = async (server: express.Express, port: number): Promise<void> => {
   await new Promise((resolve): void => {
@@ -36,7 +36,7 @@ const start = async (server: express.Express, port: number): Promise<void> => {
   });
 };
 
-const createPageServer = (service: Service, componentName: string, apiPort: number): express.Express => {
+const createPageServer = (service: Service, componentName: string, componentPort: number): express.Express => {
   const server = express();
 
   server.get(
@@ -60,7 +60,7 @@ const createPageServer = (service: Service, componentName: string, apiPort: numb
           res.set('Location', pageLocation);
         }
         const basicResponseBody = createResponseBody(body, pageStatusCode);
-        const responseBody = appendSocketReloadScript(basicResponseBody, apiPort);
+        const responseBody = appendSocketReloadScript(basicResponseBody, componentPort);
         res
           .status(pageStatusCode)
           .set(headers)
@@ -80,10 +80,10 @@ const startPageServer = async (service: Service, name: string, config: Store): P
     return pageServers[name];
   }
 
-  const apiPort = config.get('apiPort');
+  const componentPort = config.get('componentPort');
   const port = nextPageServerPort + 1;
   pageServers[name] = port;
-  await start(createPageServer(service, name, apiPort as number), port);
+  await start(createPageServer(service, name, componentPort as number), port);
   return port;
 };
 

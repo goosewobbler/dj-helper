@@ -28,7 +28,7 @@ const startServer = async (mainWindow: Electron.BrowserWindow): Promise<number> 
     }
   };
 
-  const { api, component, service, config } = await createApp(
+  const { component, service, config } = await createApp(
     mainWindow,
     system,
     onComponentUpdate,
@@ -36,17 +36,10 @@ const startServer = async (mainWindow: Electron.BrowserWindow): Promise<number> 
     onUpdated,
     process.env.npm_package_version!,
   );
-  const apiServer = new Server(api);
   const componentServer = new Server(component);
-  const io = socketIo(apiServer);
+  const io = socketIo(componentServer);
 
-  let apiPort = config.get('apiPort') as number;
   let componentPort = config.get('componentPort') as number;
-
-  if (!apiPort) {
-    apiPort = 4444;
-    config.set('apiPort', apiPort);
-  }
 
   if (!componentPort) {
     componentPort = 4000;
@@ -66,25 +59,18 @@ const startServer = async (mainWindow: Electron.BrowserWindow): Promise<number> 
   };
 
   await new Promise((resolve): void => {
-    apiServer.listen(apiPort, (): void => {
-      resolve();
-    });
-  });
-
-  await new Promise((resolve): void => {
     componentServer.listen(componentPort, (): void => {
       resolve();
     });
   });
 
-  const url = `http://localhost:${apiPort}`;
-  log(`[console] Running at ${url}`);
+  log(`[console] Component server running at http://localhost:${componentPort}`);
 
   io.on('connection', (): void => {
     io.emit('freshState', service.getComponentsData());
   });
 
-  return apiPort;
+  return componentPort;
 };
 
 export default startServer;

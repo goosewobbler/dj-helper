@@ -2,7 +2,7 @@ import { createContext } from 'react';
 import { Theme } from '../../common/types';
 
 interface AppContext {
-  apiPort: number;
+  componentPort: number;
   theme: Theme;
 }
 

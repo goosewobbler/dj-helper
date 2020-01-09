@@ -3,14 +3,12 @@ import { Express } from 'express';
 import appRoot from 'app-root-path';
 
 import createService from '../service';
-import createApiServer from './apiServer';
 import createComponentServer from './componentServer';
 import createStore from '../helpers/store';
 import { ComponentData, Service, System, Store } from '../../common/types';
 import setupRendererComms from './rendererComms';
 
 interface App {
-  api: Express;
   component: Express;
   config: Store;
   devMode: boolean;
@@ -46,10 +44,9 @@ const createApp = async (
 
   const service = await createService(system, config, state, routing, onComponentUpdate, onReload, componentsDirectory);
 
-  setupRendererComms(mainWindow, service);
+  setupRendererComms(mainWindow, service, config);
 
   return {
-    api: createApiServer(service, config),
     component: createComponentServer(service, config),
     config,
     devMode,

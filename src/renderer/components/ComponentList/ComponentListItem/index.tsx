@@ -98,14 +98,14 @@ const renderStartStopButton = (
   }
 };
 
-class ComponentListItem extends React.PureComponent<ComponentListItemProps> {
-  public static displayName = 'ComponentListItem';
-
+class ComponentListItem extends React.Component<ComponentListItemProps> {
   private handleClick: () => void;
 
   private handleStart: () => void;
 
   private handleStop: () => void;
+
+  public static displayName: string;
 
   public constructor(props: ComponentListItemProps) {
     super(props);
@@ -144,7 +144,14 @@ class ComponentListItem extends React.PureComponent<ComponentListItemProps> {
     const labelText: React.ReactElement[] | string = highlighted && highlighted.length > 0 ? highlighted : displayName;
 
     return (
-      <div className={selected ? 'selected' : ''} role="button" id={createID(name)} onClick={this.handleClick}>
+      <div
+        className={selected ? 'selected' : ''}
+        role="button"
+        id={createID(name)}
+        onClick={this.handleClick}
+        tabIndex={0}
+        onKeyPress={(): void => {}}
+      >
         {renderFavouriteButton(this.props)}
         <Spacer />
         <span className="component-name-label">{labelText}</span>
@@ -156,5 +163,7 @@ class ComponentListItem extends React.PureComponent<ComponentListItemProps> {
     );
   }
 }
+
+ComponentListItem.displayName = 'ComponentListItem';
 
 export { ComponentListItem, ComponentListItemProps };

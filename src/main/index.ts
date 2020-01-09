@@ -23,11 +23,15 @@ const installExtensions = async (): Promise<string | void> => {
   const electronDevtoolsInstaller = await import('electron-devtools-installer');
   const { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS, REACT_PERF } = electronDevtoolsInstaller;
   const installer = electronDevtoolsInstaller.default;
-  const forceDownload = true; // !!process.env.UPGRADE_EXTENSIONS;
+  const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
   const extensions = [REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS, REACT_PERF];
 
+  console.log('\nInstalling Developer Tools...');
+
   return installer(extensions, forceDownload)
-    .then(name => console.log(`Added Extension:  ${name}`))
+    .then((
+      extensionNames: unknown, // electron-devtools-installer typedefs are wrong for the array of extensions case
+    ) => (extensionNames as string[]).forEach(name => console.log(`Added Extension:  ${name}`)))
     .catch(err => console.log('An error occurred: ', err));
 };
 
@@ -44,11 +48,12 @@ async function createWindow(): Promise<void> {
     },
   });
 
-  const apiPort = await startServer(mainWindow).catch(logError);
+  await startServer(mainWindow).catch(logError);
 
-  console.log(`Server running on ${apiPort}`);
+  mainWindow.loadURL(isDev ? 'http://localhost:1212/' : `file:///${__dirname}/../../dist/index.html`);
 
-  mainWindow.loadURL(`http://localhost:${apiPort}/`);
+  // mainWindow.show();
+  // mainWindow.webContents.openDevTools();
 
   mainWindow.once('ready-to-show', () => {
     (mainWindow as BrowserWindow).show();

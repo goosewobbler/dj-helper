@@ -10,7 +10,18 @@ const plugins = require('./webpack.renderer.plugins');
 const isDev = process.env.NODE_ENV === 'development';
 
 const port = process.env.PORT || 1212;
-const publicPath = `http://localhost:${port}/dist`;
+const publicPath = `http://localhost:${port}/`;
+
+const startMain = () => {
+  console.log('\nStarting Main Process...');
+  spawn('yarn', ['dev:start-main'], {
+    shell: true,
+    env: process.env,
+    stdio: 'inherit',
+  })
+    .on('close', code => process.exit(code))
+    .on('error', spawnError => console.error(spawnError));
+};
 
 rules.push({
   test: /\.css$/,
@@ -64,6 +75,9 @@ module.exports = {
   plugins,
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
+    alias: {
+      'react-dom': '@hot-loader/react-dom',
+    },
     //    modules: [path.join(__dirname, 'node_modules')],
   },
   target: 'electron-renderer',
@@ -75,12 +89,13 @@ module.exports = {
     port,
     publicPath,
     compress: true,
-    // stats: 'errors-only',
+    // stats: 'normal', // 'verbose',
     inline: true,
     lazy: false,
     hot: true,
     headers: { 'Access-Control-Allow-Origin': '*' },
-    contentBase: path.join(__dirname, 'dist'),
+    contentBase: path.join(__dirname, 'static'),
+    writeToDisk: true,
     watchOptions: {
       aggregateTimeout: 300,
       ignored: /node_modules/,
@@ -90,26 +105,19 @@ module.exports = {
       verbose: true,
       disableDotRule: false,
     },
-    before() {
+    before(app, server, compiler) {
       if (process.env.START_HOT) {
-        console.log('\nStarting Main Process...');
-        spawn('yarn', ['dev:start-main'], {
-          shell: true,
-          env: process.env,
-          stdio: 'inherit',
-        })
-          .on('close', code => process.exit(code))
-          .on('error', spawnError => console.error(spawnError));
+        compiler.hooks.done.tap('MyPlugin', startMain);
       }
     },
   },
-  externals: [
-    (context, request, callback) => {
-      if (request[0] === '.' || request.includes('webpack-dev-server')) {
-        callback();
-      } else {
-        callback(null, `require('${request}')`);
-      }
-    },
-  ],
+  // externals: [
+  //   (context, request, callback) => {
+  //     if (request[0] === '.' || request.includes('webpack-dev-server')) {
+  //       callback();
+  //     } else {
+  //       callback(null, `require('${request}')`);
+  //     }
+  //   },
+  // ],
 };

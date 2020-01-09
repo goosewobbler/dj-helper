@@ -17,7 +17,6 @@ const setupRendererComms = (mainWindow: Electron.BrowserWindow, service: Service
   log('setting up renderer comms');
 
   ipcMain.on('get-app-setup', (): void => {
-    log('get-app-setup requested');
     const { components, editors } = service.getComponentsSummaryData();
     const theme = service.getTheme();
 

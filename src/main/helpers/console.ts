@@ -1,5 +1,5 @@
-const log = (message: string): void => {
-  console.log(message); // eslint-disable-line no-console
+const log = (...args: string[]): void => {
+  console.log(...args); // eslint-disable-line no-console
 };
 
 const logWarning = (message: string): void => {

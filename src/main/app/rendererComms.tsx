@@ -1,6 +1,11 @@
+import * as React from 'react';
+import { Provider } from 'react-redux';
 import { ipcMain } from 'electron';
-import { Service, ModuleType, BumpType } from '../../common/types';
-import { logError } from '../helpers/console';
+import { renderToString } from 'react-dom/server';
+import App from '../../renderer/components/App';
+import { Service, ModuleType, BumpType, Store, AppState } from '../../common/types';
+import { logError, log } from '../helpers/console';
+import createReduxStore from '../../renderer/reduxStore';
 
 const componentTypeMap: { [Key: string]: ModuleType } = {
   data: ModuleType.Data,
@@ -8,7 +13,36 @@ const componentTypeMap: { [Key: string]: ModuleType } = {
   viewcss: ModuleType.ViewCSS,
 };
 
-const setupRendererComms = (mainWindow: Electron.BrowserWindow, service: Service): void => {
+const setupRendererComms = (mainWindow: Electron.BrowserWindow, service: Service, config: Store): void => {
+  log('setting up renderer comms');
+
+  ipcMain.on('get-app-setup', (): void => {
+    log('get-app-setup requested');
+    const { components, editors } = service.getComponentsSummaryData();
+    const theme = service.getTheme();
+
+    const initialState: AppState = {
+      components,
+      ui: {
+        editors,
+        theme,
+      },
+    };
+
+    const reduxStore = createReduxStore(initialState);
+    const componentPort = config.get('componentPort') as number;
+    const html = renderToString(
+      <Provider store={reduxStore}>
+        <App componentPort={componentPort} />
+      </Provider>,
+    );
+
+    const preloadedState = reduxStore.getState();
+    const dynamicCSS = `mark{background-color:${theme.highlightColour};}`;
+
+    mainWindow.webContents.send('app-setup', { initialState: preloadedState, dynamicCSS, html, componentPort });
+  });
+
   ipcMain.on('get-components-data', (): void =>
     mainWindow.webContents.send('components-data', service.getComponentsSummaryData()),
   );

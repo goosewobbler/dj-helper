@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { hot } from 'react-hot-loader';
+// import { hot } from 'react-hot-loader/root'
 import { showDialog, hideDialog } from '../../actions/app';
 import { createComponent } from '../../actions/components';
 import App from './App';
@@ -43,5 +43,6 @@ const mapStateToProps = (state: AppState): AppProps => ({
 
 const Container = connect(mapStateToProps, mapDispatchToProps)(App);
 
-// export default Container;
-export default hot(module)(Container);
+export default Container;
+
+// export default hot(module)(Container);

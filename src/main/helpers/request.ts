@@ -45,7 +45,7 @@ const requestWithRetries = async (
     .replace(/localhost:8082/g, `localhost:${port}`)
     .replace(/react\.min/g, 'react')
     .replace(/react-dom\.min/g, 'react-dom')
-    .replace(/'live-push' : '[^']+'/g, `'live-push' : '//localhost:${config.get('apiPort')}/local-push'`);
+    .replace(/'live-push' : '[^']+'/g, `'live-push' : '//localhost:${config.get('componentPort')}/local-push'`);
 
   return { body: modifiedBody, headers, statusCode };
 };

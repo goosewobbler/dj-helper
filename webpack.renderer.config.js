@@ -1,6 +1,7 @@
 /* eslint global-require: off,no-console: off */
 const path = require('path');
 const { spawn } = require('child_process');
+const detectPort = require('detect-port');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // const tailwind = require('tailwindcss');
 // const autoprefixer = require('autoprefixer');
@@ -9,11 +10,13 @@ const plugins = require('./webpack.renderer.plugins');
 
 const isDev = process.env.NODE_ENV === 'development';
 
-const port = process.env.PORT || 1212;
-const publicPath = `http://localhost:${port}/`;
+const devServerPort = process.env.PORT || 1212;
+const componentPort = 4000;
+const publicPath = `http://localhost:${devServerPort}/`;
 
 const startMain = () => {
   console.log('\nStarting Main Process...');
+
   spawn('yarn', ['dev:start-main'], {
     shell: true,
     env: process.env,
@@ -55,7 +58,7 @@ rules.push({
 });
 
 // const baseEntry = ['webpack/hot/dev-server'];
-const baseEntry = [`webpack-dev-server/client?http://localhost:${port}/`, 'webpack/hot/only-dev-server'];
+const baseEntry = [`webpack-dev-server/client?http://localhost:${devServerPort}/`, 'webpack/hot/only-dev-server'];
 
 module.exports = {
   context: __dirname,
@@ -86,7 +89,7 @@ module.exports = {
     __filename: true,
   },
   devServer: {
-    port,
+    port: devServerPort,
     publicPath,
     compress: true,
     // stats: 'normal', // 'verbose',
@@ -107,7 +110,13 @@ module.exports = {
     },
     before(app, server, compiler) {
       if (process.env.START_HOT) {
-        compiler.hooks.done.tap('MyPlugin', startMain);
+        compiler.hooks.done.tap('StartMainProcessOnAvailablePort', () => {
+          detectPort(componentPort, (err, availablePort) => {
+            if (componentPort === availablePort) {
+              startMain();
+            }
+          });
+        });
       }
     },
   },

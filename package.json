@@ -62,7 +62,9 @@
     "socket.io-client": "^2.3.0",
     "source-map-support": "^0.5.16",
     "strip-ansi": "^6.0.0",
-    "tailwindcss": "^1.1.4",
+    "tailwindcss-alpha": "^0.1.4",
+    "tailwindcss-theming": "^2.3.0",
+    "tailwindcss": "^1.2.0-canary.5",
     "tar": "^5.0.5",
     "uws": "mmdevries/uws",
     "why-did-you-update": "^1.0.6"
@@ -147,7 +149,6 @@
     "purgecss-webpack-plugin": "^1.6.0",
     "react-refresh": "0.7.1",
     "source-map-loader": "^0.2.4",
-    "tailwindcss-alpha": "^0.1.4",
     "ts-jest": "^24.2.0",
     "typescript": "^3.7.3",
     "utf-8-validate": "^5.0.2",

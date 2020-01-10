@@ -54,7 +54,7 @@ const App = (props: AppProps): ReactElement => {
           <h1 key="title">Morph Developer Console</h1>
           <div key="links" className="flex flex-shrink-0 height h-10 mr-4">
             <LabelButton
-              className="create-button flex items-center justify-center flex-shrink-0 bg-transparent rounded p-8 text-sm"
+              className="create-button"
               label="Create"
               image={<CreateIcon />}
               onClick={(): void => showDialog('create')}

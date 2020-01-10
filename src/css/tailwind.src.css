@@ -15,8 +15,12 @@ body {
 }
 */
 
+button:focus {
+  @apply outline-none;
+}
+
 ::-webkit-scrollbar {
-  width: 4px;
+  @apply w-1;
 }
 
 ::-webkit-scrollbar-track {
@@ -75,23 +79,23 @@ body {
 @tailwind utilities;
 
 .flex-basis-4 {
-  flex-basis: 4;
+  flex-basis: 4px;
 }
 
 .flex-basis-8 {
-  flex-basis: 8;
+  flex-basis: 8px;
 }
 
 .flex-basis-16 {
-  flex-basis: 16;
+  flex-basis: 16px;
 }
 
 .flex-basis-30 {
-  flex-basis: 30;
+  flex-basis: 30px;
 }
 
 .flex-basis-70 {
-  flex-basis: 70;
+  flex-basis: 70px;
 }
 
 .text-hidden {

@@ -30,7 +30,7 @@ if (isDev && process.env.START_HOT) {
 
 plugins.push(
   new ProgressPlugin(),
-  new HotModuleReplacementPlugin(),
+  new HotModuleReplacementPlugin({ multiStep: true }),
   new BundleAnalyzerPlugin({
     analyzerMode: 'static',
     generateStatsFile: true,

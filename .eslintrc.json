@@ -8,7 +8,7 @@
   "rules": {
     "curly": "error",
     "import/extensions": ["error", "never"],
-    "import/no-extraneous-dependencies": ["error", { "devDependencies": ["webpack.*.js", "tailwind.config.js"] }]
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": ["webpack.*.js"] }]
   },
   "overrides": [
     {

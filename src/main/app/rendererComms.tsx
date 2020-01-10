@@ -4,7 +4,7 @@ import { ipcMain } from 'electron';
 import { renderToString } from 'react-dom/server';
 import App from '../../renderer/components/App';
 import { Service, ModuleType, BumpType, Store, AppState } from '../../common/types';
-import { logError, log } from '../helpers/console';
+import { logError } from '../helpers/console';
 import createReduxStore from '../../renderer/reduxStore';
 
 const componentTypeMap: { [Key: string]: ModuleType } = {
@@ -14,8 +14,6 @@ const componentTypeMap: { [Key: string]: ModuleType } = {
 };
 
 const setupRendererComms = (mainWindow: Electron.BrowserWindow, service: Service, config: Store): void => {
-  log('setting up renderer comms');
-
   ipcMain.on('get-app-setup', (): void => {
     const { components, editors } = service.getComponentsSummaryData();
     const theme = service.getTheme();

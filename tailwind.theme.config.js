@@ -3,49 +3,51 @@ const { ThemeBuilder, Theme } = require('tailwindcss-theming');
 
 const mainTheme = new Theme()
   .default()
+  .name('default')
   .colors({
-    'component-building': '#CB75FF',
-    'component-installing': '#FF5A5A',
-    'component-starting': '#FFA500',
-    'component-launch': '#2491C8',
-    'component-running': '#BAECFF',
-    'component-linked': '#C9FFC9',
-    header: '#000000',
-    highlight: '#6AC4E6',
-    loading: '#FFA500',
-    negative: '#FF4545',
-    neutral: '#AAAAAA',
-    positive: '#59BB5D',
-    'primary-background': '#EEEEEE',
-    'primary-text': '#000000',
-    'secondary-background': '#FFFFFF',
-    'secondary-text': '#FFFFFF',
-    'selected-item-border': '#000000',
-    'tertiary-background': '#000000',
-    'tertiary-text': '#FFFFFF',
+    'color-component-building': '#CB75FF',
+    'color-component-installing': '#FF5A5A',
+    'color-component-starting': '#FFA500',
+    'color-component-launch': '#2491C8',
+    'color-component-running': '#BAECFF',
+    'color-component-linked': '#C9FFC9',
+    'color-header': '#000000',
+    'color-highlight': '#6AC4E6',
+    'color-loading': '#FFA500',
+    'color-negative': '#FF4545',
+    'color-neutral': '#AAAAAA',
+    'color-positive': '#59BB5D',
+    'color-primary-background': '#EEEEEE',
+    'color-primary-text': '#000000',
+    'color-secondary-background': '#FFFFFF',
+    'color-secondary-text': '#FFFFFF',
+    'color-selected-item-border': '#000000',
+    'color-tertiary-background': '#000000',
+    'color-tertiary-text': '#FFFFFF',
   })
   .opacityVariant('5', 0.05, 'header')
-  .opacityVariant('70', 0.7, 'selected-item-border')
+  .opacityVariant('30', 0.3, 'primary-text')
+  .opacityVariant('70', 0.7, ['primary-text', 'selected-item-border'])
   .variable('font-family-name', 'Roboto');
 
 const darkTheme = new Theme()
   .colors({
-    'component-installing': '#FF3360',
-    'component-launch': '#FFFFFF',
-    'component-running': '#11944D',
-    'component-linked': '#11944D',
-    highlight: '#28FF8A',
-    loading: '#FFFFFF',
-    negative: '#FF3360',
-    neutral: '#FFFFFF',
-    positive: '#28FF8A',
-    'primary-background': '#191919',
-    'primary-text': '#FFFFFF',
-    'secondary-background': '#323232',
-    'secondary-text': '#000000',
-    'selected-item-border': '#28FF8A',
-    'tertiary-background': '#FFFFFF',
-    'tertiary-text': '#000000',
+    'color-component-installing': '#FF3360',
+    'color-component-launch': '#FFFFFF',
+    'color-component-running': '#11944D',
+    'color-component-linked': '#11944D',
+    'color-highlight': '#28FF8A',
+    'color-loading': '#FFFFFF',
+    'color-negative': '#FF3360',
+    'color-neutral': '#FFFFFF',
+    'color-positive': '#28FF8A',
+    'color-primary-background': '#191919',
+    'color-primary-text': '#FFFFFF',
+    'color-secondary-background': '#323232',
+    'color-secondary-text': '#000000',
+    'color-selected-item-border': '#28FF8A',
+    'color-tertiary-background': '#FFFFFF',
+    'color-tertiary-text': '#000000',
   })
   .name('dark')
   .dark()

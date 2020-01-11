@@ -15,6 +15,10 @@ body {
 }
 */
 
+html {
+  font-family: var(--font-family-name);
+}
+
 button:focus {
   @apply outline-none;
 }

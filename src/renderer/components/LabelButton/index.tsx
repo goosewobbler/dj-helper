@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { context, AppContext } from '../../contexts/appContext';
 
 interface LabelButtonProps {
   backgroundColor?: string;
@@ -27,12 +26,11 @@ const LabelButton = ({
   backgroundColor = 'transparent',
   fontSize = 'base',
 }: LabelButtonProps): React.ReactElement => {
-  const { theme } = React.useContext(context) as AppContext;
-  const borderColour = `border-${theme.primaryTextColour}-70`;
+  const borderColor = `border-color-primary-text-70`;
   const opacity = `opacity-${disabled ? '25' : '100'}`;
   const dynamicClasses = [
     className,
-    borderColour,
+    borderColor,
     opacity,
     padding,
     `w-${width}`,
@@ -44,7 +42,7 @@ const LabelButton = ({
   return (
     <button
       type="button"
-      className={`flex flex-shrink-0 rounded items-center justify-center font-sans border border-solid ${dynamicClasses}`}
+      className={`flex flex-shrink-0 rounded items-center justify-center border border-solid ${dynamicClasses}`}
       disabled={disabled}
       onClick={(event: React.FormEvent): void => {
         event.stopPropagation();

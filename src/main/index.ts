@@ -2,6 +2,7 @@
 import { app, BrowserWindow } from 'electron';
 import startServer from './server';
 import { logError } from './helpers/console';
+import { installDevToolsExtensions } from './helpers/dev';
 
 if (module.hot) {
   module.hot.accept();
@@ -19,35 +20,11 @@ if (isDev || process.env.DEBUG_PROD === 'true') {
   import('electron-debug').then(electronDebug => electronDebug.default());
 }
 
-const installExtensions = async (forceInstall: boolean): Promise<string | void> => {
-  const electronDevtoolsInstaller = await import('electron-devtools-installer');
-  const { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS, REACT_PERF } = electronDevtoolsInstaller;
-  const installer = electronDevtoolsInstaller.default;
-  const extensions = [REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS, REACT_PERF];
-
-  console.log('\nInstalling Developer Tools...');
-
-  return installer(extensions, forceInstall)
-    .then((
-      extensionNames: unknown, // electron-devtools-installer typedefs are wrong for the array of extensions case
-    ) =>
-      (extensionNames as string[]).forEach(name =>
-        console.log(`${forceInstall ? 'Upgraded' : 'Added'} Extension:  ${name}`),
-      ),
-    )
-    .catch(err => console.log('An error occurred: ', err));
-};
-
 async function createWindow(): Promise<void> {
   if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
-    const forceInstall = !!process.env.UPGRADE_EXTENSIONS;
-    const extensionsInstalled = false;
-    console.log(BrowserWindow.getDevToolsExtensions());
-
-    if (!extensionsInstalled || forceInstall) {
-      await installExtensions(forceInstall);
-    }
+    await installDevToolsExtensions();
   }
+
   mainWindow = new BrowserWindow({
     show: false,
     height: 800,

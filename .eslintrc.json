@@ -8,7 +8,8 @@
   "rules": {
     "curly": "error",
     "import/extensions": ["error", "never"],
-    "import/no-extraneous-dependencies": ["error", { "devDependencies": ["webpack.*.js"] }]
+    "import/prefer-default-export": "off",
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }]
   },
   "overrides": [
     {
@@ -50,6 +51,8 @@
             "css": "always"
           }
         ],
+        "import/prefer-default-export": "off",
+        "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
         "react/jsx-filename-extension": ["warn", { "extensions": [".tsx"] }],
         "@typescript-eslint/no-non-null-assertion": "off"
       },

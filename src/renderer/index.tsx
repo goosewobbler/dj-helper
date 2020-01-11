@@ -33,17 +33,13 @@ if (process.env.NODE_ENV !== 'production' && typeof window !== 'undefined') {
 }
 
 type AppSetup = {
-  dynamicCSS: string;
   html: string;
   initialState: AppState;
   componentPort: number;
 };
 
-ipcRenderer.once('app-setup', (appSetupEvent, { initialState, dynamicCSS, html, componentPort }: AppSetup): void => {
+ipcRenderer.once('app-setup', (appSetupEvent, { initialState, html, componentPort }: AppSetup): void => {
   const reduxStore = createReduxStore(initialState);
-
-  const dynamicStyleTag = document.getElementById('dynamic-styles') as HTMLElement;
-  dynamicStyleTag.appendChild(document.createTextNode(dynamicCSS));
   const htmlRoot = document.getElementById('app') as HTMLElement;
   htmlRoot.innerHTML = html;
 

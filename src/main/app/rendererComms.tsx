@@ -33,9 +33,8 @@ const setupRendererComms = (mainWindow: Electron.BrowserWindow, service: Service
     );
 
     const preloadedState = reduxStore.getState();
-    const dynamicCSS = `mark{background-color:${theme.highlightColour};}`;
 
-    mainWindow.webContents.send('app-setup', { initialState: preloadedState, dynamicCSS, html, componentPort });
+    mainWindow.webContents.send('app-setup', { initialState: preloadedState, html, componentPort });
   });
 
   ipcMain.on('get-components-data', (): void =>

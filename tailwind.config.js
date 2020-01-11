@@ -5,14 +5,5 @@ module.exports = {
     extend: {},
   },
   variants: {},
-  plugins: [
-    require('./tailwind.theme.config'),
-    require('tailwindcss-alpha')({
-      alpha: {
-        '5': 0.05,
-        '30': 0.3,
-        '70': 0.7,
-      },
-    }),
-  ],
+  plugins: [require('./tailwind.theme.config')],
 };

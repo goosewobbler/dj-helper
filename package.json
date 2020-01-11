@@ -147,7 +147,6 @@
     "strip-ansi": "^6.0.0",
     "tailwind.macro": "^1.0.0-alpha.10",
     "tailwindcss": "^1.2.0-canary.5",
-    "tailwindcss-alpha": "^0.1.4",
     "tailwindcss-theming": "^2.3.0",
     "tar": "^5.0.5",
     "ts-jest": "^24.3.0",

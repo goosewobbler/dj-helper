@@ -45,7 +45,15 @@ const renderLaunchButton = (component: ComponentData): React.ReactElement | null
 
   if (component.state === ComponentState.Running) {
     return (
-      <ExternalLink className="launch-button" label="Launch" link={link} color="#2491c8" height="21" padding="0 4px" />
+      <ExternalLink
+        className="launch-button"
+        label="Launch"
+        link={link}
+        backgroundColor="bg-color-component-launch"
+        height="h-5"
+        padding="py-0 px-1"
+        textColor="text-color-secondary-text"
+      />
     );
   }
   return null;

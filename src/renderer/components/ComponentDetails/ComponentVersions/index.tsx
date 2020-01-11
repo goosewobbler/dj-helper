@@ -1,6 +1,6 @@
 import * as React from 'react';
 import classNames from 'classnames';
-import * as semver from 'semver/preload';
+import * as semver from 'semver';
 
 import { context, ComponentContext } from '../../../contexts/componentContext';
 import Spacer from '../../Spacer';

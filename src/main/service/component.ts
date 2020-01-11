@@ -1,5 +1,5 @@
 import { join } from 'path';
-import * as semver from 'semver/preload';
+import * as semver from 'semver';
 
 import componentStateMachine from './componentStateMachine';
 import { createComponentActions } from './componentActions';

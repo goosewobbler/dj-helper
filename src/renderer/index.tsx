@@ -9,7 +9,7 @@ import { receiveComponent, receiveComponents, receiveEditors } from './actions/a
 import App from './components/App';
 import createReduxStore from './reduxStore';
 import { ComponentData, ComponentsData, AppState } from '../common/types';
-import '../css/tailwind.src.css';
+import '../css/tailwind.src.pcss';
 
 declare global {
   interface Window {

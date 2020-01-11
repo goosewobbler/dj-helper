@@ -27,7 +27,7 @@ const startMain = () => {
 };
 
 rules.push({
-  test: /\.css$/,
+  test: /\.pcss$/,
   exclude: /node_modules/,
   use: [
     {

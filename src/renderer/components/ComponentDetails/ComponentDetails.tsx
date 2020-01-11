@@ -49,9 +49,9 @@ const renderPipelineLinks = (component: ComponentData): ReactElement => {
   const buildEnvLink = buildPipelineLink(component.rendererType);
   return (
     <div key="links">
-      <ExternalLink link={buildEnvLink('int')} label="INT Pipeline" black />
-      <ExternalLink link={buildEnvLink('test')} label="TEST Pipeline" black />
-      <ExternalLink link={buildEnvLink('live')} label="LIVE Pipeline" black />
+      <ExternalLink link={buildEnvLink('int')} label="INT Pipeline" />
+      <ExternalLink link={buildEnvLink('test')} label="TEST Pipeline" />
+      <ExternalLink link={buildEnvLink('live')} label="LIVE Pipeline" />
     </div>
   );
 };

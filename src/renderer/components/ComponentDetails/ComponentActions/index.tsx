@@ -99,11 +99,10 @@ const ComponentActions = (props: ComponentActionsProps): ReactElement => {
           <ExternalLink
             label="Dependency Graph"
             link={`https://morph-dependency-grapher.test.api.bbc.co.uk/env/test/modules/${displayName}`}
-            black
           />
         </div>
         <div className="wrapper">
-          <ExternalLink label="GitHub" link={`https://github.com/bbc/morph-modules/tree/master/${displayName}`} black />
+          <ExternalLink label="GitHub" link={`https://github.com/bbc/morph-modules/tree/master/${displayName}`} />
         </div>
       </div>
     </div>

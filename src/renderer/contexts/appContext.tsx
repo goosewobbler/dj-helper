@@ -1,9 +1,7 @@
 import { createContext } from 'react';
-import { Theme } from '../../common/types';
 
 interface AppContext {
   componentPort: number;
-  theme: Theme;
 }
 
 const context = createContext<AppContext | null>(null);

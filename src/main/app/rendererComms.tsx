@@ -16,13 +16,11 @@ const componentTypeMap: { [Key: string]: ModuleType } = {
 const setupRendererComms = (mainWindow: Electron.BrowserWindow, service: Service, config: Store): void => {
   ipcMain.on('get-app-setup', (): void => {
     const { components, editors } = service.getComponentsSummaryData();
-    const theme = service.getTheme();
 
     const initialState: AppState = {
       components,
       ui: {
         editors,
-        theme,
       },
     };
 

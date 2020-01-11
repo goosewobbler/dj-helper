@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { showDialog, hideDialog } from '../../actions/app';
 import { createComponent } from '../../actions/components';
 import App from './App';
-import { AppState, Dispatch, Theme } from '../../../common/types';
+import { AppState, Dispatch } from '../../../common/types';
 
 const mapDispatchToProps = (
   dispatch: Dispatch,
@@ -31,14 +31,12 @@ type AppProps = {
   componentToClone: string;
   showCreateDialog: boolean;
   showCloneDialog: boolean;
-  theme: Theme;
 };
 
 const mapStateToProps = (state: AppState): AppProps => ({
   componentToClone: state.ui.componentToClone!,
   showCreateDialog: state.ui.showDialog === 'create',
   showCloneDialog: state.ui.showDialog === 'clone',
-  theme: state.ui.theme!,
 });
 
 const Container = connect(mapStateToProps, mapDispatchToProps)(App);

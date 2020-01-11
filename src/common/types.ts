@@ -30,7 +30,6 @@ interface AppState {
   ui: {
     componentToClone?: string;
     editors: string[];
-    theme?: Theme;
     selectedComponent?: string;
     filter?: string;
     updating?: boolean;
@@ -241,29 +240,6 @@ type Versions = {
 };
 // type Versions = { [key in EnvironmentValues]: string | null };
 
-interface Theme {
-  buildingColour?: string;
-  font?: string;
-  headerColour?: string;
-  highlightColour?: string;
-  installingColour?: string;
-  launchColour?: string;
-  linkedColour?: string;
-  loadingColour?: string;
-  negativeColour?: string;
-  neutralColour?: string;
-  positiveColour?: string;
-  primaryBackgroundColour?: string;
-  primaryTextColour?: string;
-  runningColour?: string;
-  secondaryBackgroundColour?: string;
-  secondaryTextColour?: string;
-  selectedItemBorderColour?: string;
-  startingColour?: string;
-  tertiaryBackgroundColour?: string;
-  tertiaryTextColour?: string;
-}
-
 interface Service {
   bump(name: string, type: BumpType): Promise<void>;
   build(name: string): Promise<void>;
@@ -274,7 +250,6 @@ interface Service {
   getComponentsSummaryData(): ComponentsData;
   getDependantGraph(name: string): GraphData;
   getDependencyGraph(name: string): GraphData;
-  getTheme(): Theme;
   link(name: string, dependency: string): Promise<void>;
   openInEditor(name: string): Promise<void>;
   promote(name: string, environment: string): Promise<void>;
@@ -288,7 +263,6 @@ interface Service {
 }
 
 export {
-  Theme,
   Versions,
   LooseObject,
   BumpType,

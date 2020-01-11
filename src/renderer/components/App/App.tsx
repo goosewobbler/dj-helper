@@ -9,10 +9,8 @@ import Dialog from '../Dialog';
 import GitHubLink from '../GithubLink';
 import { AppContextProvider, AppContext } from '../../contexts/appContext';
 import Spacer from '../Spacer';
-import { Theme } from '../../../common/types';
 
 interface AppProps {
-  theme: Theme;
   componentPort: number;
   showCreateDialog: boolean;
   showCloneDialog: boolean;
@@ -44,8 +42,8 @@ const renderCloneDialog = ({ hideDialog, cloneComponent, componentToClone }: App
 };
 
 const App = (props: AppProps): ReactElement => {
-  const { showDialog, showCreateDialog, showCloneDialog, theme, componentPort } = props;
-  const appContextValue: AppContext = { componentPort, theme };
+  const { showDialog, showCreateDialog, showCloneDialog, componentPort } = props;
+  const appContextValue: AppContext = { componentPort };
 
   return (
     <AppContextProvider value={appContextValue}>

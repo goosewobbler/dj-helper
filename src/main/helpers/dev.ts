@@ -38,19 +38,20 @@ const installExtension = async (extension: DevToolsExtension): Promise<string | 
     .catch((err: Error) => logError(err));
 };
 
-const getExtensionsToInstall = (installedExtensions: string[]): DevToolsExtension[] => {
-  const forceInstall = !!process.env.UPGRADE_EXTENSIONS;
+const getExtensionsToInstall = (installedExtensions: string[], forceInstall: boolean): DevToolsExtension[] => {
   return devToolsExtensions
     .map(({ ref, name }) => ({ id: ref, name, installed: installedExtensions.includes(name) }))
     .filter(extension => !extension.installed || forceInstall);
 };
 
 const installDevToolsExtensions = async (): Promise<void> => {
+  const forceInstall = !!process.env.UPGRADE_EXTENSIONS;
   const installedExtensions = Object.keys(BrowserWindow.getDevToolsExtensions());
-  const extensionsToInstall = getExtensionsToInstall(installedExtensions);
+  const extensionsToInstall = getExtensionsToInstall(installedExtensions, forceInstall);
+  log('\nFound existing Developer Tools Extensions...', installedExtensions);
 
   if (extensionsToInstall.length) {
-    log('\nInstalling Developer Tools...', installedExtensions, extensionsToInstall);
+    log(`${forceInstall ? 'Upgrading' : 'Installing'} Developer Tools Extensions...`);
     await Promise.all(extensionsToInstall.map(extension => installExtension(extension)));
   }
 };

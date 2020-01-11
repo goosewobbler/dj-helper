@@ -26,7 +26,7 @@ const LabelButton = ({
   backgroundColor = 'transparent',
   fontSize = 'base',
 }: LabelButtonProps): React.ReactElement => {
-  const borderColor = `border-color-primary-text-70`;
+  const borderColor = `border-primary-text-70`;
   const opacity = `opacity-${disabled ? '25' : '100'}`;
   const dynamicClasses = [
     className,

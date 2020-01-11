@@ -16,7 +16,7 @@ const ExternalLink = ({
   className,
   link,
   label,
-  textColor = 'text-color-primary-text',
+  textColor = 'text-primary-text',
   backgroundColor = 'bg-black',
   height = 'h-auto',
   padding = 'p-2',
@@ -27,7 +27,7 @@ const ExternalLink = ({
   // TODO: check no-underline is needed
   return (
     <a
-      className={`flex-shrink-0 rounded text-base border border-solid border-color-primary-text-30 ${dynamicClasses}`}
+      className={`flex-shrink-0 rounded text-base border border-solid border-primary-text-30 ${dynamicClasses}`}
       href={link}
       target="_blank"
       rel="noopener noreferrer"

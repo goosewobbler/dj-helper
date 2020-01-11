@@ -217,7 +217,6 @@ const createService = async (
     getComponentsSummaryData,
     getDependantGraph,
     getDependencyGraph,
-    getTheme,
     link,
     openInEditor,
     promote,

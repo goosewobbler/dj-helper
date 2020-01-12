@@ -22,8 +22,11 @@
     "dev:build-main": "cross-env NODE_ENV=development webpack --config webpack.main.config.js --colors",
     "dev:start-main": "cross-env START_HOT=1 NODE_ENV=development electron -r @babel/register ./dist/main.dev.js",
     "dev:start-renderer": "cross-env NODE_ENV=development webpack-dev-server --config webpack.renderer.config.js",
-    "lint": "eslint '**/*.[j|t]s{,x}'",
-    "lint:fix": "yarn lint --fix'",
+    "lint": "concurrently 'yarn lint:code' 'yarn lint:styles'",
+    "lint:code": "eslint '**/*.[j|t]s{,x}'",
+    "lint:code:fix": "yarn lint:code --fix'",
+    "lint:styles": "stylelint --ignore-path .eslintignore '**/*.pcss'",
+    "lint:styles:fix": "yarn --silent lint-styles --fix; exit 0",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
@@ -131,6 +134,9 @@
     "socket.io-client": "^2.3.0",
     "source-map-loader": "^0.2.4",
     "strip-ansi": "^6.0.0",
+    "stylelint": "^12.0.1",
+    "stylelint-config-prettier": "^8.0.0",
+    "stylelint-config-standard": "^19.0.0",
     "tailwind.macro": "^1.0.0-alpha.10",
     "tailwindcss": "^1.2.0-canary.5",
     "tailwindcss-theming": "^2.3.0",

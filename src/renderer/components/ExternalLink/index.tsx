@@ -24,7 +24,6 @@ const ExternalLink = ({
   const dynamicClasses = [className, padding, height, textColor, backgroundColor].join(' ');
   const fillColor = tw`${textColor}`.color;
 
-  // TODO: check no-underline is needed
   return (
     <a
       className={`flex-shrink-0 rounded text-base border border-solid border-primary-text-30 ${dynamicClasses}`}
@@ -33,7 +32,7 @@ const ExternalLink = ({
       rel="noopener noreferrer"
       onClick={(event): void => event.stopPropagation()}
     >
-      <div className="container inline-flex w-3 h-3 my-0 mr-2 ml-1 no-underline text-black">
+      <div className="container inline-flex w-3 h-3 my-0 ml-1 mr-2 text-black">
         <ExternalIcon fillColor={fillColor} />
       </div>
       <span>{label}</span>

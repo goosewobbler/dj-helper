@@ -11,17 +11,18 @@ MDC was the original Morph Developer GUI. This is intended to be the rebirth of 
 
 ## Ordered TODO for release (\* denotes investigation required)
 
-- Build tooling for dev (HMR, etc. for rapid iteration)
-- Replace Express API Server with file:/// and Webpack Dev Server
+- ~Build tooling for dev (HMR, etc. for rapid iteration)~
+- ~Replace Express API Server with file:/// and Webpack Dev Server~
 - Put theming back in w/ TailwindCSS rules to replace removed Glamorous styles
+- Put Jest tests back and unbitrot them
+- Add new / update Jest tests for any changes to functionality
 - Ensure all functionality works from inside Electron in Dev mode
 - Build tooling for prod
 - Ensure all functionality works from inside Electron in Prod mode
-- Put Jest tests back and unbitrot them
-- Add new / update Jest tests for any changes to functionality
 - Build tooling for deployment \*
 - New auto-update feature \*
 - Integration tests with Spectron \*
+- Replace old class-based React Components with functions and hooks
 - Remove use of non-null assertion!
 
 ## Install

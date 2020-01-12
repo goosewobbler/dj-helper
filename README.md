@@ -38,6 +38,10 @@ Start the development server with `yarn dev`.
 
 Documentation of issues encountered during development.
 
+### Tailwind.Macro Source Map Loader error
+
+This was worked around by exempting `tailwind.macro` from the `source-map-loader` webpack rule config.
+
 ### NPM Invalid Config Warning
 
 NPM throws an invalid config warning because the morph-cli depends on a (very old) local version of npm:

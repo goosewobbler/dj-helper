@@ -7,6 +7,12 @@
       "extensions": ["webpack.main.plugins.js", "webpack.renderer.plugins.js"],
       "filename": true,
       "format": "svg"
+    },
+    {
+      "icon": "tailwind",
+      "extensions": ["tailwind.theme.config.js"],
+      "filename": true,
+      "format": "svg"
     }
   ]
 }

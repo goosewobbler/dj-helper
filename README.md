@@ -13,7 +13,9 @@ MDC was the original Morph Developer GUI. This is intended to be the rebirth of 
 
 - ~Build tooling for dev (HMR, etc. for rapid iteration)~
 - ~Replace Express API Server with file:/// and Webpack Dev Server~
-- Put theming back in w/ TailwindCSS rules to replace removed Glamorous styles
+- ~Put theming back in w/ TailwindCSS approach~
+- Add Ceefax mode back
+- Replace all removed Glamorous styles with Tailwind classes
 - Put Jest tests back and unbitrot them
 - Add new / update Jest tests for any changes to functionality
 - Ensure all functionality works from inside Electron in Dev mode

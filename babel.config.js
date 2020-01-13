@@ -3,7 +3,6 @@ const plugins = [
   '@babel/plugin-syntax-dynamic-import',
   ['@babel/plugin-proposal-decorators', { legacy: true }],
   ['@babel/plugin-proposal-class-properties', { loose: true }], // remove once we're class-free
-  'macros',
 ];
 
 if (process.env.NODE_ENV === 'development') {

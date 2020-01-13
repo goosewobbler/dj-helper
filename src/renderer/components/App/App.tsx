@@ -48,9 +48,9 @@ const App = (props: AppProps): ReactElement => {
   return (
     <AppContextProvider value={appContextValue}>
       <div className="flex flex-col flex-grow">
-        <div className="header flex items-center flex-shrink-0 p-3 justify-between shadow-md border-b">
+        <div className="flex items-center justify-between flex-shrink-0 p-3 border-b shadow-md header">
           <h1 key="title">Morph Developer Console</h1>
-          <div key="links" className="flex flex-shrink-0 height h-10 mr-4">
+          <div key="links" className="flex flex-shrink-0 h-10 mr-4 height">
             <LabelButton
               className="create-button"
               label="Create"
@@ -62,12 +62,12 @@ const App = (props: AppProps): ReactElement => {
           </div>
         </div>
         <Spacer />
-        <div className="content flex flex-grow">
-          <div className="section flex flex-col flex-grow-0 flex-shrink-0 p-2 overflow-hidden flex-basis-30">
+        <div className="flex flex-grow content">
+          <div className="flex flex-col flex-grow-0 flex-shrink-0 p-2 overflow-hidden section flex-basis-30">
             <ComponentListFilterContainer key="filter" />
             <ComponentListContainer key="list" />
           </div>
-          <div className="section flex flex-col flex-grow-0 flex-shrink-0 p-2 overflow-hidden flex-basis-70">
+          <div className="flex flex-col flex-grow-0 flex-shrink-0 p-2 overflow-hidden section flex-basis-70">
             <ComponentDetailsContainer />
           </div>
           {showCreateDialog && renderCreateDialog(props)}

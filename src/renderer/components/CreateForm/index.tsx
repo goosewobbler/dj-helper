@@ -16,13 +16,13 @@ const SelectInput = ({
   options: { value: string; label: string }[];
   onChange(event: React.ChangeEvent): void;
 }): React.ReactElement => (
-  <div>
-    <label className="flex text-xl" htmlFor={className}>
+  <div className="mx-0 my-2 text-xl">
+    <label className="flex" htmlFor={className}>
       <span className="w-32">{labelText}</span>
-      <select id={className} className={`flex-grow h-8 ${className}`} onChange={onChange}>
+      <select id={className} className={`flex-grow h-8 text-secondary-text ${className}`} onChange={onChange}>
         {options.map(
           (option): React.ReactElement => (
-            <option className="h-8 text-xl" key={option.value} value={option.value}>
+            <option key={option.value} value={option.value}>
               {option.label}
             </option>
           ),
@@ -43,7 +43,7 @@ const TextInput = ({
   onChange(event: React.ChangeEvent): void;
   onKeyDown(event: React.KeyboardEvent): void;
 }): React.ReactElement => (
-  <div className="items-center mx-0 my-2 text-xl">
+  <div className="mx-0 my-2 text-xl">
     <label className="flex" htmlFor={className}>
       <span className="w-32">{labelText}</span>
       <input

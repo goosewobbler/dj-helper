@@ -21,6 +21,7 @@ MDC was the original Morph Developer GUI. This is intended to be the rebirth of 
 - Ensure all functionality works from inside Electron in Dev mode
 - Build tooling for prod
 - Ensure all functionality works from inside Electron in Prod mode
+- DLL dependency splitting
 - Build tooling for deployment \*
 - New auto-update feature \*
 - Integration tests with Spectron \*
@@ -40,10 +41,6 @@ Start the development server with `yarn dev`.
 ## Development Issues
 
 Documentation of issues encountered during development.
-
-### Tailwind.Macro Source Map Loader error
-
-This was worked around by exempting `tailwind.macro` from the `source-map-loader` webpack rule config.
 
 ### NPM Invalid Config Warning
 

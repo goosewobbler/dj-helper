@@ -1,6 +1,6 @@
 import * as React from 'react';
-import tw from 'tailwind.macro';
 import ExternalIcon from './ExternalIcon';
+import { getColorFromTailwindConfig } from '../../helpers/stylesHelper';
 
 interface ExternalLinkProps {
   textColor?: string;
@@ -16,17 +16,21 @@ const ExternalLink = ({
   className,
   link,
   label,
-  textColor = 'text-primary-text',
-  backgroundColor = '',
+  textColor = 'primary-text',
+  backgroundColor,
   height = 'h-auto',
   padding = 'p-2',
 }: ExternalLinkProps): React.ReactElement => {
-  const dynamicClasses = [className, padding, height, textColor, backgroundColor].join(' ');
-  const fillColor = tw`${textColor}`.color;
+  const dynamicClasses = [className, padding, height, `text-${textColor}`];
+  if (backgroundColor) {
+    dynamicClasses.push(`bg-${backgroundColor}`);
+  }
+  const staticClasses = 'flex-shrink-0 rounded text-base border border-solid border-primary-text-30';
+  const fillColor = getColorFromTailwindConfig('primary-text');
 
   return (
     <a
-      className={`flex-shrink-0 rounded text-base border border-solid border-primary-text-30 ${dynamicClasses}`}
+      className={`${staticClasses} ${dynamicClasses.join(' ')}`}
       href={link}
       target="_blank"
       rel="noopener noreferrer"

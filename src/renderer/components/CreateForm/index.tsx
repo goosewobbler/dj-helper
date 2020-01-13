@@ -6,23 +6,23 @@ const KEY_ENTER = 13;
 const KEY_ESCAPE = 27;
 
 const SelectInput = ({
-  label,
+  labelText,
   className,
   onChange,
   options,
 }: {
   className?: string;
-  label: string;
+  labelText: string;
   options: { value: string; label: string }[];
   onChange(event: React.ChangeEvent): void;
 }): React.ReactElement => (
   <div>
-    <label htmlFor={className}>
-      {label}
-      <select id={className} className={className} onChange={onChange}>
+    <label className="flex text-xl" htmlFor={className}>
+      <span className="w-32">{labelText}</span>
+      <select id={className} className={`flex-grow h-8 ${className}`} onChange={onChange}>
         {options.map(
           (option): React.ReactElement => (
-            <option key={option.value} value={option.value}>
+            <option className="h-8 text-xl" key={option.value} value={option.value}>
               {option.label}
             </option>
           ),
@@ -43,10 +43,16 @@ const TextInput = ({
   onChange(event: React.ChangeEvent): void;
   onKeyDown(event: React.KeyboardEvent): void;
 }): React.ReactElement => (
-  <div>
-    <label htmlFor={className}>
-      {labelText}
-      <input id={className} className={className} type="text" onChange={onChange} onKeyDown={onKeyDown} />
+  <div className="items-center mx-0 my-2 text-xl">
+    <label className="flex" htmlFor={className}>
+      <span className="w-32">{labelText}</span>
+      <input
+        id={className}
+        className={`flex-grow h-8 border-solid border border-primary-text-30 ${className}`}
+        type="text"
+        onChange={onChange}
+        onKeyDown={onKeyDown}
+      />
     </label>
   </div>
 );
@@ -128,11 +134,11 @@ class CreateForm extends React.Component<CreateFormProps, CreateFormState> {
     const { valid } = this.state;
 
     return (
-      <div>
+      <div className="flex flex-col">
         {typeSelectEnabled && (
           <SelectInput
             className="create-type-select"
-            label="Type"
+            labelText="Type"
             options={options}
             onChange={(event): void => this.handleTypeChange(event)}
           />
@@ -149,7 +155,7 @@ class CreateForm extends React.Component<CreateFormProps, CreateFormState> {
           onChange={(event): void => this.handleDescriptionChange(event)}
           onKeyDown={(event): void => this.handleKeyDown(event)}
         />
-        <div>
+        <div className="mt-2 ml-auto">
           <LabelButton
             className="create-create-button"
             label="Create"

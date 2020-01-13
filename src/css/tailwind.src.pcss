@@ -1,4 +1,6 @@
 @tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /*
 * {
@@ -27,6 +29,10 @@ button:focus {
   @apply outline-none;
 }
 
+button:disabled {
+  @apply cursor-not-allowed;
+}
+
 ::-webkit-scrollbar {
   @apply w-1;
 }
@@ -37,6 +43,10 @@ button:focus {
 
 ::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.2);
+}
+
+.shadow-dialog {
+  box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.2);
 }
 
 @keyframes spin {
@@ -82,9 +92,6 @@ button:focus {
   font-weight: normal;
   font-style: normal;
 }
-
-@tailwind components;
-@tailwind utilities;
 
 .flex-basis-4 {
   flex-basis: 4px;

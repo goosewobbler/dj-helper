@@ -49,10 +49,10 @@ const renderLaunchButton = (component: ComponentData): React.ReactElement | null
         className="launch-button"
         label="Launch"
         link={link}
-        backgroundColor="bg-color-component-launch"
+        backgroundColor="component-launch"
         height="h-5"
         padding="py-0 px-1"
-        textColor="text-color-secondary-text"
+        textColor="secondary-text"
       />
     );
   }

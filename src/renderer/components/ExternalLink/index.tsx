@@ -17,7 +17,7 @@ const ExternalLink = ({
   link,
   label,
   textColor = 'text-primary-text',
-  backgroundColor = 'bg-black',
+  backgroundColor = '',
   height = 'h-auto',
   padding = 'p-2',
 }: ExternalLinkProps): React.ReactElement => {
@@ -32,7 +32,7 @@ const ExternalLink = ({
       rel="noopener noreferrer"
       onClick={(event): void => event.stopPropagation()}
     >
-      <div className="container inline-flex w-3 h-3 my-0 ml-1 mr-2 text-black">
+      <div className="container inline-flex w-3 h-3 my-0 ml-1 mr-2">
         <ExternalIcon fillColor={fillColor} />
       </div>
       <span>{label}</span>

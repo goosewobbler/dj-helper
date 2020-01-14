@@ -12,11 +12,15 @@ const getColorFromTailwindConfig = (colorVariable: string): string => {
     return '';
   }
 
-  return tailwindRule.replace(/var\(([^)]+)\)/, (fullMatch: string, cssVar: string) =>
-    getComputedStyle(document.documentElement)
+  return tailwindRule.replace(/var\(([^)]+)\)/, (fullMatch: string, cssVar: string) => {
+    if (typeof window === 'undefined') {
+      return '0,0,0';
+    }
+    return window
+      .getComputedStyle(document.documentElement)
       .getPropertyValue(cssVar)
-      .trim(),
-  );
+      .trim();
+  });
 };
 
 export { getColorFromTailwindConfig };

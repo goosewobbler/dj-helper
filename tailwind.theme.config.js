@@ -17,6 +17,7 @@ const mainTheme = new Theme()
     'negative': '#FF4545',
     'neutral': '#AAAAAA',
     'positive': '#59BB5D',
+    'create-form-field-text': '#000000',
     'dialog-overlay': '#000000',
     'primary-background': '#EEEEEE',
     'primary-text': '#000000',
@@ -29,7 +30,7 @@ const mainTheme = new Theme()
   .opacityVariant('5', 0.05, 'header')
   .opacityVariant('30', 0.3, 'primary-text')
   .opacityVariant('50', 0.5, 'dialog-overlay')
-  .opacityVariant('70', 0.7, ['primary-text', 'selected-item-border'])
+  .opacityVariant('70', 0.7, ['primary-text', 'selected-item-border', 'secondary-background'])
   .variable('font-family-name', 'Roboto');
 
 const darkTheme = new Theme()

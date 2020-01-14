@@ -19,7 +19,7 @@ const SelectInput = ({
   <div className="mx-0 my-2 text-xl">
     <label className="flex" htmlFor={className}>
       <span className="w-32">{labelText}</span>
-      <select id={className} className={`flex-grow h-8 text-secondary-text ${className}`} onChange={onChange}>
+      <select id={className} className={`flex-grow h-8 text-create-form-field-text ${className}`} onChange={onChange}>
         {options.map(
           (option): React.ReactElement => (
             <option key={option.value} value={option.value}>
@@ -48,7 +48,7 @@ const TextInput = ({
       <span className="w-32">{labelText}</span>
       <input
         id={className}
-        className={`flex-grow h-8 border-solid border border-primary-text-30 ${className}`}
+        className={`flex-grow h-8 border-solid border text-create-form-field-text border-primary-text-30 ${className}`}
         type="text"
         onChange={onChange}
         onKeyDown={onKeyDown}

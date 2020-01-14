@@ -17,7 +17,7 @@ const mainTheme = new Theme()
     'negative': '#FF4545',
     'neutral': '#AAAAAA',
     'positive': '#59BB5D',
-    'create-form-field-text': '#000000',
+    'form-field-text': '#000000',
     'dialog-overlay': '#000000',
     'primary-background': '#EEEEEE',
     'primary-text': '#000000',

@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-// import { hot } from 'react-hot-loader/root'
 import { showDialog, hideDialog } from '../../actions/app';
 import { createComponent } from '../../actions/components';
 import App from './App';
@@ -35,12 +34,10 @@ type AppProps = {
 
 const mapStateToProps = (state: AppState): AppProps => ({
   componentToClone: state.ui.componentToClone!,
-  showCreateDialog: state.ui.showDialog === 'create',
-  showCloneDialog: state.ui.showDialog === 'clone',
+  showCreateDialog: state.ui.showDialog === 'create' && !state.ui.hideDialog,
+  showCloneDialog: state.ui.showDialog === 'clone' && !state.ui.hideDialog,
 });
 
 const Container = connect(mapStateToProps, mapDispatchToProps)(App);
 
 export default Container;
-
-// export default hot(module)(Container);

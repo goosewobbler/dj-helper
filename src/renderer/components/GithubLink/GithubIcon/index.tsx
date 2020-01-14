@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { getColorFromTailwindConfig } from '../../../helpers/stylesHelper';
+import { tailwindColorResolver } from '../../../helpers/stylesHelper';
 
 const GitHubIcon = (): React.ReactElement => {
-  const fillColor = getColorFromTailwindConfig('primary-text');
+  const fillColor = tailwindColorResolver('primary-text');
   return (
     <svg width="100%" height="100%" viewBox="0 0 24 24" fill={fillColor}>
       <title>GitHub icon</title>

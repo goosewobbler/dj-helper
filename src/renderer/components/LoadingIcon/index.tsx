@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { getColorFromTailwindConfig } from '../../helpers/stylesHelper';
+import { tailwindColorResolver } from '../../helpers/stylesHelper';
 
 // TODO: https://github.com/benface/tailwindcss-animations
 // animation: 'spin 0.5s infinite linear',
 
 const LoadingIcon = (): React.ReactElement => {
-  const fillColor = getColorFromTailwindConfig('primary-text');
+  const fillColor = tailwindColorResolver('primary-text');
   return (
     <div className="w-full h-full spinner">
       <svg width="100%" height="100%" viewBox="0 0 32 32" fill={fillColor}>

@@ -5,7 +5,7 @@ import tailwindConfig from '../../../tailwind.config';
 
 const styles = resolveConfig(tailwindConfig);
 
-const getColorFromTailwindConfig = (colorVariable: string): string => {
+const tailwindColorResolver = (colorVariable: string): string => {
   const tailwindRule = styles?.theme?.colors[colorVariable]?.default;
 
   if (!tailwindRule) {
@@ -23,4 +23,4 @@ const getColorFromTailwindConfig = (colorVariable: string): string => {
   });
 };
 
-export { getColorFromTailwindConfig };
+export { tailwindColorResolver };

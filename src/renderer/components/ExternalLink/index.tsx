@@ -1,6 +1,6 @@
 import * as React from 'react';
 import ExternalIcon from './ExternalIcon';
-import { getColorFromTailwindConfig } from '../../helpers/stylesHelper';
+import { tailwindColorResolver } from '../../helpers/stylesHelper';
 
 interface ExternalLinkProps {
   textColor?: string;
@@ -26,7 +26,7 @@ const ExternalLink = ({
     dynamicClasses.push(`bg-${backgroundColor}`);
   }
   const staticClasses = 'flex-shrink-0 rounded text-base border border-solid border-primary-text-30';
-  const fillColor = getColorFromTailwindConfig('primary-text');
+  const fillColor = tailwindColorResolver('primary-text');
 
   return (
     <a

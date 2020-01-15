@@ -3,7 +3,7 @@
 MDC was the original Morph Developer GUI. This is intended to be the rebirth of MDC with the following improvements:
 
 - Now an Electron app
-- Documentation
+- Documentation for development, build and deployment
 - Modern tooling
 - Much improved use of TypeScript
 - Better code quality
@@ -21,7 +21,7 @@ MDC was the original Morph Developer GUI. This is intended to be the rebirth of 
 - Finish off build tooling for production
 - Ensure all functionality works from inside Electron in Production mode
 - Separate building DLL dependencies to speed up build time using Webpack DLL plugin
-- Integration tests with Spectron \*
+- Integration tests with Spectron
 - Build tooling for automated deployment using Github Releases
 - New auto-update feature using electron-updater
 - Replace old class-based React Components with functions and hooks

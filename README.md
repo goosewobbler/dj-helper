@@ -9,7 +9,7 @@ MDC was the original Morph Developer GUI. This is intended to be the rebirth of 
 - Better code quality
 - Better performance
 
-## Ordered TODO for release (\* denotes investigation required)
+## Roughly ordered TODO for release (\* denotes investigation required)
 
 - ~Build tooling for dev (HMR, etc. for rapid iteration)~
 - ~Replace Express API Server with file:/// and Webpack Dev Server~

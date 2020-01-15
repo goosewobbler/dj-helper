@@ -14,19 +14,21 @@ MDC was the original Morph Developer GUI. This is intended to be the rebirth of 
 - ~Build tooling for dev (HMR, etc. for rapid iteration)~
 - ~Replace Express API Server with file:/// and Webpack Dev Server~
 - ~Put theming back in w/ TailwindCSS approach~
-- Add Ceefax mode back
 - Replace all removed Glamorous styles with Tailwind classes
 - Put Jest tests back and unbitrot them
 - Add new / update Jest tests for any changes to functionality
 - Ensure all functionality works from inside Electron in Dev mode
-- Build tooling for prod
-- Ensure all functionality works from inside Electron in Prod mode
-- DLL dependency splitting
-- Build tooling for deployment \*
-- New auto-update feature \*
+- Finish off build tooling for production
+- Ensure all functionality works from inside Electron in Production mode
+- Separate building DLL dependencies to speed up build time using Webpack DLL plugin
 - Integration tests with Spectron \*
+- Build tooling for automated deployment using Github Releases
+- New auto-update feature using electron-updater
 - Replace old class-based React Components with functions and hooks
-- Remove use of non-null assertion!
+- Remove use of non-null assertion! (tech debt from enabling strict null checking)
+- Remove any remaining use of `any`
+- Clean up any remaining ESLint errors 
+- Add Ceefax mode back in
 
 ## Install
 
@@ -38,16 +40,5 @@ It is recommended to use Yarn with Electron projects. You will need to explicitl
 
 Start the development server with `yarn dev`.
 
-## Development Issues
 
-Documentation of issues encountered during development.
 
-### NPM Invalid Config Warning
-
-NPM throws an invalid config warning because the morph-cli depends on a (very old) local version of npm:
-
-`npm WARN invalid config loglevel="notice"`
-
-This can be fixed by upgrading morph-cli to use a later version, or by removing the local version from the tree. A script to perform the latter has been included in the package.json.
-
-https://github.com/npm/npm/issues/16862#issuecomment-358112152

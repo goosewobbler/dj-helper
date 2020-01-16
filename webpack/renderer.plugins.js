@@ -54,6 +54,11 @@ plugins.push(
   }),
   new HtmlWebpackHarddiskPlugin(),
   new HardSourceWebpackPlugin(),
+  new HardSourceWebpackPlugin.ExcludeModulePlugin([
+    {
+      test: /mini-css-extract-plugin[\\/]dist[\\/]loader/,
+    },
+  ]),
 );
 
 module.exports = plugins;

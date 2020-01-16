@@ -52,7 +52,7 @@ ipcRenderer.once('app-setup', (appSetupEvent, { initialState, html, componentPor
   }
 
   const render = (Component: ConnectedComponent<any, any>): void => {
-    ReactDOM.render(
+    ReactDOM.hydrate(
       <AppContainer>
         <Provider store={reduxStore}>
           <Component componentPort={componentPort} />

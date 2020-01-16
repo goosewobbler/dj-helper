@@ -1,11 +1,11 @@
 /* eslint global-require: off */
-const plugins = require('./webpack.main.plugins');
-const rules = require('./webpack.rules');
+const plugins = require('./main.plugins');
+const rules = require('./rules');
 
 const isDev = process.env.NODE_ENV === 'development';
 
 module.exports = {
-  // context: __dirname,
+  context: `${__dirname}/..`,
   /**
    * This is the main entry point for your application, it's the first file
    * that runs in the main process.
@@ -14,7 +14,7 @@ module.exports = {
   devtool: isDev ? 'inline-source-map' : 'source-map',
   entry: './src/main/index.ts',
   output: {
-    path: `${__dirname}/dist`,
+    path: `${__dirname}/../dist`,
     filename: `main.${isDev ? 'dev' : 'prod'}.js`,
   },
   module: {
@@ -40,12 +40,4 @@ module.exports = {
       }
     },
   ],
-  // node: {
-  // child_process: 'empty',
-  // fs: 'empty',
-  // module: 'empty',
-  // net: 'empty',
-  // tls: 'empty',
-  // },
-  // externals: [],
 };

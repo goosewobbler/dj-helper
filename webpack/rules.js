@@ -3,7 +3,6 @@ module.exports = [
     enforce: 'pre',
     test: /\.js$/,
     loader: 'source-map-loader',
-    exclude: [/node_modules\/tailwind.macro/g], // workaround for missing source map for this module
   },
   // Add support for native node modules
   {

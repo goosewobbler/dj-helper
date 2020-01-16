@@ -1,16 +1,13 @@
-/* eslint global-require: off,no-console: off */
-const path = require('path');
+/* eslint global-require: off, import/no-dynamic-require: off, no-console: off */
 const { spawn } = require('child_process');
 const detectPort = require('detect-port');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-// const tailwind = require('tailwindcss');
-// const autoprefixer = require('autoprefixer');
-const rules = require('./webpack.rules');
-const plugins = require('./webpack.renderer.plugins');
+const rules = require('./rules');
+const plugins = require('./renderer.plugins');
 
 const isDev = process.env.NODE_ENV === 'development';
-
 const devServerPort = process.env.PORT || 1212;
+
 const componentPort = 4000;
 const publicPath = `http://localhost:${devServerPort}/`;
 
@@ -47,13 +44,6 @@ rules.push({
         sourceMap: true,
       },
     },
-    // {
-    //   loader: 'postcss-loader',
-    //   options: {
-    //     ident: 'postcss',
-    //     plugins: [tailwind, autoprefixer],
-    //   },
-    // },
   ],
 });
 
@@ -61,14 +51,14 @@ rules.push({
 const baseEntry = [`webpack-dev-server/client?http://localhost:${devServerPort}/`, 'webpack/hot/only-dev-server'];
 
 module.exports = {
-  context: __dirname,
+  context: `${__dirname}/../`,
   mode: process.env.NODE_ENV,
   devtool: isDev ? 'inline-source-map' : 'source-map',
   entry: {
-    renderer: [...baseEntry, './src/renderer/index.tsx'],
+    renderer: [...baseEntry, `${__dirname}/../src/renderer/index.tsx`],
   },
   output: {
-    path: `${__dirname}/dist`,
+    path: `${__dirname}/../dist`,
     publicPath,
     filename: `[name].${isDev ? 'dev' : 'prod'}.js`,
   },
@@ -81,7 +71,6 @@ module.exports = {
     alias: {
       'react-dom': '@hot-loader/react-dom',
     },
-    //    modules: [path.join(__dirname, 'node_modules')],
   },
   target: 'electron-renderer',
   node: {
@@ -91,13 +80,13 @@ module.exports = {
   devServer: {
     port: devServerPort,
     publicPath,
-    compress: true,
+    compress: false,
     // stats: 'normal', // 'verbose',
     inline: true,
     lazy: false,
     hot: true,
     headers: { 'Access-Control-Allow-Origin': '*' },
-    contentBase: path.join(__dirname, 'static'),
+    contentBase: [`${__dirname}/../static`, `${__dirname}/../dll`],
     writeToDisk: true,
     watchOptions: {
       aggregateTimeout: 300,
@@ -120,13 +109,4 @@ module.exports = {
       }
     },
   },
-  // externals: [
-  //   (context, request, callback) => {
-  //     if (request[0] === '.' || request.includes('webpack-dev-server')) {
-  //       callback();
-  //     } else {
-  //       callback(null, `require('${request}')`);
-  //     }
-  //   },
-  // ],
 };

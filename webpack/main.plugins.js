@@ -7,21 +7,21 @@ const isDev = process.env.NODE_ENV === 'development';
 
 const plugins = [
   new ProgressPlugin(),
-  new BundleAnalyzerPlugin({
-    analyzerMode: 'static',
-    generateStatsFile: true,
-    openAnalyzer: !isDev,
-    reportFilename: 'report.main.html',
-    statsFilename: 'stats.main.json',
-  }),
   new ForkTsCheckerWebpackPlugin({
     async: false,
   }),
 ];
 
-if (isDev) {
-  // const CopyPlugin = require('copy-webpack-plugin');
-  // plugins.push(new CopyPlugin([{ from: './src/index.html', to: './index.html' }]));
+if (!isDev) {
+  plugins.push(
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+      generateStatsFile: true,
+      openAnalyzer: true,
+      reportFilename: 'report.main.html',
+      statsFilename: 'stats.main.json',
+    }),
+  );
 }
 
 module.exports = plugins;

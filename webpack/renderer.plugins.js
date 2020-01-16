@@ -5,6 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
 const plugins = [];
 const isDev = process.env.NODE_ENV === 'development';
@@ -22,16 +23,21 @@ if (isDev && process.env.START_HOT) {
   };
 }
 
+if (!isDev) {
+  plugins.push(
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+      generateStatsFile: true,
+      openAnalyzer: true,
+      reportFilename: 'report.renderer.html',
+      statsFilename: 'stats.renderer.json',
+    }),
+  );
+}
+
 plugins.push(
   new ProgressPlugin(),
   new HotModuleReplacementPlugin(),
-  new BundleAnalyzerPlugin({
-    analyzerMode: 'static',
-    generateStatsFile: true,
-    openAnalyzer: !isDev,
-    reportFilename: 'report.renderer.html',
-    statsFilename: 'stats.renderer.json',
-  }),
   new ForkTsCheckerWebpackPlugin({
     async: false,
   }),
@@ -47,6 +53,7 @@ plugins.push(
     templateParameters,
   }),
   new HtmlWebpackHarddiskPlugin(),
+  new HardSourceWebpackPlugin(),
 );
 
 module.exports = plugins;

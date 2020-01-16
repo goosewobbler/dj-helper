@@ -149,17 +149,7 @@
     "webpack-bundle-analyzer": "^3.6.0",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.10.1",
-    "webpack-hook-plugin": "^1.0.7"
-  },
-  "resolutions": {
-    "@types/react": "^16.9.17"
-  },
-  "browserslist": [
-    "electron >= 7",
-    "node >= 10"
-  ],
-  "dependencies": {
-    "@hot-loader/react-dom": "^16.11.0",
+    "webpack-hook-plugin": "^1.0.7",
     "electron-debug": "^3.0.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
@@ -169,5 +159,13 @@
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
     "source-map-support": "^0.5.16"
-  }
+  },
+  "resolutions": {
+    "@types/react": "^16.9.17"
+  },
+  "browserslist": [
+    "electron >= 7",
+    "node >= 10"
+  ],
+  "dependencies": { }
 }

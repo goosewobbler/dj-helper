@@ -2,23 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-/*
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html,
-body {
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-}
-*/
+/* Tailwind base / preflight styles: https://unpkg.com/tailwindcss@1.2.0-canary.5/dist/base.css */
 
 html {
   font-family: var(--font-family-name);
+}
+
+body {
+  @apply h-full;
+  @apply w-full;
+  @apply overflow-hidden;
 }
 
 mark {

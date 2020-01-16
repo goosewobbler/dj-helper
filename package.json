@@ -16,7 +16,6 @@
     "dev": "yarn clean && yarn dev:build-main && cross-env START_HOT=1 node -r @babel/register ./scripts/check-port.js && cross-env START_HOT=1 yarn dev:start-renderer",
     "dist": "yarn build && electron-builder",
     "build": "yarn clean && concurrently 'yarn build:main' 'yarn build:renderer'",
-    "build:dll": "cross-env NODE_ENV=development webpack --config ./webpack/renderer.dll.config.js --colors",
     "build:main": "cross-env NODE_ENV=production webpack --config ./webpack/main.config.js --colors",
     "build:renderer": "cross-env NODE_ENV=production webpack --config ./webpack/renderer.config.js --colors",
     "start": "cross-env NODE_ENV=production electron ./dist/main.prod.js",

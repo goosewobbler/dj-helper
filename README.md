@@ -77,8 +77,10 @@ The following technologies are used:
 
 ### Useful Links
 
+- https://basarat.gitbook.io/typescript/
 - https://github.com/electron-react-boilerplate/electron-react-boilerplate
 - https://github.com/sindresorhus/awesome-electron
-- https://basarat.gitbook.io/typescript/
+- https://github.com/enaqx/awesome-react
+- https://github.com/webpack-contrib/awesome-webpack
 - https://github.com/aniftyco/awesome-tailwindcss
 - https://www.postcss.parts/

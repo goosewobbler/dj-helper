@@ -9,26 +9,38 @@ MDC was the original Morph Developer GUI. This is intended to be the rebirth of 
 - Better code quality
 - Better performance
 
-## Roughly ordered TODO for release (\* denotes investigation required)
+## Roughly ordered TODO for release (\* denotes requirement for boilerplate repo)
 
 - ~Build tooling for dev (HMR, etc. for rapid iteration)~
 - ~Replace Express API Server with file:/// and Webpack Dev Server~
 - ~Put theming back in w/ TailwindCSS approach~
+- ~Move webpack configs into own dir~
 - Replace all removed Glamorous styles with Tailwind classes
-- Put Jest tests back and unbitrot them
-- Add new / update Jest tests for any changes to functionality
+- Put unit tests back and unbitrot them
+- Add new / update unit tests for any changes to functionality
 - Ensure all functionality works from inside Electron in Dev mode
 - Finish off build tooling for production
 - Ensure all functionality works from inside Electron in Production mode
-- Separate building DLL dependencies to speed up build time using Webpack DLL plugin
-- Integration tests with Spectron
+- Improvements in compilation time
+  - ~Separate building DLL dependencies to speed up build time using Webpack DLL plugin~
+  - ~Use `HardSourceWebpackPlugin` to implement caching ahead of the Webpack 5 release~
+  - ~Make `BundleAnalyzerPlugin` run for Production only~
 - Build tooling for automated deployment using Github Releases
 - New auto-update feature using electron-updater
+- Write comprehensive development docs
+- Port old MDC user docs
+
+## Nice to Have / Post Release
+
+- Switch to use Redux Toolkit and update Redux usage for the Redux Style Guide
+- Integration tests with Spectron
 - Replace old class-based React Components with functions and hooks
+- Upgrade Webpack to v5
 - Replace `react-hot-loader` with React Refresh (likely dependent on Webpack 5)
 - Remove use of non-null assertion! (tech debt from enabling strict null checking)
-- Remove any remaining use of `any`
-- Clean up any remaining ESLint errors
+- Remove remaining use of `any`
+- Clean up remaining ESLint errors
+- Enable pre-commit hooks using Husky
 - Add Ceefax mode back in
 
 ## Install

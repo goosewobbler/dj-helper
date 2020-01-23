@@ -20,6 +20,23 @@ interface ComponentListItemProps {
   onStop?(name: string): void;
 }
 
+const getBackgroundColor = (state: ComponentState): string => {
+  switch (state) {
+    case ComponentState.Linking:
+    case ComponentState.Starting:
+      return 'bg-component-starting';
+    case ComponentState.Installing:
+      return 'bg-component-installing';
+    case ComponentState.Building:
+      return 'bg-component-building';
+    case ComponentState.Running:
+      return 'bg-component-running';
+    default:
+      break;
+  }
+  return 'bg-secondary-background';
+};
+
 const renderFavouriteButton = ({
   component: { favourite, name },
   onFavourite,
@@ -148,12 +165,21 @@ class ComponentListItem extends React.Component<ComponentListItemProps> {
 
   public render(): React.ReactElement {
     const { selected, component } = this.props;
-    const { highlighted, displayName, name } = component;
+    const { highlighted, displayName, name, state } = component;
     const labelText: React.ReactElement[] | string = highlighted && highlighted.length > 0 ? highlighted : displayName;
+    const backgroundColor = getBackgroundColor(state);
+
+    let borderColor = 'border-selected-item-border';
+    let boxShadow = 'shadow';
+
+    if (selected) {
+      borderColor = 'border-selected-item-border-10';
+      boxShadow = 'shadow-outline';
+    }
 
     return (
       <div
-        className={selected ? 'selected' : ''}
+        className={`border ${boxShadow} border-solid ${borderColor} flex items-center flex-grow h-10 p-2 mb-2 overflow-hidden text-lg cursor-pointer text-primary-text component-dependency ${backgroundColor}`}
         role="button"
         id={createID(name)}
         onClick={this.handleClick}

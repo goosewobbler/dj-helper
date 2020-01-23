@@ -21,24 +21,18 @@ const isLinking = (dependencyName: string, component: ComponentData): boolean =>
 const isLinkable = ({ state }: ComponentData): boolean => state === ComponentState.Running;
 
 const renderLinkButton = (
-  dependencyName: string,
-  component: ComponentData,
+  linked: boolean,
+  linking: boolean,
   onUnlink: () => void,
   onLink: () => void,
 ): ReactElement | null => {
-  if (isLinking(dependencyName, component)) {
+  if (linking) {
     return (
       <button type="button" disabled className="w-4 h-4 border-0 outline-none loading">
         <LoadingIcon />
       </button>
     );
   }
-
-  if (!isLinkable(component)) {
-    return null;
-  }
-
-  const linked = isLinked(dependencyName, component);
 
   const className = linked ? 'component-unlink-button' : 'component-link-button';
   const label = linked ? 'Unlink' : 'Link';
@@ -71,12 +65,30 @@ const ComponentDependencyListItem = ({ dependency }: ComponentDependencyProps): 
   const onClick = (): void => onSelectComponent(name);
   const onKeyPress = (): void => onSelectComponent(name);
 
+  const componentIsLinked = isLinked(name, componentContext.component);
+  const componentIsLinking = isLinking(name, componentContext.component);
+  const componentIsLinkable = isLinkable(componentContext.component);
+
+  let backgroundColor = 'bg-secondary-background';
+
+  if (componentIsLinking) {
+    backgroundColor = 'bg-component-starting';
+  } else if (componentIsLinked) {
+    backgroundColor = 'bg-component-linked';
+  }
+
   return (
     <li key={name}>
-      <div className="component-dependency" onClick={onClick} role="link" onKeyPress={onKeyPress} tabIndex={0}>
+      <div
+        className={`border shadow border-solid border-selected-item-border flex items-center flex-grow h-10 p-2 mb-2 overflow-hidden text-lg cursor-pointer text-primary-text component-dependency ${backgroundColor}`}
+        onClick={onClick}
+        role="link"
+        onKeyPress={onKeyPress}
+        tabIndex={0}
+      >
         <span className="component-name-label">{name}</span>
         <Spacer fill />
-        {renderLinkButton(name, componentContext.component, onUnlink, onLink)}
+        {componentIsLinkable && renderLinkButton(componentIsLinked, componentIsLinking, onUnlink, onLink)}
         <Spacer />
         {renderVersionBox(version!, outdated)}
         <Spacer />

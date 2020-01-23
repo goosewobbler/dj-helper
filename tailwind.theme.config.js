@@ -28,6 +28,7 @@ const mainTheme = new Theme()
     'tertiary-text': '#FFFFFF',
   })
   .opacityVariant('5', 0.05, 'header')
+  .opacityVariant('10', 0.1, 'selected-item-border')
   .opacityVariant('30', 0.3, 'primary-text')
   .opacityVariant('50', 0.5, 'dialog-overlay')
   .opacityVariant('70', 0.7, ['primary-text', 'selected-item-border', 'secondary-background'])

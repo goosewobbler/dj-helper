@@ -31,9 +31,13 @@ const renderStateLabel = (state: ComponentState): string => {
   }
 };
 
-const renderUseCacheButton = (onClick: () => void, className: string): ReactElement => (
+const renderUseCacheButton = (onClick: () => void, useCache: boolean): ReactElement => (
   <div className="wrapper">
-    <LabelButton className={className} label="Cache" onClick={onClick} />
+    <LabelButton
+      className={`use-cache-button${useCache ? ' bg-highlight text-secondary-text' : ''}`}
+      label="Cache"
+      onClick={onClick}
+    />
   </div>
 );
 
@@ -64,24 +68,27 @@ const ComponentActions = (props: ComponentActionsProps): ReactElement => {
   const shouldDisplayInstallButton = state === ComponentState.Stopped || state === ComponentState.Running;
   const shouldDisplayBuildButton = state === ComponentState.Running;
   const shouldDisplayUseCacheButton = state === ComponentState.Stopped || state === ComponentState.Running;
+  const isNode10 = rendererType === '10';
   return (
-    <div>
-      <div className="header">
-        <h2>{displayName}</h2>
-        <p className="renderer-label">
+    <div className="flex flex-col flex-grow">
+      <div className="flex items-center header">
+        <h2 className="flex-grow mt-2 mb-1 ml-2 mr-0 text-3xl text-primary-text">{displayName}</h2>
+        <p
+          className={`flex-shrink-0 px-2 py-0 m-1 text-base font-bold leading-loose renderer-label ${
+            isNode10 ? 'bg-highlight text-secondary-text' : 'bg-tertiary-background text-tertiary-text'
+          }`}
+        >
           Node version:
           {rendererType}
         </p>
-        <p className="state-label">{renderStateLabel(state)}</p>
+        <p className="flex-shrink-0 px-2 py-0 text-base font-bold leading-loose state-label bg-tertiary-background text-tertiary-text">
+          {renderStateLabel(state)}
+        </p>
       </div>
       <Spacer />
-      <div className="actions">
+      <div className="flex flex-wrap justify-start actions">
         <Spacer fill />
-        {shouldDisplayUseCacheButton &&
-          renderUseCacheButton(
-            (): void => onSetUseCache(name, !useCache),
-            useCache ? 'no-use-cache-button' : 'use-cache-button',
-          )}
+        {shouldDisplayUseCacheButton && renderUseCacheButton((): void => onSetUseCache(name, !useCache), useCache)}
         {shouldDisplayBuildButton && renderBuildButton((): void => onBuild(name))}
         {shouldDisplayInstallButton && renderInstallButton((): void => onInstall(name))}
         {renderCloneButton((): void => onClone(name))}

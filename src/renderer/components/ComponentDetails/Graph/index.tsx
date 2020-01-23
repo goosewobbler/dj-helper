@@ -133,12 +133,12 @@ class Graph extends React.PureComponent<GraphProps, GraphState> {
   public render(): React.ReactElement {
     const { data } = this.state;
     return (
-      <div>
+      <div className="absolute top-0 bottom-0 left-0 right-0">
         {data ? (
           this.renderGraph(data)
         ) : (
-          <div className="loading">
-            <div>
+          <div className="flex items-center justify-center w-full h-full loading">
+            <div className="w-8 h-8">
               <LoadingIcon />
             </div>
           </div>

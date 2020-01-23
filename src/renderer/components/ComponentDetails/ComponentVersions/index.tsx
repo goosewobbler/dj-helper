@@ -5,6 +5,7 @@ import * as semver from 'semver';
 import { context, ComponentContext } from '../../../contexts/componentContext';
 import Spacer from '../../Spacer';
 import { Versions } from '../../../../common/types';
+import VersionBox from '../ComponentDependencyListItem/VersionBox';
 
 const promotionInProgressText = (environment: string): string => (environment === 'int' ? 'Bumping' : 'Promoting');
 const promotionActionText = (environment: string): string => (environment === 'int' ? 'Bump' : 'Promote');
@@ -46,9 +47,13 @@ const Environment = ({
 
   return (
     <div className={classNames(['environment-version', isCurrent && 'current'])}>
-      <p className="version-label">{version || 'N/A'}</p>
-      <Spacer space={4} />
-      <p className="environment-label">{label}</p>
+      <VersionBox version={version} width="w-16" height="h-16" current={isCurrent}>
+        <>
+          <p className="version-label">{version || 'N/A'}</p>
+          <Spacer space={4} />
+          <p className="environment-label">{label}</p>
+        </>
+      </VersionBox>
     </div>
   );
 };

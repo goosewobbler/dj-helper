@@ -6,6 +6,7 @@ import { context, ComponentContext } from '../../../contexts/componentContext';
 
 import { ComponentState, ComponentData, ComponentDependency } from '../../../../common/types';
 import Spacer from '../../Spacer';
+import LoadingIcon from '../../LoadingIcon';
 
 interface ComponentDependencyProps {
   dependency: ComponentDependency;
@@ -27,9 +28,9 @@ const renderLinkButton = (
 ): ReactElement | null => {
   if (isLinking(dependencyName, component)) {
     return (
-      <div className="loading">
-        <img alt="loading" src="/image/icon/gel-icon-loading.svg" />
-      </div>
+      <button type="button" disabled className="w-4 h-4 border-0 outline-none loading">
+        <LoadingIcon />
+      </button>
     );
   }
 
@@ -58,7 +59,7 @@ const renderLinkButton = (
 };
 
 const renderVersionBox = (version: string, outdated: boolean): ReactElement => (
-  <VersionBox version={version} outdated={outdated} />
+  <VersionBox version={version} outdated={outdated} fontSize="sm" padding="py-1 px-0" />
 );
 
 const ComponentDependencyListItem = ({ dependency }: ComponentDependencyProps): ReactElement => {

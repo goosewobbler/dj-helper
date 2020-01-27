@@ -19,15 +19,18 @@ interface ComponentDetailsProps {
   handlers: ComponentHandlers;
 }
 
-const renderDetailsSectionEnd = (): ReactElement => (
-  <div className="dependencies-heading">
-    <h4>Wants</h4>
-    <Spacer />
-    <h4>Bundled</h4>
-    <Spacer />
-    <h4>Latest</h4>
-  </div>
-);
+const renderDetailsSectionEnd = (): ReactElement => {
+  const dependenciesHeadingClassNames = 'text-primary-text flex-shrink-0 font-normal w-16 text-base';
+  return (
+    <div className="flex pr-8 text-center dependencies-heading">
+      <h4 className={dependenciesHeadingClassNames}>Wants</h4>
+      <Spacer />
+      <h4 className={dependenciesHeadingClassNames}>Bundled</h4>
+      <Spacer />
+      <h4 className={dependenciesHeadingClassNames}>Latest</h4>
+    </div>
+  );
+};
 
 const orderDependencies = (dependencies: ComponentDependency[]): ComponentDependency[] =>
   (dependencies || []).sort((a, b): number => a.displayName.localeCompare(b.displayName));
@@ -48,16 +51,18 @@ const buildPipelineLink = (rendererType: string): Function => (env: string): str
 const renderPipelineLinks = (component: ComponentData): ReactElement => {
   const buildEnvLink = buildPipelineLink(component.rendererType);
   return (
-    <div key="links">
+    <div className="flex flex-shrink-0 h-10 mr-5" key="links">
       <ExternalLink link={buildEnvLink('int')} label="INT Pipeline" />
+      <Spacer />
       <ExternalLink link={buildEnvLink('test')} label="TEST Pipeline" />
+      <Spacer />
       <ExternalLink link={buildEnvLink('live')} label="LIVE Pipeline" />
     </div>
   );
 };
 
 const renderPlaceholder = (): ReactElement => (
-  <div className="placeholder">
+  <div className="flex items-center justify-center flex-grow placeholder text-primary-text">
     <p>No component selected</p>
   </div>
 );
@@ -77,8 +82,8 @@ const ComponentDetails = ({ component, editors, handlers }: ComponentDetailsProp
       renderButtons={(): ReactElement => renderPipelineLinks(component)}
     >
       <ComponentContextProvider value={componentContextValue}>
-        <div className="details">
-          <div className="actions">
+        <div className="flex flex-col flex-grow details">
+          <div className="flex flex-shrink-0 px-2 pt-0 pb-1 actions">
             <ComponentActions editors={editors} component={component} handlers={handlers} />
           </div>
           <ComponentDetailsSection label="Versions">

@@ -25,13 +25,20 @@ class Tabs extends React.Component<TabsProps, TabsState> {
     return headings.map(
       (heading, index): React.ReactElement => {
         const selected = selectedIndex === index;
+        const borderBottomWidth = `border-b-${selected ? '4' : '2'}`;
+        const borderBottomColor = `border-${selected ? 'selected-item' : 'primary-text'}`;
         const onClick = (): void => {
           this.setState({
             selectedIndex: index,
           });
         };
         return (
-          <button className={selected ? 'selected' : ''} type="button" key={heading} onClick={onClick}>
+          <button
+            className={`p-1 outline-none border-0 text-lg my-0 mx-2 text-primary-text border-solid ${borderBottomWidth} ${borderBottomColor}`}
+            type="button"
+            key={heading}
+            onClick={onClick}
+          >
             {heading}
           </button>
         );
@@ -45,12 +52,12 @@ class Tabs extends React.Component<TabsProps, TabsState> {
     const panels = Array.isArray(children) ? children : [children];
 
     return (
-      <div>
-        <div className="header">
-          <ul>{this.renderHeadings()}</ul>
+      <div className="flex flex-col flex-grow">
+        <div className="flex flex-row justify-between header">
+          <ul className="flex px-0 pt-2 pb-4">{this.renderHeadings()}</ul>
           {renderButtons()}
         </div>
-        <div>{panels[selectedIndex]}</div>
+        <div className="relative flex flex-col flex-grow w-full h-full">{panels[selectedIndex]}</div>
       </div>
     );
   }

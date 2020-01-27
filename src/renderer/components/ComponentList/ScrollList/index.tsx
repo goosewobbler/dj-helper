@@ -60,11 +60,30 @@ class ScrollList extends React.Component<ScrollListProps, ScrollListState> {
     }
   }
 
+  // const ToTheTopButton = glamorous.button(
+  //   {
+  //     backgroundPosition: '50%',
+  //     backgroundRepeat: 'no-repeat',
+  //     backgroundSize: '40%',
+  //     border: 'none',
+  //     borderRadius: '1.5625rem',
+  //     boxShadow: '4px 4px 8px 0 rgba(0, 0, 0, 0.2)',
+  //     left: '50%',
+  //     marginLeft: '-1.5625rem',
+  //     transition: 'bottom 0.5s', TODO - transition
+  //   },
+  //   (props: { theme: ITheme; show: boolean }) => ({
+  //     backgroundColor: props.theme.tertiaryBackgroundColour,
+  //     bottom: props.show ? '1.25rem' : '-5.625rem',
+  //   }),
+  // );
+
   public render(): React.ReactElement {
     const { renderListItem, length } = this.props;
+    const { showScrollToTop } = this.state;
     return (
-      <div>
-        <ul onScroll={this.handleScroll}>
+      <div className="relative flex flex-col flex-grow">
+        <ul className="flex-grow p-2 pb-1 overflow-y-scroll" onScroll={this.handleScroll}>
           <ReactList
             ref={this.handleListRef}
             itemRenderer={renderListItem}
@@ -75,7 +94,13 @@ class ScrollList extends React.Component<ScrollListProps, ScrollListState> {
             minSize={20}
           />
         </ul>
-        <button type="button" onClick={this.handleScrollToTheTop}>
+        <button
+          className={`absolute w-12 h-12 p-3 shadow outline-none bg-tertiary-background bottom-0 ${
+            showScrollToTop ? '' : 'hidden'
+          }`}
+          type="button"
+          onClick={this.handleScrollToTheTop}
+        >
           <TopIcon />
         </button>
       </div>

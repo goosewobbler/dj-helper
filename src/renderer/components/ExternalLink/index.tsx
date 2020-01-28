@@ -1,3 +1,4 @@
+import { shell } from 'electron';
 import * as React from 'react';
 import ExternalIcon from './ExternalIcon';
 import { tailwindColorResolver } from '../../helpers/stylesHelper';
@@ -29,18 +30,16 @@ const ExternalLink = ({
   const fillColor = tailwindColorResolver('primary-text');
 
   return (
-    <a
+    <button
       className={`${staticClasses} ${dynamicClasses.join(' ')}`}
-      href={link}
-      target="_blank"
-      rel="noopener noreferrer"
-      onClick={(event): void => event.stopPropagation()}
+      type="button"
+      onClick={(): Promise<void> => shell.openExternal(link)}
     >
       <div className="container inline-flex w-3 h-3 my-0 ml-1 mr-2">
         <ExternalIcon fillColor={fillColor} />
       </div>
       <span>{label}</span>
-    </a>
+    </button>
   );
 };
 

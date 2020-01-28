@@ -1,33 +1,54 @@
-import Config from '../../../src/server/app/Config';
-import State from '../../../src/server/app/State';
-import Service from '../../../src/server/service/Service';
-import ISystem from '../../../src/server/types/ISystem';
-import createDefaultMockSystem from './defaultSystem';
+import { Service } from '../../../src/common/types';
 
-const createMockService = async (
-  options: { componentsDirectory?: string; systemModifier?: (builder: any) => void } = {},
-) => {
-  const routingFilePath = '/tmp/routing.json';
+const createMockService = (body = '', headers = {}, statusCode = 200): Service => {
+  const request = jest.fn().mockReturnValue(
+    Promise.resolve({
+      body,
+      headers,
+      statusCode,
+    }),
+  );
 
-  const componentsDirectory = options.componentsDirectory || '/test/components';
-  const { systemBuilder } = createDefaultMockSystem(componentsDirectory);
-  if (options.systemModifier) {
-    options.systemModifier(systemBuilder);
-  }
-  const system: ISystem = systemBuilder.build();
-  const config = await Config('/mdc-config.json', system);
-  const state = await State('/mdc-state.json', system);
+  const bump = jest.fn();
+  const build = jest.fn();
+  const clone = jest.fn();
+  const create = jest.fn();
+  const fetchDetails = jest.fn();
+  const getComponentsData = jest.fn();
+  const getComponentsSummaryData = jest.fn();
+  const getDependantGraph = jest.fn();
+  const link = jest.fn();
+  const promote = jest.fn();
+  const openInEditor = jest.fn();
+  const reinstall = jest.fn();
+  const getDependencyGraph = jest.fn();
+  const setFavourite = jest.fn();
+  const setUseCache = jest.fn();
+  const start = jest.fn();
+  const stop = jest.fn();
+  const unlink = jest.fn();
 
-  const onComponentUpdate = jest.fn();
-  const onReload = jest.fn();
-  const startServer = jest.fn();
-
-  const service = await Service(system, config, state, onComponentUpdate, onReload, startServer, {
-    componentsDirectory,
-    routingFilePath,
-  });
-
-  return { service, onComponentUpdate, onReload, startServer, system, systemBuilder, config, state };
+  return {
+    request,
+    bump,
+    build,
+    clone,
+    create,
+    link,
+    promote,
+    openInEditor,
+    setFavourite,
+    getDependencyGraph,
+    reinstall,
+    fetchDetails,
+    getComponentsData,
+    getComponentsSummaryData,
+    getDependantGraph,
+    setUseCache,
+    start,
+    stop,
+    unlink,
+  };
 };
 
 export default createMockService;

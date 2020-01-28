@@ -28,8 +28,8 @@ async function createWindow(): Promise<void> {
 
   mainWindow = new BrowserWindow({
     show: false,
-    height: 800,
-    width: 1200,
+    height: 1000,
+    width: 1100,
     webPreferences: {
       nodeIntegration: true,
     },
@@ -42,7 +42,9 @@ async function createWindow(): Promise<void> {
   mainWindow.once('ready-to-show', () => {
     const browser = mainWindow as BrowserWindow;
     if (isDebugMode) {
-      browser.webContents.once('did-frame-finish-load', () => browser.webContents.openDevTools());
+      browser.webContents.once('dom-ready', () => {
+        browser.webContents.openDevTools();
+      });
     }
     browser.show();
   });

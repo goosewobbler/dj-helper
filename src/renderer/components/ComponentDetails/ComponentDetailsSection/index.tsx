@@ -12,7 +12,7 @@ const ComponentDetailsSection = ({ label, end, children, grow }: ComponentDetail
   const flexClasses = `flex flex-col ${additionalFlexClasses}`;
   return (
     <div className={flexClasses}>
-      <div className="header">
+      <div className="flex justify-between mx-2 mt-5 mb-2 header">
         <h3 className="label">{label}</h3>
         {end}
       </div>

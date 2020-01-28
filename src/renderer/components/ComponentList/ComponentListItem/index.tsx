@@ -174,12 +174,12 @@ class ComponentListItem extends React.Component<ComponentListItemProps> {
 
     if (selected) {
       borderColor = 'border-selected-item-border-10';
-      boxShadow = 'shadow-outline';
+      boxShadow = 'component-focus-shadow';
     }
 
     return (
       <div
-        className={`border ${boxShadow} border-solid ${borderColor} flex items-center flex-grow h-10 p-2 mb-2 overflow-hidden text-lg cursor-pointer text-primary-text component-dependency ${backgroundColor}`}
+        className={`border outline-none ${boxShadow} border-solid ${borderColor} flex items-center flex-grow h-10 p-2 mb-2 overflow-hidden text-lg cursor-pointer text-primary-text component-dependency ${backgroundColor}`}
         role="button"
         id={createID(name)}
         onClick={this.handleClick}
@@ -188,7 +188,7 @@ class ComponentListItem extends React.Component<ComponentListItemProps> {
       >
         {renderFavouriteButton(this.props)}
         <Spacer />
-        <span className="component-name-label">{labelText}</span>
+        <span className="mr-auto truncate component-name-label">{labelText}</span>
         <Spacer />
         {renderLaunchButton(component)}
         <Spacer />

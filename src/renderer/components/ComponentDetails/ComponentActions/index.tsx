@@ -32,7 +32,7 @@ const renderStateLabel = (state: ComponentState): string => {
 };
 
 const renderUseCacheButton = (onClick: () => void, useCache: boolean): ReactElement => (
-  <div className="wrapper">
+  <div className="flex mt-2 ml-2 wrapper">
     <LabelButton
       className={`use-cache-button${useCache ? ' bg-highlight text-secondary-text' : ''}`}
       label="Cache"
@@ -42,19 +42,19 @@ const renderUseCacheButton = (onClick: () => void, useCache: boolean): ReactElem
 );
 
 const renderBuildButton = (onClick: () => void): ReactElement => (
-  <div className="wrapper">
+  <div className="flex mt-2 ml-2 wrapper">
     <LabelButton className="build-button" label="Build" onClick={onClick} />
   </div>
 );
 
 const renderInstallButton = (onClick: () => void): ReactElement => (
-  <div className="wrapper">
+  <div className="flex mt-2 ml-2 wrapper">
     <LabelButton className="install-button" label="Reinstall" onClick={onClick} />
   </div>
 );
 
 const renderCloneButton = (onClick: () => void): ReactElement => (
-  <div className="wrapper">
+  <div className="flex mt-2 ml-2 wrapper">
     <LabelButton className="clone-button" label="Clone" onClick={onClick} />
   </div>
 );
@@ -93,7 +93,7 @@ const ComponentActions = (props: ComponentActionsProps): ReactElement => {
         {shouldDisplayInstallButton && renderInstallButton((): void => onInstall(name))}
         {renderCloneButton((): void => onClone(name))}
         {editors.includes('code') ? (
-          <div className="wrapper" key="vs-code-button">
+          <div className="flex mt-2 ml-2 wrapper " key="vs-code-button">
             <LabelButton
               className="vs-code-button"
               label="VS Code"
@@ -102,13 +102,13 @@ const ComponentActions = (props: ComponentActionsProps): ReactElement => {
             />
           </div>
         ) : null}
-        <div className="wrapper">
+        <div className="flex mt-2 ml-2 wrapper">
           <ExternalLink
             label="Dependency Graph"
             link={`https://morph-dependency-grapher.test.api.bbc.co.uk/env/test/modules/${displayName}`}
           />
         </div>
-        <div className="wrapper">
+        <div className="flex mt-2 ml-2 wrapper ">
           <ExternalLink label="GitHub" link={`https://github.com/bbc/morph-modules/tree/master/${displayName}`} />
         </div>
       </div>

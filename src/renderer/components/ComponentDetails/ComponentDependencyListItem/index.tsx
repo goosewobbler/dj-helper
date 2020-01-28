@@ -80,13 +80,13 @@ const ComponentDependencyListItem = ({ dependency }: ComponentDependencyProps): 
   return (
     <li key={name}>
       <div
-        className={`border shadow border-solid border-selected-item-border flex items-center flex-grow h-10 p-2 mb-2 overflow-hidden text-lg cursor-pointer text-primary-text component-dependency ${backgroundColor}`}
+        className={`border component-dependency-shadow border-solid border-selected-item-border flex items-center flex-grow h-10 p-2 mb-2 overflow-hidden cursor-pointer text-primary-text component-dependency ${backgroundColor}`}
         onClick={onClick}
         role="link"
         onKeyPress={onKeyPress}
         tabIndex={0}
       >
-        <span className="component-name-label">{name}</span>
+        <span className="mr-auto truncate component-name-label">{name}</span>
         <Spacer fill />
         {componentIsLinkable && renderLinkButton(componentIsLinked, componentIsLinking, onUnlink, onLink)}
         <Spacer />

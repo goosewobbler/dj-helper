@@ -20,7 +20,7 @@ const VersionBox = ({
   current?: boolean;
   fontSize?: string;
 }): React.ReactElement => {
-  let contents: React.ReactElement | string = children!;
+  let contents: React.ReactElement | string | undefined = children;
   let backgroundColor = 'bg-neutral';
 
   if (version === null) {
@@ -42,7 +42,7 @@ const VersionBox = ({
     <div
       className={`container items-center flex flex-col content-center rounded text-secondary-text text-${fontSize} ${padding} ${backgroundColor} ${height} ${width}`}
     >
-      {contents}
+      {contents || version}
     </div>
   );
 };

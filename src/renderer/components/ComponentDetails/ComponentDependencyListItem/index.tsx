@@ -53,9 +53,7 @@ const renderLinkButton = (
 };
 
 const renderVersionBox = (version: string, outdated: boolean): ReactElement => (
-  <VersionBox version={version} outdated={outdated} fontSize="sm" padding="py-1 px-0">
-    <>{version}</>
-  </VersionBox>
+  <VersionBox version={version} outdated={outdated} fontSize="sm" padding="py-1 px-0" />
 );
 
 const ComponentDependencyListItem = ({ dependency }: ComponentDependencyProps): ReactElement => {

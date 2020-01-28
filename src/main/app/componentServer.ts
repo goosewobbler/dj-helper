@@ -1,4 +1,4 @@
-import express from 'express';
+import * as express from 'express';
 import { readFileSync } from 'graceful-fs';
 import { join } from 'path';
 

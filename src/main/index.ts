@@ -9,6 +9,7 @@ if (module.hot) {
 }
 
 const isDev = process.env.NODE_ENV === 'development';
+const isDebugMode = isDev || process.env.DEBUG_PROD === 'true';
 
 let mainWindow: BrowserWindow | undefined;
 
@@ -16,7 +17,7 @@ if (process.env.NODE_ENV === 'production') {
   import('source-map-support').then(sourceMapSupport => sourceMapSupport.install());
 }
 
-if (isDev || process.env.DEBUG_PROD === 'true') {
+if (isDebugMode) {
   import('electron-debug').then(electronDebug => electronDebug.default());
 }
 
@@ -38,12 +39,12 @@ async function createWindow(): Promise<void> {
 
   mainWindow.loadURL(isDev ? 'http://localhost:1212/' : `file:///${__dirname}/../../dist/index.html`);
 
-  // mainWindow.show();
-  // mainWindow.webContents.openDevTools();
-
   mainWindow.once('ready-to-show', () => {
-    (mainWindow as BrowserWindow).show();
-    (mainWindow as BrowserWindow).webContents.openDevTools();
+    const browser = mainWindow as BrowserWindow;
+    if (isDebugMode) {
+      browser.webContents.once('did-frame-finish-load', () => browser.webContents.openDevTools());
+    }
+    browser.show();
   });
 
   mainWindow.on('closed', (): void => {

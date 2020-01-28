@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`it should render a title. 1`] = `
+.glamor-0,
+[data-glamor-0] {
+  font-size: 32px;
+  font-weight: normal;
+}
+
+<h1
+  className="glamor-0"
+>
+  Morph Developer Console
+</h1>
+`;

@@ -15160,6 +15160,13 @@ table@^5.2.3, table@^5.4.6:
     slice-ansi "^2.1.0"
     string-width "^3.0.0"
 
+tailwindcss-animations@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/tailwindcss-animations/-/tailwindcss-animations-1.0.0.tgz#45c99b6914f2a69744e51d4cdc55f2d9691dec14"
+  integrity sha512-dPAo/rRC2Cqupte3tVjoR8gTXyZjyApAmPD6LdiTRRQ79lNx0aCCMTDo86T8Ulif7N48mrMcj/eebf/a3QV6TQ==
+  dependencies:
+    lodash "^4.17.15"
+
 tailwindcss-theming@^2.3.1:
   version "2.3.1"
   resolved "https://npm.morph.int.tools.bbc.co.uk/tailwindcss-theming/-/tailwindcss-theming-2.3.1.tgz#46b0ccabb317c073b05a68538add34f8f154883d"

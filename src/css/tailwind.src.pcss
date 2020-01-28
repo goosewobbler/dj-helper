@@ -4,6 +4,10 @@
 
 /* Tailwind base / preflight styles: https://unpkg.com/tailwindcss@1.2.0-canary.5/dist/base.css */
 
+* {
+  @apply box-border;
+}
+
 html {
   font-family: var(--font-family-name);
 }
@@ -18,7 +22,9 @@ mark {
   @apply bg-highlight;
 }
 
-button:focus {
+button:focus,
+input:focus,
+div:focus {
   @apply outline-none;
 }
 
@@ -109,4 +115,19 @@ button:disabled {
 .text-hidden {
   font-size: 0;
   line-height: 0;
+}
+
+.search-bar-border-bottom {
+  border-bottom-width: 2px;
+  border-bottom-style: solid;
+  transition: border-color 0.2s ease 0s;
+  @apply border-primary-text-20;
+}
+
+.component-focus-shadow {
+  box-shadow: rgba(0, 0, 0, 0.7) 0 0 0 3px;
+}
+
+.component-dependency-shadow {
+  box-shadow: rgba(0, 0, 0, 0.05) 2px 2px 4px 0;
 }

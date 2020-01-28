@@ -9,6 +9,7 @@ const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
 const plugins = [];
 const isDev = process.env.NODE_ENV === 'development';
+const reportFiles = isDev ? ['src/**/*.{ts,tsx}'] : []; // in dev mode we only report type errors in source files
 
 let templateParameters = {
   rendererSrc: './renderer.prod.js',
@@ -40,6 +41,7 @@ plugins.push(
   new HotModuleReplacementPlugin(),
   new ForkTsCheckerWebpackPlugin({
     async: false,
+    reportFiles,
   }),
   new MiniCssExtractPlugin({
     filename: isDev ? '[name].css' : '[name].[hash].css',

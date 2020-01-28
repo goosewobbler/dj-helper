@@ -28,8 +28,11 @@
     "lint:code:fix": "yarn lint:code --fix'",
     "lint:styles": "stylelint --ignore-path .eslintignore '**/*.pcss'",
     "lint:styles:fix": "yarn --silent lint-styles --fix; exit 0",
-    "typecheck": "tsc --noEmit",
-    "dedupeReactTypes": "npx yarn-deduplicate --packages @types/react yarn.lock"
+    "test": "yarn lint && yarn test:coverage",
+    "test:coverage": "jest --coverage",
+    "test:watch": "jest --watch",
+    "type-check": "tsc --noEmit",
+    "dedupe-react-types": "npx yarn-deduplicate --packages @types/react yarn.lock"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.3",
@@ -65,6 +68,7 @@
     "@types/socket.io-client": "^1.4.32",
     "@types/source-map-support": "^0.5.1",
     "@types/stylelint": "^9.10.1",
+    "@types/supertest": "^2.0.8",
     "@types/tar": "^4.0.3",
     "@types/vfile-message": "^2.0.0",
     "@types/webpack": "^4.41.3",
@@ -150,6 +154,7 @@
     "stylelint": "13.0.0",
     "stylelint-config-prettier": "^8.0.1",
     "stylelint-config-standard": "^19.0.0",
+    "supertest": "^4.0.2",
     "tailwindcss": "^1.2.0-canary.5",
     "tailwindcss-animations": "^1.0.0",
     "tailwindcss-theming": "^2.3.1",

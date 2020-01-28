@@ -14,6 +14,7 @@
     "clean": "rm -rf ./dist",
     "clean:all": "rm -rf yarn.lock ./node_modules ./dist",
     "dev": "yarn clean && yarn dev:build-main && cross-env START_HOT=1 node -r @babel/register ./scripts/check-port.js && cross-env START_HOT=1 yarn dev:start-renderer",
+    "dev:upgrade-extensions": "UPGRADE_EXTENSIONS=true yarn dev",
     "dist": "yarn build && electron-builder",
     "build": "yarn clean && concurrently 'yarn build:main' 'yarn build:renderer'",
     "build:main": "cross-env NODE_ENV=production webpack --config ./webpack/main.config.js --colors",

@@ -67,6 +67,18 @@ const renderPlaceholder = (): ReactElement => (
   </div>
 );
 
+const renderDependencies = (dependencies: ComponentDependency[]): ReactElement => (
+  <ComponentDetailsSection label="Dependencies" end={renderDetailsSectionEnd()} grow>
+    <ul>
+      {orderDependencies(dependencies).map(
+        (dependency: ComponentDependency): ReactElement => (
+          <ComponentDependencyListItem dependency={dependency} />
+        ),
+      )}
+    </ul>
+  </ComponentDetailsSection>
+);
+
 const ComponentDetails = ({ component, editors, handlers }: ComponentDetailsProps): ReactElement => {
   if (!component) {
     return renderPlaceholder();
@@ -89,17 +101,7 @@ const ComponentDetails = ({ component, editors, handlers }: ComponentDetailsProp
           <ComponentDetailsSection label="Versions">
             <ComponentVersions />
           </ComponentDetailsSection>
-          {hasDependencies && (
-            <ComponentDetailsSection label="Dependencies" end={renderDetailsSectionEnd()} grow>
-              <ul>
-                {orderDependencies(dependencies!).map(
-                  (dependency: ComponentDependency): ReactElement => (
-                    <ComponentDependencyListItem dependency={dependency} />
-                  ),
-                )}
-              </ul>
-            </ComponentDetailsSection>
-          )}
+          {hasDependencies && renderDependencies(dependencies!)}
         </div>
       </ComponentContextProvider>
       {renderDependencyGraph(handlers, displayName)}

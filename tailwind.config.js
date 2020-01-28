@@ -3,6 +3,8 @@ module.exports = {
   theme: {
     extend: {},
   },
-  variants: {},
+  variants: {
+    borderColor: ['responsive', 'hover', 'focus', 'focus-within', 'active'],
+  },
   plugins: [require('./tailwind.theme.config')],
 };

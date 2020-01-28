@@ -1,5 +1,6 @@
 import { join } from 'path';
-import * as semver from 'semver';
+import satisfies from 'semver/functions/satisfies';
+import inc from 'semver/functions/inc';
 
 import componentStateMachine from './componentStateMachine';
 import { createComponentActions } from './componentActions';
@@ -145,7 +146,7 @@ const createComponent = (
 
       if (other) {
         latest = await other.getLatestVersion();
-        outdated = !semver.satisfies(latest, version);
+        outdated = !satisfies(latest, version);
       }
 
       dependency.version = version;
@@ -337,7 +338,7 @@ const createComponent = (
     }
 
     const packageContents = await readPackage();
-    const newVersion = semver.inc(packageContents.version, type);
+    const newVersion = inc(packageContents.version, type);
     packageContents.version = newVersion!;
     const newBranch = `bump-${name}-${await system.git.getRandomBranchName()}`;
     const currentBranch = await system.git.getCurrentBranch(componentPath);

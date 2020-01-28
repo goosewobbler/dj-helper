@@ -1,6 +1,8 @@
 import * as React from 'react';
 import classNames from 'classnames';
-import * as semver from 'semver';
+import gte from 'semver/functions/gte';
+import lt from 'semver/functions/lt';
+import valid from 'semver/functions/valid';
 
 import { context, ComponentContext } from '../../../contexts/componentContext';
 import Spacer from '../../Spacer';
@@ -83,14 +85,14 @@ const shouldRenderPromoteButton = (
     return true;
   }
 
-  return semver.lt(versions[toEnv]!, versions[fromEnv]!);
+  return lt(versions[toEnv]!, versions[fromEnv]!);
 };
 
 const parseVersions = ({ local = null, int = null, test = null, live = null }: Versions): Versions => ({
-  local: semver.valid(local),
-  int: int === '' ? int : semver.valid(int),
-  test: test === '' ? test : semver.valid(test),
-  live: live === '' ? live : semver.valid(live),
+  local: valid(local),
+  int: int === '' ? int : valid(int),
+  test: test === '' ? test : valid(test),
+  live: live === '' ? live : valid(live),
 });
 
 const ComponentVersions = (): React.ReactElement => {
@@ -106,11 +108,11 @@ const ComponentVersions = (): React.ReactElement => {
     live: promoting === 'live',
   };
 
-  const localUpToDate = !local || !int || semver.gte(local, int);
+  const localUpToDate = !local || !int || gte(local, int);
   const latestVersion = localUpToDate ? local : int;
-  const intUpToDate = !!(int && local && semver.gte(int, local));
-  const testUpToDate = !!(latestVersion && test && semver.gte(test, latestVersion));
-  const liveUpToDate = !!(latestVersion && live && semver.gte(live, latestVersion));
+  const intUpToDate = !!(int && local && gte(int, local));
+  const testUpToDate = !!(latestVersion && test && gte(test, latestVersion));
+  const liveUpToDate = !!(latestVersion && live && gte(live, latestVersion));
 
   return (
     <div>

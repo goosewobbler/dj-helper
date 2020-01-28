@@ -23,7 +23,6 @@ interface ComponentListFilterProps {
 
 interface ComponentListFilterState {
   filter: string;
-  focussed: boolean;
 }
 
 class ComponentListFilter extends React.Component<ComponentListFilterProps, ComponentListFilterState> {
@@ -31,14 +30,7 @@ class ComponentListFilter extends React.Component<ComponentListFilterProps, Comp
     super(props);
     this.state = {
       filter: '',
-      focussed: false,
     };
-  }
-
-  private onFocussed(focussed: boolean): void {
-    this.setState({
-      focussed,
-    });
   }
 
   private onInput({ target: { value } }: { target: { value: string } }): void {
@@ -68,20 +60,16 @@ class ComponentListFilter extends React.Component<ComponentListFilterProps, Comp
     return filter.length > 0 ? renderClearButton((): void => this.clearSearchInput()) : renderSearchButton();
   }
 
-  // TODO: containing div transition: 'border-bottom 0.2s'
   public render(): React.ReactElement {
-    const { filter, focussed } = this.state;
-    const borderBottomColor = `border-primary-text${focussed ? '' : '-70'}`;
+    const { filter } = this.state;
     return (
-      <div className={`items-center flex flex-shrink-0 m-2 p-1 border-b-2 ${borderBottomColor}`}>
+      <div className="flex items-center flex-shrink-0 p-1 m-2 bg-primary-background search-bar-border-bottom focus-within:border-primary-text">
         <input
-          className="flex-grow h-6 text-xl text-primary-text"
+          className="flex-grow h-6 text-xl text-primary-text bg-primary-background"
           value={filter}
           id="search-input"
           placeholder="Search"
           onKeyDown={(event): void => this.onKeyDown(event)}
-          onFocus={(): void => this.onFocussed(true)}
-          onBlur={(): void => this.onFocussed(false)}
           onChange={(event): void => this.onInput(event)}
         />
         {this.renderIcon()}

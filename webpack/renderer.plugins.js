@@ -6,6 +6,7 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const plugins = [];
 const isDev = process.env.NODE_ENV === 'development';
@@ -59,6 +60,12 @@ plugins.push(
   new HardSourceWebpackPlugin.ExcludeModulePlugin([
     {
       test: /mini-css-extract-plugin[\\/]dist[\\/]loader/,
+    },
+  ]),
+  new CopyWebpackPlugin([
+    {
+      from: './src/local-push.js',
+      to: '.',
     },
   ]),
 );

@@ -1,14 +1,7 @@
 import { Service } from '../../../src/common/types';
 
-const createMockService = (body = '', headers = {}, statusCode = 200): Service => {
-  const request = jest.fn().mockReturnValue(
-    Promise.resolve({
-      body,
-      headers,
-      statusCode,
-    }),
-  );
-
+const createMockService = (): Service => {
+  const request = jest.fn();
   const bump = jest.fn();
   const build = jest.fn();
   const clone = jest.fn();

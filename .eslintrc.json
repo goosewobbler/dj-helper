@@ -63,7 +63,7 @@
         "import/resolver": {
           "node": {},
           "webpack": {
-            "config": "webpack.main.config.js"
+            "config": "./webpack/main.config.js"
           },
           "typescript": {
             "alwaysTryTypes": true

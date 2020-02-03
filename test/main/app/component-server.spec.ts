@@ -159,6 +159,17 @@ describe('given a data component is running', () => {
       })
       .then(done);
   });
+
+  it('should correctly handle being requested with an accept header of text/html', done =>
+    request(server)
+      .get('/data/bbc-morph-baz')
+      .accept('text/html')
+      .expect(200)
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .then(() => {
+        expect(mockService.request).toHaveBeenCalledWith('bbc-morph-baz', {}, true);
+      })
+      .then(done));
 });
 
 describe('given a data component is running and returning non-200 with custom headers', () => {
@@ -282,6 +293,36 @@ describe('given a view component is running', () => {
         expect(response.text).toEqual('erhmahgerd');
       })
       .then(done);
+  });
+
+  it('should correctly handle being requested with an accept header of text/html', done =>
+    request(server)
+      .get('/view/bbc-morph-baz')
+      .accept('text/html')
+      .expect(200)
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .then(() => {
+        expect(mockService.request).toHaveBeenCalledWith('bbc-morph-baz', {}, true);
+      })
+      .then(done));
+
+  describe('and the component has no head or bodyLast', () => {
+    beforeEach(() => {
+      (mockService.request as jest.Mock).mockReset();
+      mockServiceRequest('{ "bodyInline": "<h1>Hello</h1>" }', {}, 200);
+    });
+
+    it('should return the expected values when requested', done =>
+      request(server)
+        .get('/view/bbc-morph-baz')
+        .expect(200)
+        .expect('Content-Type', 'text/html; charset=utf-8')
+        .then((response: request.Response) => {
+          expect(mockService.request).toHaveBeenCalledWith('bbc-morph-baz', {}, true);
+          expect(response.text).toContain('<h1>Hello</h1>');
+          expect(response.text).toMatchSnapshot();
+        })
+        .then(done));
   });
 });
 

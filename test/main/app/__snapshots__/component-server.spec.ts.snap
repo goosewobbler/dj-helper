@@ -1,5 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`given a view component is running and the component has no head or bodyLast should return the expected values when requested 1`] = `
+"<!doctype html>
+   <html class=\\"b-pw-1280\\">
+     <head>
+       <meta charset=\\"utf-8\\">
+       <meta http-equiv=\\"x-ua-compatible\\" content=\\"ie=edge\\">
+       <meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1\\">
+       <link rel=\\"shortcut icon\\" type=\\"image/png\\" href=\\"http://localhost:undefined/image/icon/morph.png\\"/>
+       <script src=\\"http://localhost:undefined/socket.io/socket.io.js\\"></script>
+       
+       <style>body {font-size: 62.5%;line-height: 1;}</style>
+     </head>
+     <body>
+       <h1>Hello</h1>
+       <script src=\\"//m.int.files.bbci.co.uk/modules/vendor/requirejs/2.1.20/require.min.js\\"></script>
+       
+       <script>const socket = io(\\"http://localhost:undefined\\"); socket.on(\\"reload\\", () => window.location.reload(true));</script>
+     </body>
+   </html>"
+`;
+
 exports[`given a view component is running can be requested with props 1`] = `
 "<!doctype html>
    <html class=\\"b-pw-1280\\">

@@ -1,9 +1,10 @@
 import * as React from 'react';
 
 interface TabsProps {
-  children?: React.ReactElement[];
+  children?: React.ReactNode;
+  headingChildren?: React.ReactNode;
   headings: string[];
-  renderButtons(): React.ReactElement;
+  buttons?: React.ReactNode;
 }
 
 interface TabsState {
@@ -47,18 +48,18 @@ class Tabs extends React.Component<TabsProps, TabsState> {
   }
 
   public render(): React.ReactElement {
-    const { children, renderButtons } = this.props;
+    const { children, headingChildren } = this.props;
     const { selectedIndex } = this.state;
     const panels = Array.isArray(children) ? children : [children];
 
     return (
-      <div className="flex flex-col flex-grow">
-        <div className="flex flex-row justify-between header">
+      <>
+        <div className="flex justify-between header">
           <ul className="flex px-0 pt-2 pb-4">{this.renderHeadings()}</ul>
-          {renderButtons()}
+          {headingChildren}
         </div>
         <div className="relative flex flex-col flex-grow w-full h-full">{panels[selectedIndex]}</div>
-      </div>
+      </>
     );
   }
 }

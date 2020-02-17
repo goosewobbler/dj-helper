@@ -179,7 +179,7 @@ class ComponentListItem extends React.Component<ComponentListItemProps> {
 
     return (
       <div
-        className={`border outline-none ${boxShadow} border-solid ${borderColor} flex items-center flex-grow h-10 p-2 mb-2 overflow-hidden text-lg cursor-pointer text-primary-text component-dependency ${backgroundColor}`}
+        className={`border outline-none ${boxShadow} border-solid ${borderColor} flex items-center h-10 p-2 mb-2 overflow-hidden text-lg cursor-pointer text-primary-text component-dependency ${backgroundColor}`}
         role="button"
         id={createID(name)}
         onClick={this.handleClick}

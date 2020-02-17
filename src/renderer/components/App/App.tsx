@@ -65,11 +65,11 @@ const App = (props: AppProps): ReactElement => {
         </div>
         <Spacer />
         <div className="flex flex-grow content">
-          <div className="flex flex-col flex-grow-0 flex-shrink-0 p-2 section flex-basis-30">
+          <div className="flex flex-col flex-grow-0 flex-shrink-0 w-1/3 p-2 section">
             <ComponentListFilterContainer key="filter" />
             <ComponentListContainer key="list" />
           </div>
-          <div className="flex flex-col flex-grow-0 flex-shrink-0 p-2 section flex-basis-70">
+          <div className="flex flex-col flex-grow flex-shrink-0 w-2/3 p-2 section">
             <ComponentDetailsContainer />
           </div>
           {showCreateDialog && renderCreateDialog(props)}

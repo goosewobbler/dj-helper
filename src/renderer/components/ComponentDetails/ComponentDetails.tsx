@@ -35,14 +35,6 @@ const renderDetailsSectionEnd = (): ReactElement => {
 const orderDependencies = (dependencies: ComponentDependency[]): ComponentDependency[] =>
   (dependencies || []).sort((a, b): number => a.displayName.localeCompare(b.displayName));
 
-const renderDependencyGraph = (handlers: ComponentHandlers, componentName: string): ReactElement => {
-  return <Graph onSelect={handlers.onSelectComponent} down componentName={componentName} type="dependency" />;
-};
-
-const renderDependendantGraph = (handlers: ComponentHandlers, componentName: string): ReactElement => {
-  return <Graph onSelect={handlers.onSelectComponent} down={false} componentName={componentName} type="dependant" />;
-};
-
 const buildPipelineLink = (rendererType: string): Function => (env: string): string => {
   const jobPrefix = rendererType === '10' ? 'modern-' : '';
   return `https://ci.user.morph.int.tools.bbc.co.uk/job/morph-asset-${jobPrefix}promote-${env}/`;
@@ -87,26 +79,28 @@ const ComponentDetails = ({ component, editors, handlers }: ComponentDetailsProp
   const { dependencies, displayName } = component;
   const hasDependencies = Array.isArray(dependencies) && dependencies.length > 0;
   const componentContextValue: ComponentContext = { component, handlers };
+  const { onSelectComponent } = handlers;
 
   return (
-    <Tabs
-      headings={['Overview', 'Dependencies', 'Dependants']}
-      renderButtons={(): ReactElement => renderPipelineLinks(component)}
-    >
-      <ComponentContextProvider value={componentContextValue}>
-        <div className="flex flex-col flex-grow details">
-          <div className="flex flex-shrink-0 px-2 pt-0 pb-1 actions">
-            <ComponentActions editors={editors} component={component} handlers={handlers} />
-          </div>
-          <ComponentDetailsSection label="Versions">
-            <ComponentVersions />
-          </ComponentDetailsSection>
-          {hasDependencies && renderDependencies(dependencies!)}
-        </div>
-      </ComponentContextProvider>
-      {renderDependencyGraph(handlers, displayName)}
-      {renderDependendantGraph(handlers, displayName)}
-    </Tabs>
+    <div className="component-details">
+      <div className="flex flex-col flex-grow">
+        <Tabs headings={['Overview', 'Dependencies', 'Dependants']} headingChildren={renderPipelineLinks(component)}>
+          <ComponentContextProvider value={componentContextValue}>
+            <div className="flex flex-col flex-grow details">
+              <div className="flex flex-shrink-0 px-2 pt-0 pb-1 actions">
+                <ComponentActions editors={editors} component={component} handlers={handlers} />
+              </div>
+              <ComponentDetailsSection label="Versions">
+                <ComponentVersions />
+              </ComponentDetailsSection>
+              {hasDependencies && renderDependencies(dependencies!)}
+            </div>
+          </ComponentContextProvider>
+          <Graph onSelect={onSelectComponent} down componentName={displayName} type="dependency" />
+          <Graph onSelect={onSelectComponent} down={false} componentName={displayName} type="dependant" />
+        </Tabs>
+      </div>
+    </div>
   );
 };
 

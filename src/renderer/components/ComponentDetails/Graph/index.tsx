@@ -5,16 +5,16 @@ import GraphVis from 'react-graph-vis';
 import { GraphData } from '../../../../common/types';
 import LoadingIcon from '../../LoadingIcon';
 
-interface GraphProps {
+type GraphProps = {
   down: boolean;
   type: 'dependency' | 'dependant';
   componentName: string;
   onSelect(name: string): void;
-}
+};
 
-interface GraphState {
+type GraphState = {
   data: GraphData | null;
-}
+};
 
 const convertData = (data: GraphData): {} => {
   const newNodes = data.nodes.map((node): {} => ({ id: node.id, label: node.name.replace(/^bbc-morph-/, '') }));
@@ -149,3 +149,4 @@ class Graph extends React.PureComponent<GraphProps, GraphState> {
 }
 
 export default Graph;
+export { GraphProps };

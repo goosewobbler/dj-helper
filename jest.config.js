@@ -1,5 +1,5 @@
-const { pathsToModuleNameMapper } = require('ts-jest/utils');
-const { compilerOptions } = require('./tsconfig.json');
+// const { pathsToModuleNameMapper } = require('ts-jest/utils');
+// const { compilerOptions } = require('./tsconfig.json');
 
 module.exports = {
   transform: {
@@ -16,8 +16,9 @@ module.exports = {
   },
   clearMocks: true,
   testPathIgnorePatterns: ['.node_modules_production'],
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
+  //  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
   modulePathIgnorePatterns: ['.node_modules_production'],
   testMatch: ['**/test/**/*.spec.(ts|tsx)'],
+  setupFiles: ['./test/setup.ts'],
   testURL: 'https://bbc.co.uk/',
 };

@@ -7,6 +7,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+// const DashboardPlugin = require('webpack-dashboard/plugin');
 
 const plugins = [];
 const isDev = process.env.NODE_ENV === 'development';
@@ -34,6 +35,7 @@ if (!isDev) {
       reportFilename: 'report.renderer.html',
       statsFilename: 'stats.renderer.json',
     }),
+    //    new DashboardPlugin(),
   );
 }
 

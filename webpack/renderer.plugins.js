@@ -9,6 +9,8 @@ const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 // const DashboardPlugin = require('webpack-dashboard/plugin');
 
+// TODO: check out dashboardPlugin again
+
 const plugins = [];
 const isDev = process.env.NODE_ENV === 'development';
 const reportFiles = isDev ? ['src/**/*.{ts,tsx}'] : []; // in dev mode we only report type errors in source files

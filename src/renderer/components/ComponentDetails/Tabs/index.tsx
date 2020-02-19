@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 interface TabsProps {
-  children?: React.ReactNode;
+  children: React.ReactNodeArray;
   headingChildren?: React.ReactNode;
   headings: string[];
   buttons?: React.ReactNode;
@@ -20,11 +20,11 @@ class Tabs extends React.Component<TabsProps, TabsState> {
     };
   }
 
-  private renderHeadings(): React.ReactElement[] {
+  private renderHeadings(): React.ReactNode[] {
     const { selectedIndex } = this.state;
     const { headings } = this.props;
     return headings.map(
-      (heading, index): React.ReactElement => {
+      (heading, index): React.ReactNode => {
         const selected = selectedIndex === index;
         const borderBottomWidth = `border-b-${selected ? '4' : '2'}`;
         const borderBottomColor = `border-${selected ? 'selected-item' : 'primary-text'}`;
@@ -47,10 +47,9 @@ class Tabs extends React.Component<TabsProps, TabsState> {
     );
   }
 
-  public render(): React.ReactElement {
+  public render(): React.ReactNode {
     const { children, headingChildren } = this.props;
     const { selectedIndex } = this.state;
-    const panels = Array.isArray(children) ? children : [children];
 
     return (
       <>
@@ -58,7 +57,7 @@ class Tabs extends React.Component<TabsProps, TabsState> {
           <ul className="flex px-0 pt-2 pb-4">{this.renderHeadings()}</ul>
           {headingChildren}
         </div>
-        <div className="relative flex flex-col flex-grow w-full h-full">{panels[selectedIndex]}</div>
+        <div className="relative flex flex-col flex-grow w-full h-full panels">{children[selectedIndex]}</div>
       </>
     );
   }

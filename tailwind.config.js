@@ -26,5 +26,5 @@ module.exports = {
   variants: {
     borderColor: ['responsive', 'hover', 'focus', 'focus-within', 'active'],
   },
-  plugins: [require('./tailwind.theme.config'), require('tailwindcss-animations')()],
+  plugins: [require('./tailwind.theme.config'), require('tailwindcss-animations')],
 };

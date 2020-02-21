@@ -41,9 +41,10 @@ const setupRendererComms = (mainWindow: Electron.BrowserWindow, service: Service
     mainWindow.webContents.send('components-data', service.getComponentsSummaryData()),
   );
 
-  ipcMain.on('get-dependency-graph', (event, componentName): void =>
-    mainWindow.webContents.send('dependency-graph', service.getDependencyGraph(componentName)),
-  );
+  ipcMain.on('get-dependency-graph', (event, componentName): void => {
+    console.log('getting graph', componentName, service.getDependencyGraph(componentName));
+    return mainWindow.webContents.send('dependency-graph', service.getDependencyGraph(componentName));
+  });
 
   ipcMain.on('get-dependant-graph', (event, componentName): void =>
     mainWindow.webContents.send('dependant-graph', service.getDependantGraph(componentName)),

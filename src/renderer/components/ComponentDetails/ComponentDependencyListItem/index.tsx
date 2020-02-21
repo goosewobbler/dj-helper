@@ -6,7 +6,7 @@ import { context, ComponentContext } from '../../../contexts/componentContext';
 
 import { ComponentState, ComponentData, ComponentDependency } from '../../../../common/types';
 import Spacer from '../../Spacer';
-import LoadingIcon from '../../LoadingIcon';
+import { LoadingIcon } from '../../LoadingIcon';
 
 interface ComponentDependencyProps {
   dependency: ComponentDependency;

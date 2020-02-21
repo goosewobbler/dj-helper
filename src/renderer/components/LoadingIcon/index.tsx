@@ -12,4 +12,4 @@ const LoadingIcon = (): React.ReactElement => {
   );
 };
 
-export default LoadingIcon;
+export { LoadingIcon };

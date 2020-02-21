@@ -1,6 +1,6 @@
 import * as React from 'react';
 import ExternalLink from '../../ExternalLink';
-import LoadingIcon from '../../LoadingIcon';
+import { LoadingIcon } from '../../LoadingIcon';
 import PauseIcon from './PauseIcon';
 import PlayIcon from './PlayIcon';
 import StarIcon from './StarIcon';

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { render, RenderResult, act } from '@testing-library/react';
 import { ipcRenderer } from 'electron';
-// import ReactGraphVis from 'react-graph-vis';
 import Graph from '../../../src/renderer/components/ComponentDetails/Graph';
 import { GraphData } from '../../../src/common/types';
 
@@ -51,7 +50,7 @@ describe('given a dependency graph', () => {
   });
 });
 
-describe.only('given a dependency graph with some data', () => {
+describe('given a dependency graph with some data', () => {
   mockGraphData = {
     edges: [
       {
@@ -96,7 +95,7 @@ describe.only('given a dependency graph with some data', () => {
     (once as jest.Mock).mockImplementation((channel, listener) => {
       sendGraphDataTimeout = setTimeout(() => {
         listener({}, mockGraphData);
-      }, 10);
+      }, 100);
     });
     graph = render(<Graph onSelect={onSelect} componentName="test-component" type="dependency" />);
   });
@@ -111,7 +110,7 @@ describe.only('given a dependency graph with some data', () => {
 
   it('should render a graph after it receives data', () => {
     act(() => {
-      jest.advanceTimersByTime(11);
+      jest.advanceTimersByTime(101);
     });
     expect(graph.getByText('graph')).toBeInTheDocument();
   });

@@ -15,6 +15,6 @@ module.exports = {
   testPathIgnorePatterns: ['.node_modules_production'],
   modulePathIgnorePatterns: ['.node_modules_production'],
   testMatch: ['**/test/**/*.spec.(ts|tsx)'],
-  setupFiles: ['./test/setup.ts'],
+  setupFilesAfterEnv: ['./test/setup.ts'],
   testURL: 'https://bbc.co.uk/',
 };

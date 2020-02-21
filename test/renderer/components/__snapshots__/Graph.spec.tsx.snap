@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`given a dependency graph should render the expected html 1`] = `
+<div>
+  <div
+    class="absolute top-0 bottom-0 left-0 right-0"
+  >
+    <div
+      class="flex items-center justify-center w-full h-full loading"
+    >
+      <div
+        class="w-8 h-8"
+      >
+        <p>
+          loading
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`given a dependency graph with some data should render the expected html 1`] = `
+<div>
+  <div
+    class="absolute top-0 bottom-0 left-0 right-0"
+  >
+    <div
+      class="flex items-center justify-center w-full h-full loading"
+    >
+      <div
+        class="w-8 h-8"
+      >
+        <p>
+          loading
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;

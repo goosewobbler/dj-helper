@@ -1,7 +1,130 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`given a list of tab headings and heading children are provided should render the expected html 1`] = `"<div class=\\"flex justify-between header\\"><ul class=\\"flex px-0 pt-2 pb-4\\"><button class=\\"p-1 outline-none border-0 text-lg my-0 mx-2 text-primary-text border-solid border-b-4 border-selected-item\\" type=\\"button\\">so</button><button class=\\"p-1 outline-none border-0 text-lg my-0 mx-2 text-primary-text border-solid border-b-2 border-primary-text\\" type=\\"button\\">many</button><button class=\\"p-1 outline-none border-0 text-lg my-0 mx-2 text-primary-text border-solid border-b-2 border-primary-text\\" type=\\"button\\">headings</button></ul><div class=\\"heading-child\\">I am heading child 1</div></div><div class=\\"relative flex flex-col flex-grow w-full h-full panels\\"><div class=\\"child\\">I am child 1</div></div>"`;
+exports[`and heading children are provided should render the expected html 1`] = `
+<div>
+  <div
+    class="flex justify-between"
+    data-testid="header"
+  >
+    <ul
+      class="flex px-0 pt-2 pb-4"
+    >
+      <button
+        class="p-1 outline-none border-0 text-lg my-0 mx-2 text-primary-text border-solid border-b-4 border-selected-item"
+        type="button"
+      >
+        so
+      </button>
+      <button
+        class="p-1 outline-none border-0 text-lg my-0 mx-2 text-primary-text border-solid border-b-2 border-primary-text"
+        type="button"
+      >
+        many
+      </button>
+      <button
+        class="p-1 outline-none border-0 text-lg my-0 mx-2 text-primary-text border-solid border-b-2 border-primary-text"
+        type="button"
+      >
+        headings
+      </button>
+    </ul>
+    <div>
+      I am heading child
+    </div>
+  </div>
+  <div
+    class="relative flex flex-col flex-grow w-full h-full"
+    data-testid="panels"
+  >
+    <div
+      class="child"
+    >
+      I am child 1
+    </div>
+  </div>
+</div>
+`;
 
-exports[`given a list of tab headings should render the expected html 1`] = `"<div class=\\"flex justify-between header\\"><ul class=\\"flex px-0 pt-2 pb-4\\"><button class=\\"p-1 outline-none border-0 text-lg my-0 mx-2 text-primary-text border-solid border-b-4 border-selected-item\\" type=\\"button\\">look</button><button class=\\"p-1 outline-none border-0 text-lg my-0 mx-2 text-primary-text border-solid border-b-2 border-primary-text\\" type=\\"button\\">some</button><button class=\\"p-1 outline-none border-0 text-lg my-0 mx-2 text-primary-text border-solid border-b-2 border-primary-text\\" type=\\"button\\">headings</button></ul></div><div class=\\"relative flex flex-col flex-grow w-full h-full panels\\"><div class=\\"child\\">I am child 1</div></div>"`;
+exports[`given a list of tab headings should render the expected html 1`] = `
+<div>
+  <div
+    class="flex justify-between"
+    data-testid="header"
+  >
+    <ul
+      class="flex px-0 pt-2 pb-4"
+    >
+      <button
+        class="p-1 outline-none border-0 text-lg my-0 mx-2 text-primary-text border-solid border-b-4 border-selected-item"
+        type="button"
+      >
+        look
+      </button>
+      <button
+        class="p-1 outline-none border-0 text-lg my-0 mx-2 text-primary-text border-solid border-b-2 border-primary-text"
+        type="button"
+      >
+        some
+      </button>
+      <button
+        class="p-1 outline-none border-0 text-lg my-0 mx-2 text-primary-text border-solid border-b-2 border-primary-text"
+        type="button"
+      >
+        headings
+      </button>
+    </ul>
+  </div>
+  <div
+    class="relative flex flex-col flex-grow w-full h-full"
+    data-testid="panels"
+  >
+    <div
+      class="child"
+    >
+      I am child 1
+    </div>
+  </div>
+</div>
+`;
 
-exports[`given a list of tab headings when a tab button is clicked should render the expected html 1`] = `"<div class=\\"flex justify-between header\\"><ul class=\\"flex px-0 pt-2 pb-4\\"><button class=\\"p-1 outline-none border-0 text-lg my-0 mx-2 text-primary-text border-solid border-b-2 border-primary-text\\" type=\\"button\\">look</button><button class=\\"p-1 outline-none border-0 text-lg my-0 mx-2 text-primary-text border-solid border-b-2 border-primary-text\\" type=\\"button\\">some</button><button class=\\"p-1 outline-none border-0 text-lg my-0 mx-2 text-primary-text border-solid border-b-4 border-selected-item\\" type=\\"button\\">headings</button></ul></div><div class=\\"relative flex flex-col flex-grow w-full h-full panels\\"><div class=\\"child\\">I am child 3</div></div>"`;
+exports[`given a list of tab headings when a tab button is clicked should render the expected html 1`] = `
+<div>
+  <div
+    class="flex justify-between"
+    data-testid="header"
+  >
+    <ul
+      class="flex px-0 pt-2 pb-4"
+    >
+      <button
+        class="p-1 outline-none border-0 text-lg my-0 mx-2 text-primary-text border-solid border-b-2 border-primary-text"
+        type="button"
+      >
+        look
+      </button>
+      <button
+        class="p-1 outline-none border-0 text-lg my-0 mx-2 text-primary-text border-solid border-b-2 border-primary-text"
+        type="button"
+      >
+        some
+      </button>
+      <button
+        class="p-1 outline-none border-0 text-lg my-0 mx-2 text-primary-text border-solid border-b-4 border-selected-item"
+        type="button"
+      >
+        headings
+      </button>
+    </ul>
+  </div>
+  <div
+    class="relative flex flex-col flex-grow w-full h-full"
+    data-testid="panels"
+  >
+    <div
+      class="child"
+    >
+      I am child 3
+    </div>
+  </div>
+</div>
+`;

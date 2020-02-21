@@ -11,6 +11,9 @@ MDC was the original Morph Developer GUI. This is intended to be the rebirth of 
 
 ## Roughly ordered TODO for release (\* denotes requirement for boilerplate repo)
 
+- ~Rework project structure for sanity~
+- ~Enable strict (aka proper) use of TypeScript~
+- ~Fix the bulk of the linting errors~
 - ~Build tooling for dev (HMR, etc. for rapid iteration)~
 - ~Replace Express API Server with file:/// and Webpack Dev Server~
 - ~Put theming back in w/ TailwindCSS approach~
@@ -37,6 +40,7 @@ MDC was the original Morph Developer GUI. This is intended to be the rebirth of 
 - Integration tests with Spectron
 - Replace old class-based React Components with functions and hooks
 - Upgrade Webpack to v5
+- Upgrade Yarn to v2
 - Replace `react-hot-loader` with React Refresh (likely dependent on Webpack 5)
 - Remove use of non-null assertion! (tech debt from enabling strict null checking)
 - Remove remaining use of `any`

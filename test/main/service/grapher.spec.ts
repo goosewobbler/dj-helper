@@ -1,33 +1,120 @@
+import { readFileSync } from 'fs-extra';
 import { Grapher, createGrapher } from '../../../src/main/service/grapher';
 
 let grapher: Grapher;
 
+const rawJson = readFileSync(`${__dirname}/../test-data/morph-module-dependencies.json`, 'utf-8');
+const morphModuleDependencyList = JSON.parse(rawJson);
+
 beforeEach(() => {
-  grapher = createGrapher({
-    'bbc-morph-foo': [{ name: 'bbc-morph-bar' }, { name: 'bbc-morph-baz' }],
-    'bbc-morph-bar': [{ name: 'bbc-morph-baz' }],
-    'bbc-morph-no-dependencies': [],
+  grapher = createGrapher(morphModuleDependencyList);
+});
+
+it('should return dependant graph data for a module with no dependants', () => {
+  const dependantData = grapher.getDependantData('bbc-morph-sport-index');
+  expect(dependantData).toEqual({
+    edges: [],
+    nodes: [
+      {
+        id: 1005,
+        name: 'bbc-morph-sport-index',
+      },
+    ],
   });
 });
 
-it('should return dependant graph data', () => {
-  const dependantData = grapher.getDependantData('bbc-morph-foo');
-
+it('should return dependant graph data for a module with dependants', () => {
+  const dependantData = grapher.getDependantData('bbc-morph-sport-social-media-embed');
   expect(dependantData).toEqual({
     edges: [
       {
-        from: 2,
-        to: 0,
+        from: 1079,
+        to: 240,
+      },
+      {
+        from: 1079,
+        to: 868,
       },
     ],
     nodes: [
       {
-        id: 2,
-        name: 'bbc-morph-bar',
+        id: 1079,
+        name: 'bbc-morph-sport-social-media-embed',
       },
       {
-        id: 0,
-        name: 'bbc-morph-baz',
+        id: 240,
+        name: 'bbc-morph-cps-story',
+      },
+      {
+        id: 868,
+        name: 'bbc-morph-sport-best-of-social-media-2',
+      },
+    ],
+  });
+});
+
+it('should return dependency graph data for a module with no dependencies', () => {
+  const dependencyData = grapher.getDependencyData('bbc-morph-app-bridge');
+  expect(dependencyData).toEqual({
+    edges: [],
+    nodes: [
+      {
+        id: 4,
+        name: 'bbc-morph-app-bridge',
+      },
+    ],
+  });
+});
+
+it('should return dependency graph data for a module with dependencies', () => {
+  const dependencyData = grapher.getDependencyData('bbc-morph-sport-football-scores-components');
+  expect(dependencyData).toEqual({
+    edges: [
+      {
+        to: 603,
+        from: 954,
+      },
+      {
+        from: 954,
+        to: 418,
+      },
+      {
+        from: 418,
+        to: 795,
+      },
+      {
+        from: 954,
+        to: 1034,
+      },
+      {
+        from: 954,
+        to: 1146,
+      },
+    ],
+    nodes: [
+      {
+        id: 954,
+        name: 'bbc-morph-sport-football-scores-components',
+      },
+      {
+        id: 603,
+        name: 'bbc-morph-grandstand',
+      },
+      {
+        id: 418,
+        name: 'bbc-morph-istats',
+      },
+      {
+        id: 795,
+        name: 'bbc-morph-promise',
+      },
+      {
+        id: 1034,
+        name: 'bbc-morph-sport-native-app-helper',
+      },
+      {
+        id: 1146,
+        name: 'bbc-morph-sportsdata-soccer-event-progress-period-helper',
       },
     ],
   });

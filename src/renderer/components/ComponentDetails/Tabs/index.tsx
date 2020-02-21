@@ -38,11 +38,13 @@ const Tabs = ({ children, headings, headingChildren }: TabsProps): React.ReactEl
 
   return (
     <>
-      <div className="flex justify-between header">
+      <div className="flex justify-between" data-testid="header">
         <ul className="flex px-0 pt-2 pb-4">{renderHeadings(headings, selectedIndex, onClick)}</ul>
         {headingChildren}
       </div>
-      <div className="relative flex flex-col flex-grow w-full h-full panels">{children[selectedIndex]}</div>
+      <div className="relative flex flex-col flex-grow w-full h-full" data-testid="panels">
+        {children[selectedIndex]}
+      </div>
     </>
   );
 };

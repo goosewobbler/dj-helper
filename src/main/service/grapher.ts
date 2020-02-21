@@ -1,19 +1,19 @@
 import { GraphData } from '../../common/types';
 
-interface Grapher {
+type Grapher = {
   getDependantData(name: string): GraphData;
   getDependencyData(name: string): GraphData;
-}
+};
 
-interface Node {
+type Node = {
   id: number;
   name: string;
-}
+};
 
-interface Edge {
+type Edge = {
   from: number;
   to: number;
-}
+};
 
 const createGrapher = (dependencies: { [Key: string]: { name: string }[] }): Grapher => {
   const nodes: Node[] = [];

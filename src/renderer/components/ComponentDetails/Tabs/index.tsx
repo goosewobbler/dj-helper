@@ -1,11 +1,11 @@
 import * as React from 'react';
 
-interface TabsProps {
+type TabsProps = {
   children: React.ReactNodeArray;
   headingChildren?: React.ReactNode;
   headings: string[];
   buttons?: React.ReactNode;
-}
+};
 
 const renderHeadings = (
   headings: string[],

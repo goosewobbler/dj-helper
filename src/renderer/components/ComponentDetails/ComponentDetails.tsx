@@ -64,7 +64,7 @@ const renderDependencies = (dependencies: ComponentDependency[]): ReactElement =
     <ul>
       {orderDependencies(dependencies).map(
         (dependency: ComponentDependency): ReactElement => (
-          <ComponentDependencyListItem dependency={dependency} />
+          <ComponentDependencyListItem key={dependency.name} dependency={dependency} />
         ),
       )}
     </ul>
@@ -96,8 +96,8 @@ const ComponentDetails = ({ component, editors, handlers }: ComponentDetailsProp
               {hasDependencies && renderDependencies(dependencies!)}
             </div>
           </ComponentContextProvider>
-          <Graph onSelect={onSelectComponent} down componentName={displayName} type="dependency" />
-          <Graph onSelect={onSelectComponent} down={false} componentName={displayName} type="dependant" />
+          <Graph onSelect={onSelectComponent} componentName={displayName} type="dependency" />
+          <Graph onSelect={onSelectComponent} componentName={displayName} type="dependant" />
         </Tabs>
       </div>
     </div>

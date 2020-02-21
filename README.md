@@ -15,8 +15,9 @@ MDC was the original Morph Developer GUI. This is intended to be the rebirth of 
 - ~Replace Express API Server with file:/// and Webpack Dev Server~
 - ~Put theming back in w/ TailwindCSS approach~
 - ~Move webpack configs into own dir~
-- Replace all removed Glamorous styles with Tailwind classes
-- Put unit tests back and unbitrot them
+- ~Replace all removed Glamorous styles with Tailwind classes~
+- Fix styling of module details panel - IN PROGRESS
+- Update unit tests with React Testing Library - IN PROGRESS
 - Add new / update unit tests for any changes to functionality
 - Ensure all functionality works from inside Electron in Dev mode
 - Finish off build tooling for production

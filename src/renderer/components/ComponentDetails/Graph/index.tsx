@@ -28,7 +28,6 @@ const renderLoadingIcon = (): React.ReactNode => (
 );
 
 const renderGraph = (data: GraphData, onSelect: GraphProps['onSelect'], type: GraphProps['type']): React.ReactNode => {
-  console.log('rendering graph with data', data);
   const isDependencyGraph = type === 'dependency';
   const options = {
     edges: {
@@ -102,12 +101,10 @@ const renderGraph = (data: GraphData, onSelect: GraphProps['onSelect'], type: Gr
 
 const Graph = ({ onSelect, componentName, type }: GraphProps): React.ReactElement => {
   const graphDataRequested = React.useRef<boolean>();
-  const [data, setData] = React.useState();
+  const [state, setState] = React.useState<{ graphData: GraphData | undefined }>({ graphData: undefined });
   React.useEffect(() => {
     const graphDataListener = (event: Event, graphData: GraphData): void => {
-      console.log('received graph data', graphData);
-      // {edges: Array(0), nodes: Array(0)}
-      setData(graphData);
+      setState(prevState => ({ ...prevState, graphData }));
     };
     if (!graphDataRequested.current) {
       ipcRenderer.once(`${type}-graph`, graphDataListener);
@@ -120,11 +117,11 @@ const Graph = ({ onSelect, componentName, type }: GraphProps): React.ReactElemen
     };
   });
 
-  console.log('render');
+  const { graphData } = state;
 
   return (
     <div className="absolute top-0 bottom-0 left-0 right-0">
-      {data ? renderGraph(data, onSelect, type) : renderLoadingIcon()}
+      {graphData ? renderGraph(graphData, onSelect, type) : renderLoadingIcon()}
     </div>
   );
 };

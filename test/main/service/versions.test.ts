@@ -35,7 +35,7 @@ test('versions are initially null', async () => {
 
 test('can versions are updated when details are fetched', async () => {
   const { service, onComponentUpdate } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder
         .withVersionOnEnvironment('bbc-morph-foo', 'int', '1.1.0')
         .withVersionOnEnvironment('bbc-morph-foo', 'test', '1.0.1')

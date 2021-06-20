@@ -6,7 +6,7 @@ const nodeModulesPath = join(__dirname, '../../../node_modules');
 
 test('component is installed and built when starting with out of date dependencies', async () => {
   const { service, onComponentUpdate, systemBuilder } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder.withReadFile(join('/test/components/foo/node_modules/.mdc.json'), JSON.stringify({ hash: 'old' }));
     },
   });
@@ -89,7 +89,7 @@ test('component is installed and built when starting with out of date dependenci
 
 test('can reinstall a component', async () => {
   const { service, onComponentUpdate, systemBuilder } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder.withVersionOnEnvironment('bbc-morph-bar', 'int', '2.9.9');
       builder.withVersionOnEnvironment('bbc-morph-baz', 'int', '2.8.8');
     },
@@ -179,7 +179,7 @@ test('can reinstall a component', async () => {
 
 test('should only attempt bower and grunt steps if they are used in project', async () => {
   const { service, onComponentUpdate, systemBuilder } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder.withReadFile(join('/test/components/bar/node_modules/.mdc.json'), JSON.stringify({ hash: 'old' }));
     },
   });
@@ -237,7 +237,7 @@ test('package hash is written to node_modules after install', async () => {
 
 test('component is not installed and built when starting if disabled through config', async () => {
   const { service, onComponentUpdate, systemBuilder, config } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder.withReadFile(join('/test/components/foo/node_modules/.mdc.json'), JSON.stringify({ hash: 'old' }));
     },
   });

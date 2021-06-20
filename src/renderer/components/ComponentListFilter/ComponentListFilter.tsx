@@ -17,65 +17,45 @@ const renderClearButton = (onClick: () => void): React.ReactElement => (
   </button>
 );
 
-interface ComponentListFilterProps {
-  onInput(filter: string): AnyAction;
-}
+type ComponentListFilterProps = {
+  filterComponents(filter: string): AnyAction;
+};
 
-interface ComponentListFilterState {
-  filter: string;
-}
+const ComponentListFilter = ({ filterComponents }: ComponentListFilterProps): React.ReactElement => {
+  const [filter, setFilter] = React.useState('');
 
-class ComponentListFilter extends React.Component<ComponentListFilterProps, ComponentListFilterState> {
-  public constructor(props: ComponentListFilterProps) {
-    super(props);
-    this.state = {
-      filter: '',
-    };
-  }
+  const clearSearchInput = (): void => {
+    setFilter('');
+    filterComponents('');
+  };
 
-  private onInput({ target: { value } }: { target: { value: string } }): void {
-    const { onInput } = this.props;
-    this.setState({
-      filter: value,
-    });
-    onInput(value);
-  }
+  const handleInput = ({ target: { value } }: { target: { value: string } }): void => {
+    setFilter(value);
+    filterComponents(value);
+  };
 
-  private onKeyDown({ keyCode }: React.KeyboardEvent<HTMLInputElement>): void {
+  const handleKeyDown = ({ keyCode }: React.KeyboardEvent<HTMLInputElement>): void => {
     if (keyCode === 27) {
-      this.clearSearchInput();
+      clearSearchInput();
     }
-  }
+  };
 
-  private clearSearchInput(): void {
-    const { onInput } = this.props;
-    this.setState({
-      filter: '',
-    });
-    onInput('');
-  }
+  const renderButton = (): React.ReactElement =>
+    filter.length > 0 ? renderClearButton((): void => clearSearchInput()) : renderSearchButton();
 
-  private renderIcon(): React.ReactElement {
-    const { filter } = this.state;
-    return filter.length > 0 ? renderClearButton((): void => this.clearSearchInput()) : renderSearchButton();
-  }
+  return (
+    <div className="flex items-center flex-shrink-0 p-1 m-2 bg-primary-background search-bar-border-bottom focus-within:border-primary-text">
+      <input
+        className="flex-grow h-6 text-xl text-primary-text bg-primary-background"
+        value={filter}
+        id="search-input"
+        placeholder="Search"
+        onKeyDown={(event): void => handleKeyDown(event)}
+        onChange={(event): void => handleInput(event)}
+      />
+      {renderButton()}
+    </div>
+  );
+};
 
-  public render(): React.ReactElement {
-    const { filter } = this.state;
-    return (
-      <div className="flex items-center flex-shrink-0 p-1 m-2 bg-primary-background search-bar-border-bottom focus-within:border-primary-text">
-        <input
-          className="flex-grow h-6 text-xl text-primary-text bg-primary-background"
-          value={filter}
-          id="search-input"
-          placeholder="Search"
-          onKeyDown={(event): void => this.onKeyDown(event)}
-          onChange={(event): void => this.onInput(event)}
-        />
-        {this.renderIcon()}
-      </div>
-    );
-  }
-}
-
-export default ComponentListFilter;
+export { ComponentListFilter };

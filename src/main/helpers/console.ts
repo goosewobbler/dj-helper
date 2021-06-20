@@ -1,4 +1,6 @@
-const log = (...args: any): void => {
+import { LooseObject } from '../../common/types';
+
+const log = (...args: (string | string[] | LooseObject)[]): void => {
   console.log(...args); // eslint-disable-line no-console
 };
 

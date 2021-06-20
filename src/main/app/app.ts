@@ -1,6 +1,6 @@
 import { join } from 'path';
 import { Express } from 'express';
-import appRoot from 'app-root-path';
+import appRootPath from 'app-root-path';
 
 import createService from '../service';
 import createComponentServer from './componentServer';
@@ -24,6 +24,7 @@ const createApp = async (
   currentVersion: string,
 ): Promise<App> => {
   const devMode = process.env.NODE_ENV === 'development';
+  const appRoot = appRootPath.toString();
 
   system.process.log(
     `Morph Developer Console v${currentVersion} is starting${devMode ? ' in development mode...' : '...'}`,
@@ -40,7 +41,7 @@ const createApp = async (
 
   system.process.log(`Components directory: ${componentsDirectory}`);
 
-  process.env.APP_ROOT_PATH = appRoot.toString();
+  process.env.APP_ROOT_PATH = appRoot;
 
   const service = await createService(system, config, state, routing, onComponentUpdate, onReload, componentsDirectory);
 

@@ -5,9 +5,9 @@ declare module 'react-graph-vis' {
     events,
     options,
   }: {
-    getNetwork: Function;
-    graph: {};
-    events: {};
-    options: {};
+    getNetwork: unknown;
+    graph: unknown;
+    events: unknown;
+    options: unknown;
   }): React.ReactElement;
 }

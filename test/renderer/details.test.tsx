@@ -9,10 +9,7 @@ describe('node 0.12 module details', () => {
     mockFetch();
 
     const { wrapper } = render();
-    wrapper
-      .find(ComponentListItem)
-      .at(2)
-      .simulate('click');
+    wrapper.find(ComponentListItem).at(2).simulate('click');
     details = wrapper.find('ComponentDetails');
   });
 
@@ -83,10 +80,7 @@ describe('node 10 module details', () => {
     mockFetch();
 
     const { wrapper } = render();
-    wrapper
-      .find(ComponentListItem)
-      .at(3)
-      .simulate('click');
+    wrapper.find(ComponentListItem).at(3).simulate('click');
     details = wrapper.find('ComponentDetails');
   });
 

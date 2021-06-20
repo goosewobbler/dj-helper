@@ -16,7 +16,7 @@ const reducer = (state: AppState['ui'] = { editors: [] }, action: Action): AppSt
     case 'RECEIVE_EDITORS': {
       return {
         ...state,
-        editors: action.editors!,
+        editors: action.editors!, // TODO: Tech debt
       };
     }
     case 'SELECT_COMPONENT': {

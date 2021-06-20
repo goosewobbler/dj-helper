@@ -3,7 +3,6 @@ import * as React from 'react';
 interface LabelButtonProps {
   backgroundColor?: string;
   className?: string;
-  color?: string;
   fontSize?: string;
   height?: string;
   image?: React.ReactElement;

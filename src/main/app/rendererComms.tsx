@@ -32,7 +32,7 @@ const setupRendererComms = (mainWindow: Electron.BrowserWindow, service: Service
       </Provider>,
     );
 
-    const preloadedState = reduxStore.getState();
+    const preloadedState = reduxStore.getState() as AppState;
 
     mainWindow.webContents.send('app-setup', { initialState: preloadedState, html, componentPort });
   });
@@ -101,19 +101,22 @@ const setupRendererComms = (mainWindow: Electron.BrowserWindow, service: Service
       .catch(logError);
   });
 
-  ipcMain.on('clone-component', (event, componentName, cloneName, cloneDescription): void => {
+  ipcMain.on('clone-component', (event, componentName: string, cloneName: string, cloneDescription: string): void => {
     service
       .clone(componentName, cloneName, { description: cloneDescription })
       .then(() => mainWindow.webContents.send('component-cloned'))
       .catch(logError);
   });
 
-  ipcMain.on('create-component', (event, componentName, componentType, componentDescription): void => {
-    service
-      .create(componentName, componentTypeMap[componentType], { description: componentDescription })
-      .then(() => mainWindow.webContents.send('component-created'))
-      .catch(logError);
-  });
+  ipcMain.on(
+    'create-component',
+    (event, componentName: string, componentType: string, componentDescription: string): void => {
+      service
+        .create(componentName, componentTypeMap[componentType], { description: componentDescription })
+        .then(() => mainWindow.webContents.send('component-created'))
+        .catch(logError);
+    },
+  );
 };
 
 export default setupRendererComms;

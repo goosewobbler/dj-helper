@@ -57,7 +57,7 @@ const createGrapher = (dependencies: { [Key: string]: { name: string }[] }): Gra
         edgesMap[node.id].forEach((e): void => {
           totalEdges.push({ from: node.id, to: e });
 
-          const toNode: Node = nodes.find((n): boolean => n.id === e)!;
+          const toNode: Node = nodes.find((n): boolean => n.id === e) as Node;
           follow(toNode.name, edgesMap, totalNodes, totalEdges);
         });
       }

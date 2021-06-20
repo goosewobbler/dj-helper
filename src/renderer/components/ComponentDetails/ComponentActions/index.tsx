@@ -1,18 +1,16 @@
 import React, { ReactElement } from 'react';
 
 import ExternalLink from '../../ExternalLink';
-import VSCodeIcon from './VSCodeIcon';
+import VSCodeIcon from '../VSCodeIcon';
 import LabelButton from '../../LabelButton';
 
-import { ComponentState, ComponentData } from '../../../../common/types';
-import { ComponentHandlers } from '../../../contexts/componentContext';
+import { ComponentState } from '../../../../common/types';
 import Spacer from '../../Spacer';
+import { getComponentContext } from '../../../contexts/componentContext';
 
-interface ComponentActionsProps {
-  component: ComponentData;
+type ComponentActionsProps = {
   editors: string[];
-  handlers: ComponentHandlers;
-}
+};
 
 const renderStateLabel = (state: ComponentState): string => {
   switch (state) {
@@ -59,12 +57,12 @@ const renderCloneButton = (onClick: () => void): ReactElement => (
   </div>
 );
 
-const ComponentActions = (props: ComponentActionsProps): ReactElement => {
+export const ComponentActions = (props: ComponentActionsProps): ReactElement => {
+  const { editors } = props;
   const {
-    editors,
     component: { displayName, state, name, useCache, rendererType },
-    handlers: { onOpenInCode, onClone, onInstall, onBuild, onSetUseCache },
-  } = props;
+    handlers: { openInCode, showCloneComponentDialog, installComponent, buildComponent, setUseCacheOnComponent },
+  } = getComponentContext();
   const shouldDisplayInstallButton = state === ComponentState.Stopped || state === ComponentState.Running;
   const shouldDisplayBuildButton = state === ComponentState.Running;
   const shouldDisplayUseCacheButton = state === ComponentState.Stopped || state === ComponentState.Running;
@@ -88,17 +86,18 @@ const ComponentActions = (props: ComponentActionsProps): ReactElement => {
       <Spacer />
       <div className="flex flex-wrap justify-start actions">
         <Spacer fill />
-        {shouldDisplayUseCacheButton && renderUseCacheButton((): void => onSetUseCache(name, !useCache), useCache)}
-        {shouldDisplayBuildButton && renderBuildButton((): void => onBuild(name))}
-        {shouldDisplayInstallButton && renderInstallButton((): void => onInstall(name))}
-        {renderCloneButton((): void => onClone(name))}
+        {shouldDisplayUseCacheButton &&
+          renderUseCacheButton((): void => setUseCacheOnComponent(name, !useCache), useCache)}
+        {shouldDisplayBuildButton && renderBuildButton((): void => buildComponent(name))}
+        {shouldDisplayInstallButton && renderInstallButton((): void => installComponent(name))}
+        {renderCloneButton((): void => showCloneComponentDialog(name))}
         {editors.includes('code') ? (
           <div className="flex mt-2 ml-2 wrapper " key="vs-code-button">
             <LabelButton
               className="vs-code-button"
               label="VS Code"
               image={<VSCodeIcon />}
-              onClick={(): void => onOpenInCode(name)}
+              onClick={(): void => openInCode(name)}
             />
           </div>
         ) : null}
@@ -115,5 +114,3 @@ const ComponentActions = (props: ComponentActionsProps): ReactElement => {
     </div>
   );
 };
-
-export default ComponentActions;

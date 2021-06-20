@@ -18,10 +18,7 @@ const render = (rendererType: string, state: ComponentState) => {
 
   mockFetch();
   const { wrapper } = renderApp(components);
-  wrapper
-    .find(ComponentListItem)
-    .at(0)
-    .simulate('click');
+  wrapper.find(ComponentListItem).at(0).simulate('click');
 
   return { wrapper };
 };

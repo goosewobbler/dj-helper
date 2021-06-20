@@ -27,9 +27,7 @@ test('config values are read from file', async () => {
     foo: 'hello',
   });
 
-  const system = createMockSystem()
-    .withReadFile('/c/mdcc.json', configFileContents)
-    .build();
+  const system = createMockSystem().withReadFile('/c/mdcc.json', configFileContents).build();
 
   const config = await Config('/c/mdcc.json', system);
 

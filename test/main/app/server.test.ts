@@ -42,7 +42,7 @@ test('can request /api/status', async () => {
     .get('/api/status')
     .expect('Content-Type', 'application/json; charset=utf-8')
     .expect(200)
-    .then(response => {
+    .then((response) => {
       expect(response.body).toEqual({
         currentVersion: '1.2.3',
         updateAvailable: null,
@@ -64,7 +64,7 @@ test('can request /api/update', async () => {
     .post('/api/update')
     .expect('Content-Type', 'text/html; charset=utf-8')
     .expect(200)
-    .then(response => {
+    .then((response) => {
       expect(response.text).toBe('🤔');
     });
 
@@ -90,7 +90,7 @@ test('can request /', async () => {
     .get('/')
     .expect('Content-Type', 'text/html; charset=utf-8')
     .expect(200)
-    .then(response => {
+    .then((response) => {
       expect(response.text).not.toContain('CSS_PLACEHOLDER');
       expect(response.text).toContain('>Morph Developer Console</h1>');
       expect(response.text).toContain(
@@ -110,7 +110,7 @@ test('can request /component/:name', async () => {
     .get('/component/bbc-morph-foo')
     .expect('Content-Type', 'text/html; charset=utf-8')
     .expect(200)
-    .then(response => {
+    .then((response) => {
       expect(response.text).not.toContain('CSS_PLACEHOLDER');
       expect(response.text).toContain('>Morph Developer Console</h1>');
       expect(response.text).toContain(
@@ -132,7 +132,7 @@ test('can request /local-push.js', async () => {
     .get('/local-push.js')
     .expect('Content-Type', 'application/javascript; charset=utf-8')
     .expect(200)
-    .then(response => {
+    .then((response) => {
       expect(response.text).toBe(
         readFileSync(join(__dirname, '../../../public/local-push.js'))
           .toString()
@@ -148,9 +148,7 @@ test('can configure poll interval of /local-push.js in config', async () => {
   });
 
   const service = createMockService();
-  const system = createMockSystem()
-    .withReadFile('/config.json', configFileContents)
-    .build();
+  const system = createMockSystem().withReadFile('/config.json', configFileContents).build();
   const updater = await Updater(system, '1.2.3');
   const config = await Config('/config.json', system);
   const server = createApiServer(service, config, updater, jest.fn());
@@ -159,7 +157,7 @@ test('can configure poll interval of /local-push.js in config', async () => {
     .get('/local-push.js')
     .expect('Content-Type', 'application/javascript; charset=utf-8')
     .expect(200)
-    .then(response => {
+    .then((response) => {
       expect(response.text).toContain('intervals[topic] = setInterval(poll, 1234);');
     });
 });

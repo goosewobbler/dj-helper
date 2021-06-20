@@ -10,10 +10,7 @@ test('create a new view with css component', () => {
 
   wrapper.find('.create-button').simulate('click');
 
-  const type = wrapper
-    .find('.create-type-select option')
-    .at(0)
-    .prop('value');
+  const type = wrapper.find('.create-type-select option').at(0).prop('value');
 
   wrapper.find('.create-type-select').simulate('change', { target: { value: type } });
   wrapper.find('.create-name-input').simulate('change', { target: { value: 'new-view-css' } });
@@ -42,10 +39,7 @@ test('create a new view component', () => {
 
   wrapper.find('.create-button').simulate('click');
 
-  const type = wrapper
-    .find('.create-type-select option')
-    .at(1)
-    .prop('value');
+  const type = wrapper.find('.create-type-select option').at(1).prop('value');
 
   wrapper.find('.create-type-select').simulate('change', { target: { value: type } });
   wrapper.find('.create-name-input').simulate('change', { target: { value: 'new-view' } });
@@ -74,10 +68,7 @@ test('create a new data component', () => {
 
   wrapper.find('.create-button').simulate('click');
 
-  const type = wrapper
-    .find('.create-type-select option')
-    .at(2)
-    .prop('value');
+  const type = wrapper.find('.create-type-select option').at(2).prop('value');
 
   wrapper.find('.create-type-select').simulate('change', { target: { value: type } });
   wrapper.find('.create-name-input').simulate('change', { target: { value: 'new-data' } });

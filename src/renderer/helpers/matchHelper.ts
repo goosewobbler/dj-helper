@@ -1,4 +1,4 @@
-import { deburr, find, isObject, some, trim } from 'lodash/fp';
+import { deburr, find, isObject, some } from 'lodash/fp';
 import { ComponentMatch } from '../../common/types';
 
 const normalise = (value: string): string => deburr(value.toLowerCase());
@@ -41,7 +41,7 @@ const getMatchesRecursive = (needle: string, haystack: string): ComponentMatch[]
 };
 
 const getMatches = (needle: string, haystack: string): ComponentMatch[] => {
-  const trimmedNeedle = trim(needle);
+  const trimmedNeedle = needle.trim();
   const matches = getMatchesRecursive(trimmedNeedle, haystack);
   const matchedParts = matches.filter((match): boolean => typeof match === 'object') as { matched: string }[];
   const combinedMatchedParts = matchedParts.reduce((acc, match): string => acc + match.matched, '');
@@ -56,12 +56,12 @@ const getMatches = (needle: string, haystack: string): ComponentMatch[] => {
 const getMatchesWithAlternatives = (needle: string, haystack: string, alternatives: string[]): ComponentMatch[] => {
   const matches = getMatches(needle, haystack);
 
-  if (some(isObject)(matches)) {
+  if (matches.some(isObject)) {
     return matches;
   }
 
   const alternativeMatches = alternatives.map((alternative): ComponentMatch[] => getMatches(needle, alternative));
-  return find(some(isObject), alternativeMatches)!;
+  return find(some(isObject), alternativeMatches)!; // TODO: Tech debt
 };
 
 export default getMatchesWithAlternatives;

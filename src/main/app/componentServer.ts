@@ -63,12 +63,9 @@ const createComponentServer = (service: Service, config: Store): express.Express
           convertPropsString(propsString),
           history,
         );
-        res
-          .status(statusCode)
-          .set(headers)
-          .send(body);
-      } catch (ex) {
-        res.status(500).send(ex.message);
+        res.status(statusCode).set(headers).send(body);
+      } catch ({ message }) {
+        res.status(500).send(message);
       }
     },
   );
@@ -89,13 +86,10 @@ const createComponentServer = (service: Service, config: Store): express.Express
           const componentPort = config.get('componentPort');
           res.send(createViewPage(JSON.parse(body), componentPort as number));
         } else {
-          res
-            .status(statusCode)
-            .set(headers)
-            .send(body);
+          res.status(statusCode).set(headers).send(body);
         }
-      } catch (ex) {
-        res.status(500).send(ex.message);
+      } catch ({ message }) {
+        res.status(500).send(message);
       }
     },
   );
@@ -110,12 +104,9 @@ const createComponentServer = (service: Service, config: Store): express.Express
           convertPropsString(propsString),
           false,
         );
-        res
-          .status(statusCode)
-          .set(headers)
-          .send(body);
-      } catch (ex) {
-        res.status(500).send(ex.message);
+        res.status(statusCode).set(headers).send(body);
+      } catch ({ message }) {
+        res.status(500).send(message);
       }
     },
   );

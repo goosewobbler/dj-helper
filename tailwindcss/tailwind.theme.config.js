@@ -59,7 +59,4 @@ const darkTheme = new Theme()
   .default()
   .assignable();
 
-module.exports = new ThemeBuilder()
-  .asPrefixedClass('theme')
-  .default(mainTheme)
-  .dark(darkTheme);
+module.exports = new ThemeBuilder().asPrefixedClass('theme').default(mainTheme).dark(darkTheme);

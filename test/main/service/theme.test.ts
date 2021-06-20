@@ -8,7 +8,7 @@ test('can get theme from service', async () => {
     },
   };
   const { service } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder.withReadFile('/mdc-config.json', JSON.stringify(configFileContents));
     },
   });

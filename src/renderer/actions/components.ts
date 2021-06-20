@@ -1,7 +1,7 @@
 import { ipcRenderer } from 'electron';
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import { showDialog } from './app';
+import { showDialog, hideDialog } from './app';
 import { ComponentState, Dispatch, AppState } from '../../common/types';
 
 /* FETCH VERSIONS */
@@ -154,32 +154,45 @@ export const updateAndSelectComponent = (name: string): AnyAction => {
 
   action.type = '';
   return action;
-}; // TODO: split into separate handlers
+};
 
-/* CREATION & CLONING */ export const createComponent = (
+/* CREATION & CLONING */
+
+const createComponentResponseHandler = (dispatch: Dispatch, name: string): (() => void) => (): void => {
+  const fullName = `bbc-morph-${name}`;
+  dispatch({
+    name,
+    fullName,
+    type: 'CREATE_COMPONENT',
+  });
+  dispatch(updateAndSelectComponent(fullName));
+  dispatch(installComponent(fullName));
+  dispatch(hideDialog());
+};
+
+export const createComponent = (
   name: string,
   description: string,
   type: string,
+): ThunkAction<void, AppState, undefined, AnyAction> => (dispatch: Dispatch): void => {
+  const responseHandler = createComponentResponseHandler(dispatch, name);
+
+  ipcRenderer.once('component-created', responseHandler);
+  ipcRenderer.send('create-component', name, type, description);
+};
+
+export const showCloneComponentDialog = (
+  sourceComponent: string,
+): ThunkAction<void, AppState, undefined, AnyAction> => (dispatch: Dispatch): AnyAction =>
+  dispatch(showDialog('clone', sourceComponent));
+
+export const cloneComponent = (
+  name: string,
+  description: string,
   sourceComponent?: string,
 ): ThunkAction<void, AppState, undefined, AnyAction> => (dispatch: Dispatch): void => {
-  const responseHandler = (): void => {
-    const fullName = `bbc-morph-${name}`;
-    dispatch({
-      name,
-      fullName,
-      type: 'CREATE_COMPONENT',
-    });
-    dispatch(updateAndSelectComponent(fullName));
-    dispatch(installComponent(fullName));
-  };
+  const responseHandler = createComponentResponseHandler(dispatch, name);
 
-  if (sourceComponent) {
-    dispatch(showDialog('clone', sourceComponent));
-    ipcRenderer.once('component-cloned', responseHandler);
-    ipcRenderer.send('clone-component', sourceComponent, name, description);
-  } else {
-    dispatch(showDialog('create'));
-    ipcRenderer.once('component-created', responseHandler);
-    ipcRenderer.send('create-component', name, type, description);
-  }
+  ipcRenderer.once('component-cloned', responseHandler);
+  ipcRenderer.send('clone-component', sourceComponent, name, description);
 };

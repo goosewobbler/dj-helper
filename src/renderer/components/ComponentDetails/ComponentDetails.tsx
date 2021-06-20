@@ -5,18 +5,17 @@ import ExternalLink from '../ExternalLink';
 import Graph from './Graph';
 import Tabs from './Tabs';
 
-import ComponentActions from './ComponentActions';
+import { ComponentActions } from './ComponentActions';
 import ComponentDependencyListItem from './ComponentDependencyListItem';
 import ComponentVersions from './ComponentVersions';
 
-import { ComponentData, ComponentDependency } from '../../../common/types';
-import { ComponentContext, ComponentContextProvider, ComponentHandlers } from '../../contexts/componentContext';
+import { ComponentData, ComponentDependency, ComponentHandlers } from '../../../common/types';
 import Spacer from '../Spacer';
+import { getComponentContextProvider } from '../../contexts/componentContext';
 
-interface ComponentDetailsProps {
+interface ComponentDetailsProps extends ComponentHandlers {
   component?: ComponentData | null;
   editors: string[];
-  handlers: ComponentHandlers;
 }
 
 const renderDetailsSectionEnd = (): ReactElement => {
@@ -35,20 +34,21 @@ const renderDetailsSectionEnd = (): ReactElement => {
 const orderDependencies = (dependencies: ComponentDependency[]): ComponentDependency[] =>
   (dependencies || []).sort((a, b): number => a.displayName.localeCompare(b.displayName));
 
-const buildPipelineLink = (rendererType: string): Function => (env: string): string => {
-  const jobPrefix = rendererType === '10' ? 'modern-' : '';
-  return `https://ci.user.morph.int.tools.bbc.co.uk/job/morph-asset-${jobPrefix}promote-${env}/`;
+const buildPipelineLink = (env: string): string => {
+  return `https://ci.user.morph.int.tools.bbc.co.uk/job/morph-asset-modern-promote-${env}/`;
 };
 
 const renderPipelineLinks = (component: ComponentData): ReactElement => {
-  const buildEnvLink = buildPipelineLink(component.rendererType);
+  if (component.rendererType !== '10') {
+    return <></>;
+  }
   return (
     <div className="flex flex-shrink-0 h-10 mr-5" key="links">
-      <ExternalLink link={buildEnvLink('int')} label="INT Pipeline" />
+      <ExternalLink link={buildPipelineLink('int')} label="INT Pipeline" />
       <Spacer />
-      <ExternalLink link={buildEnvLink('test')} label="TEST Pipeline" />
+      <ExternalLink link={buildPipelineLink('test')} label="TEST Pipeline" />
       <Spacer />
-      <ExternalLink link={buildEnvLink('live')} label="LIVE Pipeline" />
+      <ExternalLink link={buildPipelineLink('live')} label="LIVE Pipeline" />
     </div>
   );
 };
@@ -71,24 +71,52 @@ const renderDependencies = (dependencies: ComponentDependency[]): ReactElement =
   </ComponentDetailsSection>
 );
 
-const ComponentDetails = ({ component, editors, handlers }: ComponentDetailsProps): ReactElement => {
+export const ComponentDetails = ({
+  component,
+  editors,
+  buildComponent,
+  bumpComponent,
+  showCloneComponentDialog,
+  installComponent,
+  linkComponent,
+  openInCode,
+  promoteComponent,
+  updateAndSelectComponent,
+  setUseCacheOnComponent,
+  unlinkComponent,
+}: ComponentDetailsProps): ReactElement => {
   if (!component) {
     return renderPlaceholder();
   }
 
+  const ComponentContextProvider = getComponentContextProvider();
   const { dependencies, displayName } = component;
   const hasDependencies = Array.isArray(dependencies) && dependencies.length > 0;
-  const componentContextValue: ComponentContext = { component, handlers };
-  const { onSelectComponent } = handlers;
+  const componentContextValue = {
+    component,
+    handlers: {
+      buildComponent,
+      bumpComponent,
+      showCloneComponentDialog,
+      installComponent,
+      linkComponent,
+      openInCode,
+      promoteComponent,
+      updateAndSelectComponent,
+      setUseCacheOnComponent,
+      unlinkComponent,
+    },
+  };
 
   return (
+    // TODO: Tech debt
     <div className="component-details">
       <div className="flex flex-col flex-grow">
         <Tabs headings={['Overview', 'Dependencies', 'Dependants']} headingChildren={renderPipelineLinks(component)}>
           <ComponentContextProvider value={componentContextValue}>
             <div className="flex flex-col flex-grow details">
               <div className="flex flex-shrink-0 px-2 pt-0 pb-1 actions">
-                <ComponentActions editors={editors} component={component} handlers={handlers} />
+                <ComponentActions editors={editors} />
               </div>
               <ComponentDetailsSection label="Versions">
                 <ComponentVersions />
@@ -96,12 +124,10 @@ const ComponentDetails = ({ component, editors, handlers }: ComponentDetailsProp
               {hasDependencies && renderDependencies(dependencies!)}
             </div>
           </ComponentContextProvider>
-          <Graph onSelect={onSelectComponent} componentName={displayName} type="dependency" />
-          <Graph onSelect={onSelectComponent} componentName={displayName} type="dependant" />
+          <Graph onSelect={updateAndSelectComponent} componentName={displayName} type="dependency" />
+          <Graph onSelect={updateAndSelectComponent} componentName={displayName} type="dependant" />
         </Tabs>
       </div>
     </div>
   );
 };
-
-export default ComponentDetails;

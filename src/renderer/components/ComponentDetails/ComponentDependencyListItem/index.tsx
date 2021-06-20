@@ -1,8 +1,8 @@
-import React, { ReactElement, useContext } from 'react';
+import React, { ReactElement } from 'react';
 
-import VersionBox from './VersionBox';
+import VersionBox from '../VersionBox';
 import LabelButton from '../../LabelButton';
-import { context, ComponentContext } from '../../../contexts/componentContext';
+import { getComponentContext } from '../../../contexts/componentContext';
 
 import { ComponentState, ComponentData, ComponentDependency } from '../../../../common/types';
 import Spacer from '../../Spacer';
@@ -12,8 +12,8 @@ interface ComponentDependencyProps {
   dependency: ComponentDependency;
 }
 
-const isLinked = (dependencyName: string, component: ComponentData): boolean =>
-  component?.dependencies?.find((d): boolean => d.name === dependencyName)!.linked;
+const isLinked = (dependencyName: string, component: ComponentData): boolean | undefined =>
+  component?.dependencies?.find((d): boolean => d.name === dependencyName)!.linked; // TODO: Tech debt
 
 const isLinking = (dependencyName: string, component: ComponentData): boolean =>
   (component.linking || []).includes(dependencyName);
@@ -21,8 +21,8 @@ const isLinking = (dependencyName: string, component: ComponentData): boolean =>
 const isLinkable = ({ state }: ComponentData): boolean => state === ComponentState.Running;
 
 const renderLinkButton = (
-  linked: boolean,
-  linking: boolean,
+  linked: boolean | undefined,
+  linking: boolean | undefined,
   onUnlink: () => void,
   onLink: () => void,
 ): ReactElement | null => {
@@ -57,17 +57,19 @@ const renderVersionBox = (version: string, outdated: boolean): ReactElement => (
 );
 
 const ComponentDependencyListItem = ({ dependency }: ComponentDependencyProps): ReactElement => {
-  const componentContext: ComponentContext = useContext(context)!;
-  const { onLinkComponent, onUnlinkComponent, onSelectComponent } = componentContext.handlers;
+  const {
+    component,
+    handlers: { linkComponent, unlinkComponent, updateAndSelectComponent },
+  } = getComponentContext();
   const { name, displayName, version, outdated, has, latest } = dependency;
-  const onLink = (): void => onLinkComponent(displayName, name);
-  const onUnlink = (): void => onUnlinkComponent(displayName, name);
-  const onClick = (): void => onSelectComponent(name);
-  const onKeyPress = (): void => onSelectComponent(name);
+  const onLink = (): void => linkComponent(displayName, name);
+  const onUnlink = (): void => unlinkComponent(displayName, name);
+  const onClick = (): void => updateAndSelectComponent(name);
+  const onKeyPress = (): void => updateAndSelectComponent(name);
 
-  const componentIsLinked = isLinked(name, componentContext.component);
-  const componentIsLinking = isLinking(name, componentContext.component);
-  const componentIsLinkable = isLinkable(componentContext.component);
+  const componentIsLinked = isLinked(name, component);
+  const componentIsLinking = isLinking(name, component);
+  const componentIsLinkable = isLinkable(component);
 
   let backgroundColor = 'bg-secondary-background';
 
@@ -96,7 +98,7 @@ const ComponentDependencyListItem = ({ dependency }: ComponentDependencyProps): 
         <Spacer />
         {renderVersionBox(latest!, false)}
       </div>
-    </li>
+    </li> // TODO: Tech debt
   );
 };
 

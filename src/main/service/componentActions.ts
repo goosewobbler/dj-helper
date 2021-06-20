@@ -2,7 +2,7 @@ import { join } from 'path';
 
 import runNpm from '../helpers/npm';
 import packageHash from '../helpers/packageHash';
-import { Component, System, Store } from '../../common/types';
+import { Component, System, Store, Package } from '../../common/types';
 
 interface ComponentActions {
   buildAll(): Promise<void>;
@@ -31,12 +31,8 @@ const createComponentActions = (
 ): ComponentActions => {
   let stopRunning: () => Promise<void>;
 
-  const readPackage = async (): Promise<{
-    scripts: { build: string };
-    dependencies: {};
-    devDependencies: {};
-    version: string;
-  }> => JSON.parse(await system.file.readFile(join(componentPath, 'package.json')));
+  const readPackage = async (): Promise<Package> =>
+    JSON.parse(await system.file.readFile(join(componentPath, 'package.json'))) as Package;
 
   const hasBuildScript = async (): Promise<boolean> => {
     const packageContents = await readPackage();
@@ -57,31 +53,30 @@ const createComponentActions = (
 
   const getPackageHash = async (): Promise<string | null> => {
     try {
-      const packageHashContents = JSON.parse(
-        await system.file.readFile(join(componentPath, 'node_modules', '.mdc.json')),
-      );
-      return packageHashContents.hash;
+      const { hash } = JSON.parse(await system.file.readFile(join(componentPath, 'node_modules', '.mdc.json'))) as {
+        hash: string;
+      };
+      return hash;
     } catch (ex) {
       // ignore
     }
     return null;
   };
 
+  const build = async (command: string): Promise<void> => {
+    const displayCommand = command.replace(/(.*\/)+/, '');
+    log(`Running ${displayCommand}...`);
+    const buildLog = (message: string): void => log(`[${displayCommand}] ${message}`);
+    await system.process.runToCompletion(componentPath, command, buildLog, buildLog);
+    log('Built.');
+  };
+
   const buildAll = async (): Promise<void> => {
-    let command: string | null = null;
-    let shortName: string | null = null;
     if (await hasBuildScript()) {
-      command = 'npm run build';
-      shortName = 'npm run build';
+      void build('npm run build');
     } else if (await hasGrunt()) {
-      command = join(__dirname, '../../../node_modules/.bin/grunt build');
-      shortName = 'grunt build';
-    }
-    if (command) {
-      log(`Running ${shortName}...`);
-      const buildLog = (message: string): void => log(`[${shortName}] ${message}`);
-      await system.process.runToCompletion(componentPath, command, buildLog, buildLog);
-      log('Built.');
+      const command = join(__dirname, '../../../node_modules/.bin/grunt build');
+      void build(command);
     }
   };
 
@@ -143,11 +138,11 @@ const createComponentActions = (
     const useCache = getUseCache();
     log('Starting...');
     const command = join(
-      __dirname,
-      `../../../node_modules/morph-cli/bin/morph.js develop${useCache ? ' --cache' : ''} --port ${getPort()}`,
+      await system.process.getCurrentWorkingDirectory(),
+      `node_modules/morph-cli/bin/morph.js develop${useCache ? ' --cache' : ''} --port ${getPort()}`,
     );
     const stopProcess = await system.process.runUntilStopped(componentPath, command, log, log);
-    onReload(restartOthers);
+    void onReload(restartOthers);
     await routing.set(name, getPort());
     stopRunning = async (): Promise<void> => {
       await routing.set(name, null);

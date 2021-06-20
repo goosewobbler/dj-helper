@@ -10,6 +10,9 @@ import App from './components/App';
 import createReduxStore from './reduxStore';
 import { ComponentData, ComponentsData, AppState } from '../common/types';
 import '../css/tailwind.src.pcss';
+import { AppProps } from './components/App/App';
+
+const isDev = process.env.NODE_ENV === 'development';
 
 declare global {
   interface Window {
@@ -51,7 +54,9 @@ ipcRenderer.once('app-setup', (appSetupEvent, { initialState, html, componentPor
     ipcRenderer.send('get-components-data');
   }
 
-  const render = (Component: ConnectedComponent<any, any>): void => {
+  const render = (
+    Component: ConnectedComponent<(props: AppProps) => React.ReactElement, { componentPort: number }>,
+  ): void => {
     ReactDOM.hydrate(
       <AppContainer>
         <Provider store={reduxStore}>
@@ -69,9 +74,10 @@ ipcRenderer.once('app-setup', (appSetupEvent, { initialState, html, componentPor
     inputElement.focus();
   }
 
-  if (module.hot) {
-    module.hot.accept('./components/App', () => {
-      import('./components/App').then(hotApp => render(hotApp.default));
+  if (isDev) {
+    // eslint-disable-next-line
+    (module as any).hot?.accept('./components/App', () => {
+      void import('./components/App').then((hotApp) => render(hotApp.default));
     });
   }
 
@@ -82,7 +88,7 @@ ipcRenderer.once('app-setup', (appSetupEvent, { initialState, html, componentPor
     });
 
     const updateSelected = (): void => {
-      const selected = reduxStore.getState().ui.selectedComponent;
+      const selected = (reduxStore.getState() as AppState).ui.selectedComponent;
       if (selected) {
         reduxStore.dispatch(fetchVersions(selected));
       }

@@ -1,6 +1,6 @@
 # Morph Developer Console
 
-MDC was the original Morph Developer GUI. This is intended to be the rebirth of MDC with the following improvements:
+[Morph Developer Console](https://github.com/bbc/morph-developer-console) was the original Morph Developer GUI. This is intended to be the rebirth of MDC with the following improvements:
 
 - Now an Electron app
 - Documentation for development, build and deployment
@@ -9,54 +9,27 @@ MDC was the original Morph Developer GUI. This is intended to be the rebirth of 
 - Better code quality
 - Better performance
 
-## Roughly ordered TODO for release (\* denotes requirement for boilerplate repo)
-
-- ~Rework project structure for sanity~
-- ~Enable strict (aka proper) use of TypeScript~
-- ~Fix the bulk of the linting errors~
-- ~Build tooling for dev (HMR, etc. for rapid iteration)~
-- ~Replace Express API Server with file:/// and Webpack Dev Server~
-- ~Put theming back in w/ TailwindCSS approach~
-- ~Move webpack configs into own dir~
-- ~Replace all removed Glamorous styles with Tailwind classes~
-- Fix styling of module details panel - IN PROGRESS
-- Update unit tests with React Testing Library - IN PROGRESS
-- Add new / update unit tests for any changes to functionality
-- Ensure all functionality works from inside Electron in Dev mode
-- Finish off build tooling for production
-- Ensure all functionality works from inside Electron in Production mode
-- Improvements in compilation time
-  - ~Separate building DLL dependencies to speed up build time using Webpack DLL plugin~
-  - ~Use `HardSourceWebpackPlugin` to implement caching ahead of the Webpack 5 release~
-  - ~Make `BundleAnalyzerPlugin` run for Production only~
-- Build tooling for automated deployment using Github Releases
-- New auto-update feature using electron-updater
-- Write comprehensive development docs
-- Port old MDC user docs
-
-## Nice to Have / Post Release
-
-- Switch to use Redux Toolkit and update Redux usage for the Redux Style Guide
-- Integration tests with Spectron
-- Replace old class-based React Components with functions and hooks
-- Upgrade Webpack to v5
-- Upgrade Yarn to v2
-- Replace `react-hot-loader` with React Refresh (likely dependent on Webpack 5)
-- Remove use of non-null assertion! (tech debt from enabling strict null checking)
-- Remove remaining use of `any`
-- Clean up remaining ESLint errors
-- Enable pre-commit hooks using Husky
-- Add Ceefax mode back in
-
 ## Install
 
-It is recommended to use Yarn with Electron projects. You will need to explicitly set `cafile`, `cert` and `key` config values using `yarn config set`. Once yarn has these config values you can install using the following:
+MDC Electron should run on Node 10 at a minimum as per the previous MDC, however the current version of Node in Electron (as of v9) is 12 so if you have any problems you might want to upgrade to that. The `.nvmrc` file in the root of the project should ensure the correct version is used when running MDC if you use a switching mechanism, e.g. for ZSH:
 
-`yarn --registry https://npm.morph.int.tools.bbc.co.uk install`
+https://github.com/nvm-sh/nvm#zsh \
+https://github.com/lukechilds/zsh-nvm
+
+[PNPM](https://pnpm.js.org) is the recommended package manager for use with MDC. You can install PNPM (https://pnpm.js.org/en/installation) and initialise the repository for development using the following commands:
+
+```
+curl -L https://raw.githubusercontent.com/pnpm/self-installer/master/install.js | node
+pnpm init
+```
 
 ## Development
 
-Start the development server with `yarn dev`.
+Start the development server with `pnpm dev`. Hot Module Replacement (HMR) with React Dev Server is in use for rapid iteration on the `renderer` process, however when changing files running on the `main` process you will likely need to restart Electron.
+
+## Tasks / issues for release
+
+https://github.com/bbc/mdc-electron/projects/1
 
 ### Tech Stack
 
@@ -73,9 +46,8 @@ The following technologies are used:
 - **[Express](https://expressjs.com)** (Component server)
 - **[Socket.IO](https://socket.io)** (Component <=> App communication)
 - **[Jest](https://jestjs.io)** (Unit Testing)
-- **[Enzyme](https://airbnb.io/enzyme)** (Unit Testing)
+- **[Testing Library](https://testing-library.com)** (Unit Testing)
 - **[Morph CLI](https://github.com/bbc/morph-cli)** (Component tooling, Morph interface)
-- **[Chas](https://github.com/bbc/chas)** (Component rendering)
 - **[Prettier](https://prettier.io)** (Code formatting)
 - **[ESLint](https://eslint.org)** (TS & JS linting)
 - **[StyleLint](https://stylelint.io)** (CSS linting)

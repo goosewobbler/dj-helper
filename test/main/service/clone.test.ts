@@ -2,7 +2,7 @@ import createMockService from '../mocks/service';
 
 test('can clone a component', async () => {
   const { service, system, systemBuilder } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder.withCurrentWorkingDirectory('/cwd');
       builder.withReadFile(
         '/test/components/cloned-foo/package.json',
@@ -38,7 +38,7 @@ test('can clone a component', async () => {
 
 test('component is started after clone', async () => {
   const { service } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder.withCurrentWorkingDirectory('/cwd');
       builder.withReadFile(
         '/test/components/cloned-foo/package.json',

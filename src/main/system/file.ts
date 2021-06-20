@@ -1,8 +1,6 @@
-import { ensureDirSync, moveSync, WriteStream } from 'fs-extra';
+import { copy, ensureDirSync, moveSync, WriteStream } from 'fs-extra';
 import { existsSync, lstatSync, readFileSync, symlinkSync, unlinkSync, writeFileSync } from 'graceful-fs';
-import { some } from 'lodash/fp';
 import ls from 'ls';
-import { ncp } from 'ncp';
 import watch from 'node-watch';
 import { join } from 'path';
 
@@ -70,8 +68,7 @@ const watchDirectory = (directory: string, callback: (path: string) => void): Pr
     watch(
       directory,
       {
-        filter: (name: string): boolean =>
-          !some((pathToIgnore: string): boolean => name.includes(pathToIgnore), ignore),
+        filter: (name: string): boolean => !ignore.some((pathToIgnore: string): boolean => name.includes(pathToIgnore)),
         recursive: true,
       },
       (event: string, fileName: string): void => {
@@ -85,12 +82,12 @@ const watchDirectory = (directory: string, callback: (path: string) => void): Pr
 
 const copyDirectory = async (from: string, to: string, filter: boolean): Promise<void> =>
   new Promise((resolve, reject): void =>
-    ncp(
+    copy(
       from,
       to,
       {
         filter: (name: string): boolean =>
-          !filter || !some((pathToIgnore: string): boolean => name.includes(pathToIgnore), copyIgnore),
+          !filter || !copyIgnore.some((pathToIgnore: string): boolean => name.includes(pathToIgnore)),
       },
       (error: Error | Error[] | WriteStream | null): void => {
         if (error) {

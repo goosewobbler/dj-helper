@@ -24,9 +24,7 @@ test('can retrieve existing values from state file', async () => {
 
   const stateFilePath = '/file/state.json';
 
-  const system = createMockSystem()
-    .withReadFile(stateFilePath, stateFileContents)
-    .build();
+  const system = createMockSystem().withReadFile(stateFilePath, stateFileContents).build();
 
   const state = await State(stateFilePath, system);
 
@@ -61,9 +59,7 @@ test('can unset values by setting to null', async () => {
 
   const stateFilePath = '/file/state.json';
 
-  const system = createMockSystem()
-    .withReadFile(stateFilePath, stateFileContents)
-    .build();
+  const system = createMockSystem().withReadFile(stateFilePath, stateFileContents).build();
 
   const state = await State(stateFilePath, system);
 
@@ -85,9 +81,7 @@ test('can set falsey values', async () => {
 
   const stateFilePath = '/file/state.json';
 
-  const system = createMockSystem()
-    .withReadFile(stateFilePath, stateFileContents)
-    .build();
+  const system = createMockSystem().withReadFile(stateFilePath, stateFileContents).build();
 
   const state = await State(stateFilePath, system);
 

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import * as request from 'supertest';
 import express from 'express';
 import createServer from '../../../src/main/app/componentServer';
@@ -33,7 +32,7 @@ describe('when a given component is not running', () => {
     mockServiceRequest('Component is not running', {}, 500);
   });
 
-  it('cannot request a data component', done =>
+  it('cannot request a data component', (done) =>
     request(server)
       .get('/data/bbc-morph-baz')
       .expect('Content-Type', 'text/html; charset=utf-8')
@@ -44,7 +43,7 @@ describe('when a given component is not running', () => {
       })
       .then(done));
 
-  it('cannot request a view component', done =>
+  it('cannot request a view component', (done) =>
     request(server)
       .get('/view/bbc-morph-baz')
       .expect('Content-Type', 'text/html; charset=utf-8')
@@ -55,7 +54,7 @@ describe('when a given component is not running', () => {
       })
       .then(done));
 
-  it('cannot proxy a component', done =>
+  it('cannot proxy a component', (done) =>
     request(server)
       .get('/proxy/bbc-morph-baz')
       .expect('Content-Type', 'text/html; charset=utf-8')
@@ -72,7 +71,7 @@ describe('given a data component is running', () => {
     mockServiceRequest('{ "baz": "123" }', {}, 200);
   });
 
-  it('can be requested without props', done =>
+  it('can be requested without props', (done) =>
     request(server)
       .get('/data/bbc-morph-baz')
       .expect(200)
@@ -82,7 +81,7 @@ describe('given a data component is running', () => {
       })
       .then(done));
 
-  it('can be requested with props', done =>
+  it('can be requested with props', (done) =>
     request(server)
       .get('/data/bbc-morph-baz/a/1/b%2Fb/2%202/c/3')
       .expect(200)
@@ -100,7 +99,7 @@ describe('given a data component is running', () => {
       })
       .then(done));
 
-  it('correctly handles errors', done => {
+  it('correctly handles errors', (done) => {
     (mockService.request as jest.Mock).mockReset();
     (mockService.request as jest.Mock).mockImplementationOnce(() => {
       throw new Error('erhmahgerd');
@@ -115,7 +114,7 @@ describe('given a data component is running', () => {
       .then(done);
   });
 
-  it('can be proxied without props', done =>
+  it('can be proxied without props', (done) =>
     request(server)
       .get('/proxy/bbc-morph-baz')
       .expect(200)
@@ -126,7 +125,7 @@ describe('given a data component is running', () => {
       })
       .then(done));
 
-  it('can be proxied with props', done =>
+  it('can be proxied with props', (done) =>
     request(server)
       .get('/proxy/bbc-morph-baz/a/1/b%2Fb/2%202/c/3')
       .expect(200)
@@ -145,7 +144,7 @@ describe('given a data component is running', () => {
       })
       .then(done));
 
-  it('correctly handles errors when proxied', done => {
+  it('correctly handles errors when proxied', (done) => {
     (mockService.request as jest.Mock).mockReset();
     (mockService.request as jest.Mock).mockImplementationOnce(() => {
       throw new Error('erhmahgerd');
@@ -160,7 +159,7 @@ describe('given a data component is running', () => {
       .then(done);
   });
 
-  it('should correctly handle being requested with an accept header of text/html', done =>
+  it('should correctly handle being requested with an accept header of text/html', (done) =>
     request(server)
       .get('/data/bbc-morph-baz')
       .accept('text/html')
@@ -177,7 +176,7 @@ describe('given a data component is running and returning non-200 with custom he
     mockServiceRequest('{ "baz": "123" }', { custom: 'header' }, 222);
   });
 
-  it('correctly forwards status code and headers when requested', done =>
+  it('correctly forwards status code and headers when requested', (done) =>
     request(server)
       .get('/data/bbc-morph-baz')
       .expect(222)
@@ -187,7 +186,7 @@ describe('given a data component is running and returning non-200 with custom he
       })
       .then(done));
 
-  it('correctly forwards status code and headers when proxied', done =>
+  it('correctly forwards status code and headers when proxied', (done) =>
     request(server)
       .get('/proxy/bbc-morph-baz')
       .expect(222)
@@ -207,7 +206,7 @@ describe('given a view component is running', () => {
     );
   });
 
-  it('can be requested without props', done =>
+  it('can be requested without props', (done) =>
     request(server)
       .get('/view/bbc-morph-baz')
       .expect(200)
@@ -219,7 +218,7 @@ describe('given a view component is running', () => {
       })
       .then(done));
 
-  it('can be requested with props', done =>
+  it('can be requested with props', (done) =>
     request(server)
       .get('/view/bbc-morph-baz/hello/world')
       .expect(200)
@@ -237,7 +236,7 @@ describe('given a view component is running', () => {
       })
       .then(done));
 
-  it('correctly handles errors', done => {
+  it('correctly handles errors', (done) => {
     (mockService.request as jest.Mock).mockReset();
     (mockService.request as jest.Mock).mockImplementationOnce(() => {
       throw new Error('erhmahgerd');
@@ -252,7 +251,7 @@ describe('given a view component is running', () => {
       .then(done);
   });
 
-  it('can be proxied without props', done =>
+  it('can be proxied without props', (done) =>
     request(server)
       .get('/proxy/bbc-morph-baz')
       .expect(200)
@@ -263,7 +262,7 @@ describe('given a view component is running', () => {
       })
       .then(done));
 
-  it('can be proxied with props', done =>
+  it('can be proxied with props', (done) =>
     request(server)
       .get('/proxy/bbc-morph-baz/hello/world')
       .expect(200)
@@ -280,7 +279,7 @@ describe('given a view component is running', () => {
       })
       .then(done));
 
-  it('correctly handles errors when proxied', done => {
+  it('correctly handles errors when proxied', (done) => {
     (mockService.request as jest.Mock).mockReset();
     (mockService.request as jest.Mock).mockImplementationOnce(() => {
       throw new Error('erhmahgerd');
@@ -295,7 +294,7 @@ describe('given a view component is running', () => {
       .then(done);
   });
 
-  it('should correctly handle being requested with an accept header of text/html', done =>
+  it('should correctly handle being requested with an accept header of text/html', (done) =>
     request(server)
       .get('/view/bbc-morph-baz')
       .accept('text/html')
@@ -312,7 +311,7 @@ describe('given a view component is running', () => {
       mockServiceRequest('{ "bodyInline": "<h1>Hello</h1>" }', {}, 200);
     });
 
-    it('should return the expected values when requested', done =>
+    it('should return the expected values when requested', (done) =>
       request(server)
         .get('/view/bbc-morph-baz')
         .expect(200)
@@ -331,7 +330,7 @@ describe('given a view component is running and returning non-200 with custom he
     mockServiceRequest('non-200 response', { custom: 'header' }, 222);
   });
 
-  it('correctly forwards status code and headers and returns an unwrapped body when requested', done =>
+  it('correctly forwards status code and headers and returns an unwrapped body when requested', (done) =>
     request(server)
       .get('/view/bbc-morph-baz')
       .expect(222)
@@ -341,7 +340,7 @@ describe('given a view component is running and returning non-200 with custom he
       })
       .then(done));
 
-  it('correctly forwards status code and headers and returns an unwrapped body when proxied', done =>
+  it('correctly forwards status code and headers and returns an unwrapped body when proxied', (done) =>
     request(server)
       .get('/proxy/bbc-morph-baz')
       .expect(222)
@@ -358,7 +357,7 @@ describe('local-push.js', () => {
       mockConfig.get.mockReturnValue('42');
     });
 
-    it('returns the file with the expected poll interval', done =>
+    it('returns the file with the expected poll interval', (done) =>
       request(server)
         .get('/local-push.js')
         .expect(200)
@@ -376,7 +375,7 @@ describe('local-push.js', () => {
       mockConfig.get.mockReturnValue(undefined);
     });
 
-    it('returns the file with the default poll interval', done =>
+    it('returns the file with the default poll interval', (done) =>
       request(server)
         .get('/local-push.js')
         .expect(200)

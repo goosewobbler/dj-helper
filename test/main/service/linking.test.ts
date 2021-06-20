@@ -6,7 +6,7 @@ const nodeModulesPath = join(__dirname, '../../../node_modules');
 
 test('can link a component dependency', async () => {
   const { service, onComponentUpdate, system, systemBuilder } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder.withReadFile(join('/test/components/baz/node_modules/.mdc.json'), JSON.stringify({ hash: 'old' }));
       builder.withSymbolicLink('/test/components/foo/node_modules/bbc-morph-baz');
       builder.withVersionOnEnvironment('bbc-morph-baz', 'int', '2.8.8');
@@ -122,7 +122,7 @@ test('can link a component dependency', async () => {
 
 test('can unlink a component dependency', async () => {
   const { service, onComponentUpdate, systemBuilder, system } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder.withVersionOnEnvironment('bbc-morph-baz', 'int', '2.8.8');
     },
   });

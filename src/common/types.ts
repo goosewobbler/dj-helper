@@ -1,6 +1,5 @@
 import { AnyAction } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { IncomingHttpHeaders } from 'http';
 
 enum ModuleType {
   View,
@@ -22,8 +21,6 @@ enum ComponentState {
   Running,
   Linking,
 }
-
-type StateValue = string[] | string | boolean;
 
 interface AppState {
   components: ComponentData[];
@@ -48,7 +45,7 @@ interface Component {
   getType(): ComponentType;
   getURL(): string | null;
   getFavourite(): boolean;
-  getHistory(): StateValue;
+  getHistory(): string[];
   getUseCache(): boolean;
   setFavourite(favourite: boolean): Promise<void>;
   setUseCache(useCache: boolean): Promise<void>;
@@ -92,7 +89,7 @@ interface ComponentData {
   highlighted?: React.ReactElement[];
   state: ComponentState;
   favourite: boolean;
-  history?: StateValue;
+  history?: string[];
   url?: string;
   type?: ComponentType;
   dependencies?: ComponentDependency[];
@@ -117,32 +114,48 @@ interface ComponentDependency {
   rendererType: string | null;
 }
 
-interface GraphData {
+type GraphNode = {
+  id: number;
+  name: string;
+};
+
+type GraphData = {
   edges: {
     from: number;
     to: number;
   }[];
-  nodes: {
-    id: number;
-    name: string;
-  }[];
-}
+  nodes: GraphNode[];
+};
 
 interface Response {
   body: string;
-  headers: IncomingHttpHeaders;
+  headers: Headers;
   statusCode: number;
 }
 
-interface Package {
-  scripts: { [Key: string]: string };
-  dependencies: { [Key: string]: string };
-  devDependencies: { [Key: string]: string };
-  version: string;
+type StringObject = { [Key: string]: string };
+
+interface Shrinkwrap {
+  dependencies: {
+    [Key: string]: StringObject;
+  };
 }
 
+interface Package {
+  name: string;
+  description: string;
+  homepage: string;
+  scripts: StringObject;
+  dependencies: StringObject;
+  devDependencies: StringObject;
+  version: string;
+  morph: { rendererType: string };
+}
+
+type AnyObject = Record<string, unknown>;
+
 interface LooseObject {
-  [Key: string]: {} | [] | string | number | boolean;
+  [Key: string]: AnyObject | [] | string | number | boolean;
 }
 
 interface AppStatus {
@@ -185,7 +198,7 @@ interface MorphSystem {
 }
 
 interface NetworkSystem {
-  get(url: string): Promise<Response>;
+  get(url: string): Promise<Response | undefined>;
 }
 
 interface ProcessSystem {
@@ -216,15 +229,15 @@ interface System {
 
 type Dispatch = ThunkDispatch<AppState, undefined, AnyAction>;
 
-type storedValue = string[] | string | number | boolean;
+type StoredValue = string[] | string | number | boolean;
 
 interface ValueStore {
-  [Key: string]: storedValue;
+  [Key: string]: StoredValue;
 }
 
 interface Store {
-  get(key: string): storedValue | null;
-  set(key: string, value: storedValue | null): Promise<void>;
+  get(key: string): StoredValue | null;
+  set(key: string, value: StoredValue | null): Promise<void>;
 }
 
 // type EnvironmentValues = 'int' | 'local' | 'live' | 'test';
@@ -262,7 +275,23 @@ interface Service {
   unlink(name: string, dependency: string): Promise<void>;
 }
 
+export type ComponentHandlers = {
+  buildComponent(name: string): void;
+  bumpComponent(name: string, type: string): void;
+  showCloneComponentDialog(sourceComponent: string): void;
+  installComponent(name: string): void;
+  linkComponent(name: string, dependency: string): void;
+  promoteComponent(name: string, dependency: string): void;
+  updateAndSelectComponent(name: string): void;
+  setUseCacheOnComponent(name: string, value: boolean): void;
+  unlinkComponent(name: string, dependency: string): void;
+  openInCode(name: string): void;
+};
+
 export {
+  AnyObject,
+  Shrinkwrap,
+  StringObject,
   Versions,
   LooseObject,
   BumpType,
@@ -274,11 +303,11 @@ export {
   ComponentType,
   ComponentsData,
   GraphData,
+  GraphNode,
   ModuleType,
   Response,
   Package,
   Service,
-  StateValue,
   AppStatus,
   AppState,
   Dispatch,
@@ -289,6 +318,6 @@ export {
   NetworkSystem,
   ProcessSystem,
   Store,
-  storedValue,
+  StoredValue,
   ValueStore,
 };

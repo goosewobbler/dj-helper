@@ -11,16 +11,7 @@ const createResponseBody = (body: string, statusCode: number): string => {
   if (statusCode === 404 && (!body || body === '{}')) {
     return `<!doctype html><html lang="en-gb"><head><style>*{margin:0;padding:0;}body{padding:16px;}</style></head><body><pre style="font-size: 48px;">404 😕</pre></body></html>`;
   }
-
-  // Old versions of morph-cli v15 and below used to incorrectly JSON-encode text/html responses.
-  // As of morph-cli v16.X, this is no longer the case, matching the behaviour of the renderers.
-  // We should support either version.
-  try {
-    const parsed = JSON.parse(body);
-    return typeof parsed === 'string' ? parsed : body;
-  } catch (ex) {
-    return body;
-  }
+  return body;
 };
 
 const appendSocketReloadScript = (responseBody: string, componentPort: number): string =>
@@ -54,20 +45,16 @@ const createPageServer = (service: Service, componentName: string, componentPort
         };
 
         const { body, headers } = await service.request(componentName, props, history);
-        const pageStatusCode = Number(headers['x-page-status-code']) || 200;
-        const pageLocation = headers['x-page-location'] as string;
+        const pageStatusCode = Number(headers.get('x-page-status-code')) || 200;
+        const pageLocation = headers.get('x-page-location');
         if (pageLocation) {
           res.set('Location', pageLocation);
         }
         const basicResponseBody = createResponseBody(body, pageStatusCode);
         const responseBody = appendSocketReloadScript(basicResponseBody, componentPort);
-        res
-          .status(pageStatusCode)
-          .set(headers)
-          .set('Content-Type', 'text/html')
-          .send(responseBody);
-      } catch (ex) {
-        res.status(500).send(ex.message);
+        res.status(pageStatusCode).set(headers).set('Content-Type', 'text/html').send(responseBody);
+      } catch ({ message }) {
+        res.status(500).send(message);
       }
     },
   );

@@ -48,7 +48,7 @@ test('can create app and request /api/components', async () => {
     .get('/api/component')
     .expect('Content-Type', 'application/json; charset=utf-8')
     .expect(200)
-    .then(response => {
+    .then((response) => {
       expect(response.body).toEqual({
         components: expectedDefaultComponentData,
         editors: ['code'],
@@ -69,7 +69,7 @@ test('can create app and request /local-push.js', async () => {
     .get('/local-push.js')
     .expect('Content-Type', 'application/javascript; charset=utf-8')
     .expect(200)
-    .then(response => {
+    .then((response) => {
       expect(response.text).toContain('intervals[topic] = setInterval(poll, 10000);');
     });
 });
@@ -82,7 +82,7 @@ test('can create app and request /data/bbc-morph-baz', async () => {
     .get('/data/bbc-morph-baz')
     .expect('Content-Type', 'text/html; charset=utf-8')
     .expect(500)
-    .then(response => {
+    .then((response) => {
       expect(response.text).toBe('Component is not running');
     });
 });
@@ -90,10 +90,7 @@ test('can create app and request /data/bbc-morph-baz', async () => {
 test('running in dev mode will use relative path for components directory', async () => {
   const { systemBuilder } = createDefaultMockSystem('/hello/morph-modules');
 
-  const system = systemBuilder
-    .withCurrentWorkingDirectory('/hello/world')
-    .withCommandLineArg('-D')
-    .build();
+  const system = systemBuilder.withCurrentWorkingDirectory('/hello/world').withCommandLineArg('-D').build();
 
   const { api, devMode } = await createApp(system, jest.fn(), jest.fn(), jest.fn(), jest.fn(), '1.2.3');
 
@@ -103,7 +100,7 @@ test('running in dev mode will use relative path for components directory', asyn
     .get('/api/component')
     .expect('Content-Type', 'application/json; charset=utf-8')
     .expect(200)
-    .then(response => {
+    .then((response) => {
       expect(response.body).toEqual({
         components: expectedDefaultComponentData,
         editors: ['code'],

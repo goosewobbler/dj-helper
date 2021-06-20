@@ -9,10 +9,7 @@ test('history is updated when selecting a component', () => {
   mockFetch();
   const { wrapper } = render();
 
-  wrapper
-    .find(ComponentListItem)
-    .at(2)
-    .simulate('click');
+  wrapper.find(ComponentListItem).at(2).simulate('click');
 
   expect(window.history.pushState).toHaveBeenCalledTimes(1);
   expect(window.history.pushState).toHaveBeenCalledWith(
@@ -29,10 +26,7 @@ test('history is not updated when selecting a component when history is disabled
   mockFetch();
   const { wrapper } = render();
 
-  wrapper
-    .find(ComponentListItem)
-    .at(2)
-    .simulate('click');
+  wrapper.find(ComponentListItem).at(2).simulate('click');
 
   expect(window.history.pushState).toHaveBeenCalledTimes(0);
 });

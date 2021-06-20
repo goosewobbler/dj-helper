@@ -11,7 +11,7 @@ window.define('live-push', [], () => {
   }
 
   function callbackAllOnMomentCallbacks(moment) {
-    onMomentCallbacks.forEach(callback => {
+    onMomentCallbacks.forEach((callback) => {
       callback(moment);
     });
   }
@@ -50,7 +50,7 @@ window.define('live-push', [], () => {
     xhr.send(null);
   }
 
-  exports.subscribe = topic => {
+  exports.subscribe = (topic) => {
     if (intervals[topic]) {
       return;
     }
@@ -65,7 +65,7 @@ window.define('live-push', [], () => {
     }
   };
 
-  exports.unsubscribe = topic => {
+  exports.unsubscribe = (topic) => {
     if (intervals[topic]) {
       clearInterval(intervals[topic]);
       delete intervals[topic];
@@ -83,7 +83,7 @@ window.define('live-push', [], () => {
       console.info('Morph Live Push Local: get (XHR):', topic);
     }
 
-    fetch(topic, true, moment => {
+    fetch(topic, true, (moment) => {
       const moments = moment ? [moment] : [];
       callback(JSON.stringify({ moments }));
     });

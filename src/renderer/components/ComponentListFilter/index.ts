@@ -1,16 +1,13 @@
 import { connect } from 'react-redux';
-import { AnyAction } from 'redux';
-import ComponentListFilter from './ComponentListFilter';
+import { ComponentListFilter } from './ComponentListFilter';
 
 import { filterComponents } from '../../actions/app';
-import { Dispatch } from '../../../common/types';
+import { AnyObject } from '../../../common/types';
 
-const mapStateToProps = (): {} => ({});
+const mapStateToProps = (): AnyObject => ({}); // TODO: try null
 
-const mapDispatchToProps = (dispatch: Dispatch): { onInput: (filter: string) => AnyAction } => ({
-  onInput: (filter: string): AnyAction => dispatch(filterComponents(filter)),
-});
+const actionCreators = { filterComponents };
 
-const Container = connect(mapStateToProps, mapDispatchToProps)(ComponentListFilter);
+const Container = connect(mapStateToProps, actionCreators)(ComponentListFilter);
 
 export default Container;

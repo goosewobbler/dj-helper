@@ -2,7 +2,7 @@ import createMockService from '../mocks/service';
 
 test('editors list is empty when code is not installed', async () => {
   const { service } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder.withProcessOutputs('which code', '/test/components', [], ['code not found']);
     },
   });
@@ -15,7 +15,7 @@ test('editors list is empty when code is not installed', async () => {
 
 test('editors includes code when installed', async () => {
   const { service } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder.withProcessOutputs('which code', '/test/components', ['/usr/local/bin/code'], []);
     },
   });

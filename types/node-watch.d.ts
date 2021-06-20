@@ -1,5 +1,5 @@
 declare module 'node-watch' {
-  export default function(
+  export default function (
     directory: string,
     options: {
       filter?: (name: string) => boolean;

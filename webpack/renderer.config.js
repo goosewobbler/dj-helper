@@ -14,13 +14,13 @@ const publicPath = `http://localhost:${devServerPort}/`;
 const startMain = () => {
   console.log('\nStarting Main Process...');
 
-  spawn('yarn', ['dev:start-main'], {
+  spawn('pnpm', ['dev:start-main'], {
     shell: true,
     env: process.env,
     stdio: 'inherit',
   })
-    .on('close', code => process.exit(code))
-    .on('error', spawnError => console.error(spawnError));
+    .on('close', (code) => process.exit(code))
+    .on('error', (spawnError) => console.error(spawnError));
 };
 
 rules.push({
@@ -45,6 +45,14 @@ rules.push({
       },
     },
   ],
+});
+
+rules.push({
+  test: /\.(png|jpe?g|gif|svg|eot|ttf|woff|woff2)$/i,
+  loader: 'url-loader',
+  options: {
+    limit: 8192,
+  },
 });
 
 // const baseEntry = ['webpack/hot/dev-server'];

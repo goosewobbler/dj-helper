@@ -50,7 +50,7 @@ test('can override localhost in component URL', async () => {
 
 test('can override component type with config', async () => {
   const { service, startServer } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder.withReadFile(
         '/mdc-config.json',
         JSON.stringify({

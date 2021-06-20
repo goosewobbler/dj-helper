@@ -3,7 +3,7 @@ import { emptyDirSync, readFileSync } from 'fs-extra';
 import * as tar from 'tar';
 
 import runNpm from './npm';
-import { ModuleType, System } from '../../common/types';
+import { ModuleType, System, StringObject, Package, Shrinkwrap } from '../../common/types';
 
 const cloneComponentFiles = async (
   system: System,
@@ -17,7 +17,7 @@ const cloneComponentFiles = async (
   await system.file.copyDirectory(path, clonePath, true);
 
   const packageJSONPath = join(clonePath, 'package.json');
-  const packageJSON = JSON.parse(await system.file.readFile(packageJSONPath));
+  const packageJSON = JSON.parse(await system.file.readFile(packageJSONPath)) as StringObject;
   packageJSON.name = packageName;
   packageJSON.description = cloneOptions.description;
   packageJSON.homepage = `http://github.com/bbc/morph-modules/tree/master/${name}`;
@@ -67,11 +67,11 @@ const pack = async (directory: string, packageName: string): Promise<string> => 
   return output;
 };
 
-const getVersions = (raw: string): { [Key: string]: string } => {
-  const shrinkwrap = JSON.parse(raw);
-  const has: { [Key: string]: string } = {};
-  Object.keys(shrinkwrap.dependencies).forEach((dependency: string): void => {
-    has[dependency] = shrinkwrap.dependencies[dependency].version;
+const getVersions = (raw: string): StringObject => {
+  const shrinkwrap = JSON.parse(raw) as Shrinkwrap;
+  const has: StringObject = {};
+  Object.entries(shrinkwrap.dependencies).forEach(([dependencyName, dependency]: [string, StringObject]): void => {
+    has[dependencyName] = dependency.version;
   });
   return has;
 };
@@ -108,7 +108,7 @@ const createComponentFiles = async (
   await system.file.copyDirectory(fromDirectory, toDirectory, false);
 
   const packageJSONPath = join(toDirectory, 'package.json');
-  const packageJSON = JSON.parse(await system.file.readFile(packageJSONPath));
+  const packageJSON = JSON.parse(await system.file.readFile(packageJSONPath)) as Package;
   packageJSON.name = packageName;
   packageJSON.description = createOptions.description;
   packageJSON.homepage = `http://github.com/bbc/morph-modules/tree/master/${name}`;

@@ -16,9 +16,7 @@ test('creates an empty routing file if it does not exist.', async () => {
 test('clears the routing file if it exists.', async () => {
   const routingFilePath = '/file/routing.json';
 
-  const system = createMockSystem()
-    .withReadFile(routingFilePath, '{"bbc-morph-bar": 2222}')
-    .build();
+  const system = createMockSystem().withReadFile(routingFilePath, '{"bbc-morph-bar": 2222}').build();
 
   await Routing(routingFilePath, system);
 

@@ -34,7 +34,7 @@ const startServer = async (mainWindow: Electron.BrowserWindow): Promise<number> 
     onComponentUpdate,
     onReload,
     onUpdated,
-    process.env.npm_package_version!,
+    process.env.npm_package_version!, // TODO: Tech debt
   );
   const componentServer = new Server(component);
   const io = socketIo(componentServer);
@@ -43,7 +43,7 @@ const startServer = async (mainWindow: Electron.BrowserWindow): Promise<number> 
 
   if (!componentPort) {
     componentPort = 4000;
-    config.set('componentPort', componentPort);
+    void (await config.set('componentPort', componentPort));
   }
 
   sendComponentData = (data: ComponentData): void => {

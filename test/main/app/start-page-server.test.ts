@@ -39,7 +39,7 @@ test('page server is not started when non page component is started', async () =
     .post('/api/component/bbc-morph-bar/start')
     .expect('Content-Type', 'text/html; charset=utf-8')
     .expect(200)
-    .then(response => {
+    .then((response) => {
       expect(response.text).toBe('🤔');
     });
 
@@ -55,7 +55,7 @@ test('page server is started when page component is started', async () => {
     .post('/api/component/bbc-morph-foo/start')
     .expect('Content-Type', 'text/html; charset=utf-8')
     .expect(200)
-    .then(response => {
+    .then((response) => {
       expect(response.text).toBe('🤔');
     });
 
@@ -67,7 +67,7 @@ test('page server is started when page component is started', async () => {
     .expect('Content-Type', 'text/html; charset=utf-8')
     .expect(200)
     .expect('custom', 'header')
-    .then(response => {
+    .then((response) => {
       expect(response.text).toBe('hello');
     });
 });
@@ -81,7 +81,7 @@ test('restarting a page component does not create a new server', async () => {
     .post('/api/component/bbc-morph-foo/start')
     .expect('Content-Type', 'text/html; charset=utf-8')
     .expect(200)
-    .then(response => {
+    .then((response) => {
       expect(response.text).toBe('🤔');
     });
 
@@ -89,7 +89,7 @@ test('restarting a page component does not create a new server', async () => {
     .post('/api/component/bbc-morph-foo/stop')
     .expect('Content-Type', 'text/html; charset=utf-8')
     .expect(200)
-    .then(response => {
+    .then((response) => {
       expect(response.text).toBe('🤔');
     });
 
@@ -97,7 +97,7 @@ test('restarting a page component does not create a new server', async () => {
     .post('/api/component/bbc-morph-foo/start')
     .expect('Content-Type', 'text/html; charset=utf-8')
     .expect(200)
-    .then(response => {
+    .then((response) => {
       expect(response.text).toBe('🤔');
     });
 
@@ -109,7 +109,7 @@ test('restarting a page component does not create a new server', async () => {
     .expect('Content-Type', 'text/html; charset=utf-8')
     .expect(200)
     .expect('custom', 'header')
-    .then(response => {
+    .then((response) => {
       expect(response.text).toBe('hello');
     });
 });
@@ -124,7 +124,7 @@ test('page server is started on next available port', async () => {
     .post('/api/component/bbc-morph-foo/start')
     .expect('Content-Type', 'text/html; charset=utf-8')
     .expect(200)
-    .then(response => {
+    .then((response) => {
       expect(response.text).toBe('🤔');
     });
 
@@ -132,7 +132,7 @@ test('page server is started on next available port', async () => {
     .post('/api/component/bbc-morph-page/start')
     .expect('Content-Type', 'text/html; charset=utf-8')
     .expect(200)
-    .then(response => {
+    .then((response) => {
       expect(response.text).toBe('🤔');
     });
 
@@ -145,7 +145,7 @@ test('page server is started on next available port', async () => {
     .expect('Content-Type', 'text/html; charset=utf-8')
     .expect(200)
     .expect('custom', 'header')
-    .then(response => {
+    .then((response) => {
       expect(response.text).toBe('hello');
     });
 
@@ -154,7 +154,7 @@ test('page server is started on next available port', async () => {
     .expect('Content-Type', 'text/html; charset=utf-8')
     .expect(200)
     .expect('custom', 'header')
-    .then(response => {
+    .then((response) => {
       expect(response.text).toBe('ok');
     });
 

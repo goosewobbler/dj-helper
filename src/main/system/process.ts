@@ -20,7 +20,7 @@ const getStatusCode = (message: string): string | null => {
 interface MessageDetails {
   title?: string;
   body: string;
-  colour: (message: string) => void;
+  colour: (message: string) => string;
 }
 
 const getMessageDetails = (message: string): MessageDetails => {

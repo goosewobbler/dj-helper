@@ -7,7 +7,7 @@ const KEY_ESCAPE = 27;
 
 const SelectInput = ({
   labelText,
-  className,
+  className = '',
   onChange,
   options,
 }: {
@@ -34,7 +34,7 @@ const SelectInput = ({
 
 const TextInput = ({
   labelText,
-  className,
+  className = '',
   onChange,
   onKeyDown,
 }: {
@@ -57,115 +57,81 @@ const TextInput = ({
   </div>
 );
 
-interface CreateFormProps {
+type CreateFormProps = {
   typeSelectEnabled: boolean;
   submitModule(name: string, description: string, type: string): void;
   onClose(): void;
-}
+};
 
-interface CreateFormState {
-  valid: boolean;
-}
+const CreateForm = ({ typeSelectEnabled, submitModule, onClose }: CreateFormProps): React.ReactElement => {
+  const [valid, setValid] = React.useState(false);
+  const options = [
+    { label: 'React with Grandstand and Sass', value: 'viewcss' },
+    { label: 'React without Grandstand and Sass', value: 'view' },
+    { label: 'Data Template', value: 'data' },
+  ];
+  let type = 'viewcss';
+  let name = '';
+  let description = '';
 
-class CreateForm extends React.Component<CreateFormProps, CreateFormState> {
-  private name: string;
+  const create = (): void => {
+    submitModule(name, description, type);
+  };
 
-  private description: string;
+  const updateValid = (): void => {
+    setValid(!!(name && description && type));
+  };
 
-  private type: string;
+  const handleNameChange = (event: React.BaseSyntheticEvent): void => {
+    name = (event.target as HTMLInputElement).value;
+    updateValid();
+  };
 
-  public constructor(props: CreateFormProps) {
-    super(props);
+  const handleDescriptionChange = (event: React.BaseSyntheticEvent): void => {
+    description = (event.target as HTMLInputElement).value;
+    updateValid();
+  };
 
-    this.type = 'viewcss';
-    this.name = '';
-    this.description = '';
+  const handleTypeChange = (event: React.BaseSyntheticEvent): void => {
+    type = (event.target as HTMLSelectElement).value;
+    updateValid();
+  };
 
-    this.state = {
-      valid: false,
-    };
-  }
-
-  private create(): void {
-    const { submitModule } = this.props;
-    submitModule(this.name, this.description, this.type);
-  }
-
-  private updateValid(): void {
-    this.setState({
-      valid: Boolean(this.name && this.description && this.type),
-    });
-  }
-
-  private handleNameChange(event: React.BaseSyntheticEvent): void {
-    this.name = event.target.value;
-    this.updateValid();
-  }
-
-  private handleDescriptionChange(event: React.BaseSyntheticEvent): void {
-    this.description = event.target.value;
-    this.updateValid();
-  }
-
-  private handleTypeChange(event: React.BaseSyntheticEvent): void {
-    this.type = event.target.value;
-    this.updateValid();
-  }
-
-  private handleKeyDown(event: React.KeyboardEvent): void {
-    const { onClose } = this.props;
-    if (event.keyCode === KEY_ENTER) {
-      const { valid } = this.state;
-      if (valid) {
-        this.create();
-      }
+  const handleKeyDown = (event: React.KeyboardEvent): void => {
+    if (event.keyCode === KEY_ENTER && valid) {
+      create();
     } else if (event.keyCode === KEY_ESCAPE) {
       onClose();
     }
-  }
+  };
 
-  public render(): React.ReactElement {
-    const options = [
-      { label: 'React with Grandstand and Sass', value: 'viewcss' },
-      { label: 'React without Grandstand and Sass', value: 'view' },
-      { label: 'Data Template', value: 'data' },
-    ];
-    const { typeSelectEnabled } = this.props;
-    const { valid } = this.state;
-
-    return (
-      <div className="flex flex-col">
-        {typeSelectEnabled && (
-          <SelectInput
-            className="create-type-select"
-            labelText="Type"
-            options={options}
-            onChange={(event): void => this.handleTypeChange(event)}
-          />
-        )}
-        <TextInput
-          labelText="Name"
-          className="create-name-input"
-          onChange={(event): void => this.handleNameChange(event)}
-          onKeyDown={(event): void => this.handleKeyDown(event)}
+  return (
+    <div className="flex flex-col">
+      {typeSelectEnabled && (
+        <SelectInput
+          className="create-type-select"
+          labelText="Type"
+          options={options}
+          onChange={(event): void => handleTypeChange(event)}
         />
-        <TextInput
-          labelText="Description"
-          className="create-description-input"
-          onChange={(event): void => this.handleDescriptionChange(event)}
-          onKeyDown={(event): void => this.handleKeyDown(event)}
-        />
-        <div className="mt-2 ml-auto">
-          <LabelButton
-            className="create-create-button"
-            label="Create"
-            disabled={!valid}
-            onClick={(): void => this.create()}
-          />
-        </div>
+      )}
+      <TextInput
+        labelText="Name"
+        className="create-name-input"
+        onChange={(event): void => handleNameChange(event)}
+        onKeyDown={(event): void => handleKeyDown(event)}
+      />
+      <TextInput
+        labelText="Description"
+        className="create-description-input"
+        onChange={(event): void => handleDescriptionChange(event)}
+        onKeyDown={(event): void => handleKeyDown(event)}
+      />
+      <div className="mt-2 ml-auto">
+        <LabelButton className="create-create-button" label="Create" disabled={!valid} onClick={(): void => create()} />
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
-export default CreateForm;
+export { CreateForm };

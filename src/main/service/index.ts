@@ -1,4 +1,3 @@
-import { get } from 'lodash';
 import { join } from 'path';
 
 import startPageServer from '../app/pageServer';
@@ -20,6 +19,7 @@ import {
   BumpType,
   LooseObject,
   ComponentsData,
+  Package,
 } from '../../common/types';
 
 const createService = async (
@@ -40,7 +40,7 @@ const createService = async (
   const acquirePort = (): number => nextPort + 1;
 
   const getComponent = (name: string): Component =>
-    components.find((component): boolean => component.getName() === name)!;
+    components.find((component): boolean => component.getName() === name)!; // TODO: Tech debt
 
   const getData = (name: string): ComponentData => {
     const component = getComponent(name);
@@ -52,12 +52,12 @@ const createService = async (
       history: component.getHistory(),
       linking: component.getLinking(),
       name: component.getName(),
-      promoting: component.getPromoting()!,
-      promotionFailure: component.getPromotionFailure()!,
+      promoting: component.getPromoting()!, // TODO: Tech debt
+      promotionFailure: component.getPromotionFailure()!, // TODO: Tech debt
       rendererType: component.getRendererType(),
       state: component.getState(),
       type: component.getType(),
-      url: component.getURL()!,
+      url: component.getURL()!, // TODO: Tech debt
       useCache: component.getUseCache(),
       versions: component.getVersions(),
     };
@@ -83,9 +83,10 @@ const createService = async (
 
   const addComponent = async (componentDirectoryName: string): Promise<Component> => {
     const componentDirectory = join(componentsDirectory, componentDirectoryName);
-    const packageContents = JSON.parse(await system.file.readFile(join(componentDirectory, 'package.json')));
+    const packageContents = JSON.parse(await system.file.readFile(join(componentDirectory, 'package.json'))) as Package;
     const componentType = getComponentType(config, packageContents, packageContents.name);
-    const rendererType = get(packageContents, 'morph.rendererType', 'node:0.12').replace('node:', '');
+    const packageRendererType = packageContents?.morph?.rendererType?.replace('node:', '');
+    const rendererType = packageRendererType || '0.12';
 
     const reloadHandler = async (restartOthers: boolean): Promise<void> => {
       if (restartOthers) {
@@ -133,7 +134,7 @@ const createService = async (
       const changedComponent = components.find((component): boolean => component.getDirectoryName() === directoryName);
       if (changedComponent && changedComponent.getState() === ComponentState.Running) {
         const isSass = relativePath.includes('/sass/');
-        changedComponent.build(isSass, relativePath.replace(`${directoryName}/`, ''));
+        void changedComponent.build(isSass, relativePath.replace(`${directoryName}/`, ''));
       }
     });
 

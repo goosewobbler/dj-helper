@@ -1,5 +1,3 @@
-import renderChas from 'chas';
-
 import { ComponentType, ComponentState, System, Response, Store } from '../../common/types';
 
 const requestWithRetries = async (
@@ -20,7 +18,7 @@ const requestWithRetries = async (
   const response = await system.network.get(requestUrl);
 
   if (!response) {
-    return { body: '', headers: {}, statusCode: 404 };
+    return { body: '', headers: new Headers(), statusCode: 404 };
   }
 
   const { body, headers, statusCode } = response;
@@ -41,11 +39,13 @@ const requestWithRetries = async (
     return requestWithRetries(system, config, name, type, port, propsString, log, remainingRetries);
   }
 
+  const componentPort = config.get('componentPort') as string;
+
   const modifiedBody = body
     .replace(/localhost:8082/g, `localhost:${port}`)
     .replace(/react\.min/g, 'react')
     .replace(/react-dom\.min/g, 'react-dom')
-    .replace(/'live-push' : '[^']+'/g, `'live-push' : '//localhost:${config.get('componentPort')}/local-push'`);
+    .replace(/'live-push' : '[^']+'/g, `'live-push' : '//localhost:${componentPort}/local-push'`);
 
   return { body: modifiedBody, headers, statusCode };
 };
@@ -93,16 +93,6 @@ const request = async (
     const currentHistory = (state.get(stateKey) || []) as string[];
     const newEntry = type === ComponentType.Page ? props.path || '' : propsString;
     await state.set(stateKey, getNewHistory(currentHistory, newEntry));
-  }
-
-  if (config.get('renderer') === 'chas') {
-    const chasType = type === ComponentType.View ? 'view' : 'data';
-    const response = await renderChas(componentPath, chasType, props);
-    return {
-      body: JSON.stringify(response.body),
-      headers: { 'Content-Type': 'application/json' },
-      statusCode: response.code,
-    };
   }
 
   const retries = (config.get('retries') || 10) as number;

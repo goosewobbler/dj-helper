@@ -1,7 +1,6 @@
-// @ts-ignore
+import { useState, useEffect } from 'react';
 import resolveConfig from 'tailwindcss/resolveConfig';
-// @ts-ignore
-import tailwindConfig from '../../../tailwind.config';
+import tailwindConfig from '../../../tailwindcss/tailwind.config';
 
 const styles = resolveConfig(tailwindConfig);
 
@@ -14,13 +13,25 @@ const tailwindColorResolver = (colorVariable: string): string => {
 
   return tailwindRule.replace(/var\(([^)]+)\)/, (fullMatch: string, cssVar: string) => {
     if (typeof window === 'undefined') {
-      return '0,0,0';
+      return '';
     }
-    return window
-      .getComputedStyle(document.documentElement)
-      .getPropertyValue(cssVar)
-      .trim();
+    return window.getComputedStyle(document.documentElement).getPropertyValue(cssVar).trim();
   });
 };
 
-export { tailwindColorResolver };
+const useTailwindColorResolver = (colorVariable: string): string => {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    // equivalent to componentDidMount
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return 'rgb(255, 255, 255)';
+  }
+
+  return tailwindColorResolver(colorVariable);
+};
+
+export { useTailwindColorResolver };

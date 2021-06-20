@@ -18,10 +18,7 @@ const render = (useCache: boolean, state: ComponentState) => {
 
   mockFetch();
   const { wrapper } = renderApp(components);
-  wrapper
-    .find(ComponentListItem)
-    .at(0)
-    .simulate('click');
+  wrapper.find(ComponentListItem).at(0).simulate('click');
 
   return { wrapper };
 };
@@ -51,12 +48,12 @@ test('cache button is only rendered when stopped or running', () => {
     ComponentState.Starting,
   ];
 
-  availableStates.forEach(state => {
+  availableStates.forEach((state) => {
     const { wrapper } = render(false, state);
     expect(wrapper.find('.use-cache-button').exists()).toBe(true);
   });
 
-  unavailableStates.forEach(state => {
+  unavailableStates.forEach((state) => {
     const { wrapper } = render(false, state);
     expect(wrapper.find('.use-cache-button').exists()).toBe(false);
   });

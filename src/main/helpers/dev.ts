@@ -1,4 +1,4 @@
-import { BrowserWindow } from 'electron';
+import { session } from 'electron';
 import electronDevToolsInstaller, {
   REACT_DEVELOPER_TOOLS,
   REDUX_DEVTOOLS,
@@ -41,18 +41,18 @@ const installExtension = async (extension: DevToolsExtension): Promise<string | 
 const getExtensionsToInstall = (installedExtensions: string[], forceInstall: boolean): DevToolsExtension[] => {
   return devToolsExtensions
     .map(({ ref, name }) => ({ id: ref, name, installed: installedExtensions.includes(name) }))
-    .filter(extension => !extension.installed || forceInstall);
+    .filter((extension) => !extension.installed || forceInstall);
 };
 
 const installDevToolsExtensions = async (): Promise<void> => {
   const forceInstall = !!process.env.UPGRADE_EXTENSIONS;
-  const installedExtensions = Object.keys(BrowserWindow.getDevToolsExtensions());
+  const installedExtensions = Object.keys(session.defaultSession.getAllExtensions());
   const extensionsToInstall = getExtensionsToInstall(installedExtensions, forceInstall);
   log('\nFound existing Developer Tools Extensions...', installedExtensions);
 
   if (extensionsToInstall.length) {
     log(`${forceInstall ? 'Upgrading' : 'Installing'} Developer Tools Extensions...`);
-    await Promise.all(extensionsToInstall.map(extension => installExtension(extension)));
+    await Promise.all(extensionsToInstall.map((extension) => installExtension(extension)));
   }
 };
 

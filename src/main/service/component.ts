@@ -14,7 +14,6 @@ import {
   Response,
   Package,
   System,
-  StateValue,
   Store,
   Versions,
   BumpType,
@@ -57,7 +56,7 @@ const createComponent = (
 
   const getPackagePath = (): string => join(componentPath, 'package.json');
 
-  const readPackage = async (): Promise<Package> => JSON.parse(await system.file.readFile(getPackagePath()));
+  const readPackage = async (): Promise<Package> => JSON.parse(await system.file.readFile(getPackagePath())) as Package;
 
   const getName = (): string => name;
 
@@ -88,7 +87,7 @@ const createComponent = (
     const domain = (config.get('localhost') as string) || 'localhost';
     const type = getType();
     if (type === ComponentType.Page) {
-      setUrl(domain, pagePort!);
+      setUrl(domain, pagePort!); // TODO: Tech debt
     } else if (type === ComponentType.View) {
       setUrl(domain, config.get('componentPort') as number, `view/${name}`);
     } else {
@@ -138,7 +137,9 @@ const createComponent = (
 
     updated();
 
-    const decorateDependency = async (dependency: ComponentDependency): Promise<void> => {
+    const shrinkwrapped = await system.morph.getShrinkwrap(name);
+
+    const decorateDependency = async (dependency: ComponentDependency): Promise<ComponentDependency> => {
       const other = getOther(dependency.name);
       const version = packageContents.dependencies[dependency.name];
       let latest = null;
@@ -149,18 +150,13 @@ const createComponent = (
         outdated = !satisfies(latest, version);
       }
 
-      dependency.version = version;
-      dependency.latest = latest!;
-      dependency.outdated = outdated;
+      const has = shrinkwrapped[dependency.name] || '';
+
       updated();
+      return { ...dependency, version, latest, outdated, has };
     };
 
-    const shrinkwrapped = await system.morph.getShrinkwrap(name);
-    dependencies.forEach((dependency): void => {
-      dependency.has = shrinkwrapped[dependency.name] || '';
-    });
-
-    updated();
+    dependencies = (await Promise.all(dependencies.map(decorateDependency)).catch(logError)) as ComponentDependency[];
 
     await Promise.all(dependencies.map(decorateDependency)).catch(logError);
   };
@@ -205,7 +201,7 @@ const createComponent = (
 
   const getFavourite = (): boolean => Boolean(state.get(`favourite.${name}`));
 
-  const getHistory = (): StateValue => (state.get(`history.${name}`) as StateValue) || [];
+  const getHistory = () => (state.get(`history.${name}`) as string[]) || [];
 
   const actions = createComponentActions(
     system,
@@ -267,7 +263,7 @@ const createComponent = (
         await system.morph.promote(name, environment);
         await updateEnvironmentVersions();
       } catch (failure) {
-        promotionFailure = failure;
+        promotionFailure = failure as string;
       }
       promoting = null;
       updated();
@@ -338,8 +334,8 @@ const createComponent = (
     }
 
     const packageContents = await readPackage();
-    const newVersion = inc(packageContents.version, type);
-    packageContents.version = newVersion!;
+    const newVersion = inc(packageContents.version, type) as string;
+    packageContents.version = newVersion;
     const newBranch = `bump-${name}-${await system.git.getRandomBranchName()}`;
     const currentBranch = await system.git.getCurrentBranch(componentPath);
 

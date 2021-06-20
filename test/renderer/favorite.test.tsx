@@ -7,26 +7,11 @@ import mockFetch from './mocks/fetch';
 
 const expectItemsToBe = (items: ReactWrapper<any, any>, expectations: Array<{ name: string; favorited: boolean }>) => {
   expectations.forEach((expectation, index) => {
-    expect(
-      items
-        .at(index)
-        .find('.component-name-label')
-        .text(),
-    ).toBe(expectation.name);
+    expect(items.at(index).find('.component-name-label').text()).toBe(expectation.name);
 
-    expect(
-      items
-        .at(index)
-        .find('.favorite-button')
-        .exists(),
-    ).toBe(!expectation.favorited);
+    expect(items.at(index).find('.favorite-button').exists()).toBe(!expectation.favorited);
 
-    expect(
-      items
-        .at(index)
-        .find('.unfavorite-button')
-        .exists(),
-    ).toBe(expectation.favorited);
+    expect(items.at(index).find('.unfavorite-button').exists()).toBe(expectation.favorited);
   });
 };
 
@@ -69,10 +54,7 @@ test('can favorite and unfavorite a component', () => {
     { name: 'foo', favorited: false },
   ]);
 
-  items
-    .at(2)
-    .find('.favorite-button')
-    .simulate('click');
+  items.at(2).find('.favorite-button').simulate('click');
 
   expectItemsToBe(items, [
     { name: 'foo', favorited: true },
@@ -80,10 +62,7 @@ test('can favorite and unfavorite a component', () => {
     { name: 'baz', favorited: false },
   ]);
 
-  items
-    .at(2)
-    .find('.favorite-button')
-    .simulate('click');
+  items.at(2).find('.favorite-button').simulate('click');
 
   expectItemsToBe(items, [
     { name: 'baz', favorited: true },
@@ -91,10 +70,7 @@ test('can favorite and unfavorite a component', () => {
     { name: 'bar', favorited: false },
   ]);
 
-  items
-    .at(1)
-    .find('.unfavorite-button')
-    .simulate('click');
+  items.at(1).find('.unfavorite-button').simulate('click');
 
   expectItemsToBe(items, [
     { name: 'baz', favorited: true },

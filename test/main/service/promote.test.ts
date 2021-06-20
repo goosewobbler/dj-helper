@@ -2,7 +2,7 @@ import createMockService from '../mocks/service';
 
 test('can promote to Test environment', async () => {
   const { service, onComponentUpdate, systemBuilder } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder
         .withVersionOnEnvironment('bbc-morph-foo', 'int', '1.1.0')
         .withVersionOnEnvironment('bbc-morph-foo', 'test', '1.0.1')
@@ -63,7 +63,7 @@ test('can promote to Test environment', async () => {
 
 test('can promote to Live environment', async () => {
   const { service, onComponentUpdate, systemBuilder } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder
         .withVersionOnEnvironment('bbc-morph-foo', 'int', '1.1.0')
         .withVersionOnEnvironment('bbc-morph-foo', 'test', '1.0.1')
@@ -135,7 +135,7 @@ test('cannot promote to invalid environment', async () => {
 
 test('can get promotion failure', async () => {
   const { service, onComponentUpdate } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder.withPromotionFailure('bbc-morph-bar', 'test', 'http://failure.example.com');
     },
   });
@@ -161,7 +161,7 @@ test('can get promotion failure', async () => {
 
 test('can retry a failure promotion', async () => {
   const { service, onComponentUpdate } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder.withPromotionFailure('bbc-morph-bar', 'test', 'http://failure.example.com');
     },
   });

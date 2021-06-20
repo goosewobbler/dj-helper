@@ -18,9 +18,9 @@ const reducer = (state: ComponentData[] = [], action: Action): ComponentData[] =
       return [
         ...state,
         {
-          name: action.name!,
+          name: action.name!, // TODO: Tech debt
           displayName: action.displayName!,
-          state: action.state!,
+          state: action.state!, // TODO: Tech debt
           favourite: false,
           useCache: false,
           rendererType: 'node:10',
@@ -28,10 +28,10 @@ const reducer = (state: ComponentData[] = [], action: Action): ComponentData[] =
       ];
     }
     case 'RECEIVE_COMPONENTS': {
-      return action.components!;
+      return action.components!; // TODO: Tech debt
     }
     case 'RECEIVE_COMPONENT': {
-      return state.filter((component): boolean => component.name !== action.component!.name).concat(action.component!);
+      return state.filter((component): boolean => component.name !== action.component!.name).concat(action.component!); // TODO: Tech debt
     }
     case 'CHANGE_COMPONENT_STATE': {
       return state.map(
@@ -39,7 +39,7 @@ const reducer = (state: ComponentData[] = [], action: Action): ComponentData[] =
           if (component.name === action.name) {
             return {
               ...component,
-              state: action.state!,
+              state: action.state!, // TODO: Tech debt
             };
           }
           return component;
@@ -52,7 +52,7 @@ const reducer = (state: ComponentData[] = [], action: Action): ComponentData[] =
           if (component.name === action.name) {
             return {
               ...component,
-              linking: [action.dependency!],
+              linking: [action.dependency!], // TODO: Tech debt
             };
           }
           return component;
@@ -78,7 +78,7 @@ const reducer = (state: ComponentData[] = [], action: Action): ComponentData[] =
           if (component.name === action.name) {
             return {
               ...component,
-              favourite: action.favourite!,
+              favourite: action.favourite!, // TODO: Tech debt
             };
           }
           return component;

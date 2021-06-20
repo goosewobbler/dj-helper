@@ -352,12 +352,7 @@ test('The promotion error is shown.', () => {
   expect(wrapper.find('.promotion-failure').text()).toContain('😧');
   expect(wrapper.find('.promotion-failure').text()).toContain('Promotion failed');
   expect(wrapper.find('.promotion-failure').text()).toContain('fail');
-  expect(
-    wrapper
-      .find('.promotion-failure')
-      .find('a')
-      .exists(),
-  ).toBe(false);
+  expect(wrapper.find('.promotion-failure').find('a').exists()).toBe(false);
 });
 
 test('The promotion error is wrapped in an anchor if it is a link.', () => {
@@ -382,12 +377,7 @@ test('The promotion error is wrapped in an anchor if it is a link.', () => {
   expect(wrapper.find('.promotion-failure').text()).toContain('😧');
   expect(wrapper.find('.promotion-failure').text()).toContain('Promotion failed');
   expect(wrapper.find('.promotion-failure').text()).toContain('http://fail');
-  expect(
-    wrapper
-      .find('.promotion-failure')
-      .find('a')
-      .exists(),
-  ).toBe(true);
+  expect(wrapper.find('.promotion-failure').find('a').exists()).toBe(true);
 });
 
 test('should render environment links for Page component', () => {
@@ -403,26 +393,11 @@ test('should render environment links for Page component', () => {
 
   const wrapper = mount(<ComponentVersions theme={{}} component={component} />);
 
-  expect(
-    wrapper
-      .find('.envLink')
-      .at(0)
-      .prop('href'),
-  ).toBe('https://morph.int.api.bbci.co.uk/data/bbc-morph-test');
+  expect(wrapper.find('.envLink').at(0).prop('href')).toBe('https://morph.int.api.bbci.co.uk/data/bbc-morph-test');
 
-  expect(
-    wrapper
-      .find('.envLink')
-      .at(1)
-      .prop('href'),
-  ).toBe('https://morph.test.api.bbci.co.uk/data/bbc-morph-test');
+  expect(wrapper.find('.envLink').at(1).prop('href')).toBe('https://morph.test.api.bbci.co.uk/data/bbc-morph-test');
 
-  expect(
-    wrapper
-      .find('.envLink')
-      .at(2)
-      .prop('href'),
-  ).toBe('https://morph.api.bbci.co.uk/data/bbc-morph-test');
+  expect(wrapper.find('.envLink').at(2).prop('href')).toBe('https://morph.api.bbci.co.uk/data/bbc-morph-test');
 });
 
 test('should render environment links for View component', () => {
@@ -438,26 +413,11 @@ test('should render environment links for View component', () => {
 
   const wrapper = mount(<ComponentVersions theme={{}} component={component} />);
 
-  expect(
-    wrapper
-      .find('.envLink')
-      .at(0)
-      .prop('href'),
-  ).toBe('https://morph.int.api.bbci.co.uk/page/bbc-morph-test');
+  expect(wrapper.find('.envLink').at(0).prop('href')).toBe('https://morph.int.api.bbci.co.uk/page/bbc-morph-test');
 
-  expect(
-    wrapper
-      .find('.envLink')
-      .at(1)
-      .prop('href'),
-  ).toBe('https://morph.test.api.bbci.co.uk/page/bbc-morph-test');
+  expect(wrapper.find('.envLink').at(1).prop('href')).toBe('https://morph.test.api.bbci.co.uk/page/bbc-morph-test');
 
-  expect(
-    wrapper
-      .find('.envLink')
-      .at(2)
-      .prop('href'),
-  ).toBe('https://morph.api.bbci.co.uk/page/bbc-morph-test');
+  expect(wrapper.find('.envLink').at(2).prop('href')).toBe('https://morph.api.bbci.co.uk/page/bbc-morph-test');
 });
 
 test('should render environment links for Data component', () => {
@@ -473,24 +433,9 @@ test('should render environment links for Data component', () => {
 
   const wrapper = mount(<ComponentVersions theme={{}} component={component} />);
 
-  expect(
-    wrapper
-      .find('.envLink')
-      .at(0)
-      .prop('href'),
-  ).toBe('https://morph.int.api.bbci.co.uk/data/bbc-morph-test');
+  expect(wrapper.find('.envLink').at(0).prop('href')).toBe('https://morph.int.api.bbci.co.uk/data/bbc-morph-test');
 
-  expect(
-    wrapper
-      .find('.envLink')
-      .at(1)
-      .prop('href'),
-  ).toBe('https://morph.test.api.bbci.co.uk/data/bbc-morph-test');
+  expect(wrapper.find('.envLink').at(1).prop('href')).toBe('https://morph.test.api.bbci.co.uk/data/bbc-morph-test');
 
-  expect(
-    wrapper
-      .find('.envLink')
-      .at(2)
-      .prop('href'),
-  ).toBe('https://morph.api.bbci.co.uk/data/bbc-morph-test');
+  expect(wrapper.find('.envLink').at(2).prop('href')).toBe('https://morph.api.bbci.co.uk/data/bbc-morph-test');
 });

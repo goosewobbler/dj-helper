@@ -13,6 +13,6 @@ const renderUnstarred = (colour: string): React.ReactElement => (
 );
 
 const StarIcon = ({ colour, starred }: { colour?: string; starred: boolean }): React.ReactElement =>
-  starred ? renderStarred(colour!) : renderUnstarred(colour!);
+  starred ? renderStarred(colour!) : renderUnstarred(colour!); // TODO: Tech debt
 
 export default StarIcon;

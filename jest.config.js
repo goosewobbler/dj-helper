@@ -17,4 +17,9 @@ module.exports = {
   testMatch: ['**/test/**/*.spec.(ts|tsx)'],
   setupFilesAfterEnv: ['./test/setup.ts'],
   testURL: 'https://bbc.co.uk/',
+  globals: {
+    'ts-jest': {
+      packageJson: './package.json',
+    },
+  },
 };

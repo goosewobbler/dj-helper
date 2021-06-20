@@ -13,7 +13,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const plugins = [];
 const isDev = process.env.NODE_ENV === 'development';
-const reportFiles = isDev ? ['src/**/*.{ts,tsx}'] : []; // in dev mode we only report type errors in source files
 
 let templateParameters = {
   rendererSrc: './renderer.prod.js',
@@ -44,10 +43,7 @@ if (!isDev) {
 plugins.push(
   new ProgressPlugin(),
   new HotModuleReplacementPlugin(),
-  new ForkTsCheckerWebpackPlugin({
-    async: false,
-    reportFiles,
-  }),
+  new ForkTsCheckerWebpackPlugin(),
   new MiniCssExtractPlugin({
     filename: isDev ? '[name].css' : '[name].[hash].css',
     chunkFilename: isDev ? '[id].css' : '[id].[hash].css',
@@ -66,12 +62,14 @@ plugins.push(
       test: /mini-css-extract-plugin[\\/]dist[\\/]loader/,
     },
   ]),
-  new CopyWebpackPlugin([
-    {
-      from: './src/local-push.js',
-      to: '.',
-    },
-  ]),
+  new CopyWebpackPlugin({
+    patterns: [
+      {
+        from: './src/local-push.js',
+        to: '.',
+      },
+    ],
+  }),
 );
 
 module.exports = plugins;

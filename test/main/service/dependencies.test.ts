@@ -2,7 +2,7 @@ import createMockService from '../mocks/service';
 
 test('dependencies are initially empty', async () => {
   const { service } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder.withSymbolicLink('/test/components/foo/node_modules/bbc-morph-baz');
     },
   });
@@ -24,7 +24,7 @@ test('dependencies are initially empty', async () => {
 
 test('can get a list of a components dependencies when details are fetched', async () => {
   const { service, system } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder.withSymbolicLink('/test/components/foo/node_modules/bbc-morph-baz');
       builder.withVersionOnEnvironment('bbc-morph-bar', 'int', '2.9.9');
       builder.withVersionOnEnvironment('bbc-morph-baz', 'int', '2.8.8');
@@ -93,7 +93,7 @@ test('should cache the has version on subsequent updates', async () => {
 
   let updatesWithoutHasVersion = 0;
 
-  onComponentUpdate.mock.calls.forEach(call => {
+  onComponentUpdate.mock.calls.forEach((call) => {
     if (call[0].dependencies.length && call[0].dependencies[0].has === null) {
       updatesWithoutHasVersion++;
     }

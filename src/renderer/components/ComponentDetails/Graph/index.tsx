@@ -2,7 +2,7 @@ import { ipcRenderer } from 'electron';
 import * as React from 'react';
 import GraphVis from 'react-graph-vis';
 
-import { GraphData } from '../../../../common/types';
+import { GraphData, GraphNode, AnyObject } from '../../../../common/types';
 import { LoadingIcon } from '../../LoadingIcon';
 
 type GraphProps = {
@@ -11,8 +11,8 @@ type GraphProps = {
   onSelect(name: string): void;
 };
 
-const convertData = (data: GraphData): {} => {
-  const newNodes = data.nodes.map((node): {} => ({ id: node.id, label: node.name.replace(/^bbc-morph-/, '') }));
+const convertData = (data: GraphData): AnyObject => {
+  const newNodes = data.nodes.map((node): AnyObject => ({ id: node.id, label: node.name.replace(/^bbc-morph-/, '') }));
   return {
     edges: data.edges,
     nodes: newNodes,
@@ -77,25 +77,25 @@ const renderGraph = (data: GraphData, onSelect: GraphProps['onSelect'], type: Gr
       const {
         nodes: [id],
       } = event;
-      const { name } = data.nodes.find((n): boolean => n.id === id)!;
+      const { name } = data.nodes.find((n): boolean => n.id === id) as GraphNode;
       onSelect(name);
     },
   };
 
-  return (
+  return data.nodes.length ? (
     <GraphVis
-      getNetwork={(network: { focus: Function }): void => {
-        if (data.nodes.length > 0) {
-          const currentNode = data.nodes[0].id;
-          network.focus(currentNode, {
-            scale: 1,
-          });
-        }
+      getNetwork={(network: { focus: (node: number, { scale }: { scale: number }) => AnyObject }): void => {
+        const currentNode = data.nodes[0].id;
+        network.focus(currentNode, {
+          scale: 1,
+        });
       }}
       graph={convertData(data)}
       events={events}
       options={options}
     />
+  ) : (
+    <>{`The ${type} graph of this module has no nodes.`}</>
   );
 };
 
@@ -104,7 +104,7 @@ const Graph = ({ onSelect, componentName, type }: GraphProps): React.ReactElemen
   const [state, setState] = React.useState<{ graphData: GraphData | undefined }>({ graphData: undefined });
   React.useEffect(() => {
     const graphDataListener = (event: Event, graphData: GraphData): void => {
-      setState(prevState => ({ ...prevState, graphData }));
+      setState((prevState) => ({ ...prevState, graphData }));
     };
     if (!graphDataRequested.current) {
       ipcRenderer.once(`${type}-graph`, graphDataListener);
@@ -125,26 +125,6 @@ const Graph = ({ onSelect, componentName, type }: GraphProps): React.ReactElemen
     </div>
   );
 };
-
-// class Graph extends React.PureComponent<GraphProps, GraphState> {
-//   public componentDidMount(): void {
-//     this.update();
-//   }
-
-//   public componentWillReceiveProps(nextProps: GraphProps): void {
-//     const { url } = this.props;
-//     if (nextProps.url !== url) {
-//       this.setState({ data: null });
-//     }
-//   }
-
-//   public componentDidUpdate(): void {
-//     const { data } = this.state;
-//     if (!data) {
-//       this.update();
-//     }
-//   }
-// }
 
 export default Graph;
 export { GraphProps };

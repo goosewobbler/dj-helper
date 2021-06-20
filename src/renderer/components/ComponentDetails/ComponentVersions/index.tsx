@@ -4,10 +4,10 @@ import gte from 'semver/functions/gte';
 import lt from 'semver/functions/lt';
 import valid from 'semver/functions/valid';
 
-import { context, ComponentContext } from '../../../contexts/componentContext';
+import { getComponentContext } from '../../../contexts/componentContext';
 import Spacer from '../../Spacer';
 import { Versions } from '../../../../common/types';
-import VersionBox from '../ComponentDependencyListItem/VersionBox';
+import VersionBox from '../VersionBox';
 
 const promotionInProgressText = (environment: string): string => (environment === 'int' ? 'Bumping' : 'Promoting');
 const promotionActionText = (environment: string): string => (environment === 'int' ? 'Bump' : 'Promote');
@@ -85,7 +85,7 @@ const shouldRenderPromoteButton = (
     return true;
   }
 
-  return lt(versions[toEnv]!, versions[fromEnv]!);
+  return lt(versions[toEnv]!, versions[fromEnv]!); // TODO: Tech debt
 };
 
 const parseVersions = ({ local = null, int = null, test = null, live = null }: Versions): Versions => ({
@@ -96,10 +96,11 @@ const parseVersions = ({ local = null, int = null, test = null, live = null }: V
 });
 
 const ComponentVersions = (): React.ReactElement => {
-  const componentContext: ComponentContext | null = React.useContext(context);
-  const { onBumpComponent, onPromoteComponent } = componentContext!.handlers;
-  const { versions, promoting, name, promotionFailure } = componentContext!.component;
-  const parsedVersions = parseVersions(versions!);
+  const {
+    component: { versions, promoting, name, promotionFailure },
+    handlers: { bumpComponent, promoteComponent },
+  } = getComponentContext();
+  const parsedVersions = parseVersions(versions!); // TODO: Tech debt
   const { local, int, test, live } = parsedVersions;
 
   const buildInProgress = {
@@ -134,26 +135,26 @@ const ComponentVersions = (): React.ReactElement => {
           <PromoteButton
             environment="int"
             buildInProgress={buildInProgress}
-            action={(): void => onBumpComponent(name, 'patch')}
+            action={(): void => bumpComponent(name, 'patch')}
           />
         </div>
         <Environment label="INT" version={int} isCurrent={intUpToDate} />
         <div className="connector">
-          {shouldRenderPromoteButton(versions!, buildInProgress, 'int', 'test') && (
+          {shouldRenderPromoteButton(versions!, buildInProgress, 'int', 'test') && ( // TODO: Tech debt
             <PromoteButton
               environment="test"
               buildInProgress={buildInProgress}
-              action={(): void => onPromoteComponent(name, 'test')}
+              action={(): void => promoteComponent(name, 'test')}
             />
           )}
         </div>
         <Environment label="TEST" version={test} isCurrent={testUpToDate} />
         <div className="connector">
-          {shouldRenderPromoteButton(versions!, buildInProgress, 'test', 'live') && (
+          {shouldRenderPromoteButton(versions!, buildInProgress, 'test', 'live') && ( // TODO: Tech debt
             <PromoteButton
               environment="live"
               buildInProgress={buildInProgress}
-              action={(): void => onPromoteComponent(name, 'live')}
+              action={(): void => promoteComponent(name, 'live')}
             />
           )}
         </div>

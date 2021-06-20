@@ -3,7 +3,7 @@ import createMockService from '../mocks/service';
 
 test('can request a component with no props', async () => {
   const { service, systemBuilder } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder
         .withGetResponse('http://localhost:8083/data/bbc-morph-foo', '{ "bodyInline": "<h1>Hello foo</h1>" }', 123, {
           foo: '123',
@@ -46,7 +46,7 @@ test('can request a component with no props', async () => {
 
 test('can request a component with props', async () => {
   const { service } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder
         .withGetResponse(
           'http://localhost:8083/data/bbc-morph-foo/a%20bc/123/def/4%205%206',
@@ -70,7 +70,7 @@ test('can request a component with props', async () => {
   await service.start('bbc-morph-bar');
   await service.start('bbc-morph-baz');
 
-  const responseFoo = await service.request('bbc-morph-foo', { 'a bc': '123', def: '4 5 6' }, false);
+  const responseFoo = await service.request('bbc-morph-foo', { 'a bc': '123', 'def': '4 5 6' }, false);
   const responseBar = await service.request('bbc-morph-bar', { xyz: 'true' }, false);
   const responseBaz = await service.request('bbc-morph-baz', { a: '1', b: '2', c: '3' }, false);
 
@@ -119,7 +119,7 @@ test('cannot request a component that is not running', async () => {
 
 test('all localhost:8082 occurrences are replaced with correct port', async () => {
   const { service } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder
         .withReadFile('/test/components/new/package.json', '{}')
         .withGetResponse(
@@ -172,7 +172,7 @@ test('all localhost:8082 occurrences are replaced with correct port', async () =
 
 test('all minified react require references are replaced with dev versions', async () => {
   const { service } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder.withGetResponse(
         'http://localhost:8083/data/bbc-morph-foo',
         `requirejs.config({ paths: { 'morph/react' : '//m.files.bbci.co.uk/modules/vendor-react/1.0.0/react.min', 'morph/react-dom' : '//m.files.bbci.co.uk/modules/vendor-react-dom/1.0.0/react-dom.min', ... requirejs.config({ paths: { 'morph/react' : '//m.files.bbci.co.uk/modules/vendor-react/1.0.0/react.min', 'morph/react-dom' : '//m.files.bbci.co.uk/modules/vendor-react-dom/1.0.0/react-dom.min', ...`,
@@ -193,7 +193,7 @@ test('all minified react require references are replaced with dev versions', asy
 
 test('all live push require references are replaced with local version', async () => {
   const { service } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder.withGetResponse(
         'http://localhost:8083/view/bbc-morph-bar',
         `requirejs.config({ 'live-push' : '//m.files.bbci.co.uk/modules/morph-local-live-push/1.3.3/local-push' }, shim: 'live-push' : '//m.files.bbci.co.uk/modules/morph-local-live-push/20.3.4/local-push', 'live-push' : '//push.api.bbci.co.uk/public/client', 'live-push' : '//push.test.api.bbci.co.uk/public/client' }, shim: , ...`,
@@ -214,7 +214,7 @@ test('all live push require references are replaced with local version', async (
 
 test('failed requests with unsuccessful dependencies are retried 10 times by default', async () => {
   const { service, systemBuilder } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder
         .withReadFile('/test/components/new/package.json', '{}')
         .withEphemeralGetResponse(
@@ -248,7 +248,7 @@ test('failed requests with unsuccessful dependencies are retried 10 times by def
 
 test('failed requests with unsuccessful dependencies are retried a number of times defined in config', async () => {
   const { service, config, systemBuilder } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder
         .withReadFile('/test/components/new/package.json', '{}')
         .withEphemeralGetResponse(
@@ -293,7 +293,7 @@ test('failed requests with unsuccessful dependencies are retried a number of tim
 
 test('failed requests with unsuccessful dependencies return the most recent response if no more retries remaining', async () => {
   const { service, config, systemBuilder } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder
         .withReadFile('/test/components/new/package.json', '{}')
         .withEphemeralGetResponse(
@@ -337,7 +337,7 @@ test('failed requests with unsuccessful dependencies return the most recent resp
 
 test('failed requests with missing dependencies are retried a number of times defined in config', async () => {
   const { service, config, systemBuilder } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder
         .withReadFile('/test/components/new/package.json', '{}')
         .withEphemeralGetResponse(
@@ -382,7 +382,7 @@ test('failed requests with missing dependencies are retried a number of times de
 
 test('failed requests due to ECONNREFUSED are retried a number of times defined in config', async () => {
   const { service, config, systemBuilder } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder
         .withReadFile('/test/components/new/package.json', '{}')
         .withEphemeralGetResponse(
@@ -421,7 +421,7 @@ test('failed requests due to ECONNREFUSED are retried a number of times defined 
 
 test('version prop is removed from request', async () => {
   const { service } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder
         .withGetResponse(
           'http://localhost:8083/data/bbc-morph-foo/a%20bc/123/def/4%205%206',
@@ -445,7 +445,11 @@ test('version prop is removed from request', async () => {
   await service.start('bbc-morph-bar');
   await service.start('bbc-morph-baz');
 
-  const responseFoo = await service.request('bbc-morph-foo', { 'a bc': '123', def: '4 5 6', version: '1.2.3' }, false);
+  const responseFoo = await service.request(
+    'bbc-morph-foo',
+    { 'a bc': '123', 'def': '4 5 6', 'version': '1.2.3' },
+    false,
+  );
   const responseBar = await service.request('bbc-morph-bar', { xyz: 'true', version: '7.0.0' }, false);
   const responseBaz = await service.request('bbc-morph-baz', { a: '1', b: '2', c: '3', version: 'hello' }, false);
 
@@ -460,54 +464,4 @@ test('version prop is removed from request', async () => {
     statusCode: 456,
   });
   expect(responseBaz).toEqual({ body: '{ "baz": 123, "props": true }', headers: { baz: '789' }, statusCode: 789 });
-});
-
-test('can request view using Chas if enabled', async () => {
-  const { service, config } = await createMockService();
-
-  const renderer = jest.fn().mockReturnValueOnce(
-    Promise.resolve({
-      body: { a: 1 },
-      code: 123,
-    }),
-  );
-  require('chas').setRenderer(renderer);
-
-  await config.setValue('renderer', 'chas');
-
-  await service.start('bbc-morph-bar');
-  const responseBar = await service.request('bbc-morph-bar', { a: '1', b: '2' }, false);
-
-  expect(renderer).toHaveBeenCalledTimes(1);
-  expect(renderer).toHaveBeenCalledWith('/test/components/bar', 'view', { a: '1', b: '2' });
-  expect(responseBar).toEqual({
-    body: '{"a":1}',
-    headers: { 'Content-Type': 'application/json' },
-    statusCode: 123,
-  });
-});
-
-test('can request data using Chas if enabled', async () => {
-  const { service, config } = await createMockService();
-
-  const renderer = jest.fn().mockReturnValueOnce(
-    Promise.resolve({
-      body: { a: 1 },
-      code: 123,
-    }),
-  );
-  require('chas').setRenderer(renderer);
-
-  await config.setValue('renderer', 'chas');
-
-  await service.start('bbc-morph-baz');
-  const responseBaz = await service.request('bbc-morph-baz', { a: '1', b: '2' }, false);
-
-  expect(renderer).toHaveBeenCalledTimes(1);
-  expect(renderer).toHaveBeenCalledWith('/test/components/baz', 'data', { a: '1', b: '2' });
-  expect(responseBaz).toEqual({
-    body: '{"a":1}',
-    headers: { 'Content-Type': 'application/json' },
-    statusCode: 123,
-  });
 });

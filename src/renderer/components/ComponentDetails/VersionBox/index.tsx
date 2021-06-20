@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { LoadingIcon } from '../../../LoadingIcon';
+import { LoadingIcon } from '../../LoadingIcon';
 
 const VersionBox = ({
   children,

@@ -9,6 +9,7 @@
     "noImplicitReturns": true,
     "inlineSources": true,
     "sourceMap": true,
+    "importsNotUsedAsValues": "preserve",
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "newLine": "lf",
@@ -17,7 +18,10 @@
     "lib": ["DOM", "ESNext"],
     "noImplicitAny": true,
     "resolveJsonModule": true,
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
     "typeRoots": ["./types", "./node_modules/@types"]
   },
-  "include": ["./src/**/*.ts", "./src/**/*.tsx", "./test/**/*.ts", "./test/**/*.tsx", "./types/**/*.ts"]
+  "include": ["./src/**/*.ts", "./src/**/*.tsx", "./test/**/*.spec.ts", "./test/**/*.spec.tsx", "./types/**/*.ts"]
 }

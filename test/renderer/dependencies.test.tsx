@@ -60,7 +60,7 @@ const render = (onLinkComponent?: any, onUnlinkComponent?: any, state?: Componen
 
 test('The list of dependencies are displayed in alphabetical order.', () => {
   const wrapper = render(jest.fn(), jest.fn(), ComponentState.Running);
-  const names = wrapper.find('.component-name-label').map(item => item.text());
+  const names = wrapper.find('.component-name-label').map((item) => item.text());
 
   expect(names).toEqual(['bar', 'foo', 'hello']);
 });

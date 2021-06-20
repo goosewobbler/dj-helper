@@ -3,9 +3,7 @@ import Theme from '../../../src/server/app/Theme';
 import createMockSystem from '../mocks/system';
 
 const createConfig = (configFileContents: any) => {
-  const system = createMockSystem()
-    .withReadFile('/c/mdcc.json', JSON.stringify(configFileContents))
-    .build();
+  const system = createMockSystem().withReadFile('/c/mdcc.json', JSON.stringify(configFileContents)).build();
 
   return Config('/c/mdcc.json', system);
 };

@@ -1,30 +1,15 @@
 import { connect } from 'react-redux';
 import { showDialog, hideDialog } from '../../actions/app';
-import { createComponent } from '../../actions/components';
-import App from './App';
-import { AppState, Dispatch } from '../../../common/types';
+import { createComponent, cloneComponent } from '../../actions/components';
+import { App } from './App';
+import { AppState } from '../../../common/types';
 
-const mapDispatchToProps = (
-  dispatch: Dispatch,
-): {
-  hideDialog: () => void;
-  showDialog: (name: string) => void;
-  createComponent: (name: string, description: string, type: string) => void;
-  cloneComponent: (name: string, description: string, sourceComponent: string) => void;
-} => ({
-  hideDialog: (): void => {
-    dispatch(hideDialog());
-  },
-  showDialog: (name: string): void => {
-    dispatch(showDialog(name));
-  },
-  createComponent: (name: string, description: string, type: string): void => {
-    dispatch(createComponent(name, description, type));
-  },
-  cloneComponent: (name: string, description: string, sourceComponent: string): void => {
-    dispatch(createComponent(name, description, 'clone', sourceComponent));
-  },
-});
+const actionCreators = {
+  hideDialog,
+  showDialog,
+  createComponent,
+  cloneComponent,
+};
 
 type AppProps = {
   componentToClone: string;
@@ -33,11 +18,11 @@ type AppProps = {
 };
 
 const mapStateToProps = (state: AppState): AppProps => ({
-  componentToClone: state.ui.componentToClone!,
+  componentToClone: state.ui.componentToClone!, // TODO: Tech debt
   showCreateDialog: state.ui.showDialog === 'create' && !state.ui.hideDialog,
   showCloneDialog: state.ui.showDialog === 'clone' && !state.ui.hideDialog,
 });
 
-const Container = connect(mapStateToProps, mapDispatchToProps)(App);
+const Container = connect(mapStateToProps, actionCreators)(App);
 
 export default Container;

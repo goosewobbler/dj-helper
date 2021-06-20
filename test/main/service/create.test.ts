@@ -4,7 +4,7 @@ import createMockService from '../mocks/service';
 
 test('can create a new data component', async () => {
   const { service, system, systemBuilder } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder.withReadFile(
         '/test/components/new-data/package.json',
         JSON.stringify({
@@ -53,7 +53,7 @@ test('can create a new data component', async () => {
 
 test('can create a new view component', async () => {
   const { service, system, systemBuilder } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder.withReadFile(
         '/test/components/new-view/package.json',
         JSON.stringify({
@@ -101,7 +101,7 @@ test('can create a new view component', async () => {
 
 test('can create a new viewcss component', async () => {
   const { service, system, systemBuilder } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder.withReadFile(
         '/test/components/new-viewcss/package.json',
         JSON.stringify({
@@ -149,7 +149,7 @@ test('can create a new viewcss component', async () => {
 
 test('component is started after creation', async () => {
   const { service } = await createMockService({
-    systemModifier: builder => {
+    systemModifier: (builder) => {
       builder.withReadFile(
         '/test/components/new-data/package.json',
         JSON.stringify({

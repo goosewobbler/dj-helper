@@ -1,6 +1,232 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`given a dependant graph should render the expected html 1`] = `
+<div>
+  <div
+    class="absolute top-0 bottom-0 left-0 right-0"
+  >
+    <div
+      class="flex items-center justify-center w-full h-full loading"
+    >
+      <div
+        class="w-8 h-8"
+      >
+        <p>
+          loading
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`given a dependant graph with some data after it receives data should render a graph with the expected options 1`] = `
+Object {
+  "edges": Object {
+    "arrows": Object {
+      "from": Object {
+        "enabled": true,
+        "scaleFactor": 0.5,
+      },
+      "to": Object {
+        "enabled": false,
+        "scaleFactor": 0.5,
+      },
+    },
+    "smooth": Object {
+      "forceDirection": "vertical",
+      "roundness": 1,
+      "type": "cubicBezier",
+    },
+  },
+  "layout": Object {
+    "hierarchical": Object {
+      "direction": "DU",
+      "edgeMinimization": true,
+      "nodeSpacing": 350,
+      "parentCentralization": true,
+      "sortMethod": "directed",
+    },
+    "improvedLayout": true,
+  },
+  "nodes": Object {
+    "color": Object {},
+    "font": Object {},
+    "scaling": Object {
+      "max": 30,
+      "min": 30,
+    },
+    "shape": "box",
+    "size": 30,
+  },
+  "physics": Object {
+    "enabled": false,
+  },
+}
+`;
+
+exports[`given a dependant graph with some data after it receives data should render the expected html 1`] = `
+<div>
+  <div
+    class="absolute top-0 bottom-0 left-0 right-0"
+  >
+    <div>
+      node 1
+    </div>
+    <div>
+      node 2
+    </div>
+    <div>
+      node 3
+    </div>
+  </div>
+</div>
+`;
+
+exports[`given a dependant graph with some data but no nodes after it receives data should render the expected html 1`] = `
+<div>
+  <div
+    class="absolute top-0 bottom-0 left-0 right-0"
+  >
+    The dependant graph of this module has no nodes.
+  </div>
+</div>
+`;
+
+exports[`given a dependant graph with some data but no nodes should render the expected html 1`] = `
+<div>
+  <div
+    class="absolute top-0 bottom-0 left-0 right-0"
+  >
+    <div
+      class="flex items-center justify-center w-full h-full loading"
+    >
+      <div
+        class="w-8 h-8"
+      >
+        <p>
+          loading
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`given a dependant graph with some data should render the expected html 1`] = `
+<div>
+  <div
+    class="absolute top-0 bottom-0 left-0 right-0"
+  >
+    <div
+      class="flex items-center justify-center w-full h-full loading"
+    >
+      <div
+        class="w-8 h-8"
+      >
+        <p>
+          loading
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`given a dependency graph should render the expected html 1`] = `
+<div>
+  <div
+    class="absolute top-0 bottom-0 left-0 right-0"
+  >
+    <div
+      class="flex items-center justify-center w-full h-full loading"
+    >
+      <div
+        class="w-8 h-8"
+      >
+        <p>
+          loading
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`given a dependency graph with some data after it receives data should render a graph with the expected options 1`] = `
+Object {
+  "edges": Object {
+    "arrows": Object {
+      "from": Object {
+        "enabled": false,
+        "scaleFactor": 0.5,
+      },
+      "to": Object {
+        "enabled": true,
+        "scaleFactor": 0.5,
+      },
+    },
+    "smooth": Object {
+      "forceDirection": "vertical",
+      "roundness": 1,
+      "type": "cubicBezier",
+    },
+  },
+  "layout": Object {
+    "hierarchical": Object {
+      "direction": "UD",
+      "edgeMinimization": true,
+      "nodeSpacing": 350,
+      "parentCentralization": true,
+      "sortMethod": "directed",
+    },
+    "improvedLayout": true,
+  },
+  "nodes": Object {
+    "color": Object {},
+    "font": Object {},
+    "scaling": Object {
+      "max": 30,
+      "min": 30,
+    },
+    "shape": "box",
+    "size": 30,
+  },
+  "physics": Object {
+    "enabled": false,
+  },
+}
+`;
+
+exports[`given a dependency graph with some data after it receives data should render the expected html 1`] = `
+<div>
+  <div
+    class="absolute top-0 bottom-0 left-0 right-0"
+  >
+    <div>
+      node 1
+    </div>
+    <div>
+      node 2
+    </div>
+    <div>
+      node 3
+    </div>
+  </div>
+</div>
+`;
+
+exports[`given a dependency graph with some data but no nodes after it receives data should render the expected html 1`] = `
+<div>
+  <div
+    class="absolute top-0 bottom-0 left-0 right-0"
+  >
+    The dependency graph of this module has no nodes.
+  </div>
+</div>
+`;
+
+exports[`given a dependency graph with some data but no nodes should render the expected html 1`] = `
 <div>
   <div
     class="absolute top-0 bottom-0 left-0 right-0"

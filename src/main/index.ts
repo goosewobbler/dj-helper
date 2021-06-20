@@ -4,28 +4,26 @@ import startServer from './server';
 import { logError } from './helpers/console';
 import { installDevToolsExtensions } from './helpers/dev';
 
-if (module.hot) {
-  module.hot.accept();
-}
-
 const isDev = process.env.NODE_ENV === 'development';
 const isDebugMode = isDev || process.env.DEBUG_PROD === 'true';
+
+if (isDev) {
+  (module as any).hot?.accept(); //eslint-disable-line
+}
 
 let mainWindow: BrowserWindow | undefined;
 
 if (process.env.NODE_ENV === 'production') {
-  import('source-map-support').then(sourceMapSupport => sourceMapSupport.install());
+  const sourceMapSupport = await import('source-map-support');
+  sourceMapSupport.install();
 }
 
 if (isDebugMode) {
-  import('electron-debug').then(electronDebug => electronDebug.default());
+  const electronDebug = await import('electron-debug');
+  electronDebug.default();
 }
 
 async function createWindow(): Promise<void> {
-  if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
-    await installDevToolsExtensions();
-  }
-
   mainWindow = new BrowserWindow({
     show: false,
     height: 1000,
@@ -35,9 +33,13 @@ async function createWindow(): Promise<void> {
     },
   });
 
-  await startServer(mainWindow).catch(logError);
+  if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
+    void (await installDevToolsExtensions());
+  }
 
-  mainWindow.loadURL(isDev ? 'http://localhost:1212/' : `file:///${__dirname}/../../dist/index.html`);
+  void (await startServer(mainWindow).catch(logError));
+
+  void (await mainWindow.loadURL(isDev ? 'http://localhost:1212/' : `file:///${__dirname}/../../dist/index.html`));
 
   mainWindow.once('ready-to-show', () => {
     const browser = mainWindow as BrowserWindow;
@@ -71,8 +73,8 @@ if (app.requestSingleInstanceLock()) {
     }
   });
 
-  app.on('ready', () => {
-    createWindow();
+  app.on('ready', (): void => {
+    void createWindow();
   });
 
   app.on('window-all-closed', () => {
@@ -87,7 +89,7 @@ if (app.requestSingleInstanceLock()) {
     // On OS X it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (mainWindow === undefined) {
-      createWindow();
+      void createWindow();
     }
   });
 } else {

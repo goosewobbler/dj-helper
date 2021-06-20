@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Tailwind base / preflight styles: https://unpkg.com/tailwindcss@1.2.0/dist/base.css */
+/* Tailwind base / preflight styles: https://unpkg.com/tailwindcss@1.4.6/dist/base.css */
 
 * {
   @apply box-border;
@@ -10,6 +10,7 @@
 
 html {
   font-family: var(--font-family-name);
+  @apply h-full;
 }
 
 body {
@@ -52,7 +53,7 @@ button:disabled {
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 400;
-  src: local('Roboto'), local('Roboto-Regular'), url(/roboto-latin-ext.woff2) format('woff2');
+  src: local('Roboto'), local('Roboto-Regular'), url(../../static/roboto-latin-ext.woff2) format('woff2');
   unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
 }
 
@@ -60,25 +61,25 @@ button:disabled {
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 400;
-  src: local('Roboto'), local('Roboto-Regular'), url(/roboto-latin.woff2) format('woff2');
+  src: local('Roboto'), local('Roboto-Regular'), url('../../static/roboto-latin.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
 }
 
 @font-face {
   font-family: 'ReithSans';
-  src: url(/BBCReithSans_W_Rg.woff2) format('woff2');
+  src: url('../../static/BBCReithSans_W_Rg.woff2') format('woff2');
   font-weight: 400;
 }
 
 @font-face {
   font-family: 'ReithSans';
-  src: url(/BBCReithSans_W_Bd.woff2) format('woff2');
+  src: url('../../static/BBCReithSans_W_Bd.woff2') format('woff2');
   font-weight: 700;
 }
 
 @font-face {
   font-family: 'Ceefax';
-  src: url('/bbcmode7.woff') format('woff'), url('/bbcmode7.ttf') format('truetype');
+  src: url('../../static/bbcmode7.woff') format('woff'), url('../../static/bbcmode7.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }

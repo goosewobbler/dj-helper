@@ -4,5 +4,3 @@ public
 dist
 coverage
 .DS_Store
-.routing.json
-yarn-error.log

@@ -1,6 +1,6 @@
 /* eslint global-require: off */
 const plugins = require('./main.plugins');
-const rules = require('./rules');
+const rules = require('./rules')('main');
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -32,7 +32,7 @@ module.exports = {
     __filename: true,
   },
   externals: [
-    (context, request, callback) => {
+    ({ context, request }, callback) => {
       if (request[0] === '.') {
         callback();
       } else {
@@ -40,4 +40,7 @@ module.exports = {
       }
     },
   ],
+  experiments: {
+    topLevelAwait: true,
+  },
 };

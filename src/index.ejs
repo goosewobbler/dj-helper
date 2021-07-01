@@ -1,14 +1,34 @@
 <!DOCTYPE html>
 <html lang="en-gb" class="theme-default">
   <head>
-    <title>Morph Developer Console</title>
-    <link rel="shortcut icon" href="/image/icon/morph.png" />
-    <link rel="mask-icon" href="/image/icon/morph-silhouette.svg" color="#68c3e1" />
-    <link rel="stylesheet" type="text/css" href="<%= stylesheetHref %>" />
-    <style id="dynamic-styles"></style>
+    <title>DJ Helper</title>
+    <% if (process.env.NODE_ENV === 'development') { %>
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
+        default-src http://localhost:1212; 
+        script-src-elem http://localhost:1212 'nonce-4AEemGb0xJptoIGFP3Nd';
+        style-src-elem http://localhost:1212 'nonce-4AEemGb0xJptoIGFP3Nd'; 
+        font-src data: http://localhost:1212; 
+        connect-src *
+      "
+    />
+    <% } else { %>
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
+        default-src 'none'; 
+        script-src 'nonce-4AEemGb0xJptoIGFP3Nd'; 
+        style-src-elem 'nonce-4AEemGb0xJptoIGFP3Nd'; 
+        font-src data:; 
+        connect-src *
+      "
+    />
+    <% } %>
+    <link rel="stylesheet" type="text/css" href="<%= stylesheetHref %>" nonce="4AEemGb0xJptoIGFP3Nd" />
   </head>
   <body>
     <div id="app" class="flex flex-col w-full h-full overflow-hidden"></div>
-    <script defer src="<%= rendererSrc %>"></script>
+    <script defer src="<%= rendererSrc %>" nonce="4AEemGb0xJptoIGFP3Nd"></script>
   </body>
 </html>

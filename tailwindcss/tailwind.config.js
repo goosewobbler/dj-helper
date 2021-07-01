@@ -7,7 +7,7 @@ const variants = {
   borderColor: ['responsive', 'hover', 'focus', 'focus-within', 'active'],
 };
 
-const plugins = [require('./tailwind.theme.config.js')];
+const plugins = [];
 
 const purge = ['./src/**/*.ts{,x}', './src/index.ejs'];
 

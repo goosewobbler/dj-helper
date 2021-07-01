@@ -12,7 +12,7 @@
     },
     {
       "icon": "tailwind",
-      "extensions": ["tailwind.theme.config.js"],
+      "extensions": ["theme.config.js"],
       "filename": true,
       "format": "svg"
     }

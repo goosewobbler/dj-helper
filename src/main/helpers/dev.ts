@@ -1,14 +1,9 @@
 import { session } from 'electron';
-import electronDevToolsInstaller, {
-  REACT_DEVELOPER_TOOLS,
-  REDUX_DEVTOOLS,
-  REACT_PERF,
-  ExtensionReference,
-} from 'electron-devtools-installer';
+import electronDevToolsInstaller, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer';
 import { log, logError } from './console';
 
 type DevToolsExtension = {
-  id: ExtensionReference;
+  id: typeof REACT_DEVELOPER_TOOLS;
   name: string;
   installed?: boolean;
 };
@@ -22,16 +17,15 @@ const devToolsExtensions = [
     ref: REDUX_DEVTOOLS,
     name: 'Redux DevTools',
   },
-  {
-    ref: REACT_PERF,
-    name: 'React Perf',
-  },
 ];
 
 const installExtension = async (extension: DevToolsExtension): Promise<string | void> => {
   const forceInstall = extension.installed;
 
-  return electronDevToolsInstaller(extension.id, forceInstall)
+  return electronDevToolsInstaller(extension.id, {
+    loadExtensionOptions: { allowFileAccess: true },
+    forceDownload: forceInstall,
+  })
     .then((installedExtension: string) =>
       log(`${forceInstall ? 'Upgraded' : 'Added'} Extension: ${installedExtension}`),
     )
@@ -48,7 +42,11 @@ const installDevToolsExtensions = async (): Promise<void> => {
   const forceInstall = !!process.env.UPGRADE_EXTENSIONS;
   const installedExtensions = Object.keys(session.defaultSession.getAllExtensions());
   const extensionsToInstall = getExtensionsToInstall(installedExtensions, forceInstall);
-  log('\nFound existing Developer Tools Extensions...', installedExtensions);
+  if (installedExtensions.length) {
+    log('\nFound existing Developer Tools Extensions...', installedExtensions);
+  } else {
+    log('\nFound no Developer Tools Extensions...');
+  }
 
   if (extensionsToInstall.length) {
     log(`${forceInstall ? 'Upgrading' : 'Installing'} Developer Tools Extensions...`);

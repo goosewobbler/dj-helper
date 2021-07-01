@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
+import path from 'path';
 import { app, BrowserWindow } from 'electron';
-import startServer from './server';
-import { logError } from './helpers/console';
-import { installDevToolsExtensions } from './helpers/dev';
+import { createApp } from './app';
 
 const isDev = process.env.NODE_ENV === 'development';
+const isProd = process.env.NODE_ENV === 'production';
 const isDebugMode = isDev || process.env.DEBUG_PROD === 'true';
 
 if (isDev) {
@@ -13,7 +13,7 @@ if (isDev) {
 
 let mainWindow: BrowserWindow | undefined;
 
-if (process.env.NODE_ENV === 'production') {
+if (isProd) {
   const sourceMapSupport = await import('source-map-support');
   sourceMapSupport.install();
 }
@@ -29,15 +29,16 @@ async function createWindow(): Promise<void> {
     height: 1000,
     width: 1100,
     webPreferences: {
-      nodeIntegration: true,
+      preload: path.resolve(__dirname, 'preload.js'),
     },
   });
 
-  if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
+  if (isDebugMode) {
+    const { installDevToolsExtensions } = await import('./helpers/dev');
     void (await installDevToolsExtensions());
   }
 
-  void (await startServer(mainWindow).catch(logError));
+  createApp(mainWindow, isDev);
 
   void (await mainWindow.loadURL(isDev ? 'http://localhost:1212/' : `file:///${__dirname}/../../dist/index.html`));
 

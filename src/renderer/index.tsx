@@ -1,109 +1,51 @@
-import { ipcRenderer } from 'electron';
+/// <reference types="@welldone-software/why-did-you-render" />
+import { syncRenderer } from '@mckayla/electron-redux/renderer';
 import React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Provider, ConnectedComponent } from 'react-redux';
-import { AppContainer } from 'react-hot-loader';
-import io from 'socket.io-client';
-import { fetchVersions } from './actions/components';
-import { receiveComponent, receiveComponents, receiveEditors } from './actions/app';
-import App from './components/App';
-import createReduxStore from './reduxStore';
-import { ComponentData, ComponentsData, AppState } from '../common/types';
+import { Provider } from 'react-redux';
+import { App } from './App';
+import { AppState } from '../common/types';
 import '../css/tailwind.src.pcss';
-import { AppProps } from './components/App/App';
-
-const isDev = process.env.NODE_ENV === 'development';
+import { createReduxStore } from '../common/reduxStore';
 
 declare global {
   interface Window {
-    mdc: { preloadedState: AppState; componentPort: number };
+    djHelper: { preloadedState: AppState };
+    api: {
+      app: {
+        getSetup: Function;
+      };
+    };
   }
 }
 
 // const initDebugMode = async (): Promise<void> => {
-//   Object.defineProperty(React, 'createClass', {
-//     set: (): null => null,
-//   });
-//   const { whyDidYouUpdate } = await import('why-did-you-update');
-
-//   whyDidYouUpdate(React, {
-//     include: /ComponentListItem/,
+//   const whyDidYouRender = (await import('@welldone-software/why-did-you-render')).default;
+//   whyDidYouRender(React, {
+//     trackAllPureComponents: true,
 //   });
 // };
 
-if (process.env.NODE_ENV !== 'production' && typeof window !== 'undefined') {
-  // initDebugMode();
-}
+// if (process.env.NODE_ENV !== 'production' && typeof window !== 'undefined') {
+//   initDebugMode();
+// }
 
-type AppSetup = {
-  html: string;
-  initialState: AppState;
-  componentPort: number;
-};
+const { initialState, html } = await window.api.app.getSetup();
 
-ipcRenderer.once('app-setup', (appSetupEvent, { initialState, html, componentPort }: AppSetup): void => {
-  const reduxStore = createReduxStore(initialState);
-  const htmlRoot = document.getElementById('app') as HTMLElement;
-  htmlRoot.innerHTML = html;
+const reduxStore = createReduxStore(initialState, syncRenderer);
+const htmlRoot = document.getElementById('app') as HTMLElement;
+htmlRoot.innerHTML = html;
 
-  if (!initialState) {
-    ipcRenderer.once('components-data', (componentsDataEvent, componentsData: ComponentsData): void => {
-      reduxStore.dispatch(receiveComponents(componentsData.components));
-      reduxStore.dispatch(receiveEditors(componentsData.editors));
-    });
-    ipcRenderer.send('get-components-data');
-  }
+ReactDOM.hydrate(
+  <Provider store={reduxStore}>
+    <App />
+  </Provider>,
+  document.getElementById('app'),
+);
 
-  const render = (
-    Component: ConnectedComponent<(props: AppProps) => React.ReactElement, { componentPort: number }>,
-  ): void => {
-    ReactDOM.hydrate(
-      <AppContainer>
-        <Provider store={reduxStore}>
-          <Component componentPort={componentPort} />
-        </Provider>
-      </AppContainer>,
-      document.getElementById('app'),
-    );
-  };
-
-  render(App);
-
-  const inputElement = document.getElementById('search-input');
-  if (inputElement) {
-    inputElement.focus();
-  }
-
-  if (isDev) {
-    // eslint-disable-next-line
-    (module as any).hot?.accept('./components/App', () => {
-      void import('./components/App').then((hotApp) => render(hotApp.default));
-    });
-  }
-
-  if (io) {
-    const socket = io(`http://localhost:${componentPort}`);
-    socket.on('component', (component: ComponentData): void => {
-      reduxStore.dispatch(receiveComponent(component));
-    });
-
-    const updateSelected = (): void => {
-      const selected = (reduxStore.getState() as AppState).ui.selectedComponent;
-      if (selected) {
-        reduxStore.dispatch(fetchVersions(selected));
-      }
-    };
-
-    socket.on('freshState', (freshState: ComponentsData): void => {
-      reduxStore.dispatch(receiveComponents(freshState.components));
-      reduxStore.dispatch(receiveEditors(freshState.editors));
-      updateSelected();
-    });
-
-    setInterval((): void => {
-      updateSelected();
-    }, 60000);
-  }
-});
-
-ipcRenderer.send('get-app-setup');
+// if (isDev) {
+//   // eslint-disable-next-line
+//   (module as any).hot?.accept('./App', () => {
+//     void import('./App').then((hotApp) => render(hotApp.default));
+//   });
+// }

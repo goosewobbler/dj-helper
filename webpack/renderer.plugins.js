@@ -5,8 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
-const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 // const DashboardPlugin = require('webpack-dashboard/plugin');
 
 // TODO: check out dashboardPlugin again
@@ -56,20 +55,7 @@ plugins.push(
     templateParameters,
   }),
   new HtmlWebpackHarddiskPlugin(),
-  new HardSourceWebpackPlugin(),
-  new HardSourceWebpackPlugin.ExcludeModulePlugin([
-    {
-      test: /mini-css-extract-plugin[\\/]dist[\\/]loader/,
-    },
-  ]),
-  new CopyWebpackPlugin({
-    patterns: [
-      {
-        from: './src/local-push.js',
-        to: '.',
-      },
-    ],
-  }),
+  new ReactRefreshWebpackPlugin(),
 );
 
 module.exports = plugins;

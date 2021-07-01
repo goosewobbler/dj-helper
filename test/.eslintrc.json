@@ -2,8 +2,5 @@
   "env": {
     "jest": true
   },
-  "rules": {
-    "react/display-name": "off",
-    "@typescript-eslint/unbound-method": "off"
-  }
+  "rules": {}
 }

@@ -1,25 +1,29 @@
 /* eslint global-require: off, import/no-dynamic-require: off, no-console: off */
 const { spawn } = require('child_process');
-const detectPort = require('detect-port');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const rules = require('./rules');
+const rules = require('./rules')('renderer');
 const plugins = require('./renderer.plugins');
 
 const isDev = process.env.NODE_ENV === 'development';
 const devServerPort = process.env.PORT || 1212;
 
-const componentPort = 4000;
 const publicPath = `http://localhost:${devServerPort}/`;
+let mainStarted = false;
 
 const startMain = () => {
   console.log('\nStarting Main Process...');
+
+  mainStarted = true;
 
   spawn('pnpm', ['dev:start-main'], {
     shell: true,
     env: process.env,
     stdio: 'inherit',
   })
-    .on('close', (code) => process.exit(code))
+    .on('close', (code) => {
+      process.exit(code);
+      mainStarted = false;
+    })
     .on('error', (spawnError) => console.error(spawnError));
 };
 
@@ -29,10 +33,6 @@ rules.push({
   use: [
     {
       loader: MiniCssExtractPlugin.loader,
-      options: {
-        hmr: isDev,
-        reloadAll: true,
-      },
     },
     {
       loader: 'css-loader',
@@ -73,17 +73,26 @@ module.exports = {
   module: {
     rules,
   },
+  cache: {
+    type: 'filesystem',
+    buildDependencies: {
+      config: [__filename],
+    },
+  },
   plugins,
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
     alias: {
-      'react-dom': '@hot-loader/react-dom',
+      electron: false,
     },
   },
-  target: 'electron-renderer',
+  target: 'web',
   node: {
     __dirname: true,
     __filename: true,
+  },
+  experiments: {
+    topLevelAwait: true,
   },
   devServer: {
     port: devServerPort,
@@ -107,12 +116,10 @@ module.exports = {
     },
     before(app, server, compiler) {
       if (process.env.START_HOT) {
-        compiler.hooks.done.tap('StartMainProcessOnAvailablePort', () => {
-          detectPort(componentPort, (err, availablePort) => {
-            if (componentPort === availablePort) {
-              startMain();
-            }
-          });
+        compiler.hooks.done.tap('StartMainProcess', () => {
+          if (!mainStarted) {
+            startMain();
+          }
         });
       }
     },

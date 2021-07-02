@@ -12,7 +12,7 @@ const plugins = [
   new CopyWebpackPlugin({
     patterns: [
       {
-        from: './src/main/preload.js',
+        from: './src/renderer/preload.js',
         to: '.',
       },
     ],

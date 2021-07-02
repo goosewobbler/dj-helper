@@ -28,6 +28,6 @@
     "./test/**/*.spec.ts",
     "./test/**/*.spec.tsx",
     "./types/**/*.ts",
-    "src/main/preload.js"
+    "src/renderer/preload.js"
   ]
 }

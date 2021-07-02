@@ -1,6 +1,30 @@
 # DJ Helper
 
-This is an app for helping DJs to construct and manage lists of tracks whilst browsing online music sources such as BandCamp and BeatPort.
+This is an app for helping DJs to construct and manage lists of tracks whilst browsing online music sources such as Bandcamp and Beatport. More generalised digital music curation features may be added in the future, focussing on ownership / downloadable content over streaming.
+
+## Rationale
+
+Most music apps these days are geared around streaming, with DJs and digital record collectors being overlooked. Existing apps serving this demographic broadly fall into three categories:
+
+* Local Music Management / Playback (iTunes, Clementine, etc.)
+* Online Music Acquisition (Bandcamp, Beatport, etc.)
+* DJ Software (Rekordbox, Traktor, etc.)
+
+The problem is that the places for acquiring new digital music are online and totally separated from the places where the downloaded tracks end up.  Having to cross-reference different offline and online lists with all the different music platforms and manage the state of each track (non-triaged / triaged / listened / bought / downloaded / in library) is tedious.  A typical workflow for building a setlist looks like this:
+
+1. Listen to streamed tracks
+2.1. Copy the artist & title of each interesting track into a note app
+2.2. When streamed from a platform allowing downloads, add track to online wishlist or cart
+2.3  Check that each track is not already in your local library, or an online library of a different platform 
+3. Repeat 1-2 until enough tracks, triage note app list
+4. Triage online wishlists / carts, ensure synchronised with note app list
+5. Pay for desired new tracks on download platforms
+6. Download tracks
+7. Import tracks into offline library, update metadata where necessary
+8. Recreate list from note app in DJ software by searching your library
+9. Start mixing, triage
+
+This can be made a lot easier if the gap between local library and online download platform can be reduced.
 
 ## Setup
 

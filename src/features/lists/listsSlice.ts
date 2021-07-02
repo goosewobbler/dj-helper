@@ -18,7 +18,8 @@ export const slice = createSlice({
     deleteList: (state, { payload }) => {
       const indexToRemove = state.findIndex((list) => list.id === payload);
       if (indexToRemove > -1) {
-        state.splice(indexToRemove, 1);
+        state.splice(indexToRemove, 1); //remove
+        state.slice(indexToRemove).forEach((list) => (list.id -= 1)); //reorder ids
       }
     },
     updateListTitle: (state, { payload: { id, title } }) => {
@@ -45,7 +46,6 @@ export const updateListTitleAsync = (id: number, title: string) => (dispatch: Di
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state) => state.counter.value)`
-export const selectLists = (state: AppState) =>
-  state.lists.sort((a, b) => a.title.toLowerCase().localeCompare(b.title.toLowerCase()));
+export const selectLists = (state: AppState) => state.lists;
 
 export const listsReducer = slice.reducer;

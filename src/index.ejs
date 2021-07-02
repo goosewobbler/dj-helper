@@ -7,7 +7,8 @@
       http-equiv="Content-Security-Policy"
       content="
         default-src http://localhost:1212; 
-        script-src-elem http://localhost:1212 'nonce-4AEemGb0xJptoIGFP3Nd';
+        frame-src https://bandcamp.com https://*.bandcamp.com;
+        script-src-elem http://localhost:1212 'nonce-4AEemGb0xJptoIGFP3Nd' https://bandcamp.com https://bcbits.com;
         style-src-elem http://localhost:1212 'nonce-4AEemGb0xJptoIGFP3Nd'; 
         font-src data: http://localhost:1212; 
         connect-src *

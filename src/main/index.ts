@@ -29,9 +29,34 @@ async function createWindow(): Promise<void> {
     height: 1000,
     width: 1100,
     webPreferences: {
-      preload: path.resolve(__dirname, 'preload.js'),
+      preload: path.resolve(__dirname, '../renderer/preload.js'),
     },
   });
+
+  mainWindow.webContents.session.webRequest.onHeadersReceived(
+    { urls: ['*://*/*'] },
+    ({ responseHeaders }, callback) => {
+      if (responseHeaders) {
+        Object.keys(responseHeaders)
+          .filter((x) => x.toLowerCase() === 'x-frame-options')
+          .map((x) => delete responseHeaders[x]);
+
+        callback({
+          cancel: false,
+          responseHeaders,
+        });
+      }
+    },
+  );
+
+  // Session.defaultSession.cookies.set({ url: 'https://bandcamp.com', sameSite: 'lax' }).then(
+  //   () => {
+  //     // success
+  //   },
+  //   (error) => {
+  //     console.error(error);
+  //   },
+  // );
 
   if (isDebugMode) {
     const { installDevToolsExtensions } = await import('./helpers/dev');

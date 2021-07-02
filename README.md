@@ -10,21 +10,9 @@ Most music apps these days are geared around streaming, with DJs and digital rec
 * Online Music Acquisition (Bandcamp, Beatport, etc.)
 * DJ Software (Rekordbox, Traktor, etc.)
 
-The problem is that the places for acquiring new digital music are online and totally separated from the places where the downloaded tracks end up.  Having to cross-reference different offline and online lists with all the different music platforms and manage the state of each track (non-triaged / triaged / listened / bought / downloaded / in library) is tedious.  A typical workflow for building a setlist looks like this:
+The problem is that the places for acquiring new digital music are online and totally separated from the places where the downloaded tracks end up.  Having to cross-reference different offline and online lists with all the different music platforms and manage the state of each track (non-triaged / triaged / listened / bought / downloaded / in library) is tedious. 
 
-1. Listen to streamed tracks
-2. Copy the artist & title of each interesting track into a note app 
-3. When streamed from a platform allowing downloads, add track to online wishlist or cart
-4. Check that each track is not already in your local library, or an online library of a different platform 
-5. Repeat 1-4 until enough tracks, triage note app list
-6. Triage online wishlists / carts, ensure synchronised with note app list
-7. Pay for desired new tracks on download platforms
-8. Download tracks
-9. Import tracks into offline library, update metadata where necessary
-10. Recreate list from note app in DJ software by searching your library
-11. Start mixing, triage
-
-This can be made a lot easier if the gap between local library and online download platform can be reduced.
+This problem will be made a lot easier if the gaps between local library, DJ software and online download platform can be bridged in some way.
 
 ## Setup
 

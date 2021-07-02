@@ -13,8 +13,8 @@ Most music apps these days are geared around streaming, with DJs and digital rec
 The problem is that the places for acquiring new digital music are online and totally separated from the places where the downloaded tracks end up.  Having to cross-reference different offline and online lists with all the different music platforms and manage the state of each track (non-triaged / triaged / listened / bought / downloaded / in library) is tedious.  A typical workflow for building a setlist looks like this:
 
 1. Listen to streamed tracks
-2  Copy the artist & title of each interesting track into a note app
-3  When streamed from a platform allowing downloads, add track to online wishlist or cart
+2. Copy the artist & title of each interesting track into a note app 
+3. When streamed from a platform allowing downloads, add track to online wishlist or cart
 4. Check that each track is not already in your local library, or an online library of a different platform 
 5. Repeat 1-4 until enough tracks, triage note app list
 6. Triage online wishlists / carts, ensure synchronised with note app list

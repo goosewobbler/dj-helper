@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2017",
+    "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
     "strict": true,
@@ -11,7 +11,6 @@
     "sourceMap": true,
     "importsNotUsedAsValues": "preserve",
     "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true,
     "newLine": "lf",
     "noEmitOnError": true,
     "jsx": "react",
@@ -23,5 +22,12 @@
     "noEmit": true,
     "typeRoots": ["./types", "./node_modules/@types"]
   },
-  "include": ["./src/**/*.ts", "./src/**/*.tsx", "./test/**/*.spec.ts", "./test/**/*.spec.tsx", "./types/**/*.ts"]
+  "include": [
+    "./src/**/*.ts",
+    "./src/**/*.tsx",
+    "./test/**/*.spec.ts",
+    "./test/**/*.spec.tsx",
+    "./types/**/*.ts",
+    "src/main/preload.js"
+  ]
 }

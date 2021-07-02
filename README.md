@@ -1,19 +1,34 @@
 # DJ Helper
 
-This is an app for helping DJs to construct and manage lists of tracks whilst browsing online music sources such as BandCamp and BeatPort.
+This is an app for helping DJs to construct and manage lists of tracks whilst browsing online music sources such as Bandcamp and Beatport. More generalised digital music curation features may be added in the future, focussing on ownership / downloadable content over streaming.
+
+## Rationale
+
+Most music apps these days are geared around streaming, with DJs and digital record collectors being overlooked. Existing apps serving this demographic broadly fall into three categories:
+
+* Local Music Management / Playback (iTunes, Clementine, etc.)
+* Online Music Acquisition (Bandcamp, Beatport, etc.)
+* DJ Software (Rekordbox, Traktor, etc.)
+
+The problem is that the places for acquiring new digital music are online and totally separated from the places where the downloaded tracks end up.  Having to cross-reference different offline and online lists with all the different music platforms and manage the state of each track (non-triaged / triaged / listened / bought / downloaded / in library) is tedious. 
+
+This problem will be made a lot easier if the gaps between local library, DJ software and online download platform can be bridged in some way.
 
 ## Setup
 
-[PNPM](https://pnpm.js.org) is the recommended package manager for use with this app, though others will likely work. You can install PNPM (https://pnpm.js.org/en/installation) and initialise the repository for development using the following commands:
+[PNPM](https://pnpm.io) is the recommended package manager for use with this app, though others will likely work. The following command will initialise the repository for development:
 
 ```
-curl -L https://raw.githubusercontent.com/pnpm/self-installer/master/install.js | node
 pnpm i
 ```
 
 ## Development
 
-Start the development server with `pnpm dev`. 
+Start the development server: 
+
+```
+pnpm dev
+``` 
 
 Hot Module Replacement (HMR) with React Fast Refresh and Webpack Dev Server is in use for rapid iteration on the `renderer` process, however when changing files running on the `main` process you will likely need to restart Electron.
 

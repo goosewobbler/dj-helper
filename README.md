@@ -16,7 +16,7 @@ This problem will be made a lot easier if the gaps between local library, DJ sof
 
 ## Setup
 
-[PNPM](https://pnpm.js.org) is the recommended package manager for use with this app, though others will likely work. You can install PNPM (https://pnpm.js.org/en/installation) and initialise the repository for development using the following commands:
+[PNPM](https://pnpm.js.org) is the recommended package manager for use with this app, though others will likely work. The following commands will install PNPM (https://pnpm.js.org/en/installation) and initialise the repository for development:
 
 ```
 curl -L https://raw.githubusercontent.com/pnpm/self-installer/master/install.js | node

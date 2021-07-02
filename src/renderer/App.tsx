@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import { BrowserPane } from '../features/browser/BrowserPane';
 import { ListPane } from '../features/lists/ListPane';
 
 export const App = (): ReactElement => {
@@ -13,7 +14,9 @@ export const App = (): ReactElement => {
         <div className="flex flex-col flex-grow-0 flex-shrink-0 w-1/3 p-2 section">
           <ListPane />
         </div>
-        <div className="flex flex-col flex-grow flex-shrink-0 w-2/3 p-2 section">Right Pane</div>
+        <div className="flex flex-col flex-grow flex-shrink-0 w-2/3 p-2 section">
+          <BrowserPane />
+        </div>
       </div>
     </div>
   );

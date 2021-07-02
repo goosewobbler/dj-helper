@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import path from 'path';
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserView, BrowserWindow } from 'electron';
 import { createApp } from './app';
 
 const isDev = process.env.NODE_ENV === 'development';
@@ -48,6 +48,11 @@ async function createWindow(): Promise<void> {
       }
     },
   );
+
+  const view = new BrowserView();
+  mainWindow.setBrowserView(view);
+  view.setBounds({ x: 200, y: 100, width: 1000, height: 1500 });
+  view.webContents.loadURL('https://bandcamp.com');
 
   // Session.defaultSession.cookies.set({ url: 'https://bandcamp.com', sameSite: 'lax' }).then(
   //   () => {

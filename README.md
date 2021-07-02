@@ -2,9 +2,20 @@
 
 This is an app for helping DJs to construct and manage lists of tracks whilst browsing online music sources such as BandCamp and BeatPort.
 
+## Setup
+
+[PNPM](https://pnpm.js.org) is the recommended package manager for use with this app, though others will likely work. You can install PNPM (https://pnpm.js.org/en/installation) and initialise the repository for development using the following commands:
+
+```
+curl -L https://raw.githubusercontent.com/pnpm/self-installer/master/install.js | node
+pnpm i
+```
+
 ## Development
 
-Start the development server with `pnpm dev`. Hot Module Replacement (HMR) with React Fast Refresh and Webpack Dev Server is in use for rapid iteration on the `renderer` process, however when changing files running on the `main` process you will likely need to restart Electron.
+Start the development server with `pnpm dev`. 
+
+Hot Module Replacement (HMR) with React Fast Refresh and Webpack Dev Server is in use for rapid iteration on the `renderer` process, however when changing files running on the `main` process you will likely need to restart Electron.
 
 ### Tech Stack
 

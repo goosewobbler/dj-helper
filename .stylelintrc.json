@@ -7,6 +7,6 @@
         "ignoreAtRules": ["extends", "tailwind", "apply"]
       }
     ],
-    "unit-whitelist": ["em", "rem", "s", "%", "deg", "px"]
+    "unit-allowed-list": ["em", "rem", "s", "%", "deg", "px"]
   }
 }

@@ -16,7 +16,7 @@ module.exports = {
   modulePathIgnorePatterns: ['.node_modules_production'],
   testMatch: ['**/test/**/*.spec.(ts|tsx)'],
   setupFilesAfterEnv: ['./test/setup.ts'],
-  testURL: 'https://bbc.co.uk/',
+  testURL: 'https://github.com/goosewobbler/',
   globals: {
     'ts-jest': {
       packageJson: './package.json',

@@ -54,6 +54,14 @@ async function createWindow(): Promise<void> {
   view.setBounds({ x: 200, y: 100, width: 1000, height: 1500 });
   view.webContents.loadURL('https://bandcamp.com');
 
+  // before loadUrl
+  // read cookie from electron-store
+  // view.webContents.session.cookies.set('loginCookie')
+
+  // upon login (webContents.did-navigate?)
+  // view.webContents.session.cookies.get('loginCookie')
+  // write cookie to electron-store
+
   // Session.defaultSession.cookies.set({ url: 'https://bandcamp.com', sameSite: 'lax' }).then(
   //   () => {
   //     // success

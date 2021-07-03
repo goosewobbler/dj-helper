@@ -2,7 +2,7 @@ import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 
 export type AnyObject = Record<string, unknown>;
 export interface LooseObject {
-  [Key: string]: AnyObject | [] | string | number | boolean;
+  [Key: string]: AnyObject | [] | string[] | string | number | boolean;
 }
 
 export type Dispatch = ThunkDispatch<AppState, undefined, AnyAction>;

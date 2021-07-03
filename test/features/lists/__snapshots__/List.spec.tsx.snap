@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`List should render the expected html 1`] = `
+<div>
+  <div
+    class="list"
+  >
+    <span
+      class="title"
+      data-testid="title"
+    >
+      test list
+    </span>
+    <span
+      class="action-btns"
+    >
+      <button
+        data-testid="edit"
+        type="button"
+      >
+        Edit
+      </button>
+      <button
+        data-testid="delete"
+        type="button"
+      >
+        Delete
+      </button>
+    </span>
+  </div>
+</div>
+`;
+
+exports[`List when the delete button is clicked should render the expected html 1`] = `
+<div>
+  <div
+    class="list"
+  >
+    <span
+      class="title"
+      data-testid="title"
+    >
+      test list
+    </span>
+    <span
+      class="action-btns"
+    >
+      <button
+        data-testid="edit"
+        type="button"
+      >
+        Edit
+      </button>
+      <button
+        data-testid="delete"
+        type="button"
+      >
+        Delete
+      </button>
+    </span>
+  </div>
+</div>
+`;

@@ -28,6 +28,7 @@ specifiers:
   '@types/request': ^2.48.5
   '@types/source-map-support': ^0.5.2
   '@types/stylelint': ^13.13.1
+  '@types/tailwindcss': ^2.2.1
   '@types/webpack': ^5.28.0
   '@types/webpack-env': ^1.16.2
   '@typescript-eslint/eslint-plugin': ^4.28.1
@@ -118,6 +119,7 @@ devDependencies:
   '@types/request': 2.48.5
   '@types/source-map-support': 0.5.3
   '@types/stylelint': 13.13.1
+  '@types/tailwindcss': 2.2.1
   '@types/webpack': 5.28.0_webpack-cli@4.7.2
   '@types/webpack-env': 1.16.2
   '@typescript-eslint/eslint-plugin': 4.28.1_37ea0521d4014002f404f9b7c2b7f3d2
@@ -2325,6 +2327,10 @@ packages:
     dependencies:
       globby: 11.0.4
       postcss: 8.3.5
+    dev: true
+
+  /@types/tailwindcss/2.2.1:
+    resolution: {integrity: sha512-raLwtQF+uul9lsvs7+GUizeNrpxRqbnckIu/va5hzPPwZsImZunkyLFAS/1rwEHhhvFMNiMJmTiP5PPGa0oNJA==}
     dev: true
 
   /@types/testing-library__jest-dom/5.14.0:

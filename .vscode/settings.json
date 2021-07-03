@@ -9,12 +9,6 @@
       "extensions": ["main.config.js", "renderer.config.js", "main.plugins.js", "renderer.plugins.js", "rules.js"],
       "filename": true,
       "format": "svg"
-    },
-    {
-      "icon": "tailwind",
-      "extensions": ["theme.config.js"],
-      "filename": true,
-      "format": "svg"
     }
   ]
 }

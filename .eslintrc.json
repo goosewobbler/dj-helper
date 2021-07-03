@@ -8,6 +8,7 @@
   "rules": {
     "curly": "error",
     "import/extensions": ["error", "never"],
+    "import/no-default-export": "error",
     "import/prefer-default-export": "off",
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }]
   },
@@ -50,6 +51,7 @@
             "css": "always"
           }
         ],
+        "import/no-default-export": "error",
         "import/prefer-default-export": "off",
         "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
         "react/jsx-filename-extension": ["warn", { "extensions": [".tsx"] }],

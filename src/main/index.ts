@@ -1,7 +1,7 @@
-/* eslint-disable no-console */
 import path from 'path';
 import { app, BrowserView, BrowserWindow } from 'electron';
 import { createApp } from './app';
+import { log } from './helpers/console';
 
 const isDev = process.env.NODE_ENV === 'development';
 const isProd = process.env.NODE_ENV === 'production';
@@ -52,7 +52,7 @@ async function createWindow(): Promise<void> {
   const view = new BrowserView();
   mainWindow.setBrowserView(view);
   view.setBounds({ x: 200, y: 100, width: 1000, height: 1500 });
-  view.webContents.loadURL('https://bandcamp.com');
+  void view.webContents.loadURL('https://bandcamp.com');
 
   // before loadUrl
   // read cookie from electron-store
@@ -101,13 +101,13 @@ async function createWindow(): Promise<void> {
 if (app.requestSingleInstanceLock()) {
   app.on('second-instance', () => {
     // Someone tried to run a second instance, we should focus our window.
-    console.log('second instance requested');
+    log('second instance requested');
     if (mainWindow) {
       if (mainWindow.isMinimized()) {
-        console.log('restoring main window');
+        log('restoring main window');
         mainWindow.restore();
       }
-      console.log('focussing main window');
+      log('focussing main window');
       mainWindow.focus();
     }
   });
@@ -132,5 +132,5 @@ if (app.requestSingleInstanceLock()) {
     }
   });
 } else {
-  console.log('single instance lock rejected');
+  log('single instance lock rejected');
 }

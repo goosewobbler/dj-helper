@@ -54,7 +54,8 @@
         "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
         "react/jsx-filename-extension": ["warn", { "extensions": [".tsx"] }],
         "@typescript-eslint/no-non-null-assertion": "off",
-        "no-param-reassign": ["error", { "props": false }]
+        "no-param-reassign": ["error", { "props": false }],
+        "no-void": ["error", { "allowAsStatement": true }]
       },
       "settings": {
         "import/parsers": {

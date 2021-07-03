@@ -1,14 +1,14 @@
 /* eslint global-require: off */
 
 /**
- * @type {import("../src/common/types").LooseObject}
+ * @type {import("./src/common/types").LooseObject}
  */
 const theme = {
   extend: {},
 };
 
 /**
- * @type {import("../src/common/types").LooseObject}
+ * @type {import("./src/common/types").LooseObject}
  */
 const variants = {
   borderColor: ['responsive', 'hover', 'focus', 'focus-within', 'active'],

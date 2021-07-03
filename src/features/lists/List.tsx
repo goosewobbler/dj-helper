@@ -37,7 +37,7 @@ export function List({ id, title = '', onClickDelete, onEditingComplete }: ListP
 
   return (
     <div className="list">
-      <span className="title">
+      <span className="title" data-testid="title">
         {editing ? (
           <input
             className="flex-grow h-8 border border-solid text-form-field-text border-primary-text-30"
@@ -53,10 +53,10 @@ export function List({ id, title = '', onClickDelete, onEditingComplete }: ListP
       </span>
       {!editing && (
         <span className="action-btns">
-          <button type="button" onClick={() => handleEdit()}>
+          <button type="button" onClick={() => handleEdit()} data-testid="edit">
             Edit
           </button>
-          <button type="button" onClick={() => onClickDelete(id)}>
+          <button type="button" onClick={() => onClickDelete(id)} data-testid="delete">
             Delete
           </button>
         </span>

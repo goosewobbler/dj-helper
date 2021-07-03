@@ -1,5 +1,5 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 
-export function MetaPanel() {
-  return <div></div>;
+export function MetaPanel(): ReactElement {
+  return <div />;
 }

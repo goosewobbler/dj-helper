@@ -11,17 +11,17 @@ const get = async (url: string): Promise<Response> => {
     const response = await fetch(url, {
       method: 'GET',
     });
-    const { headers, status: statusCode, statusText, ok, text } = response;
+    const { headers, status: statusCode, statusText, ok } = response;
 
-    body = await text();
+    body = await response.text();
 
     if (!ok) {
-      let err = new Error(statusText) as ResponseError;
+      const err = new Error(statusText) as ResponseError;
       err.response = { headers, statusCode, body };
       throw err;
     }
 
-    return Promise.resolve({ body, headers, statusCode });
+    return await Promise.resolve({ body, headers, statusCode });
   } catch (error) {
     return Promise.reject(error);
   }

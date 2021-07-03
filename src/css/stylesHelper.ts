@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import resolveConfig from 'tailwindcss/resolveConfig';
-import tailwindConfig from '../../../tailwindcss/tailwind.config';
+import tailwindConfig from '../../tailwindcss/tailwind.config';
 
 const styles = resolveConfig(tailwindConfig);
 

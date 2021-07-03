@@ -9,9 +9,9 @@ import { AppState, LooseObject } from '../common/types';
 import { createReduxStore } from '../common/reduxStore';
 import { log } from './helpers/console';
 
-const currentVersion = process.env.npm_package_version;
+const currentVersion = process.env.npm_package_version as string;
 
-export const createApp = (mainWindow: Electron.BrowserWindow, isDev: boolean) => {
+export const createApp = (mainWindow: Electron.BrowserWindow, isDev: boolean): void => {
   const store = new Store<AppState>();
 
   ipcMain.handleOnce('get-setup', (): { initialState: AppState; html: string } => {

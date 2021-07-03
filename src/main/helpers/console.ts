@@ -1,4 +1,4 @@
-const log = (...args: any[]): void => {
+const log = (...args: unknown[]): void => {
   console.log(...args); // eslint-disable-line no-console
 };
 

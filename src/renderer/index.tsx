@@ -1,4 +1,3 @@
-/// <reference types="@welldone-software/why-did-you-render" />
 import { syncRenderer } from '@mckayla/electron-redux/renderer';
 import React from 'react';
 import * as ReactDOM from 'react-dom';

@@ -19,17 +19,6 @@ declare global {
   }
 }
 
-// const initDebugMode = async (): Promise<void> => {
-//   const whyDidYouRender = (await import('@welldone-software/why-did-you-render')).default;
-//   whyDidYouRender(React, {
-//     trackAllPureComponents: true,
-//   });
-// };
-
-// if (process.env.NODE_ENV !== 'production' && typeof window !== 'undefined') {
-//   initDebugMode();
-// }
-
 const { initialState, html } = await window.api.app.getSetup();
 
 const reduxStore = createReduxStore(initialState, syncRenderer);

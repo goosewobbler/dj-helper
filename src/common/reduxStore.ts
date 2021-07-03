@@ -1,8 +1,8 @@
-import { configureStore, StoreEnhancer } from '@reduxjs/toolkit';
+import { configureStore, StoreEnhancer, Store } from '@reduxjs/toolkit';
 import { rootReducer } from '../features/rootReducer';
-import { AppState } from './types';
+import { AnyObject, AppState } from './types';
 
-export function createReduxStore(preloadedState: AppState, syncFn: StoreEnhancer<{}, {}>) {
+export function createReduxStore(preloadedState: AppState, syncFn: StoreEnhancer<AnyObject, AnyObject>): Store {
   const store = configureStore({
     reducer: rootReducer,
     preloadedState,

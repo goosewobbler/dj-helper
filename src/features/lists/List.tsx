@@ -3,8 +3,8 @@ import React, { ReactElement, BaseSyntheticEvent, KeyboardEvent, useState } from
 type ListProps = {
   id: number;
   title: string;
-  onClickDelete: Function;
-  onEditingComplete: Function;
+  onClickDelete: (id: number) => void;
+  onEditingComplete: (id: number, titleValue: string) => void;
 };
 
 const KEY_ENTER = 'Enter';
@@ -22,9 +22,9 @@ export function List({ id, title = '', onClickDelete, onEditingComplete }: ListP
     setTitleValue((event.target as HTMLInputElement).value);
   };
 
-  const handleKeyDown = (event: KeyboardEvent, id: number): void => {
+  const handleKeyDown = (event: KeyboardEvent, listId: number): void => {
     if (event.code === KEY_ENTER && isValid()) {
-      onEditingComplete(id, titleValue);
+      onEditingComplete(listId, titleValue);
       setEditing(false);
     } else if (event.key === KEY_ESCAPE) {
       setEditing(false);
@@ -40,7 +40,7 @@ export function List({ id, title = '', onClickDelete, onEditingComplete }: ListP
       <span className="title">
         {editing ? (
           <input
-            className={'flex-grow h-8 border-solid border text-form-field-text border-primary-text-30'}
+            className="flex-grow h-8 border border-solid text-form-field-text border-primary-text-30"
             type="text"
             onChange={(event): void => handleTitleChange(event)}
             onKeyDown={(event): void => handleKeyDown(event, id)}
@@ -53,10 +53,10 @@ export function List({ id, title = '', onClickDelete, onEditingComplete }: ListP
       </span>
       {!editing && (
         <span className="action-btns">
-          <button className="" onClick={() => handleEdit()}>
+          <button type="button" onClick={() => handleEdit()}>
             Edit
           </button>
-          <button className="" onClick={() => onClickDelete(id)}>
+          <button type="button" onClick={() => onClickDelete(id)}>
             Delete
           </button>
         </span>

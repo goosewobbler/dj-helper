@@ -32,7 +32,7 @@ module.exports = {
     __filename: true,
   },
   externals: [
-    ({ context, request }, callback) => {
+    ({ request }, callback) => {
       if (request[0] === '.') {
         callback();
       } else {

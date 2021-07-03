@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { List } from './List';
 import { createList, deleteList, selectLists, updateListTitle } from './listsSlice';
 
-export function ListPane() {
+export function ListPane(): ReactElement {
   const lists = useSelector(selectLists);
   const dispatch = useDispatch();
 
@@ -22,7 +22,7 @@ export function ListPane() {
           ),
         )}
         <div className="">
-          <button className="" aria-label="New List" onClick={() => dispatch(createList())}>
+          <button type="button" aria-label="New List" onClick={() => dispatch(createList())}>
             New List
           </button>
         </div>

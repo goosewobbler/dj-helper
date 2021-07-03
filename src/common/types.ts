@@ -1,5 +1,4 @@
-import { AnyAction } from '@reduxjs/toolkit';
-import { ThunkDispatch } from '@reduxjs/toolkit';
+import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 
 export type AnyObject = Record<string, unknown>;
 export interface LooseObject {

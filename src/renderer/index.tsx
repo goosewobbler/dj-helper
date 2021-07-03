@@ -13,7 +13,7 @@ declare global {
     djHelper: { preloadedState: AppState };
     api: {
       app: {
-        getSetup: Function;
+        getSetup: () => Promise<{ initialState: AppState; html: string }>;
       };
     };
   }

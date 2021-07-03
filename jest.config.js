@@ -17,6 +17,7 @@ module.exports = {
   testMatch: ['**/test/**/*.spec.(ts|tsx)'],
   setupFilesAfterEnv: ['./test/setup.ts'],
   testURL: 'https://github.com/goosewobbler/',
+  testEnvironment: 'jsdom',
   globals: {
     'ts-jest': {
       packageJson: './package.json',

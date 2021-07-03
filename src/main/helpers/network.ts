@@ -27,8 +27,6 @@ const get = async (url: string): Promise<Response> => {
   }
 };
 
-const network: NetworkSystem = {
+export const network: NetworkSystem = {
   get,
 };
-
-export default network;

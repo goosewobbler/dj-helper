@@ -10,7 +10,7 @@ type ListProps = {
 const KEY_ENTER = 'Enter';
 const KEY_ESCAPE = 'Escape';
 
-export function List({ id, title = '', onClickDelete, onEditingComplete }: ListProps): ReactElement {
+export function List({ id, title, onClickDelete, onEditingComplete }: ListProps): ReactElement {
   const [editing, setEditing] = useState(false);
   const [titleValue, setTitleValue] = useState(title);
 
@@ -18,15 +18,20 @@ export function List({ id, title = '', onClickDelete, onEditingComplete }: ListP
     return !!titleValue;
   };
 
+  const revert = () => {
+    setTitleValue(title);
+  };
+
   const handleTitleChange = (event: BaseSyntheticEvent): void => {
     setTitleValue((event.target as HTMLInputElement).value);
   };
 
   const handleKeyDown = (event: KeyboardEvent, listId: number): void => {
-    if (event.code === KEY_ENTER && isValid()) {
+    if (event.key === KEY_ENTER && isValid()) {
       onEditingComplete(listId, titleValue);
       setEditing(false);
     } else if (event.key === KEY_ESCAPE) {
+      revert();
       setEditing(false);
     }
   };
@@ -48,7 +53,7 @@ export function List({ id, title = '', onClickDelete, onEditingComplete }: ListP
             value={titleValue}
           />
         ) : (
-          title
+          titleValue
         )}
       </span>
       {!editing && (

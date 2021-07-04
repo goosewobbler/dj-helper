@@ -1,7 +1,15 @@
 import React, { ReactElement } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { List } from './List';
-import { createList, deleteList, selectLists, updateListTitle } from './listsSlice';
+import {
+  createList,
+  editList,
+  revertEditList,
+  finishEditList,
+  deleteList,
+  selectLists,
+  updateListTitle,
+} from './listsSlice';
 
 export function ListPane(): ReactElement {
   const lists = useSelector(selectLists);
@@ -9,23 +17,27 @@ export function ListPane(): ReactElement {
 
   return (
     <div>
-      <div className="listPane">
+      <ol className="listPane" role="list">
         {lists.map(
           (list): ReactElement => (
             <List
               key={list.id}
               id={list.id}
               title={list.title}
+              editing={list.editing}
+              onTitleChange={(id: number, title: string) => dispatch(updateListTitle({ id, title }))}
+              onClickEdit={(id: number) => dispatch(editList(id))}
               onClickDelete={(id: number) => dispatch(deleteList(id))}
-              onEditingComplete={(id: number, title: string) => dispatch(updateListTitle({ id, title }))}
+              onEditingComplete={(id: number, title: string) => dispatch(finishEditList({ id, title }))}
+              onEditingCancelled={(id: number) => dispatch(revertEditList(id))}
             />
           ),
         )}
-        <div className="">
-          <button type="button" aria-label="New List" onClick={() => dispatch(createList())}>
-            New List
-          </button>
-        </div>
+      </ol>
+      <div className="">
+        <button type="button" aria-label="New List" onClick={() => dispatch(createList())}>
+          New List
+        </button>
       </div>
     </div>
   );

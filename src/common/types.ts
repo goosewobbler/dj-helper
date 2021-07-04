@@ -35,6 +35,8 @@ export type List = {
   id: number;
   title: string;
   tracks: Track['id'][];
+  editing?: boolean;
+  oldTitle?: string;
 };
 
 export interface AppState {

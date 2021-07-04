@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { AppState, Dispatch, List } from '../../common/types';
+import { AppState, List } from '../../common/types';
 
 const listArray: List[] = [];
 
@@ -12,8 +12,16 @@ export const slice = createSlice({
         id: state.length + 1,
         title: 'New List',
         tracks: [],
+        editing: true,
       };
       state.push(newList);
+    },
+    editList: (state, { payload }) => {
+      const listIndex = state.findIndex((list) => list.id === payload);
+      if (listIndex > -1) {
+        state[listIndex].editing = true;
+        state[listIndex].oldTitle = state[listIndex].title;
+      }
     },
     deleteList: (state, { payload }) => {
       const indexToRemove = state.findIndex((list) => list.id === payload);
@@ -32,26 +40,26 @@ export const slice = createSlice({
         listToUpdate.title = title;
       }
     },
+    finishEditList: (state, { payload }) => {
+      const listIndex = state.findIndex((list) => list.editing === true);
+      if (listIndex > -1) {
+        state[listIndex].editing = false;
+        delete state[listIndex].oldTitle;
+      }
+    },
+    revertEditList: (state, { payload }) => {
+      const listIndex = state.findIndex((list) => list.id === payload);
+      if (listIndex > -1) {
+        state[listIndex].editing = false;
+        state[listIndex].title = state[listIndex].oldTitle as string;
+        delete state[listIndex].oldTitle;
+      }
+    },
   },
 });
 
-export const { createList, deleteList, updateListTitle } = slice.actions;
+export const { createList, editList, deleteList, updateListTitle, revertEditList, finishEditList } = slice.actions;
 
-// The function below is called a thunk and allows us to perform async logic. It
-// can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
-// will call the thunk with the `dispatch` function as the first argument. Async
-// code can then be executed and other actions can be dispatched
-export const updateListTitleAsync =
-  (id: number, title: string) =>
-  (dispatch: Dispatch): void => {
-    setTimeout(() => {
-      dispatch(updateListTitle({ id, title }));
-    }, 1000);
-  };
-
-// The function below is called a selector and allows us to select a value from
-// the state. Selectors can also be defined inline where they're used instead of
-// in the slice file. For example: `useSelector((state) => state.counter.value)`
 export const selectLists = (state: AppState): List[] => state.lists;
 
 export const listsReducer = slice.reducer;

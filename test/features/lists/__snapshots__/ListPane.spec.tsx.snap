@@ -1,0 +1,794 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ListPane given a number of lists should render the expected html 1`] = `
+<div>
+  <div>
+    <ol
+      class="listPane"
+      role="list"
+    >
+      <li
+        class="list"
+        id="list-1"
+        role="listitem"
+      >
+        <span
+          class="title"
+          data-testid="title"
+        >
+          test list one
+        </span>
+        <span
+          class="action-btns"
+        >
+          <button
+            role="button"
+            type="button"
+          >
+            Edit
+          </button>
+          <button
+            role="button"
+            type="button"
+          >
+            Delete
+          </button>
+        </span>
+      </li>
+      <li
+        class="list"
+        id="list-2"
+        role="listitem"
+      >
+        <span
+          class="title"
+          data-testid="title"
+        >
+          test list two
+        </span>
+        <span
+          class="action-btns"
+        >
+          <button
+            role="button"
+            type="button"
+          >
+            Edit
+          </button>
+          <button
+            role="button"
+            type="button"
+          >
+            Delete
+          </button>
+        </span>
+      </li>
+      <li
+        class="list"
+        id="list-3"
+        role="listitem"
+      >
+        <span
+          class="title"
+          data-testid="title"
+        >
+          test list three
+        </span>
+        <span
+          class="action-btns"
+        >
+          <button
+            role="button"
+            type="button"
+          >
+            Edit
+          </button>
+          <button
+            role="button"
+            type="button"
+          >
+            Delete
+          </button>
+        </span>
+      </li>
+    </ol>
+    <div
+      class=""
+    >
+      <button
+        aria-label="New List"
+        type="button"
+      >
+        New List
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ListPane given a number of lists when a list delete button is clicked should render the expected html 1`] = `
+<div>
+  <div>
+    <ol
+      class="listPane"
+      role="list"
+    >
+      <li
+        class="list"
+        id="list-1"
+        role="listitem"
+      >
+        <span
+          class="title"
+          data-testid="title"
+        >
+          test list one
+        </span>
+        <span
+          class="action-btns"
+        >
+          <button
+            role="button"
+            type="button"
+          >
+            Edit
+          </button>
+          <button
+            role="button"
+            type="button"
+          >
+            Delete
+          </button>
+        </span>
+      </li>
+      <li
+        class="list"
+        id="list-2"
+        role="listitem"
+      >
+        <span
+          class="title"
+          data-testid="title"
+        >
+          test list three
+        </span>
+        <span
+          class="action-btns"
+        >
+          <button
+            role="button"
+            type="button"
+          >
+            Edit
+          </button>
+          <button
+            role="button"
+            type="button"
+          >
+            Delete
+          </button>
+        </span>
+      </li>
+    </ol>
+    <div
+      class=""
+    >
+      <button
+        aria-label="New List"
+        type="button"
+      >
+        New List
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ListPane given a number of lists when a list edit button is clicked and an invalid title stops the edit from being completed should render the expected html 1`] = `
+<div>
+  <div>
+    <ol
+      class="listPane"
+      role="list"
+    >
+      <li
+        class="list"
+        id="list-1"
+        role="listitem"
+      >
+        <span
+          class="title"
+          data-testid="title"
+        >
+          test list one
+        </span>
+        <span
+          class="action-btns"
+        >
+          <button
+            role="button"
+            type="button"
+          >
+            Edit
+          </button>
+          <button
+            role="button"
+            type="button"
+          >
+            Delete
+          </button>
+        </span>
+      </li>
+      <li
+        class="list"
+        id="list-2"
+        role="listitem"
+      >
+        <span
+          class="title"
+          data-testid="title"
+        >
+          <label
+            for="list-title"
+          >
+            List Title
+          </label>
+          <input
+            class="ring-4 ring-opacity-30 ring-red-300"
+            id="list-title"
+            placeholder="List Title"
+            type="text"
+            value=""
+          />
+        </span>
+      </li>
+      <li
+        class="list"
+        id="list-3"
+        role="listitem"
+      >
+        <span
+          class="title"
+          data-testid="title"
+        >
+          test list three
+        </span>
+        <span
+          class="action-btns"
+        >
+          <button
+            role="button"
+            type="button"
+          >
+            Edit
+          </button>
+          <button
+            role="button"
+            type="button"
+          >
+            Delete
+          </button>
+        </span>
+      </li>
+    </ol>
+    <div
+      class=""
+    >
+      <button
+        aria-label="New List"
+        type="button"
+      >
+        New List
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ListPane given a number of lists when a list edit button is clicked and the edit is cancelled should render the expected html 1`] = `
+<div>
+  <div>
+    <ol
+      class="listPane"
+      role="list"
+    >
+      <li
+        class="list"
+        id="list-1"
+        role="listitem"
+      >
+        <span
+          class="title"
+          data-testid="title"
+        >
+          test list one
+        </span>
+        <span
+          class="action-btns"
+        >
+          <button
+            role="button"
+            type="button"
+          >
+            Edit
+          </button>
+          <button
+            role="button"
+            type="button"
+          >
+            Delete
+          </button>
+        </span>
+      </li>
+      <li
+        class="list"
+        id="list-2"
+        role="listitem"
+      >
+        <span
+          class="title"
+          data-testid="title"
+        >
+          test list two
+        </span>
+        <span
+          class="action-btns"
+        >
+          <button
+            role="button"
+            type="button"
+          >
+            Edit
+          </button>
+          <button
+            role="button"
+            type="button"
+          >
+            Delete
+          </button>
+        </span>
+      </li>
+      <li
+        class="list"
+        id="list-3"
+        role="listitem"
+      >
+        <span
+          class="title"
+          data-testid="title"
+        >
+          test list three
+        </span>
+        <span
+          class="action-btns"
+        >
+          <button
+            role="button"
+            type="button"
+          >
+            Edit
+          </button>
+          <button
+            role="button"
+            type="button"
+          >
+            Delete
+          </button>
+        </span>
+      </li>
+    </ol>
+    <div
+      class=""
+    >
+      <button
+        aria-label="New List"
+        type="button"
+      >
+        New List
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ListPane given a number of lists when a list edit button is clicked and the edit is completed should render the expected html 1`] = `
+<div>
+  <div>
+    <ol
+      class="listPane"
+      role="list"
+    >
+      <li
+        class="list"
+        id="list-1"
+        role="listitem"
+      >
+        <span
+          class="title"
+          data-testid="title"
+        >
+          test list one
+        </span>
+        <span
+          class="action-btns"
+        >
+          <button
+            role="button"
+            type="button"
+          >
+            Edit
+          </button>
+          <button
+            role="button"
+            type="button"
+          >
+            Delete
+          </button>
+        </span>
+      </li>
+      <li
+        class="list"
+        id="list-2"
+        role="listitem"
+      >
+        <span
+          class="title"
+          data-testid="title"
+        >
+          new title for test list two
+        </span>
+        <span
+          class="action-btns"
+        >
+          <button
+            role="button"
+            type="button"
+          >
+            Edit
+          </button>
+          <button
+            role="button"
+            type="button"
+          >
+            Delete
+          </button>
+        </span>
+      </li>
+      <li
+        class="list"
+        id="list-3"
+        role="listitem"
+      >
+        <span
+          class="title"
+          data-testid="title"
+        >
+          test list three
+        </span>
+        <span
+          class="action-btns"
+        >
+          <button
+            role="button"
+            type="button"
+          >
+            Edit
+          </button>
+          <button
+            role="button"
+            type="button"
+          >
+            Delete
+          </button>
+        </span>
+      </li>
+    </ol>
+    <div
+      class=""
+    >
+      <button
+        aria-label="New List"
+        type="button"
+      >
+        New List
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ListPane given a number of lists when a list edit button is clicked should render the expected html 1`] = `
+<div>
+  <div>
+    <ol
+      class="listPane"
+      role="list"
+    >
+      <li
+        class="list"
+        id="list-1"
+        role="listitem"
+      >
+        <span
+          class="title"
+          data-testid="title"
+        >
+          test list one
+        </span>
+        <span
+          class="action-btns"
+        >
+          <button
+            role="button"
+            type="button"
+          >
+            Edit
+          </button>
+          <button
+            role="button"
+            type="button"
+          >
+            Delete
+          </button>
+        </span>
+      </li>
+      <li
+        class="list"
+        id="list-2"
+        role="listitem"
+      >
+        <span
+          class="title"
+          data-testid="title"
+        >
+          <label
+            for="list-title"
+          >
+            List Title
+          </label>
+          <input
+            class="ring-4 ring-opacity-30 ring-green-300"
+            id="list-title"
+            placeholder="List Title"
+            type="text"
+            value="test list two"
+          />
+        </span>
+      </li>
+      <li
+        class="list"
+        id="list-3"
+        role="listitem"
+      >
+        <span
+          class="title"
+          data-testid="title"
+        >
+          test list three
+        </span>
+        <span
+          class="action-btns"
+        >
+          <button
+            role="button"
+            type="button"
+          >
+            Edit
+          </button>
+          <button
+            role="button"
+            type="button"
+          >
+            Delete
+          </button>
+        </span>
+      </li>
+    </ol>
+    <div
+      class=""
+    >
+      <button
+        aria-label="New List"
+        type="button"
+      >
+        New List
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ListPane given a number of lists when the new list button is clicked should render the expected html 1`] = `
+<div>
+  <div>
+    <ol
+      class="listPane"
+      role="list"
+    >
+      <li
+        class="list"
+        id="list-1"
+        role="listitem"
+      >
+        <span
+          class="title"
+          data-testid="title"
+        >
+          test list one
+        </span>
+        <span
+          class="action-btns"
+        >
+          <button
+            role="button"
+            type="button"
+          >
+            Edit
+          </button>
+          <button
+            role="button"
+            type="button"
+          >
+            Delete
+          </button>
+        </span>
+      </li>
+      <li
+        class="list"
+        id="list-2"
+        role="listitem"
+      >
+        <span
+          class="title"
+          data-testid="title"
+        >
+          test list two
+        </span>
+        <span
+          class="action-btns"
+        >
+          <button
+            role="button"
+            type="button"
+          >
+            Edit
+          </button>
+          <button
+            role="button"
+            type="button"
+          >
+            Delete
+          </button>
+        </span>
+      </li>
+      <li
+        class="list"
+        id="list-3"
+        role="listitem"
+      >
+        <span
+          class="title"
+          data-testid="title"
+        >
+          test list three
+        </span>
+        <span
+          class="action-btns"
+        >
+          <button
+            role="button"
+            type="button"
+          >
+            Edit
+          </button>
+          <button
+            role="button"
+            type="button"
+          >
+            Delete
+          </button>
+        </span>
+      </li>
+      <li
+        class="list"
+        id="list-4"
+        role="listitem"
+      >
+        <span
+          class="title"
+          data-testid="title"
+        >
+          <label
+            for="list-title"
+          >
+            List Title
+          </label>
+          <input
+            class="ring-4 ring-opacity-30 ring-green-300"
+            id="list-title"
+            placeholder="List Title"
+            type="text"
+            value="New List"
+          />
+        </span>
+      </li>
+    </ol>
+    <div
+      class=""
+    >
+      <button
+        aria-label="New List"
+        type="button"
+      >
+        New List
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ListPane initial render should render the expected html 1`] = `
+<div>
+  <div>
+    <ol
+      class="listPane"
+      role="list"
+    />
+    <div
+      class=""
+    >
+      <button
+        aria-label="New List"
+        type="button"
+      >
+        New List
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ListPane initial render when the new list button is clicked should render the expected html 1`] = `
+<div>
+  <div>
+    <ol
+      class="listPane"
+      role="list"
+    >
+      <li
+        class="list"
+        id="list-1"
+        role="listitem"
+      >
+        <span
+          class="title"
+          data-testid="title"
+        >
+          <label
+            for="list-title"
+          >
+            List Title
+          </label>
+          <input
+            class="ring-4 ring-opacity-30 ring-green-300"
+            id="list-title"
+            placeholder="List Title"
+            type="text"
+            value="New List"
+          />
+        </span>
+      </li>
+    </ol>
+    <div
+      class=""
+    >
+      <button
+        aria-label="New List"
+        type="button"
+      >
+        New List
+      </button>
+    </div>
+  </div>
+</div>
+`;

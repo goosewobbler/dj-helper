@@ -61,3 +61,105 @@ exports[`List when the delete button is clicked should render the expected html 
   </div>
 </div>
 `;
+
+exports[`List when the edit button is clicked and an invalid title is entered should render the expected html 1`] = `
+<div>
+  <div
+    class="list"
+  >
+    <span
+      class="title"
+      data-testid="title"
+    >
+      <input
+        class="flex-grow h-8 border border-solid text-form-field-text border-primary-text-30"
+        placeholder="List Title"
+        type="text"
+        value=""
+      />
+    </span>
+  </div>
+</div>
+`;
+
+exports[`List when the edit button is clicked and the edit is cancelled should render the expected html 1`] = `
+<div>
+  <div
+    class="list"
+  >
+    <span
+      class="title"
+      data-testid="title"
+    >
+      test list
+    </span>
+    <span
+      class="action-btns"
+    >
+      <button
+        data-testid="edit"
+        type="button"
+      >
+        Edit
+      </button>
+      <button
+        data-testid="delete"
+        type="button"
+      >
+        Delete
+      </button>
+    </span>
+  </div>
+</div>
+`;
+
+exports[`List when the edit button is clicked and the edit is completed should render the expected html 1`] = `
+<div>
+  <div
+    class="list"
+  >
+    <span
+      class="title"
+      data-testid="title"
+    >
+      test list 2
+    </span>
+    <span
+      class="action-btns"
+    >
+      <button
+        data-testid="edit"
+        type="button"
+      >
+        Edit
+      </button>
+      <button
+        data-testid="delete"
+        type="button"
+      >
+        Delete
+      </button>
+    </span>
+  </div>
+</div>
+`;
+
+exports[`List when the edit button is clicked should render the expected html 1`] = `
+<div>
+  <div
+    class="list"
+  >
+    <span
+      class="title"
+      data-testid="title"
+    >
+      <input
+        class="flex-grow h-8 border border-solid text-form-field-text border-primary-text-30"
+        placeholder="List Title"
+        type="text"
+        value="test list"
+      />
+    </span>
+  </div>
+</div>
+`;

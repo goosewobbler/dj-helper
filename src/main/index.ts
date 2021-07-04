@@ -13,15 +13,17 @@ if (isDev) {
 
 let mainWindow: BrowserWindow | undefined;
 
-if (isProd) {
-  const sourceMapSupport = await import('source-map-support');
-  sourceMapSupport.install();
-}
+void (async () => {
+  if (isProd) {
+    const sourceMapSupport = await import('source-map-support');
+    sourceMapSupport.install();
+  }
 
-if (isDebugMode) {
-  const electronDebug = await import('electron-debug');
-  electronDebug.default();
-}
+  if (isDebugMode) {
+    const electronDebug = await import('electron-debug');
+    electronDebug.default();
+  }
+})();
 
 async function createWindow(): Promise<void> {
   mainWindow = new BrowserWindow({

@@ -18,18 +18,19 @@ declare global {
   }
 }
 
-const { initialState, html } = await window.api.app.getSetup();
+void (async () => {
+  const { initialState, html } = await window.api.app.getSetup();
+  const reduxStore = createReduxStore(initialState, syncRenderer);
+  const htmlRoot = document.getElementById('app') as HTMLElement;
+  htmlRoot.innerHTML = html;
 
-const reduxStore = createReduxStore(initialState, syncRenderer);
-const htmlRoot = document.getElementById('app') as HTMLElement;
-htmlRoot.innerHTML = html;
-
-ReactDOM.hydrate(
-  <Provider store={reduxStore}>
-    <App />
-  </Provider>,
-  document.getElementById('app'),
-);
+  ReactDOM.hydrate(
+    <Provider store={reduxStore}>
+      <App />
+    </Provider>,
+    document.getElementById('app'),
+  );
+})();
 
 // if (isDev) {
 //   // eslint-disable-next-line

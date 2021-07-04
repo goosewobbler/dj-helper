@@ -4,23 +4,33 @@ import { List } from '../../../src/features/lists/List';
 
 let list: RenderResult;
 
-afterEach(() => {
-  list.unmount();
-});
-
 describe('List', () => {
   let onClickDeleteMock: jest.Mock;
   let onEditingCompleteMock: jest.Mock;
+  let onTitleChangeMock: jest.Mock;
+  let onClickEditMock: jest.Mock;
+  let onEditingCancelledMock: jest.Mock;
 
   beforeEach(() => {
     onClickDeleteMock = jest.fn();
     onEditingCompleteMock = jest.fn();
+    onTitleChangeMock = jest.fn();
+    onClickEditMock = jest.fn();
+    onEditingCancelledMock = jest.fn();
     list = render(
-      <List id={546} title="test list" onClickDelete={onClickDeleteMock} onEditingComplete={onEditingCompleteMock} />,
+      <List
+        id={546}
+        title="test list"
+        onClickDelete={onClickDeleteMock}
+        onEditingComplete={onEditingCompleteMock}
+        onTitleChange={onTitleChangeMock}
+        onClickEdit={onClickEditMock}
+        onEditingCancelled={onEditingCancelledMock}
+      />,
     );
   });
 
-  it('should render a list with the expected title', () => {
+  it('should render a List with the expected title', () => {
     expect(list.getByTestId('title').textContent).toEqual('test list');
   });
 
@@ -30,11 +40,11 @@ describe('List', () => {
 
   describe('when the delete button is clicked', () => {
     beforeEach(() => {
-      const button = list.getByTestId('delete');
-      fireEvent.click(button);
+      const deleteBtn = list.getByRole('button', { name: /Delete/i });
+      fireEvent.click(deleteBtn);
     });
 
-    it('should fire the delete click handler with the list ID', () => {
+    it('should fire the delete click handler with the List ID', () => {
       expect(onClickDeleteMock).toHaveBeenCalledWith(546);
     });
 
@@ -45,64 +55,16 @@ describe('List', () => {
 
   describe('when the edit button is clicked', () => {
     beforeEach(() => {
-      const button = list.getByTestId('edit');
-      fireEvent.click(button);
+      const editBtn = list.getByRole('button', { name: /Edit/i });
+      fireEvent.click(editBtn);
     });
 
-    it('should render a text input with the expected value', () => {
-      expect(list.getByPlaceholderText('List Title').getAttribute('value')).toEqual('test list');
+    it('should fire the edit click handler with the List ID', () => {
+      expect(onClickEditMock).toHaveBeenCalledWith(546);
     });
 
     it('should render the expected html', () => {
       expect(list.container).toMatchSnapshot();
-    });
-
-    describe('and the edit is cancelled', () => {
-      beforeEach(() => {
-        const input = list.getByPlaceholderText('List Title');
-        fireEvent.change(input, { target: { value: 'test list 2' } });
-        fireEvent.keyDown(input, { key: 'Escape', keyCode: 27 });
-      });
-
-      it('should render a list with the expected title', () => {
-        expect(list.getByTestId('title').textContent).toEqual('test list');
-      });
-
-      it('should render the expected html', () => {
-        expect(list.container).toMatchSnapshot();
-      });
-    });
-
-    describe('and the edit is completed', () => {
-      beforeEach(() => {
-        const input = list.getByPlaceholderText('List Title');
-        fireEvent.change(input, { target: { value: 'test list 2' } });
-        fireEvent.keyDown(input, { key: 'Enter', keyCode: 13 });
-      });
-
-      it('should render a list with the expected title', () => {
-        expect(list.getByTestId('title').textContent).toEqual('test list 2');
-      });
-
-      it('should render the expected html', () => {
-        expect(list.container).toMatchSnapshot();
-      });
-    });
-
-    describe('and an invalid title is entered', () => {
-      beforeEach(() => {
-        const input = list.getByPlaceholderText('List Title');
-        fireEvent.change(input, { target: { value: '' } });
-        fireEvent.keyDown(input, { key: 'Enter', keyCode: 13 });
-      });
-
-      it('should render a text input with the expected value', () => {
-        expect(list.getByPlaceholderText('List Title').getAttribute('value')).toEqual('');
-      });
-
-      it('should render the expected html', () => {
-        expect(list.container).toMatchSnapshot();
-      });
     });
   });
 });

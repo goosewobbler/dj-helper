@@ -14,6 +14,7 @@ specifiers:
   '@babel/register': ^7.14.5
   '@mckayla/electron-redux': ^3.0.1
   '@pmmmwh/react-refresh-webpack-plugin': ^0.4.3
+  '@redux-offline/redux-offline': ^2.6.0
   '@reduxjs/toolkit': ^1.6.0
   '@testing-library/jest-dom': ^5.14.1
   '@testing-library/react': ^12.0.0
@@ -105,6 +106,7 @@ devDependencies:
   '@babel/register': 7.14.5_@babel+core@7.14.6
   '@mckayla/electron-redux': 3.0.1_electron@13.1.5
   '@pmmmwh/react-refresh-webpack-plugin': 0.4.3_0424303e317982226d1bfd7c000dee4a
+  '@redux-offline/redux-offline': 2.6.0
   '@reduxjs/toolkit': 1.6.0_react-redux@7.2.4+react@17.0.2
   '@testing-library/jest-dom': 5.14.1
   '@testing-library/react': 12.0.0_react-dom@17.0.2+react@17.0.2
@@ -1901,6 +1903,15 @@ packages:
 
   /@polka/url/1.0.0-next.15:
     resolution: {integrity: sha512-15spi3V28QdevleWBNXE4pIls3nFZmBbUGrW9IVPwiQczuSb9n76TCB4bsk8TSel+I1OkHEdPhu5QKMfY6rQHA==}
+    dev: true
+
+  /@redux-offline/redux-offline/2.6.0:
+    resolution: {integrity: sha512-h11HBMVnFSuJBtRm9cwasGnLC+zimY7ghKOyUslHp3gOjJjX4eCurvNDyKqxZAyPg4glp4X+4s2rOXNvLC9FRA==}
+    peerDependencies:
+      redux: '>=3'
+    dependencies:
+      '@babel/runtime': 7.14.6
+      redux-persist: 4.10.2
     dev: true
 
   /@reduxjs/toolkit/1.6.0_react-redux@7.2.4+react@17.0.2:
@@ -7931,7 +7942,6 @@ packages:
   /json-stringify-safe/5.0.1:
     resolution: {integrity: sha1-Epai1Y/UXxmg9s4B1lcB4sc1tus=}
     dev: true
-    optional: true
 
   /json3/3.3.3:
     resolution: {integrity: sha512-c7/8mbUsKigAbLkD5B010BK4D9LZm7A1pNItkEwiUZRpIN66exu/e7YQWysGun+TRKaJp8MhemM+VkfWv42aCA==}
@@ -8170,6 +8180,10 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       p-locate: 4.1.0
+    dev: true
+
+  /lodash-es/4.17.21:
+    resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
     dev: true
 
   /lodash.clonedeep/4.5.0:
@@ -10234,6 +10248,14 @@ packages:
     resolution: {integrity: sha512-cNJ8Q/EtjhQaZ71c8I9+BPySIBVEKssbPpskBfsXqb8HJ002A3KRVHfeRzwRo6mGPqsm7XuHTqNSNeS1Khig0A==}
     peerDependencies:
       redux: ^3.1.0 || ^4.0.0
+    dev: true
+
+  /redux-persist/4.10.2:
+    resolution: {integrity: sha512-U+e0ieMGC69Zr72929iJW40dEld7Mflh6mu0eJtVMLGfMq/aJqjxUM1hzyUWMR1VUyAEEdPHuQmeq5ti9krIgg==}
+    dependencies:
+      json-stringify-safe: 5.0.1
+      lodash: 4.17.21
+      lodash-es: 4.17.21
     dev: true
 
   /redux-thunk/2.3.0:

@@ -16,11 +16,10 @@ export const slice = createSlice({
       };
       state.push(newList);
     },
-    editList: (state, { payload }) => {
-      const listIndex = state.findIndex((list) => list.id === payload);
-      if (listIndex > -1) {
-        state[listIndex].editing = true;
-        state[listIndex].oldTitle = state[listIndex].title;
+    updateListTitle: (state, { payload: { id, title } }: { payload: { id: number; title: string } }) => {
+      const listToUpdate = state.find((list) => list.id === id);
+      if (listToUpdate) {
+        listToUpdate.title = title;
       }
     },
     deleteList: (state, { payload }) => {
@@ -34,10 +33,11 @@ export const slice = createSlice({
         });
       }
     },
-    updateListTitle: (state, { payload: { id, title } }: { payload: { id: number; title: string } }) => {
-      const listToUpdate = state.find((list) => list.id === id);
-      if (listToUpdate) {
-        listToUpdate.title = title;
+    editList: (state, { payload }) => {
+      const listIndex = state.findIndex((list) => list.id === payload);
+      if (listIndex > -1) {
+        state[listIndex].editing = true;
+        state[listIndex].oldTitle = state[listIndex].title;
       }
     },
     finishEditList: (state, { payload }) => {

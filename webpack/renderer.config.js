@@ -83,7 +83,8 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
     alias: {
-      electron: false,
+      'electron': false,
+      'electron-store': false,
     },
   },
   target: 'web',

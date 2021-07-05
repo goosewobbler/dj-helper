@@ -10,9 +10,6 @@ const invoke = (channel, ...data) =>
   validChannels.includes(channel) ? ipcRenderer.invoke(channel, data) : Promise.reject();
 
 contextBridge.exposeInMainWorld('api', {
-  app: {
-    getSetup: async () => invoke('get-setup'),
-  },
   store: {
     /**
      * @param {string} key */

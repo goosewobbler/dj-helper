@@ -1,3 +1,4 @@
+import { Store } from '@reduxjs/toolkit';
 import { syncRenderer } from '@mckayla/electron-redux/renderer';
 import React from 'react';
 import * as ReactDOM from 'react-dom';
@@ -12,24 +13,27 @@ declare global {
     djHelper: { preloadedState: AppState };
     api: {
       app: {
-        getSetup: () => Promise<{ initialState: AppState; html: string }>;
+        getSetup: () => Promise<{ html: string }>;
       };
     };
   }
 }
 
-void (async () => {
-  const { initialState, html } = await window.api.app.getSetup();
-  const reduxStore = createReduxStore(initialState, syncRenderer);
-  const htmlRoot = document.getElementById('app') as HTMLElement;
-  htmlRoot.innerHTML = html;
-
-  ReactDOM.hydrate(
+function render(reduxStore: Store) {
+  ReactDOM.render(
     <Provider store={reduxStore}>
       <App />
     </Provider>,
     document.getElementById('app'),
   );
+}
+
+void (async () => {
+  const reduxStore = createReduxStore({
+    context: 'renderer',
+    syncFn: syncRenderer,
+    persistCallback: () => render(reduxStore),
+  });
 })();
 
 // if (isDev) {
@@ -38,3 +42,9 @@ void (async () => {
 //     void import('./App').then((hotApp) => render(hotApp.default));
 //   });
 // }
+
+const isDev = process.env.NODE_ENV === 'development';
+
+if (isDev) {
+  (module as any).hot?.accept(); //eslint-disable-line
+}

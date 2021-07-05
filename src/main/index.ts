@@ -53,7 +53,7 @@ async function createWindow(): Promise<void> {
 
   const view = new BrowserView();
   mainWindow.setBrowserView(view);
-  view.setBounds({ x: 200, y: 100, width: 1000, height: 1500 });
+  view.setBounds({ x: 200, y: 100, width: 800, height: 1500 });
   void view.webContents.loadURL('https://bandcamp.com');
 
   // before loadUrl

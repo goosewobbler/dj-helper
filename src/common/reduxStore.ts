@@ -9,26 +9,10 @@ function createElectronStorage() {
   const store = new ElectronStore({});
 
   return {
-    getItem: (key: string) => {
-      return new Promise((resolve) => {
-        resolve(store.get(key));
-      });
-    },
-    setItem: (key: string, item: string) => {
-      return new Promise((resolve) => {
-        resolve(store.set(key, item));
-      });
-    },
-    removeItem: (key: string) => {
-      return new Promise((resolve) => {
-        resolve(store.delete(key));
-      });
-    },
-    getAllKeys: () => {
-      return new Promise((resolve) => {
-        resolve([]);
-      });
-    },
+    getItem: (key: string) => Promise.resolve(store.get(key)),
+    setItem: (key: string, item: string) => Promise.resolve(store.set(key, item)),
+    removeItem: (key: string) => Promise.resolve(store.delete(key)),
+    getAllKeys: () => Promise.resolve([]),
   };
 }
 
@@ -39,7 +23,7 @@ export function createReduxStore({
 }: {
   context: string;
   syncFn: StoreEnhancer<AnyObject, AnyObject>;
-  persistCallback: (callback?: any) => any;
+  persistCallback: () => void;
 }): Store {
   const enhancers = [syncFn];
   if (context === 'main') {
@@ -49,15 +33,15 @@ export function createReduxStore({
     persistCallback();
   };
   enhancers.push(offline(offlineConfig) as StoreEnhancer);
-  // }
+
   const store = configureStore({
     reducer: rootReducer,
     enhancers,
   });
 
-  // if (process.env.NODE_ENV !== 'production' && module.hot) {
-  //   module.hot.accept('../features/rootReducer', () => store.replaceReducer(rootReducer));
-  // }
+  if (process.env.NODE_ENV !== 'production' && module.hot) {
+    module.hot.accept('../features/rootReducer', () => store.replaceReducer(rootReducer));
+  }
 
   return store;
 }

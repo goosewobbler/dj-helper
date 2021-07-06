@@ -19,7 +19,7 @@ declare global {
   }
 }
 
-function render(reduxStore: Store) {
+function render(reduxStore: Store): void {
   ReactDOM.render(
     <Provider store={reduxStore}>
       <App />
@@ -43,8 +43,8 @@ void (async () => {
 //   });
 // }
 
-const isDev = process.env.NODE_ENV === 'development';
+// const isDev = process.env.NODE_ENV === 'development';
 
-if (isDev) {
-  (module as any).hot?.accept(); //eslint-disable-line
-}
+// if (isDev) {
+//   (module as any).hot?.accept(); //eslint-disable-line
+// }

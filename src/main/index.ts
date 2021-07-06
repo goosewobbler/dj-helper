@@ -7,10 +7,6 @@ const isDev = process.env.NODE_ENV === 'development';
 const isProd = process.env.NODE_ENV === 'production';
 const isDebugMode = isDev || process.env.DEBUG_PROD === 'true';
 
-if (isDev) {
-  (module as any).hot?.accept(); //eslint-disable-line
-}
-
 let mainWindow: BrowserWindow | undefined;
 
 void (async () => {
@@ -29,31 +25,16 @@ async function createWindow(): Promise<void> {
   mainWindow = new BrowserWindow({
     show: false,
     height: 1000,
-    width: 1100,
+    width: 1500,
     webPreferences: {
       preload: path.resolve(__dirname, '../renderer/preload.js'),
     },
   });
 
-  mainWindow.webContents.session.webRequest.onHeadersReceived(
-    { urls: ['*://*/*'] },
-    ({ responseHeaders }, callback) => {
-      if (responseHeaders) {
-        Object.keys(responseHeaders)
-          .filter((x) => x.toLowerCase() === 'x-frame-options')
-          .map((x) => delete responseHeaders[x]);
-
-        callback({
-          cancel: false,
-          responseHeaders,
-        });
-      }
-    },
-  );
-
   const view = new BrowserView();
   mainWindow.setBrowserView(view);
-  view.setBounds({ x: 200, y: 100, width: 800, height: 1500 });
+  view.setBounds({ x: 300, y: 65, width: 1200, height: 550 });
+  view.setAutoResize({ horizontal: true });
   void view.webContents.loadURL('https://bandcamp.com');
 
   // before loadUrl

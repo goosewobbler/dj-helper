@@ -1,4 +1,4 @@
-/* eslint global-require: off, import/no-dynamic-require: off, no-console: off */
+/* eslint no-console: off */
 const { spawn } = require('child_process');
 const { cwd } = require('process');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -7,29 +7,26 @@ const plugins = require('./renderer.plugins');
 
 const isDev = process.env.NODE_ENV === 'development';
 const devServerPort = process.env.PORT || 1212;
-
 const publicPath = `http://localhost:${devServerPort}/`;
-let subprocess = false;
+const spawnOpts = {
+  shell: true,
+  env: process.env,
+  stdio: 'inherit',
+};
+
+let mainProcess;
+let startingMainProcess = false;
 
 const buildMain = () =>
-  spawn('pnpm', ['dev:build-main'], {
-    shell: true,
-    env: process.env,
-    stdio: 'inherit',
-  }).on('error', (spawnError) => console.error(spawnError));
+  spawn('pnpm', ['dev:build-main'], spawnOpts).on('error', (spawnError) => console.error(spawnError));
 
 const startMain = () => {
   console.log('\nStarting Main Process...');
 
-  subprocess = spawn('pnpm', ['dev:start-main'], {
-    shell: true,
-    env: process.env,
-    stdio: 'inherit',
-  })
+  mainProcess = spawn('pnpm', ['dev:start-main'], spawnOpts)
     .on('close', (code) => {
-      console.log('closing', code);
-      if (!subprocess.killed) {
-        // exit parent process if not about to restart
+      if (!startingMainProcess) {
+        // can exit parent process if main is not about to restart
         process.exit(code);
       }
     })
@@ -129,12 +126,14 @@ module.exports = {
         }
       });
       compiler.hooks.done.tap('ManageMainProcess', () => {
-        if (!subprocess) {
-          // first run => start
+        if (!mainProcess) {
+          // first run => start main process
+          startingMainProcess = true;
           startMain();
         } else if (modifiedMain) {
           // already running & main files modified => restart
-          subprocess.kill();
+          mainProcess.kill();
+          startingMainProcess = true;
           buildMain().on('close', () => startMain());
         }
       });

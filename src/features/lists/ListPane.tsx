@@ -35,7 +35,12 @@ export function ListPane(): ReactElement {
         )}
       </ol>
       <div className="">
-        <button type="button" aria-label="New List" onClick={() => dispatch(createList())}>
+        <button
+          className="p-1 bg-blue-100 border"
+          type="button"
+          aria-label="New List"
+          onClick={() => dispatch(createList())}
+        >
           New List
         </button>
       </div>

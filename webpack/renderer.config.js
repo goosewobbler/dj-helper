@@ -18,12 +18,15 @@ let mainProcess;
 let startingMainProcess = false;
 
 const buildMain = () =>
-  spawn('pnpm', ['dev:build-main'], spawnOpts).on('error', (spawnError) => console.error(spawnError));
+  spawn('pnpm', ['dev:build:main'], spawnOpts).on('error', (spawnError) => console.error(spawnError));
 
 const startMain = () => {
   console.log('\nStarting Main Process...');
 
-  mainProcess = spawn('pnpm', ['dev:start-main'], spawnOpts)
+  mainProcess = spawn('pnpm', ['dev:start'], spawnOpts)
+    .on('spawn', () => {
+      startingMainProcess = false;
+    })
     .on('close', (code) => {
       if (!startingMainProcess) {
         // can exit parent process if main is not about to restart
@@ -118,14 +121,14 @@ module.exports = {
     },
     before(app, server, compiler) {
       let modifiedMain = false;
-      compiler.hooks.watchRun.tap('StartMainProcess', ({ modifiedFiles }) => {
+      compiler.hooks.watchRun.tap('ElectronDevServerManagement', ({ modifiedFiles }) => {
         if (modifiedFiles) {
           modifiedMain = Array.from(modifiedFiles).some((modifiedFilePath) =>
             modifiedFilePath.includes(`${cwd()}/src/main`),
           );
         }
       });
-      compiler.hooks.done.tap('ManageMainProcess', () => {
+      compiler.hooks.done.tap('ElectronDevServerManagement', () => {
         if (!mainProcess) {
           // first run => start main process
           startingMainProcess = true;

@@ -11,18 +11,18 @@
   "main": "index.js",
   "scripts": {
     "init": "sh ./scripts/setup.sh && pnpm install",
+    "check-types": "tsc --noEmit",
     "clean": "rm -rf ./dist",
     "clean:all": "rm -rf pnpm-lock.yaml ./node_modules ./dist",
-    "dev": "pnpm clean && pnpm dev:build-main && cross-env pnpm dev:start-renderer",
-    "dev:upgrade-extensions": "UPGRADE_EXTENSIONS=true pnpm dev",
+    "dev": "pnpm clean && pnpm dev:build:main && cross-env pnpm dev:start-server",
     "dist": "pnpm build && electron-builder",
     "build": "pnpm clean && concurrently 'pnpm build:main' 'pnpm build:renderer'",
     "build:main": "cross-env NODE_ENV=production webpack --config ./webpack/main.config.js --color",
     "build:renderer": "cross-env NODE_ENV=production webpack --config ./webpack/renderer.config.js --color",
     "start": "cross-env NODE_ENV=production electron ./dist/main.prod.js",
-    "dev:build-main": "cross-env NODE_ENV=development webpack --config ./webpack/main.config.js --color",
-    "dev:start-main": "cross-env NODE_ENV=development electron -r @babel/register ./dist/main.dev.js",
-    "dev:start-renderer": "cross-env NODE_ENV=development webpack serve --hot --config ./webpack/renderer.config.js",
+    "dev:build:main": "cross-env NODE_ENV=development webpack --config ./webpack/main.config.js --color",
+    "dev:start": "cross-env NODE_ENV=development electron -r @babel/register ./dist/main.dev.js",
+    "dev:start-server": "cross-env NODE_ENV=development webpack serve --hot --config ./webpack/renderer.config.js",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "concurrently 'pnpm lint:code' 'pnpm lint:styles'",
@@ -34,8 +34,7 @@
     "test:setup": "mkdir -p ./dist",
     "test:coverage": "jest --coverage",
     "test:watch": "jest --watch",
-    "test:watch-coverage": "jest --watch --coverage",
-    "type-check": "tsc --noEmit"
+    "test:watch-coverage": "jest --watch --coverage"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.5",

@@ -1,4 +1,3 @@
-/* eslint global-require: off, no-console: off */
 const { ProgressPlugin } = require('webpack');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');

@@ -1,4 +1,3 @@
-/* eslint global-require: off */
 const plugins = require('./main.plugins');
 const rules = require('./rules')('main');
 

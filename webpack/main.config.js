@@ -6,10 +6,6 @@ const isDev = process.env.NODE_ENV === 'development';
 
 module.exports = {
   context: `${__dirname}/..`,
-  /**
-   * This is the main entry point for your application, it's the first file
-   * that runs in the main process.
-   */
   mode: process.env.NODE_ENV,
   devtool: isDev ? 'inline-source-map' : 'source-map',
   entry: './src/main/index.ts',
@@ -23,8 +19,6 @@ module.exports = {
   plugins,
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.json'],
-    // modules: [path.join(__dirname, 'node_modules')],
-    // alias: {},
   },
   target: 'electron-main',
   node: {
@@ -40,7 +34,4 @@ module.exports = {
       }
     },
   ],
-  experiments: {
-    topLevelAwait: true,
-  },
 };

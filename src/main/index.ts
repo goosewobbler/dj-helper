@@ -2,6 +2,7 @@ import path from 'path';
 import { app, BrowserView, BrowserWindow } from 'electron';
 import { createApp } from './app';
 import { log } from './helpers/console';
+import { parseBandcampPageData } from './helpers/bandcamp';
 
 const isDev = process.env.NODE_ENV === 'development';
 const isProd = process.env.NODE_ENV === 'production';
@@ -36,6 +37,26 @@ async function createWindow(): Promise<void> {
   view.setBounds({ x: 300, y: 65, width: 1200, height: 550 });
   view.setAutoResize({ horizontal: true });
   void view.webContents.loadURL('https://bandcamp.com');
+
+  view.webContents.on('new-window', (event, url) => {
+    event.preventDefault();
+    view.webContents.loadURL(url);
+  });
+
+  view.webContents.on('did-start-navigation', (event, url) => {
+    if (url.match(/bandcamp.com\/track|album/)) {
+      view.webContents.once('did-finish-load', () => {
+        (async () => {
+          const [TralbumData, BandData, TralbumCollectInfo, bandCurrency] = await view.webContents.executeJavaScript(
+            '[ TralbumData, BandData, TralbumCollectInfo, bandCurrency ]',
+            true,
+          );
+          const bcPageData = parseBandcampPageData(TralbumData, BandData, TralbumCollectInfo, bandCurrency, url);
+          console.log(bcPageData);
+        })();
+      });
+    }
+  });
 
   // before loadUrl
   // read cookie from electron-store

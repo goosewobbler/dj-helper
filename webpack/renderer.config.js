@@ -1,5 +1,6 @@
 /* eslint global-require: off, import/no-dynamic-require: off, no-console: off */
 const { spawn } = require('child_process');
+const { cwd } = require('process');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const rules = require('./rules')('renderer');
 const plugins = require('./renderer.plugins');
@@ -8,21 +9,29 @@ const isDev = process.env.NODE_ENV === 'development';
 const devServerPort = process.env.PORT || 1212;
 
 const publicPath = `http://localhost:${devServerPort}/`;
-let mainStarted = false;
+let subprocess = false;
+
+const buildMain = () =>
+  spawn('pnpm', ['dev:build-main'], {
+    shell: true,
+    env: process.env,
+    stdio: 'inherit',
+  }).on('error', (spawnError) => console.error(spawnError));
 
 const startMain = () => {
   console.log('\nStarting Main Process...');
 
-  mainStarted = true;
-
-  spawn('pnpm', ['dev:start-main'], {
+  subprocess = spawn('pnpm', ['dev:start-main'], {
     shell: true,
     env: process.env,
     stdio: 'inherit',
   })
     .on('close', (code) => {
-      process.exit(code);
-      mainStarted = false;
+      console.log('closing', code);
+      if (!subprocess.killed) {
+        // exit parent process if not about to restart
+        process.exit(code);
+      }
     })
     .on('error', (spawnError) => console.error(spawnError));
 };
@@ -55,8 +64,7 @@ rules.push({
   },
 });
 
-// const baseEntry = ['webpack/hot/dev-server'];
-const baseEntry = [`webpack-dev-server/client?http://localhost:${devServerPort}/`, 'webpack/hot/only-dev-server'];
+const baseEntry = [`webpack-dev-server/client?http://localhost:${devServerPort}/`];
 
 module.exports = {
   context: `${__dirname}/../`,
@@ -92,14 +100,10 @@ module.exports = {
     __dirname: true,
     __filename: true,
   },
-  experiments: {
-    topLevelAwait: true,
-  },
   devServer: {
     port: devServerPort,
     publicPath,
     compress: false,
-    // stats: 'normal', // 'verbose',
     inline: true,
     lazy: false,
     hot: true,
@@ -108,7 +112,7 @@ module.exports = {
     writeToDisk: true,
     watchOptions: {
       aggregateTimeout: 300,
-      ignored: /node_modules/,
+      ignored: ['**/node_modules'],
       poll: 100,
     },
     historyApiFallback: {
@@ -116,13 +120,24 @@ module.exports = {
       disableDotRule: false,
     },
     before(app, server, compiler) {
-      if (process.env.START_HOT) {
-        compiler.hooks.done.tap('StartMainProcess', () => {
-          if (!mainStarted) {
-            startMain();
-          }
-        });
-      }
+      let modifiedMain = false;
+      compiler.hooks.watchRun.tap('StartMainProcess', ({ modifiedFiles }) => {
+        if (modifiedFiles) {
+          modifiedMain = Array.from(modifiedFiles).some((modifiedFilePath) =>
+            modifiedFilePath.includes(`${cwd()}/src/main`),
+          );
+        }
+      });
+      compiler.hooks.done.tap('ManageMainProcess', () => {
+        if (!subprocess) {
+          // first run => start
+          startMain();
+        } else if (modifiedMain) {
+          // already running & main files modified => restart
+          subprocess.kill();
+          buildMain().on('close', () => startMain());
+        }
+      });
     },
   },
 };

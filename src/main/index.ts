@@ -2,7 +2,6 @@ import path from 'path';
 import { app, BrowserWindow } from 'electron';
 import { createApp } from './app';
 import { log } from './helpers/console';
-import { initBrowsers } from './browser';
 
 const isDev = process.env.NODE_ENV === 'development';
 const isProd = process.env.NODE_ENV === 'production';
@@ -31,8 +30,6 @@ async function createWindow(): Promise<void> {
       preload: path.resolve(__dirname, '../renderer/preload.js'),
     },
   });
-
-  initBrowsers(mainWindow);
 
   // before loadUrl
   // read cookie from electron-store

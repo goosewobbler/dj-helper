@@ -48,6 +48,8 @@ describe('ListPane', () => {
             { id: 2, title: 'test list two', tracks: [] },
             { id: 3, title: 'test list three', tracks: [] },
           ],
+          tracks: [],
+          browsers: [],
         },
       });
     });

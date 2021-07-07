@@ -29,6 +29,7 @@ export type Track = {
   artist: string;
   duration: number;
   sources: TrackSource[];
+  browserId?: number;
 };
 
 export type List = {
@@ -43,7 +44,6 @@ export type Browser = {
   id: number;
   url: string;
   title: string;
-  tracks: Track[];
 };
 
 export interface AppState {

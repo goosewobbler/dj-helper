@@ -31,23 +31,6 @@ async function createWindow(): Promise<void> {
     },
   });
 
-  // before loadUrl
-  // read cookie from electron-store
-  // view.webContents.session.cookies.set('loginCookie')
-
-  // upon login (webContents.did-navigate?)
-  // view.webContents.session.cookies.get('loginCookie')
-  // write cookie to electron-store
-
-  // Session.defaultSession.cookies.set({ url: 'https://bandcamp.com', sameSite: 'lax' }).then(
-  //   () => {
-  //     // success
-  //   },
-  //   (error) => {
-  //     console.error(error);
-  //   },
-  // );
-
   if (isDebugMode) {
     const { installDevToolsExtensions } = await import('./helpers/dev');
     void (await installDevToolsExtensions());

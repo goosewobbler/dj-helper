@@ -1,13 +1,13 @@
 import React, { ReactElement } from 'react';
 import { useSelector } from 'react-redux';
 import { Browser } from '../common/types';
-import { BrowserPane } from '../features/browser/BrowserPane';
-import { selectBrowser } from '../features/browser/browserSlice';
-import { Tabs } from '../features/browser/Tabs';
+import { BrowserPane } from '../features/browsers/BrowserPane';
+import { selectBrowsers } from '../features/browsers/browsersSlice';
+import { Tabs } from '../features/browsers/Tabs';
 import { ListPane } from '../features/lists/ListPane';
 
 export const App = (): ReactElement => {
-  const browsers = useSelector(selectBrowser);
+  const browsers = useSelector(selectBrowsers);
   const tabHeadings = browsers.map((browser) => browser.title);
   return (
     <div className="flex flex-col flex-grow bg-primary-background">
@@ -25,7 +25,7 @@ export const App = (): ReactElement => {
             <Tabs headings={tabHeadings}>
               {browsers.map(
                 (browser: Browser): ReactElement => (
-                  <BrowserPane browser={browser} />
+                  <BrowserPane key={browser.id} browser={browser} />
                 ),
               )}
             </Tabs>

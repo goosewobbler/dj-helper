@@ -58,7 +58,7 @@ export const slice = createSlice({
   },
 });
 
-export const { createList, editList, deleteList, updateListTitle, revertEditList, finishEditList } = slice.actions;
+export const { createList, deleteList, updateListTitle, editList, revertEditList, finishEditList } = slice.actions;
 
 export const selectLists = (state: AppState): List[] => state.lists;
 

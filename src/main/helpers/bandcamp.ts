@@ -32,7 +32,7 @@ export const parseBandcampPageData = (
   title: TralbumData.current.title,
   price: TralbumData.current.minimum_price,
   trackinfo: TralbumData.trackinfo.map((track: TralbumTrackInfo) => ({
-    artist: track.artist,
+    artist: track.artist || TralbumData.current.artist || BandData.name,
     duration: track.duration,
     title: track.title,
     title_link: isTrackPage(url) ? url : `${url}${track.title_link}`,

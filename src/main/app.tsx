@@ -6,7 +6,6 @@ import { log } from './helpers/console';
 const currentVersion = process.env.npm_package_version as string;
 
 export const createApp = (mainWindow: Electron.BrowserWindow, isDev: boolean): void => {
-  //@ts-ignore
   const reduxStore = createReduxStore({ context: 'main', syncFn: syncMain, persistCallback: () => {} });
   initBrowsers(mainWindow, reduxStore);
 

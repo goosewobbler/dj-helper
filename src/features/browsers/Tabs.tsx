@@ -1,4 +1,4 @@
-import React, { ReactElement, ReactNodeArray, ReactNode } from 'react';
+import React, { useState, ReactElement, ReactNodeArray, ReactNode } from 'react';
 
 type TabsProps = {
   children: ReactNodeArray;
@@ -28,7 +28,7 @@ const renderHeadings = (
   });
 
 export const Tabs = ({ children, headings }: TabsProps): ReactElement => {
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const onClick = (index: number): void => {
     setSelectedIndex(index);
   };

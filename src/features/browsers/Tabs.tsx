@@ -3,7 +3,6 @@ import React, { useState, ReactElement, ReactNodeArray, ReactNode } from 'react'
 type TabsProps = {
   children: ReactNodeArray;
   headings: string[];
-  buttons?: ReactNode;
 };
 
 const renderHeadings = (

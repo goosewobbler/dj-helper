@@ -10,7 +10,7 @@ type RawBandcampData = [TralbumData, BandData, TralbumCollectInfo, BandCurrency]
 function createBrowser(mainWindow: BrowserWindow, dispatch: Dispatch, id: number, url: string) {
   const view = new BrowserView();
   mainWindow.setBrowserView(view);
-  view.setBounds({ x: 300, y: 165, width: 1200, height: 550 }); // y: 65
+  view.setBounds({ x: 300, y: 400, width: 1200, height: 550 }); // y: 65
   view.setAutoResize({ horizontal: true });
   void view.webContents.loadURL(url);
 

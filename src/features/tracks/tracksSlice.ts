@@ -51,6 +51,7 @@ function updateTrackData(
   { browserId, title, artist, duration, url, price, priceCurrency }: TrackData,
 ): Track {
   const trackToUpdate = { ...track };
+  log('updating track', trackToUpdate);
   if (title) {
     trackToUpdate.title = title;
   }
@@ -79,10 +80,11 @@ export const slice = createSlice({
     ) => {
       const dupe = getTrackDuplicate(state, title, artist, duration);
       if (dupe) {
-        log('found track dupe, updating track sources');
+        log('found track dupe');
+
         return state.map((track) =>
           track.id === dupe.id
-            ? { ...track, sources: getUpdatedTrackSources(track, url, price, priceCurrency) }
+            ? { ...track, browserId, sources: getUpdatedTrackSources(track, url, price, priceCurrency) }
             : track,
         );
       }

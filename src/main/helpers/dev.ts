@@ -1,4 +1,4 @@
-import electronDevToolsInstaller, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer';
+import electronDevToolsInstaller, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 import { log, logError } from './console';
 
 type DevToolsExtension = {
@@ -11,10 +11,11 @@ const devToolsExtensions = [
     ref: REACT_DEVELOPER_TOOLS,
     name: 'React Developer Tools',
   },
-  {
-    ref: REDUX_DEVTOOLS,
-    name: 'Redux DevTools',
-  },
+  /* Redux Dev Tools causes electron-redux to fail store synchronisation */
+  // {
+  //   ref: REDUX_DEVTOOLS,
+  //   name: 'Redux DevTools',
+  // },
 ];
 
 const installExtension = async (extension: DevToolsExtension): Promise<string | void> => {

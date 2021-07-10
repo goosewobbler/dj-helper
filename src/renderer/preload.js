@@ -1,5 +1,5 @@
 const { contextBridge, ipcRenderer } = require('electron');
-require('@mckayla/electron-redux/preload');
+require('@goosewobbler/electron-redux/preload');
 
 const validChannels = ['get-store-value'];
 

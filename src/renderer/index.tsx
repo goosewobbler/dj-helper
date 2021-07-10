@@ -1,5 +1,5 @@
 import { Store } from '@reduxjs/toolkit';
-import { syncRenderer } from '@mckayla/electron-redux/renderer';
+import { syncRenderer } from '@goosewobbler/electron-redux/renderer';
 import React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';

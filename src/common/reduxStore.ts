@@ -19,29 +19,31 @@ function createElectronStorage() {
 export function createReduxStore({
   context,
   syncFn,
-  persistCallback,
 }: {
   context: string;
   syncFn: StoreEnhancer<AnyObject, AnyObject>;
-  persistCallback: () => void;
-}): Store {
-  const enhancers = [syncFn];
-  if (context === 'main') {
-    offlineConfig.persistOptions = { storage: createElectronStorage() };
-  }
-  offlineConfig.persistCallback = () => {
-    persistCallback();
-  };
-  enhancers.push(offline(offlineConfig) as StoreEnhancer);
+}): Promise<Store> {
+  return new Promise((resolve) => {
+    const enhancers = [syncFn];
+    let store: Store;
+    if (context === 'main') {
+      offlineConfig.persistOptions = { storage: createElectronStorage() };
+    } else {
+      offlineConfig.persistCallback = () => resolve(store);
+    }
+    enhancers.push(offline(offlineConfig) as StoreEnhancer);
 
-  const store = configureStore({
-    reducer: rootReducer,
-    enhancers,
+    store = configureStore({
+      reducer: rootReducer,
+      enhancers,
+    });
+
+    if (process.env.NODE_ENV !== 'production' && module.hot) {
+      module.hot.accept('../features/rootReducer', () => store.replaceReducer(rootReducer));
+    }
+
+    if (context === 'main') {
+      resolve(store);
+    }
   });
-
-  if (process.env.NODE_ENV !== 'production' && module.hot) {
-    module.hot.accept('../features/rootReducer', () => store.replaceReducer(rootReducer));
-  }
-
-  return store;
 }

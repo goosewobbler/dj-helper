@@ -11,9 +11,9 @@ function buildWrapper(store: EnhancedStore): FunctionComponent<{}> {
   };
 }
 
-type configOptions = { preloadedState?: AppState; store?: EnhancedStore };
+type ConfigOptions = { preloadedState?: AppState; store?: EnhancedStore };
 
-function render(ui: ReactElement, { preloadedState, store, ...renderOptions }: configOptions = {}) {
+function render(ui: ReactElement, { preloadedState, store, ...renderOptions }: ConfigOptions = {}) {
   store = configureStore({ reducer: rootReducer, preloadedState });
   return rtlRender(ui, { wrapper: buildWrapper(store), ...renderOptions });
 }

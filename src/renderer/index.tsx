@@ -29,11 +29,11 @@ function render(reduxStore: Store): void {
 }
 
 void (async () => {
-  const reduxStore = createReduxStore({
+  const reduxStore = await createReduxStore({
     context: 'renderer',
     syncFn: syncRenderer,
-    persistCallback: () => render(reduxStore),
   });
+  render(reduxStore);
 })();
 
 // if (isDev) {

@@ -26,7 +26,7 @@
         "plugin:import/warnings",
         "plugin:prettier/recommended"
       ],
-      "plugins": ["jest", "import", "prettier", "@typescript-eslint", "react-hooks"],
+      "plugins": ["import", "prettier", "@typescript-eslint", "react-hooks"],
       "parser": "@typescript-eslint/parser",
       "parserOptions": {
         "ecmaFeatures": { "jsx": true },
@@ -37,7 +37,6 @@
       "env": {
         "node": true,
         "es6": true,
-        "jest": true,
         "browser": true
       },
       "rules": {
@@ -54,6 +53,7 @@
         "import/no-default-export": "error",
         "import/prefer-default-export": "off",
         "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+        "react/require-default-props": "off",
         "react/jsx-filename-extension": ["warn", { "extensions": [".tsx"] }],
         "@typescript-eslint/no-non-null-assertion": "off",
         "no-param-reassign": ["error", { "props": false }],

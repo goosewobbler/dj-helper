@@ -17,7 +17,7 @@ const KEY_ESCAPE = 'Escape';
 export function List({
   id,
   title,
-  editing,
+  editing = false,
   onTitleChange,
   onEditingCancelled,
   onClickEdit,

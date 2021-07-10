@@ -1,4 +1,4 @@
-interface TralbumTrackInfo {
+export interface TralbumTrackInfo {
   track_id: number;
   artist: string | null;
   title: string;
@@ -6,18 +6,38 @@ interface TralbumTrackInfo {
   duration: number;
 }
 
-interface TralbumData {
+export interface TralbumData {
   current: { artist: string | null; title: string; minimum_price: number };
   trackinfo: TralbumTrackInfo[];
 }
 
-interface BandData {
+export interface BandData {
   name: string;
 }
 
-interface TralbumCollectInfo {
+export interface TralbumCollectInfo {
   is_collected: boolean;
 }
+
+export type BandCurrency = string;
+
+export type ParsedTrackData = {
+  artist: string;
+  duration: number;
+  title: string;
+  title_link: string;
+  id: number;
+};
+
+export type ParsedBandcampData = {
+  artist: TralbumData['current']['artist'];
+  title: TralbumData['current']['title'];
+  price: TralbumData['current']['minimum_price'];
+  trackinfo: ParsedTrackData[];
+  bandName: BandData['name'];
+  currency: BandCurrency;
+  inCollection: TralbumCollectInfo['is_collected'];
+};
 
 const isTrackPage = (url: string) => url.includes('/track/');
 
@@ -25,9 +45,9 @@ export const parseBandcampPageData = (
   TralbumData: TralbumData,
   BandData: BandData,
   TralbumCollectInfo: TralbumCollectInfo,
-  bandCurrency: string,
+  bandCurrency: BandCurrency,
   url: string,
-) => ({
+): ParsedBandcampData => ({
   artist: TralbumData.current.artist,
   title: TralbumData.current.title,
   price: TralbumData.current.minimum_price,

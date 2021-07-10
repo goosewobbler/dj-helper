@@ -53,7 +53,7 @@ async function createWindow(): Promise<void> {
     void (await installDevToolsExtensions());
   }
 
-  createApp(mainWindow, isDev);
+  void (await createApp(mainWindow, isDev));
 
   void (await mainWindow.loadURL(isDev ? 'http://localhost:1212/' : `file:///${__dirname}/../../dist/index.html`));
 }

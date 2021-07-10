@@ -1,6 +1,42 @@
 {
+  "root": true,
+  "extends": [
+    "airbnb-typescript",
+    "airbnb/hooks",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:import/errors",
+    "plugin:import/typescript",
+    "plugin:import/warnings",
+    "plugin:prettier/recommended",
+    "plugin:jest-dom/recommended",
+    "plugin:testing-library/react"
+  ],
+  "plugins": ["jest", "jest-dom", "testing-library", "import", "prettier", "@typescript-eslint", "react-hooks"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": { "jsx": true },
+    "ecmaVersion": 2021,
+    "sourceType": "module",
+    "project": "../tsconfig.json"
+  },
   "env": {
+    "node": true,
+    "es6": true,
     "jest": true
   },
-  "rules": {}
+  "rules": {},
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      "node": {},
+      "typescript": {
+        "alwaysTryTypes": true
+      }
+    },
+    "react": { "version": "detect" }
+  }
 }

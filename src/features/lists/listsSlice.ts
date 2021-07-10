@@ -17,10 +17,7 @@ export const slice = createSlice({
       state.push(newList);
     },
     updateListTitle: (state, { payload: { id, title } }: { payload: { id: number; title: string } }) => {
-      const listToUpdate = state.find((list) => list.id === id);
-      if (listToUpdate) {
-        listToUpdate.title = title;
-      }
+      return state.map((list) => (list.id === id ? { ...list, title } : list));
     },
     deleteList: (state, { payload }) => {
       const indexToRemove = state.findIndex((list) => list.id === payload);
@@ -40,7 +37,7 @@ export const slice = createSlice({
         state[listIndex].oldTitle = state[listIndex].title;
       }
     },
-    finishEditList: (state, { payload }) => {
+    finishEditList: (state) => {
       const listIndex = state.findIndex((list) => list.editing === true);
       if (listIndex > -1) {
         state[listIndex].editing = false;

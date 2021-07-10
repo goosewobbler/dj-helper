@@ -31,15 +31,6 @@ async function createWindow(): Promise<void> {
     },
   });
 
-  if (isDebugMode) {
-    const { installDevToolsExtensions } = await import('./helpers/dev');
-    void (await installDevToolsExtensions());
-  }
-
-  createApp(mainWindow, isDev);
-
-  void (await mainWindow.loadURL(isDev ? 'http://localhost:1212/' : `file:///${__dirname}/../../dist/index.html`));
-
   mainWindow.once('ready-to-show', () => {
     const browser = mainWindow as BrowserWindow;
     if (isDebugMode) {
@@ -56,6 +47,15 @@ async function createWindow(): Promise<void> {
     // when you should delete the corresponding element.
     mainWindow = undefined;
   });
+
+  if (isDebugMode) {
+    const { installDevToolsExtensions } = await import('./helpers/dev');
+    void (await installDevToolsExtensions());
+  }
+
+  createApp(mainWindow, isDev);
+
+  void (await mainWindow.loadURL(isDev ? 'http://localhost:1212/' : `file:///${__dirname}/../../dist/index.html`));
 }
 
 if (app.requestSingleInstanceLock()) {

@@ -1,14 +1,10 @@
-/* eslint global-require: off, no-console: off */
-const { ProgressPlugin, HotModuleReplacementPlugin } = require('webpack');
+const { ProgressPlugin } = require('webpack');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
-// const DashboardPlugin = require('webpack-dashboard/plugin');
-
-// TODO: check out dashboardPlugin again
 
 const plugins = [];
 const isDev = process.env.NODE_ENV === 'development';
@@ -18,7 +14,7 @@ let templateParameters = {
   stylesheetHref: './renderer.css',
 };
 
-if (isDev && process.env.START_HOT) {
+if (isDev) {
   const port = process.env.PORT || 1212;
   templateParameters = {
     rendererSrc: `http://localhost:${port}/renderer.dev.js`,
@@ -35,13 +31,11 @@ if (!isDev) {
       reportFilename: 'report.renderer.html',
       statsFilename: 'stats.renderer.json',
     }),
-    //    new DashboardPlugin(),
   );
 }
 
 plugins.push(
   new ProgressPlugin(),
-  new HotModuleReplacementPlugin(),
   new ForkTsCheckerWebpackPlugin(),
   new MiniCssExtractPlugin({
     filename: isDev ? '[name].css' : '[name].[hash].css',

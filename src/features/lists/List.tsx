@@ -64,10 +64,10 @@ export function List({
       </span>
       {!editing && (
         <span className="action-btns">
-          <button type="button" onClick={() => onClickEdit(id)} role="button">
+          <button className="p-1 border" type="button" onClick={() => onClickEdit(id)} role="button">
             Edit
           </button>
-          <button type="button" onClick={() => onClickDelete(id)} role="button">
+          <button className="p-1 border" type="button" onClick={() => onClickDelete(id)} role="button">
             Delete
           </button>
         </span>

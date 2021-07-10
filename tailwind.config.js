@@ -1,5 +1,3 @@
-/* eslint global-require: off */
-
 /**
  * @type {import("./src/common/types").LooseObject}
  */

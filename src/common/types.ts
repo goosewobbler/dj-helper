@@ -19,16 +19,17 @@ export interface NetworkSystem {
 
 export type TrackSource = {
   url: string;
-  price: number;
-  priceCurrency: string;
+  price?: number;
+  priceCurrency?: string;
 };
 
 export type Track = {
   id: number;
   title: string;
   artist: string;
-  length: number;
-  sources: TrackSource['url'][];
+  duration: number;
+  sources: TrackSource[];
+  browserId?: number;
 };
 
 export type List = {
@@ -39,8 +40,15 @@ export type List = {
   oldTitle?: string;
 };
 
+export type Browser = {
+  id: number;
+  url: string;
+  title: string;
+};
+
 export interface AppState {
   lists: List[];
-  // tracks: Track[];
+  tracks: Track[];
   // trackSources: TrackSource[];
+  browsers: Browser[];
 }

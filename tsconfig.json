@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
+    "target": "ES2020",
+    "module": "ES2020",
     "moduleResolution": "node",
     "esModuleInterop": true,
     "strict": true,
@@ -15,7 +15,7 @@
     "newLine": "lf",
     "noEmitOnError": true,
     "jsx": "react",
-    "lib": ["DOM", "ESNext"],
+    "lib": ["DOM", "ES2020"],
     "noImplicitAny": true,
     "resolveJsonModule": true,
     "allowJs": true,

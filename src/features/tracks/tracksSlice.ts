@@ -38,6 +38,7 @@ function addTrackSource(
   };
 
   trackToUpdate.sources.push(newTrackSource);
+  return trackToUpdate;
 }
 
 function updateTrackSources(
@@ -53,6 +54,30 @@ function updateTrackSources(
   } else {
     addTrackSource(trackToUpdate, url, price, priceCurrency);
   }
+  return trackToUpdate;
+}
+
+function updateTrackData(
+  track: Track,
+  { browserId, title, artist, duration, url, price, priceCurrency }: TrackData,
+): Track {
+  const trackToUpdate = { ...track };
+  if (title) {
+    trackToUpdate.title = title;
+  }
+  if (artist) {
+    trackToUpdate.artist = artist;
+  }
+  if (duration) {
+    trackToUpdate.duration = duration;
+  }
+  if (browserId) {
+    trackToUpdate.browserId = browserId;
+  }
+  if (url) {
+    updateTrackSources(trackToUpdate, url, price, priceCurrency);
+  }
+  return trackToUpdate;
 }
 
 export const slice = createSlice({
@@ -66,9 +91,8 @@ export const slice = createSlice({
       const trackToUpdate = getTrackDuplicate(state, title, artist, duration);
       if (trackToUpdate) {
         log('found track dupe, updating track sources');
-        updateTrackSources(trackToUpdate, url, price, priceCurrency);
-        const updatedIndex = state.findIndex((track) => track === trackToUpdate);
-        return [...state.slice(0, updatedIndex - 1), trackToUpdate, ...state.slice(updatedIndex + 1)];
+        const updatedTrack = updateTrackSources(trackToUpdate, url, price, priceCurrency);
+        return state.map((track) => (track.id === updatedTrack.id ? updatedTrack : track));
       }
       const newTrack: Track = {
         id: state.length + 1,
@@ -78,54 +102,20 @@ export const slice = createSlice({
         browserId,
         sources: [],
       };
-      addTrackSource(newTrack, url, price, priceCurrency);
-      // log('creating new track', newTrack);
-      return [...state, newTrack];
+      const newTrackWithSource = addTrackSource(newTrack, url, price, priceCurrency);
+      return [...state, newTrackWithSource];
     },
-    updateTrack: (
-      state,
-      { payload: { id, browserId, title, artist, duration, url, price, priceCurrency } }: { payload: TrackData },
-    ) => {
-      const indexToUpdate = state.findIndex((track) => track.id === id);
-      const trackToUpdate = state[indexToUpdate];
-      if (!trackToUpdate) {
-        return state;
-      }
-
-      const updatedTrack = { ...trackToUpdate };
-      if (title) {
-        updatedTrack.title = title;
-      }
-      if (artist) {
-        updatedTrack.artist = artist;
-      }
-      if (duration) {
-        updatedTrack.duration = duration;
-      }
-      if (browserId) {
-        updatedTrack.browserId = browserId;
-      }
-      if (url) {
-        updateTrackSources(updatedTrack, url, price, priceCurrency);
-      }
-      return [...state.slice(0, indexToUpdate - 1), trackToUpdate, ...state.slice(indexToUpdate + 1)];
-    },
-    deleteTrack: (state, { payload }) => {
-      const indexToRemove = state.findIndex((track) => track.id === payload);
-      if (indexToRemove > -1) {
-        // remove
-        state.splice(indexToRemove, 1);
-        // reorder ids
-        state.slice(indexToRemove).forEach((track) => {
-          track.id -= 1;
-        });
-      }
-      return state;
-    },
-    unlinkBrowserFromTracks: (state, { payload: { browserId } }) => {
-      log('unlinking tracks', browserId);
-      return state.filter((track) => track.browserId === browserId).forEach((track) => delete track.browserId);
-    },
+    updateTrack: (state, { payload }: { payload: TrackData }) =>
+      state.map((track) => {
+        if (track.id === payload.id) {
+          return updateTrackData(track, payload);
+        }
+        return track;
+      }),
+    deleteTrack: (state, { payload: { id } }) =>
+      state.filter((track) => track.id === id).map((track, index) => ({ ...track, index })),
+    unlinkBrowserFromTracks: (state, { payload: { browserId } }) =>
+      state.map((track) => (track.browserId === browserId ? { ...track, browserId: undefined } : track)),
   },
 });
 

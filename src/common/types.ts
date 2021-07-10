@@ -19,6 +19,7 @@ export interface NetworkSystem {
 
 export type TrackSource = {
   url: string;
+  sourceId: number;
   price?: number;
   priceCurrency?: string;
 };

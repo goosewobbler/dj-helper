@@ -7,7 +7,7 @@ import { log } from './helpers/console';
 
 type RawBandcampData = [TralbumData, BandData, TralbumCollectInfo, BandCurrency];
 
-function createBrowser(mainWindow: BrowserWindow, dispatch: Dispatch, id: number, url: string) {
+function createBrowser(mainWindow: BrowserWindow, dispatch: Dispatch, browserId: number, url: string) {
   const view = new BrowserView();
   mainWindow.setBrowserView(view);
   view.setBounds({ x: 300, y: 400, width: 1200, height: 550 }); // y: 65
@@ -22,7 +22,7 @@ function createBrowser(mainWindow: BrowserWindow, dispatch: Dispatch, id: number
   view.webContents.on('did-finish-load', () => {
     const loadedUrl = view.webContents.getURL();
     log('loaded url', loadedUrl);
-    dispatch(unlinkBrowserFromTracks({ browserId: id })); // unlink browser from tracks
+    dispatch(unlinkBrowserFromTracks({ browserId })); // unlink browser from tracks
     if (/bandcamp.com\/track|album/.exec(loadedUrl)) {
       log('url is bandcamp album or track');
       void (async () => {
@@ -32,13 +32,14 @@ function createBrowser(mainWindow: BrowserWindow, dispatch: Dispatch, id: number
         )) as RawBandcampData;
         const bcPageData = parseBandcampPageData(tralbumData, bandData, tralbumCollectInfo, bandCurrency, loadedUrl);
         log('parsed bandcamp page data');
-        bcPageData.trackinfo.forEach(({ title, artist, duration }) => {
+        bcPageData.trackinfo.forEach(({ id, title, artist, duration, title_link }) => {
           // pass price where we have it, check url
           const trackData: TrackData = {
             title,
             artist,
             duration,
-            browserId: id,
+            browserId,
+            sourceId: id,
             url: loadedUrl,
             priceCurrency: bcPageData.currency,
           };

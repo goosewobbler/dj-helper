@@ -10,6 +10,7 @@ export type TrackData = {
   artist: Track['artist'];
   duration: Track['duration'];
   browserId: Track['browserId'];
+  sourceId: TrackSource['sourceId'];
   url: TrackSource['url'];
   price?: TrackSource['price'];
   priceCurrency: TrackSource['priceCurrency'];
@@ -27,6 +28,7 @@ const getTrackSourceDuplicate = (track: Track, url: TrackSource['url']) =>
 
 function getUpdatedTrackSources(
   trackToUpdate: Track,
+  sourceId: TrackSource['sourceId'],
   url: TrackSource['url'],
   price: TrackSource['price'],
   priceCurrency: TrackSource['priceCurrency'],
@@ -35,11 +37,12 @@ function getUpdatedTrackSources(
   if (trackSourceDupeIndex) {
     // update price
     return trackToUpdate.sources.map((source, index) =>
-      index === trackSourceDupeIndex ? { ...source, price, priceCurrency } : source,
+      index === trackSourceDupeIndex ? { ...source, sourceId, price, priceCurrency } : source,
     );
   }
   const newTrackSource: TrackSource = {
     url,
+    sourceId,
     price,
     priceCurrency,
   };
@@ -48,7 +51,7 @@ function getUpdatedTrackSources(
 
 function updateTrackData(
   track: Track,
-  { browserId, title, artist, duration, url, price, priceCurrency }: TrackData,
+  { browserId, title, artist, duration, sourceId, url, price, priceCurrency }: TrackData,
 ): Track {
   const trackToUpdate = { ...track };
   log('updating track', trackToUpdate);
@@ -65,7 +68,7 @@ function updateTrackData(
     trackToUpdate.browserId = browserId;
   }
   if (url) {
-    trackToUpdate.sources = getUpdatedTrackSources(trackToUpdate, url, price, priceCurrency);
+    trackToUpdate.sources = getUpdatedTrackSources(trackToUpdate, sourceId, url, price, priceCurrency);
   }
   return trackToUpdate;
 }
@@ -76,7 +79,7 @@ export const slice = createSlice({
   reducers: {
     createTrack: (
       state,
-      { payload: { title, artist, duration, browserId, url, price, priceCurrency } }: { payload: TrackData },
+      { payload: { title, artist, duration, browserId, sourceId, url, price, priceCurrency } }: { payload: TrackData },
     ) => {
       const dupe = getTrackDuplicate(state, title, artist, duration);
       if (dupe) {
@@ -84,7 +87,7 @@ export const slice = createSlice({
 
         return state.map((track) =>
           track.id === dupe.id
-            ? { ...track, browserId, sources: getUpdatedTrackSources(track, url, price, priceCurrency) }
+            ? { ...track, browserId, sources: getUpdatedTrackSources(track, sourceId, url, price, priceCurrency) }
             : track,
         );
       }
@@ -96,6 +99,7 @@ export const slice = createSlice({
         browserId,
         sources: [
           {
+            sourceId,
             url,
             price,
             priceCurrency,

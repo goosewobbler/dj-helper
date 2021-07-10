@@ -11,12 +11,12 @@ export function initBrowsers(mainWindow: BrowserWindow, { dispatch, getState }: 
   state.browsers.forEach((browser: Browser) => {
     const view = new BrowserView();
     mainWindow.setBrowserView(view);
-    view.setBounds({ x: 300, y: 165, width: 1200, height: 550 }); // y: 65
+    view.setBounds({ x: 300, y: 265, width: 1200, height: 550 }); // y: 65
     view.setAutoResize({ horizontal: true });
     void view.webContents.loadURL(browser.url);
 
     view.webContents.setWindowOpenHandler(({ url }) => {
-      view.webContents.loadURL(url);
+      void view.webContents.loadURL(url);
       return { action: 'deny' };
     });
 
@@ -26,7 +26,7 @@ export function initBrowsers(mainWindow: BrowserWindow, { dispatch, getState }: 
       dispatch(unlinkBrowserFromTracks({ browserId: browser.id })); // unlink browser from tracks
       if (url.match(/bandcamp.com\/track|album/)) {
         log('url is bandcamp album or track');
-        (async () => {
+        void (async () => {
           const [TralbumData, BandData, TralbumCollectInfo, bandCurrency] = await view.webContents.executeJavaScript(
             '[ TralbumData, BandData, TralbumCollectInfo, bandCurrency ]',
             true,

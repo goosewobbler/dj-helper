@@ -28,7 +28,7 @@ export function ListPane(): ReactElement {
               onTitleChange={(id: number, title: string) => dispatch(updateListTitle({ id, title }))}
               onClickEdit={(id: number) => dispatch(editList(id))}
               onClickDelete={(id: number) => dispatch(deleteList(id))}
-              onEditingComplete={(id: number, title: string) => dispatch(finishEditList({ id, title }))}
+              onEditingComplete={() => dispatch(finishEditList())}
               onEditingCancelled={(id: number) => dispatch(revertEditList(id))}
             />
           ),

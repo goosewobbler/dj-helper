@@ -13,7 +13,7 @@ export const slice = createSlice({
   name: 'browser',
   initialState,
   reducers: {
-    createBrowser: (state, { payload: { url, title } }) => {
+    createBrowser: (state, { payload: { url, title } }: { payload: { url: string; title: string } }) => {
       const newBrowser: Browser = {
         id: state.length + 1,
         url,

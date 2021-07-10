@@ -5,8 +5,8 @@ import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { App } from './App';
 import { AppState } from '../common/types';
-import '../css/tailwind.src.pcss';
 import { createReduxStore } from '../common/reduxStore';
+import '../css/tailwind.src.pcss';
 
 declare global {
   interface Window {

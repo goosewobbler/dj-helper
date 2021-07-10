@@ -5,10 +5,8 @@ import { parseBandcampPageData } from './helpers/bandcamp';
 import { Browser } from '../common/types';
 import { log } from './helpers/console';
 
-export function initBrowsers(mainWindow: BrowserWindow, { dispatch, getState }: Store) {
+export function initBrowsers(mainWindow: BrowserWindow, { dispatch, getState }: Store): void {
   const state = getState();
-
-  log(state.browsers);
 
   state.browsers.forEach((browser: Browser) => {
     const view = new BrowserView();

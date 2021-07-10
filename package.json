@@ -11,6 +11,7 @@
   "main": "index.js",
   "scripts": {
     "init": "sh ./scripts/setup.sh && pnpm install",
+    "preinstall": "npx -y only-allow pnpm",
     "check-types": "tsc --noEmit",
     "clean": "rm -rf ./dist",
     "clean:all": "rm -rf pnpm-lock.yaml ./node_modules ./dist",

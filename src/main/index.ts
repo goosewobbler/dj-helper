@@ -55,7 +55,9 @@ async function createWindow(): Promise<void> {
 
   void (await createApp(mainWindow, isDev));
 
-  void (await mainWindow.loadURL(isDev ? 'http://localhost:1212/' : `file:///${__dirname}/../../dist/index.html`));
+  void (await mainWindow.loadURL(
+    isDev ? 'http://localhost:1212/' : `file:///${path.resolve(__dirname, '../../dist/index.html')}`,
+  ));
 }
 
 if (app.requestSingleInstanceLock()) {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { render, RenderResult, fireEvent } from '@testing-library/react';
+import { render, screen, RenderResult, userEvent } from '../../helpers/integration';
 import { List } from '../../../src/features/lists/List';
 
 let list: RenderResult;
@@ -31,7 +31,7 @@ describe('List', () => {
   });
 
   it('should render a List with the expected title', () => {
-    expect(list.getByTestId('title').textContent).toEqual('test list');
+    expect(screen.getByTestId('title')).toHaveTextContent('test list');
   });
 
   it('should render the expected html', () => {
@@ -40,8 +40,8 @@ describe('List', () => {
 
   describe('when the delete button is clicked', () => {
     beforeEach(() => {
-      const deleteBtn = list.getByRole('button', { name: /Delete/i });
-      fireEvent.click(deleteBtn);
+      const deleteBtn = screen.getByRole('button', { name: /Delete/i });
+      userEvent.click(deleteBtn);
     });
 
     it('should fire the delete click handler with the List ID', () => {
@@ -55,8 +55,8 @@ describe('List', () => {
 
   describe('when the edit button is clicked', () => {
     beforeEach(() => {
-      const editBtn = list.getByRole('button', { name: /Edit/i });
-      fireEvent.click(editBtn);
+      const editBtn = screen.getByRole('button', { name: /Edit/i });
+      userEvent.click(editBtn);
     });
 
     it('should fire the edit click handler with the List ID', () => {

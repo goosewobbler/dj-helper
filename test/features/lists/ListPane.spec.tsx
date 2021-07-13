@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { fireEvent, render, RenderResult } from '../../helpers/integration';
+import { render, screen, RenderResult, userEvent } from '../../helpers/integration';
 import { ListPane } from '../../../src/features/lists/ListPane';
 
 describe('ListPane', () => {
@@ -11,11 +11,11 @@ describe('ListPane', () => {
     });
 
     it('should render no lists', () => {
-      expect(listPane.queryByRole('listitem')).not.toBeInTheDocument();
+      expect(screen.queryByRole('listitem')).not.toBeInTheDocument();
     });
 
     it('should render a new list button', () => {
-      expect(listPane.queryByRole('button', { name: /New List/i })).toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: /New List/i })).toBeInTheDocument();
     });
 
     it('should render the expected html', () => {
@@ -24,13 +24,13 @@ describe('ListPane', () => {
 
     describe('when the new list button is clicked', () => {
       beforeEach(() => {
-        const newListBtn = listPane.getByRole('button', { name: /New List/i });
-        fireEvent.click(newListBtn);
+        const newListBtn = screen.getByRole('button', { name: /New List/i });
+        userEvent.click(newListBtn);
       });
 
       it('should render a new list', () => {
-        expect(listPane.queryAllByRole('listitem').length).toEqual(1);
-        expect(listPane.queryAllByTestId('title').map((title) => title.textContent)).toEqual(['List Title']);
+        expect(screen.queryAllByRole('listitem').length).toEqual(1);
+        expect(screen.queryAllByTestId('title').map((title) => title.textContent)).toEqual(['List Title']);
       });
 
       it('should render the expected html', () => {
@@ -55,8 +55,8 @@ describe('ListPane', () => {
     });
 
     it('should render the expected lists', () => {
-      expect(listPane.queryAllByRole('listitem').length).toEqual(3);
-      expect(listPane.queryAllByTestId('title').map((title) => title.textContent)).toEqual([
+      expect(screen.queryAllByRole('listitem').length).toEqual(3);
+      expect(screen.queryAllByTestId('title').map((title) => title.textContent)).toEqual([
         'test list one',
         'test list two',
         'test list three',
@@ -64,7 +64,7 @@ describe('ListPane', () => {
     });
 
     it('should render a new list button', () => {
-      expect(listPane.queryByRole('button', { name: /New List/i })).toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: /New List/i })).toBeInTheDocument();
     });
 
     it('should render the expected html', () => {
@@ -73,13 +73,13 @@ describe('ListPane', () => {
 
     describe('when the new list button is clicked', () => {
       beforeEach(() => {
-        const newListBtn = listPane.getByRole('button', { name: /New List/i });
-        fireEvent.click(newListBtn);
+        const newListBtn = screen.getByRole('button', { name: /New List/i });
+        userEvent.click(newListBtn);
       });
 
       it('should render a new list', () => {
-        expect(listPane.queryAllByRole('listitem').length).toEqual(4);
-        expect(listPane.queryAllByTestId('title').map((title) => title.textContent)).toEqual([
+        expect(screen.queryAllByRole('listitem').length).toEqual(4);
+        expect(screen.queryAllByTestId('title').map((title) => title.textContent)).toEqual([
           'test list one',
           'test list two',
           'test list three',
@@ -94,13 +94,13 @@ describe('ListPane', () => {
 
     describe('when a list delete button is clicked', () => {
       beforeEach(() => {
-        const listDeleteBtns = listPane.getAllByRole('button', { name: /Delete/i });
-        fireEvent.click(listDeleteBtns[1]);
+        const listDeleteBtns = screen.getAllByRole('button', { name: /Delete/i });
+        userEvent.click(listDeleteBtns[1]);
       });
 
       it('should render the expected lists', () => {
-        expect(listPane.queryAllByRole('listitem').length).toEqual(2);
-        expect(listPane.queryAllByTestId('title').map((title) => title.textContent)).toEqual([
+        expect(screen.queryAllByRole('listitem').length).toEqual(2);
+        expect(screen.queryAllByTestId('title').map((title) => title.textContent)).toEqual([
           'test list one',
           'test list three',
         ]);
@@ -113,12 +113,12 @@ describe('ListPane', () => {
 
     describe('when a list edit button is clicked', () => {
       beforeEach(() => {
-        const listEditBtns = listPane.getAllByRole('button', { name: /Edit/i });
-        fireEvent.click(listEditBtns[1]);
+        const listEditBtns = screen.getAllByRole('button', { name: /Edit/i });
+        userEvent.click(listEditBtns[1]);
       });
 
       it('should render a text input with the expected value', () => {
-        expect(listPane.getByLabelText('List Title').getAttribute('value')).toEqual('test list two');
+        expect(screen.getByLabelText('List Title')).toHaveValue('test list two');
       });
 
       it('should render the expected html', () => {
@@ -127,13 +127,13 @@ describe('ListPane', () => {
 
       describe('and the edit is cancelled', () => {
         beforeEach(() => {
-          const input = listPane.getByLabelText('List Title');
-          fireEvent.change(input, { target: { value: 'new title for test list two' } });
-          fireEvent.keyDown(input, { key: 'Escape', keyCode: 27 });
+          const input = screen.getByLabelText('List Title') as HTMLInputElement;
+          input.setSelectionRange(0, 13);
+          userEvent.type(input, 'new title for test list two{esc}');
         });
 
         it('should render a List with the expected title', () => {
-          expect(listPane.getAllByTestId('title')[1].textContent).toEqual('test list two');
+          expect(screen.getAllByTestId('title')[1]).toHaveTextContent('test list two');
         });
 
         it('should render the expected html', () => {
@@ -143,13 +143,13 @@ describe('ListPane', () => {
 
       describe('and the edit is completed', () => {
         beforeEach(() => {
-          const input = listPane.getByLabelText('List Title');
-          fireEvent.change(input, { target: { value: 'new title for test list two' } });
-          fireEvent.keyDown(input, { key: 'Enter', keyCode: 13 });
+          const input = screen.getByLabelText('List Title') as HTMLInputElement;
+          input.setSelectionRange(0, 13);
+          userEvent.type(input, '{backspace}new title for test list two{enter}');
         });
 
         it('should render a List with the expected title', () => {
-          expect(listPane.getAllByTestId('title')[1].textContent).toEqual('new title for test list two');
+          expect(screen.getAllByTestId('title')[1]).toHaveTextContent('new title for test list two');
         });
 
         it('should render the expected html', () => {
@@ -159,13 +159,28 @@ describe('ListPane', () => {
 
       describe('and an invalid title stops the edit from being completed', () => {
         beforeEach(() => {
-          const input = listPane.getByLabelText('List Title');
-          fireEvent.change(input, { target: { value: '' } });
-          fireEvent.keyDown(input, { key: 'Enter', keyCode: 13 });
+          const input = screen.getByLabelText('List Title') as HTMLInputElement;
+          input.setSelectionRange(0, 13);
+          userEvent.type(input, '{backspace}');
         });
 
         it('should render a text input with the expected value', () => {
-          expect(listPane.getByLabelText('List Title').getAttribute('value')).toEqual('');
+          expect(screen.getByLabelText('List Title')).toHaveValue('');
+        });
+
+        it('should render the expected html', () => {
+          expect(listPane.container).toMatchSnapshot();
+        });
+      });
+
+      describe('and the new list button is clicked', () => {
+        beforeEach(() => {
+          const newListBtn = screen.getByRole('button', { name: /New List/i });
+          userEvent.click(newListBtn);
+        });
+
+        it('should render a single text input with the expected value', () => {
+          expect(screen.getByLabelText('List Title')).toHaveValue('New List');
         });
 
         it('should render the expected html', () => {
@@ -175,21 +190,3 @@ describe('ListPane', () => {
     });
   });
 });
-
-// describe('when the edit button is clicked', () => {
-
-//     describe('and an invalid title is entered', () => {
-//       beforeEach(() => {
-//         const input = list.getByLabelText('List Title');
-//         fireEvent.change(input, { target: { value: '' } });
-//         fireEvent.keyDown(input, { key: 'Enter', keyCode: 13 });
-//       });
-
-//       it('should render a text input with the expected value', () => {
-//         expect(list.getByLabelText('List Title').getAttribute('value')).toEqual('');
-//       });
-
-//       it('should render the expected html', () => {
-//         expect(list.container).toMatchSnapshot();
-//       });
-//     });

@@ -19,6 +19,7 @@ specifiers:
   '@testing-library/jest-dom': ^5.14.1
   '@testing-library/react': ^12.0.0
   '@testing-library/user-event': ^13.1.9
+  '@testing-library/webdriverio': ^3.0.2
   '@types/app-root-path': ^1.2.4
   '@types/jest': ^26.0.23
   '@types/node': ^16.0.0
@@ -110,6 +111,7 @@ devDependencies:
   '@testing-library/jest-dom': 5.14.1
   '@testing-library/react': 12.0.0_react-dom@17.0.2+react@17.0.2
   '@testing-library/user-event': 13.1.9
+  '@testing-library/webdriverio': 3.0.2
   '@types/app-root-path': 1.2.4
   '@types/jest': 26.0.24
   '@types/node': 16.3.1
@@ -2044,6 +2046,16 @@ packages:
       '@testing-library/dom': '>=7.21.4'
     dependencies:
       '@babel/runtime': 7.14.6
+    dev: true
+
+  /@testing-library/webdriverio/3.0.2:
+    resolution: {integrity: sha512-AEpJ/u3RxubTEJEL5zc66j1HMidy6QANxdGTs6yCX+EKxWH89UbvbeqMtJ+idZptnM9g2evbbpCl70zgmKxOKw==}
+    peerDependencies:
+      webdriverio: '*'
+    dependencies:
+      '@babel/runtime': 7.14.6
+      '@testing-library/dom': 7.31.2
+      simmerjs: 0.5.6
     dev: true
 
   /@tootallnate/once/1.1.2:
@@ -8159,6 +8171,10 @@ packages:
     resolution: {integrity: sha1-nMtOUF1Ia5FlE0V3KIWi3yf9AXw=}
     dev: true
 
+  /lodash.flatmap/4.5.0:
+    resolution: {integrity: sha1-74y/QI9uSCaGYzRTBcaswLd4cC4=}
+    dev: true
+
   /lodash.flatten/4.4.0:
     resolution: {integrity: sha1-8xwiIlqWMtK7+OSt2+8kCqdlph8=}
     dev: true
@@ -8173,6 +8189,10 @@ packages:
 
   /lodash.groupby/4.6.0:
     resolution: {integrity: sha1-Cwih3PaDl8OXhVwyOXg4Mt90A9E=}
+    dev: true
+
+  /lodash.isfunction/3.0.9:
+    resolution: {integrity: sha512-AirXNj15uRIMMPihnkInB4i3NHeb4iBtNg9WRWuK2o31S+ePwwNmDPaTL3o7dTJ+VXNZim7rFs4rxN4YU1oUJw==}
     dev: true
 
   /lodash.isobject/3.0.2:
@@ -8193,6 +8213,14 @@ packages:
 
   /lodash.sortby/4.7.0:
     resolution: {integrity: sha1-7dFMgk4sycHgsKG0K7UhBRakJDg=}
+    dev: true
+
+  /lodash.take/4.1.1:
+    resolution: {integrity: sha1-C0FG3LenDGFTSVGH/BCxK3H++t8=}
+    dev: true
+
+  /lodash.takeright/4.1.1:
+    resolution: {integrity: sha1-yY2EqpuA5NL/Z1M1pi4C6aZbshA=}
     dev: true
 
   /lodash.toarray/4.4.0:
@@ -10719,6 +10747,16 @@ packages:
 
   /signal-exit/3.0.3:
     resolution: {integrity: sha512-VUJ49FC8U1OxwZLxIbTTrDvLnf/6TDgxZcK8wxR8zs13xpx7xbG60ndBlhNrFi2EMuFRoeDoJO7wthSLq42EjA==}
+    dev: true
+
+  /simmerjs/0.5.6:
+    resolution: {integrity: sha512-Z00zGHUp2IVSDUuni6gzBxVVQwAEZ7jVHnqL97+2RaHVWTYKfgCNyCvgm68Uc1M6X84hjatxvtOc24Y9ECLPWQ==}
+    dependencies:
+      lodash.difference: 4.5.0
+      lodash.flatmap: 4.5.0
+      lodash.isfunction: 3.0.9
+      lodash.take: 4.1.1
+      lodash.takeright: 4.1.1
     dev: true
 
   /simple-swizzle/0.2.2:

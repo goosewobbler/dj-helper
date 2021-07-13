@@ -19,7 +19,7 @@ export const slice = createSlice({
         url,
         title,
       };
-      state.push(newBrowser);
+      return [...state, newBrowser];
     },
   },
 });

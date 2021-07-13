@@ -17,7 +17,7 @@ export function ListPane(): ReactElement {
 
   return (
     <div>
-      <ol className="listPane" role="list">
+      <ol className="listPane">
         {lists.map(
           (list): ReactElement => (
             <List
@@ -26,10 +26,10 @@ export function ListPane(): ReactElement {
               title={list.title}
               editing={list.editing}
               onTitleChange={(id: number, title: string) => dispatch(updateListTitle({ id, title }))}
-              onClickEdit={(id: number) => dispatch(editList(id))}
-              onClickDelete={(id: number) => dispatch(deleteList(id))}
+              onClickEdit={(id: number) => dispatch(editList({ id }))}
+              onClickDelete={(id: number) => dispatch(deleteList({ id }))}
               onEditingComplete={() => dispatch(finishEditList())}
-              onEditingCancelled={(id: number) => dispatch(revertEditList(id))}
+              onEditingCancelled={() => dispatch(revertEditList())}
             />
           ),
         )}
@@ -39,7 +39,10 @@ export function ListPane(): ReactElement {
           className="p-1 bg-blue-100 border"
           type="button"
           aria-label="New List"
-          onClick={() => dispatch(createList())}
+          onClick={() => {
+            dispatch(revertEditList());
+            dispatch(createList());
+          }}
         >
           New List
         </button>

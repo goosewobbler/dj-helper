@@ -5,7 +5,6 @@ exports[`List should render the expected html 1`] = `
   <li
     class="list"
     id="list-546"
-    role="listitem"
   >
     <span
       class="title"
@@ -17,13 +16,13 @@ exports[`List should render the expected html 1`] = `
       class="action-btns"
     >
       <button
-        role="button"
+        class="p-1 border"
         type="button"
       >
         Edit
       </button>
       <button
-        role="button"
+        class="p-1 border"
         type="button"
       >
         Delete
@@ -38,7 +37,6 @@ exports[`List when the delete button is clicked should render the expected html 
   <li
     class="list"
     id="list-546"
-    role="listitem"
   >
     <span
       class="title"
@@ -50,13 +48,13 @@ exports[`List when the delete button is clicked should render the expected html 
       class="action-btns"
     >
       <button
-        role="button"
+        class="p-1 border"
         type="button"
       >
         Edit
       </button>
       <button
-        role="button"
+        class="p-1 border"
         type="button"
       >
         Delete
@@ -71,7 +69,6 @@ exports[`List when the edit button is clicked should render the expected html 1`
   <li
     class="list"
     id="list-546"
-    role="listitem"
   >
     <span
       class="title"
@@ -83,13 +80,13 @@ exports[`List when the edit button is clicked should render the expected html 1`
       class="action-btns"
     >
       <button
-        role="button"
+        class="p-1 border"
         type="button"
       >
         Edit
       </button>
       <button
-        role="button"
+        class="p-1 border"
         type="button"
       >
         Delete

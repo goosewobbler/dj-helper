@@ -53,6 +53,7 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
     "@testing-library/user-event": "^13.1.9",
+    "@testing-library/webdriverio": "^3.0.2",
     "@types/app-root-path": "^1.2.4",
     "@types/jest": "^26.0.23",
     "@types/node": "^16.0.0",

@@ -24,13 +24,4 @@ module.exports = {
     __dirname: true,
     __filename: true,
   },
-  externals: [
-    ({ request }, callback) => {
-      if (request[0] === '.') {
-        callback();
-      } else {
-        callback(null, `require('${request}')`);
-      }
-    },
-  ],
 };

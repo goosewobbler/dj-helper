@@ -3,4 +3,5 @@ node_modules
 public
 dist
 coverage
+*.log
 .DS_Store

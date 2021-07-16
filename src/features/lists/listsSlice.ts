@@ -1,57 +1,37 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { AppState, List } from '../../common/types';
 
-const listArray: List[] = [];
+const initialListTitle = 'New List';
+
+export const initialState: List[] = [];
 
 export const slice = createSlice({
   name: 'lists',
-  initialState: listArray,
+  initialState,
   reducers: {
     createList: (state) => {
       const newList: List = {
         id: state.length + 1,
-        title: 'New List',
+        title: initialListTitle,
         tracks: [],
         editing: true,
       };
-      state.push(newList);
+      return [...state, newList];
     },
-    updateListTitle: (state, { payload: { id, title } }: { payload: { id: number; title: string } }) => {
-      return state.map((list) => (list.id === id ? { ...list, title } : list));
-    },
-    deleteList: (state, { payload }) => {
-      const indexToRemove = state.findIndex((list) => list.id === payload);
-      if (indexToRemove > -1) {
-        // remove
-        state.splice(indexToRemove, 1);
-        // reorder ids
-        state.slice(indexToRemove).forEach((list) => {
-          list.id -= 1;
-        });
-      }
-    },
-    editList: (state, { payload }) => {
-      const listIndex = state.findIndex((list) => list.id === payload);
-      if (listIndex > -1) {
-        state[listIndex].editing = true;
-        state[listIndex].oldTitle = state[listIndex].title;
-      }
-    },
-    finishEditList: (state) => {
-      const listIndex = state.findIndex((list) => list.editing === true);
-      if (listIndex > -1) {
-        state[listIndex].editing = false;
-        delete state[listIndex].oldTitle;
-      }
-    },
-    revertEditList: (state, { payload }) => {
-      const listIndex = state.findIndex((list) => list.id === payload);
-      if (listIndex > -1) {
-        state[listIndex].editing = false;
-        state[listIndex].title = state[listIndex].oldTitle as string;
-        delete state[listIndex].oldTitle;
-      }
-    },
+    updateListTitle: (state, { payload: { id, title } }: { payload: { id: number; title: string } }) =>
+      state.map((list) => (list.id === id ? { ...list, title } : list)),
+    deleteList: (state, { payload: { id } }) =>
+      state.filter((list) => list.id !== id).map((list, index) => ({ ...list, id: index + 1 })),
+    editList: (state, { payload: { id } }) =>
+      state.map((list) => (list.id === id ? { ...list, editing: true, oldTitle: list.title } : list)),
+    finishEditList: (state) =>
+      state.map((list) => (list.editing === true ? { ...list, editing: undefined, oldTitle: undefined } : list)),
+    revertEditList: (state) =>
+      state.map((list) =>
+        list.editing === true
+          ? { ...list, editing: undefined, title: list.oldTitle ?? initialListTitle, oldTitle: undefined }
+          : list,
+      ),
   },
 });
 
@@ -60,3 +40,5 @@ export const { createList, deleteList, updateListTitle, editList, revertEditList
 export const selectLists = (state: AppState): List[] => state.lists;
 
 export const listsReducer = slice.reducer;
+
+export const reducers = slice.caseReducers;

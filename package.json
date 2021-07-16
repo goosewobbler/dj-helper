@@ -1,23 +1,25 @@
 {
   "name": "dj-helper",
   "description": "A tool for constructing DJ sets",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Sam Maister <goosewobbler@protonmail.com>",
   "license": "UNLICENSED",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/goosewobbler/dj-helper.git"
   },
-  "main": "index.js",
   "scripts": {
-    "init": "sh ./scripts/setup.sh && pnpm install",
+    "init": "pnpm install",
+    "preinstall": "npx only-allow pnpm",
     "check-types": "tsc --noEmit",
     "clean": "rm -rf ./dist",
     "clean:all": "rm -rf pnpm-lock.yaml ./node_modules ./dist",
     "dev": "pnpm clean && pnpm dev:build:main && cross-env pnpm dev:start-server",
     "dist": "pnpm build && electron-builder",
-    "build": "pnpm clean && concurrently 'pnpm build:main' 'pnpm build:renderer'",
+    "dist:pack": "pnpm build && electron-builder --dir",
+    "build": "pnpm clean && concurrently 'pnpm build:main' 'pnpm build:preload' 'pnpm build:renderer'",
     "build:main": "cross-env NODE_ENV=production webpack --config ./webpack/main.config.js --color",
+    "build:preload": "cross-env NODE_ENV=production webpack --config ./webpack/preload.config.js --color",
     "build:renderer": "cross-env NODE_ENV=production webpack --config ./webpack/renderer.config.js --color",
     "start": "cross-env NODE_ENV=production electron ./dist/main.prod.js",
     "dev:build:main": "cross-env NODE_ENV=development webpack --config ./webpack/main.config.js --color",
@@ -30,11 +32,13 @@
     "lint:code:fix": "pnpm lint:code --fix",
     "lint:styles": "stylelint --ignore-path .eslintignore '**/*.pcss'",
     "lint:styles:fix": "pnpm --silent lint-styles --fix; exit 0",
-    "test": "pnpm test:setup && pnpm test:coverage && pnpm format && pnpm lint",
-    "test:setup": "mkdir -p ./dist",
+    "test": "pnpm test:coverage && pnpm format && pnpm lint",
     "test:coverage": "jest --coverage",
     "test:watch": "jest --watch",
     "test:watch-coverage": "jest --watch --coverage"
+  },
+  "dependencies": {
+    "@goosewobbler/electron-redux": "^1.0.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.5",
@@ -45,15 +49,17 @@
     "@babel/preset-react": "^7.14.5",
     "@babel/preset-typescript": "^7.14.5",
     "@babel/register": "^7.14.5",
-    "@goosewobbler/electron-redux": "^1.0.3",
+    "@goosewobbler/spectron": "^16.0.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
     "@redux-offline/redux-offline": "^2.6.0",
     "@reduxjs/toolkit": "^1.6.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
+    "@testing-library/user-event": "^13.1.9",
+    "@testing-library/webdriverio": "^3.0.2",
     "@types/app-root-path": "^1.2.4",
     "@types/jest": "^26.0.23",
-    "@types/node": "^16.0.0",
+    "@types/node": "^16.3.2",
     "@types/react": "^17.0.11",
     "@types/react-dom": "^17.0.8",
     "@types/react-redux": "^7.1.9",
@@ -65,19 +71,18 @@
     "@types/tailwindcss": "^2.2.1",
     "@types/webpack": "^5.28.0",
     "@types/webpack-env": "^1.16.2",
-    "@typescript-eslint/eslint-plugin": "^4.28.1",
-    "@typescript-eslint/parser": "^4.28.1",
-    "app-root-path": "^3.0.0",
-    "autoprefixer": "^10.2.6",
+    "@typescript-eslint/eslint-plugin": "^4.28.3",
+    "@typescript-eslint/parser": "^4.28.3",
+    "autoprefixer": "^10.3.1",
     "babel-loader": "^8.2.2",
     "classnames": "^2.2.6",
     "concurrently": "^6.2.0",
     "copy-webpack-plugin": "^9.0.1",
     "cross-env": "^7.0.3",
-    "css-loader": "^5.2.6",
+    "css-loader": "^6.0.0",
     "cssnano": "^5.0.6",
     "electron": "^13.1.5",
-    "electron-builder": "^22.11.7",
+    "electron-builder": "^22.11.8",
     "electron-debug": "^3.2.0",
     "electron-devtools-installer": "^3.2.0",
     "electron-store": "^8.0.0",
@@ -113,7 +118,6 @@
     "redux-devtools-extension": "^2.13.9",
     "source-map-loader": "^3.0.0",
     "source-map-support": "^0.5.19",
-    "spectron": "^15.0.0",
     "stylelint": "^13.6.1",
     "stylelint-config-prettier": "^8.0.2",
     "stylelint-config-standard": "^22.0.0",
@@ -121,7 +125,7 @@
     "ts-jest": "^27.0.3",
     "typescript": "^4.3.5",
     "url-loader": "^4.1.1",
-    "webpack": "^5.42.0",
+    "webpack": "^5.45.1",
     "webpack-bundle-analyzer": "^4.4.2",
     "webpack-cli": "^4.7.2",
     "webpack-dev-server": "^3.11.2"
@@ -132,5 +136,15 @@
   "browserslist": [
     "electron >= 13",
     "node >= 14"
-  ]
+  ],
+  "main": "./dist/main.prod.js",
+  "build": {
+    "asar": true,
+    "appId": "com.dj_helper.demo",
+    "copyright": "goosewobbler",
+    "productName": "dj_helper",
+    "files": [
+      "dist/**/*"
+    ]
+  }
 }

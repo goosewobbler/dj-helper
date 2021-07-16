@@ -43,20 +43,22 @@ export function List({
   const validityRing = `ring-${isValid() ? 'green' : 'red'}-300`;
 
   return (
-    <li id={`list-${id}`} className="list" role="listitem">
+    <li id={`list-${id}`} className="list">
       <span className="title" data-testid="title">
         {editing ? (
           <>
-            <label htmlFor="list-title">List Title</label>
-            <input
-              id="list-title"
-              className={`ring-4 ring-opacity-30 ${validityRing}`}
-              type="text"
-              onChange={(event): void => handleTitleChange(event)}
-              onKeyDown={(event): void => handleKeyDown(event, id)}
-              placeholder="List Title"
-              value={title}
-            />
+            <label htmlFor="list-title">
+              List Title
+              <input
+                id="list-title"
+                className={`ring-4 ring-opacity-30 ${validityRing}`}
+                type="text"
+                onChange={(event): void => handleTitleChange(event)}
+                onKeyDown={(event): void => handleKeyDown(event, id)}
+                placeholder="List Title"
+                value={title}
+              />
+            </label>
           </>
         ) : (
           title
@@ -64,10 +66,10 @@ export function List({
       </span>
       {!editing && (
         <span className="action-btns">
-          <button className="p-1 border" type="button" onClick={() => onClickEdit(id)} role="button">
+          <button className="p-1 border" type="button" onClick={() => onClickEdit(id)}>
             Edit
           </button>
-          <button className="p-1 border" type="button" onClick={() => onClickDelete(id)} role="button">
+          <button className="p-1 border" type="button" onClick={() => onClickDelete(id)}>
             Delete
           </button>
         </span>

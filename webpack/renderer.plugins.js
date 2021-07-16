@@ -38,8 +38,8 @@ plugins.push(
   new ProgressPlugin(),
   new ForkTsCheckerWebpackPlugin(),
   new MiniCssExtractPlugin({
-    filename: isDev ? '[name].css' : '[name].[hash].css',
-    chunkFilename: isDev ? '[id].css' : '[id].[hash].css',
+    filename: '[name].css',
+    chunkFilename: '[id].css',
   }),
   new HtmlWebpackPlugin({
     filename: 'index.html',

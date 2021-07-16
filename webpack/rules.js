@@ -20,13 +20,11 @@ module.exports = (context) => {
       use: 'node-loader',
     },
     {
+      test: /\.(j|t)s(x)?$/,
+      exclude: /node_modules/,
       parser: {
         amd: false,
       },
-    },
-    {
-      test: /\.(j|t)s(x)?$/,
-      exclude: /node_modules/,
       use: [
         {
           loader: 'babel-loader',

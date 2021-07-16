@@ -32,7 +32,7 @@ function createBrowser(mainWindow: BrowserWindow, dispatch: Dispatch, browserId:
         )) as RawBandcampData;
         const bcPageData = parseBandcampPageData(tralbumData, bandData, tralbumCollectInfo, bandCurrency, loadedUrl);
         log('parsed bandcamp page data');
-        bcPageData.trackinfo.forEach(({ id, title, artist, duration, title_link }) => {
+        bcPageData.trackinfo.forEach(({ id, title, artist, duration }) => {
           // pass price where we have it, check url
           const trackData: TrackData = {
             title,

@@ -5,12 +5,10 @@ exports[`ListPane given a number of lists should render the expected html 1`] = 
   <div>
     <ol
       class="listPane"
-      role="list"
     >
       <li
         class="list"
         id="list-1"
-        role="listitem"
       >
         <span
           class="title"
@@ -22,13 +20,13 @@ exports[`ListPane given a number of lists should render the expected html 1`] = 
           class="action-btns"
         >
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Edit
           </button>
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Delete
@@ -38,7 +36,6 @@ exports[`ListPane given a number of lists should render the expected html 1`] = 
       <li
         class="list"
         id="list-2"
-        role="listitem"
       >
         <span
           class="title"
@@ -50,13 +47,13 @@ exports[`ListPane given a number of lists should render the expected html 1`] = 
           class="action-btns"
         >
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Edit
           </button>
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Delete
@@ -66,7 +63,6 @@ exports[`ListPane given a number of lists should render the expected html 1`] = 
       <li
         class="list"
         id="list-3"
-        role="listitem"
       >
         <span
           class="title"
@@ -78,13 +74,13 @@ exports[`ListPane given a number of lists should render the expected html 1`] = 
           class="action-btns"
         >
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Edit
           </button>
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Delete
@@ -97,6 +93,7 @@ exports[`ListPane given a number of lists should render the expected html 1`] = 
     >
       <button
         aria-label="New List"
+        class="p-1 bg-blue-100 border"
         type="button"
       >
         New List
@@ -111,12 +108,10 @@ exports[`ListPane given a number of lists when a list delete button is clicked s
   <div>
     <ol
       class="listPane"
-      role="list"
     >
       <li
         class="list"
         id="list-1"
-        role="listitem"
       >
         <span
           class="title"
@@ -128,13 +123,13 @@ exports[`ListPane given a number of lists when a list delete button is clicked s
           class="action-btns"
         >
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Edit
           </button>
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Delete
@@ -144,7 +139,6 @@ exports[`ListPane given a number of lists when a list delete button is clicked s
       <li
         class="list"
         id="list-2"
-        role="listitem"
       >
         <span
           class="title"
@@ -156,13 +150,13 @@ exports[`ListPane given a number of lists when a list delete button is clicked s
           class="action-btns"
         >
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Edit
           </button>
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Delete
@@ -175,6 +169,7 @@ exports[`ListPane given a number of lists when a list delete button is clicked s
     >
       <button
         aria-label="New List"
+        class="p-1 bg-blue-100 border"
         type="button"
       >
         New List
@@ -189,12 +184,10 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
   <div>
     <ol
       class="listPane"
-      role="list"
     >
       <li
         class="list"
         id="list-1"
-        role="listitem"
       >
         <span
           class="title"
@@ -206,13 +199,13 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
           class="action-btns"
         >
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Edit
           </button>
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Delete
@@ -222,7 +215,6 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
       <li
         class="list"
         id="list-2"
-        role="listitem"
       >
         <span
           class="title"
@@ -232,20 +224,19 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
             for="list-title"
           >
             List Title
+            <input
+              class="ring-4 ring-opacity-30 ring-red-300"
+              id="list-title"
+              placeholder="List Title"
+              type="text"
+              value=""
+            />
           </label>
-          <input
-            class="ring-4 ring-opacity-30 ring-red-300"
-            id="list-title"
-            placeholder="List Title"
-            type="text"
-            value=""
-          />
         </span>
       </li>
       <li
         class="list"
         id="list-3"
-        role="listitem"
       >
         <span
           class="title"
@@ -257,13 +248,13 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
           class="action-btns"
         >
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Edit
           </button>
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Delete
@@ -276,6 +267,7 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
     >
       <button
         aria-label="New List"
+        class="p-1 bg-blue-100 border"
         type="button"
       >
         New List
@@ -290,12 +282,10 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
   <div>
     <ol
       class="listPane"
-      role="list"
     >
       <li
         class="list"
         id="list-1"
-        role="listitem"
       >
         <span
           class="title"
@@ -307,13 +297,13 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
           class="action-btns"
         >
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Edit
           </button>
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Delete
@@ -323,7 +313,6 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
       <li
         class="list"
         id="list-2"
-        role="listitem"
       >
         <span
           class="title"
@@ -335,13 +324,13 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
           class="action-btns"
         >
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Edit
           </button>
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Delete
@@ -351,7 +340,6 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
       <li
         class="list"
         id="list-3"
-        role="listitem"
       >
         <span
           class="title"
@@ -363,13 +351,13 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
           class="action-btns"
         >
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Edit
           </button>
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Delete
@@ -382,6 +370,7 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
     >
       <button
         aria-label="New List"
+        class="p-1 bg-blue-100 border"
         type="button"
       >
         New List
@@ -396,12 +385,10 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
   <div>
     <ol
       class="listPane"
-      role="list"
     >
       <li
         class="list"
         id="list-1"
-        role="listitem"
       >
         <span
           class="title"
@@ -413,13 +400,13 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
           class="action-btns"
         >
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Edit
           </button>
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Delete
@@ -429,7 +416,6 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
       <li
         class="list"
         id="list-2"
-        role="listitem"
       >
         <span
           class="title"
@@ -441,13 +427,13 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
           class="action-btns"
         >
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Edit
           </button>
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Delete
@@ -457,7 +443,6 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
       <li
         class="list"
         id="list-3"
-        role="listitem"
       >
         <span
           class="title"
@@ -469,13 +454,13 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
           class="action-btns"
         >
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Edit
           </button>
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Delete
@@ -488,6 +473,132 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
     >
       <button
         aria-label="New List"
+        class="p-1 bg-blue-100 border"
+        type="button"
+      >
+        New List
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ListPane given a number of lists when a list edit button is clicked and the new list button is clicked should render the expected html 1`] = `
+<div>
+  <div>
+    <ol
+      class="listPane"
+    >
+      <li
+        class="list"
+        id="list-1"
+      >
+        <span
+          class="title"
+          data-testid="title"
+        >
+          test list one
+        </span>
+        <span
+          class="action-btns"
+        >
+          <button
+            class="p-1 border"
+            type="button"
+          >
+            Edit
+          </button>
+          <button
+            class="p-1 border"
+            type="button"
+          >
+            Delete
+          </button>
+        </span>
+      </li>
+      <li
+        class="list"
+        id="list-2"
+      >
+        <span
+          class="title"
+          data-testid="title"
+        >
+          test list two
+        </span>
+        <span
+          class="action-btns"
+        >
+          <button
+            class="p-1 border"
+            type="button"
+          >
+            Edit
+          </button>
+          <button
+            class="p-1 border"
+            type="button"
+          >
+            Delete
+          </button>
+        </span>
+      </li>
+      <li
+        class="list"
+        id="list-3"
+      >
+        <span
+          class="title"
+          data-testid="title"
+        >
+          test list three
+        </span>
+        <span
+          class="action-btns"
+        >
+          <button
+            class="p-1 border"
+            type="button"
+          >
+            Edit
+          </button>
+          <button
+            class="p-1 border"
+            type="button"
+          >
+            Delete
+          </button>
+        </span>
+      </li>
+      <li
+        class="list"
+        id="list-4"
+      >
+        <span
+          class="title"
+          data-testid="title"
+        >
+          <label
+            for="list-title"
+          >
+            List Title
+            <input
+              class="ring-4 ring-opacity-30 ring-green-300"
+              id="list-title"
+              placeholder="List Title"
+              type="text"
+              value="New List"
+            />
+          </label>
+        </span>
+      </li>
+    </ol>
+    <div
+      class=""
+    >
+      <button
+        aria-label="New List"
+        class="p-1 bg-blue-100 border"
         type="button"
       >
         New List
@@ -502,12 +613,10 @@ exports[`ListPane given a number of lists when a list edit button is clicked sho
   <div>
     <ol
       class="listPane"
-      role="list"
     >
       <li
         class="list"
         id="list-1"
-        role="listitem"
       >
         <span
           class="title"
@@ -519,13 +628,13 @@ exports[`ListPane given a number of lists when a list edit button is clicked sho
           class="action-btns"
         >
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Edit
           </button>
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Delete
@@ -535,7 +644,6 @@ exports[`ListPane given a number of lists when a list edit button is clicked sho
       <li
         class="list"
         id="list-2"
-        role="listitem"
       >
         <span
           class="title"
@@ -545,20 +653,19 @@ exports[`ListPane given a number of lists when a list edit button is clicked sho
             for="list-title"
           >
             List Title
+            <input
+              class="ring-4 ring-opacity-30 ring-green-300"
+              id="list-title"
+              placeholder="List Title"
+              type="text"
+              value="test list two"
+            />
           </label>
-          <input
-            class="ring-4 ring-opacity-30 ring-green-300"
-            id="list-title"
-            placeholder="List Title"
-            type="text"
-            value="test list two"
-          />
         </span>
       </li>
       <li
         class="list"
         id="list-3"
-        role="listitem"
       >
         <span
           class="title"
@@ -570,13 +677,13 @@ exports[`ListPane given a number of lists when a list edit button is clicked sho
           class="action-btns"
         >
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Edit
           </button>
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Delete
@@ -589,6 +696,7 @@ exports[`ListPane given a number of lists when a list edit button is clicked sho
     >
       <button
         aria-label="New List"
+        class="p-1 bg-blue-100 border"
         type="button"
       >
         New List
@@ -603,12 +711,10 @@ exports[`ListPane given a number of lists when the new list button is clicked sh
   <div>
     <ol
       class="listPane"
-      role="list"
     >
       <li
         class="list"
         id="list-1"
-        role="listitem"
       >
         <span
           class="title"
@@ -620,13 +726,13 @@ exports[`ListPane given a number of lists when the new list button is clicked sh
           class="action-btns"
         >
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Edit
           </button>
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Delete
@@ -636,7 +742,6 @@ exports[`ListPane given a number of lists when the new list button is clicked sh
       <li
         class="list"
         id="list-2"
-        role="listitem"
       >
         <span
           class="title"
@@ -648,13 +753,13 @@ exports[`ListPane given a number of lists when the new list button is clicked sh
           class="action-btns"
         >
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Edit
           </button>
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Delete
@@ -664,7 +769,6 @@ exports[`ListPane given a number of lists when the new list button is clicked sh
       <li
         class="list"
         id="list-3"
-        role="listitem"
       >
         <span
           class="title"
@@ -676,13 +780,13 @@ exports[`ListPane given a number of lists when the new list button is clicked sh
           class="action-btns"
         >
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Edit
           </button>
           <button
-            role="button"
+            class="p-1 border"
             type="button"
           >
             Delete
@@ -692,7 +796,6 @@ exports[`ListPane given a number of lists when the new list button is clicked sh
       <li
         class="list"
         id="list-4"
-        role="listitem"
       >
         <span
           class="title"
@@ -702,14 +805,14 @@ exports[`ListPane given a number of lists when the new list button is clicked sh
             for="list-title"
           >
             List Title
+            <input
+              class="ring-4 ring-opacity-30 ring-green-300"
+              id="list-title"
+              placeholder="List Title"
+              type="text"
+              value="New List"
+            />
           </label>
-          <input
-            class="ring-4 ring-opacity-30 ring-green-300"
-            id="list-title"
-            placeholder="List Title"
-            type="text"
-            value="New List"
-          />
         </span>
       </li>
     </ol>
@@ -718,6 +821,7 @@ exports[`ListPane given a number of lists when the new list button is clicked sh
     >
       <button
         aria-label="New List"
+        class="p-1 bg-blue-100 border"
         type="button"
       >
         New List
@@ -732,13 +836,13 @@ exports[`ListPane initial render should render the expected html 1`] = `
   <div>
     <ol
       class="listPane"
-      role="list"
     />
     <div
       class=""
     >
       <button
         aria-label="New List"
+        class="p-1 bg-blue-100 border"
         type="button"
       >
         New List
@@ -753,12 +857,10 @@ exports[`ListPane initial render when the new list button is clicked should rend
   <div>
     <ol
       class="listPane"
-      role="list"
     >
       <li
         class="list"
         id="list-1"
-        role="listitem"
       >
         <span
           class="title"
@@ -768,14 +870,14 @@ exports[`ListPane initial render when the new list button is clicked should rend
             for="list-title"
           >
             List Title
+            <input
+              class="ring-4 ring-opacity-30 ring-green-300"
+              id="list-title"
+              placeholder="List Title"
+              type="text"
+              value="New List"
+            />
           </label>
-          <input
-            class="ring-4 ring-opacity-30 ring-green-300"
-            id="list-title"
-            placeholder="List Title"
-            type="text"
-            value="New List"
-          />
         </span>
       </li>
     </ol>
@@ -784,6 +886,7 @@ exports[`ListPane initial render when the new list button is clicked should rend
     >
       <button
         aria-label="New List"
+        class="p-1 bg-blue-100 border"
         type="button"
       >
         New List

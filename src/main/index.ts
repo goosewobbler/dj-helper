@@ -2,10 +2,14 @@ import path from 'path';
 import { app, BrowserWindow } from 'electron';
 import { createApp } from './app';
 import { log } from './helpers/console';
+import '@goosewobbler/spectron/main';
 
+const appPath = app.getAppPath();
 const isDev = process.env.NODE_ENV === 'development';
 const isProd = process.env.NODE_ENV === 'production';
+const isPackaged = path.basename(appPath) === 'app.asar';
 const isDebugMode = isDev || process.env.DEBUG_PROD === 'true';
+const appRootPath = `${appPath}/${isPackaged ? 'dist' : ''}`;
 
 let mainWindow: BrowserWindow | undefined;
 
@@ -27,7 +31,7 @@ async function createWindow(): Promise<void> {
     height: 1000,
     width: 1500,
     webPreferences: {
-      preload: path.resolve(__dirname, '../renderer/preload.js'),
+      preload: `${appRootPath}/preload.js`,
     },
   });
 
@@ -55,7 +59,8 @@ async function createWindow(): Promise<void> {
 
   void (await createApp(mainWindow, isDev));
 
-  void (await mainWindow.loadURL(isDev ? 'http://localhost:1212/' : `file:///${__dirname}/../../dist/index.html`));
+  const htmlRoot = isDev ? 'http://localhost:1212' : `file:///${appRootPath}`;
+  void (await mainWindow.loadURL(`${htmlRoot}/index.html`));
 }
 
 if (app.requestSingleInstanceLock()) {

@@ -7,19 +7,19 @@ module.exports = {
   context: `${__dirname}/..`,
   mode: process.env.NODE_ENV,
   devtool: isDev ? 'inline-source-map' : 'source-map',
-  entry: './src/main/index.ts',
+  entry: './src/renderer/preload.ts',
   output: {
     path: `${__dirname}/../dist`,
-    filename: `main.${isDev ? 'dev' : 'prod'}.js`,
+    filename: 'preload.js',
   },
   module: {
     rules,
   },
   plugins,
   resolve: {
-    extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.json'],
+    extensions: ['.js', '.ts', '.jsx', '.tsx'],
   },
-  target: 'electron-main',
+  target: 'electron-preload',
   node: {
     __dirname: true,
     __filename: true,

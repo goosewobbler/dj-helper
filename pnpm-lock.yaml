@@ -72,7 +72,6 @@ specifiers:
   jest: ^27.0.6
   mini-css-extract-plugin: ^2.0.0
   node-loader: ^2.0.0
-  playwright: ^1.12.3
   postcss-cli: ^8.3.1
   postcss-loader: ^6.1.1
   prettier: ^2.3.2
@@ -166,7 +165,6 @@ devDependencies:
   jest: 27.0.6
   mini-css-extract-plugin: 2.1.0_webpack@5.45.1
   node-loader: 2.0.0_webpack@5.45.1
-  playwright: 1.12.3
   postcss-cli: 8.3.1
   postcss-loader: 6.1.1_webpack@5.45.1
   prettier: 2.3.2
@@ -7760,10 +7758,6 @@ packages:
       - utf-8-validate
     dev: true
 
-  /jpeg-js/0.4.3:
-    resolution: {integrity: sha512-ru1HWKek8octvUHFHvE5ZzQ1yAsJmIvRdGWvSoKV52XKyuyYA437QWDttXT8eZXDSbuMpHlLzPDZUPd6idIz+Q==}
-    dev: true
-
   /js-tokens/4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
     dev: true
@@ -9237,32 +9231,6 @@ packages:
       find-up: 3.0.0
     dev: true
 
-  /playwright/1.12.3:
-    resolution: {integrity: sha512-eyhHvZV7dMAUltqjQsgJ9CjZM8dznzN1+rcfCI6W6lfQ7IlPvTFGLuKOCcI4ETbjfbxqaS5FKIkb1WDDzq2Nww==}
-    engines: {node: '>=12'}
-    hasBin: true
-    requiresBuild: true
-    dependencies:
-      commander: 6.2.1
-      debug: 4.3.2
-      extract-zip: 2.0.1
-      https-proxy-agent: 5.0.0
-      jpeg-js: 0.4.3
-      mime: 2.5.2
-      pngjs: 5.0.0
-      progress: 2.0.3
-      proper-lockfile: 4.1.2
-      proxy-from-env: 1.1.0
-      rimraf: 3.0.2
-      stack-utils: 2.0.3
-      ws: 7.5.3
-      yazl: 2.5.1
-    transitivePeerDependencies:
-      - bufferutil
-      - supports-color
-      - utf-8-validate
-    dev: true
-
   /plist/3.0.2:
     resolution: {integrity: sha512-MSrkwZBdQ6YapHy87/8hDU8MnIcyxBKjeF+McXnr5A9MtffPewTs7G3hlpodT5TacyfIyFTaJEhh3GGcmasTgQ==}
     engines: {node: '>=6'}
@@ -9270,11 +9238,6 @@ packages:
       base64-js: 1.5.1
       xmlbuilder: 9.0.7
       xmldom: 0.5.0
-    dev: true
-
-  /pngjs/5.0.0:
-    resolution: {integrity: sha512-40QW5YalBNfQo5yRYmiw7Yz6TKKVr3h6970B2YE+3fQpsWcrbj1PzJgxeJ19DRQjhMbKPIuMY8rFaXc8moolVw==}
-    engines: {node: '>=10.13.0'}
     dev: true
 
   /portfinder/1.0.28:
@@ -9843,14 +9806,6 @@ packages:
       loose-envify: 1.4.0
       object-assign: 4.1.1
       react-is: 16.13.1
-    dev: true
-
-  /proper-lockfile/4.1.2:
-    resolution: {integrity: sha512-TjNPblN4BwAWMXU8s9AEz4JmQxnD1NNL7bNOY/AKUzyamc379FWASUhc/K1pL2noVb+XmZKLL68cjzLsiOAMaA==}
-    dependencies:
-      graceful-fs: 4.2.6
-      retry: 0.12.0
-      signal-exit: 3.0.3
     dev: true
 
   /proto-list/1.2.4:
@@ -12546,12 +12501,6 @@ packages:
     dependencies:
       buffer-crc32: 0.2.13
       fd-slicer: 1.1.0
-    dev: true
-
-  /yazl/2.5.1:
-    resolution: {integrity: sha512-phENi2PLiHnHb6QBVot+dJnaAZ0xosj7p3fWl+znIjBDlnMI2PsZCJZ306BPTFOaHf5qdDEI8x5qFrSOBN5vrw==}
-    dependencies:
-      buffer-crc32: 0.2.13
     dev: true
 
   /yocto-queue/0.1.0:

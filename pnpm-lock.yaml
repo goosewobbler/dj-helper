@@ -13,7 +13,7 @@ specifiers:
   '@babel/preset-typescript': ^7.14.5
   '@babel/register': ^7.14.5
   '@goosewobbler/electron-redux': ^1.0.4
-  '@goosewobbler/spectron': ^16.0.0
+  '@goosewobbler/spectron': ^16.0.3
   '@pmmmwh/react-refresh-webpack-plugin': ^0.4.3
   '@redux-offline/redux-offline': ^2.6.0
   '@reduxjs/toolkit': ^1.6.0
@@ -106,7 +106,7 @@ devDependencies:
   '@babel/preset-react': 7.14.5_@babel+core@7.14.6
   '@babel/preset-typescript': 7.14.5_@babel+core@7.14.6
   '@babel/register': 7.14.5_@babel+core@7.14.6
-  '@goosewobbler/spectron': 16.0.1
+  '@goosewobbler/spectron': 16.0.3
   '@pmmmwh/react-refresh-webpack-plugin': 0.4.3_aa1c70b7114996ffa7ba5ac67a2c7db3
   '@redux-offline/redux-offline': 2.6.0
   '@reduxjs/toolkit': 1.6.0_react-redux@7.2.4+react@17.0.2
@@ -1552,8 +1552,8 @@ packages:
       electron: 13.1.7
     dev: false
 
-  /@goosewobbler/spectron/16.0.1:
-    resolution: {integrity: sha512-RsqU/3FLLkgxS9+zIViulaDTXj22Vp4D7v1hosyBc3Dhzxe7zRmYmT2khoZQXNJPYHsOepyQHRVWzD6pO/ajXA==}
+  /@goosewobbler/spectron/16.0.3:
+    resolution: {integrity: sha512-m6gUNxxIIMSGZUZR9cYYXEdgg59d0TAXUBw+3J01fLx2MXYnRIeLvKVmucMXRX+bjQ+Yz0P30TFLN5vWsca/FA==}
     engines: {node: '>=12.20.0'}
     requiresBuild: true
     dependencies:

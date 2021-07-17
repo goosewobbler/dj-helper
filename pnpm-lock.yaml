@@ -20,7 +20,7 @@ specifiers:
   '@testing-library/dom': ^8.1.0
   '@testing-library/jest-dom': ^5.14.1
   '@testing-library/react': ^12.0.0
-  '@testing-library/user-event': ^13.1.9
+  '@testing-library/user-event': ^13.2.0
   '@testing-library/webdriverio': ^3.0.2
   '@types/app-root-path': ^1.2.4
   '@types/jest': ^26.0.23
@@ -44,7 +44,7 @@ specifiers:
   concurrently: ^6.2.0
   copy-webpack-plugin: ^9.0.1
   cross-env: ^7.0.3
-  css-loader: ^6.0.0
+  css-loader: ^6.1.0
   cssnano: ^5.0.6
   electron: ^13.1.5
   electron-builder: ^22.11.8
@@ -114,7 +114,7 @@ devDependencies:
   '@testing-library/dom': 8.1.0
   '@testing-library/jest-dom': 5.14.1
   '@testing-library/react': 12.0.0_react-dom@17.0.2+react@17.0.2
-  '@testing-library/user-event': 13.1.9_@testing-library+dom@8.1.0
+  '@testing-library/user-event': 13.2.0_@testing-library+dom@8.1.0
   '@testing-library/webdriverio': 3.0.2
   '@types/app-root-path': 1.2.4
   '@types/jest': 26.0.24
@@ -138,7 +138,7 @@ devDependencies:
   concurrently: 6.2.0
   copy-webpack-plugin: 9.0.1_webpack@5.45.1
   cross-env: 7.0.3
-  css-loader: 6.0.0_webpack@5.45.1
+  css-loader: 6.1.0_webpack@5.45.1
   cssnano: 5.0.6
   electron: 13.1.7
   electron-builder: 22.11.9
@@ -2049,8 +2049,8 @@ packages:
       react-dom: 17.0.2_react@17.0.2
     dev: true
 
-  /@testing-library/user-event/13.1.9_@testing-library+dom@8.1.0:
-    resolution: {integrity: sha512-NZr0zL2TMOs2qk+dNlqrAdbaRW5dAmYwd1yuQ4r7HpkVEOj0MWuUjDWwKhcLd/atdBy8ZSMHSKp+kXSQe47ezg==}
+  /@testing-library/user-event/13.2.0_@testing-library+dom@8.1.0:
+    resolution: {integrity: sha512-wDEuKkkChNfA02Fpd9A39AXmdmxkvRcHyt/cK3WWiPAQTyMhcKFNM51aQgpEDJUcdj7uPsOaDEESoW/L1b2kZA==}
     engines: {node: '>=10', npm: '>=6'}
     peerDependencies:
       '@testing-library/dom': '>=7.21.4'
@@ -4261,8 +4261,8 @@ packages:
       timsort: 0.3.0
     dev: true
 
-  /css-loader/6.0.0_webpack@5.45.1:
-    resolution: {integrity: sha512-xi3iTbHekvk5dWWdqfQKNsEm2g3Vr20uRwHzfXF+pHsaFGMuxTrqR1y8PY+st5G7wqid4/pBSiaqZsO6iaGN5g==}
+  /css-loader/6.1.0_webpack@5.45.1:
+    resolution: {integrity: sha512-AcCb6ire7NgkrxJCtwEDa/y+xxBrPNXYWdlSpXNr+YwW2wTahSowSIxD9cHc9Uvc8Dbq+NQ/NQ6aDvJWik44vg==}
     engines: {node: '>= 12.13.0'}
     peerDependencies:
       webpack: ^5.0.0

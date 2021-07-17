@@ -9,7 +9,7 @@ const isDev = process.env.NODE_ENV === 'development';
 const isProd = process.env.NODE_ENV === 'production';
 const isPackaged = path.basename(appPath) === 'app.asar';
 const isDebugMode = isDev || process.env.DEBUG_PROD === 'true';
-const appRootPath = `${appPath}/${isPackaged ? 'dist' : ''}`;
+const appRootPath = `${appPath}${isPackaged ? '/dist' : ''}`;
 
 let mainWindow: BrowserWindow | undefined;
 

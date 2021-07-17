@@ -1,4 +1,4 @@
-# DJ Helper
+# DJ Helper - 🚧 Currently pre-alpha, MVP / functional prototype will be v0.1 🚧
 
 This is an app for helping DJs to construct and manage lists of tracks whilst browsing online music sources such as Bandcamp and Beatport. More generalised digital music curation features may be added in the future, focussing on ownership / downloadable content over streaming.
 

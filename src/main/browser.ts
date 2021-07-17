@@ -1,6 +1,12 @@
 import { BrowserView, BrowserWindow } from 'electron';
 import { Store } from '@reduxjs/toolkit';
-import { createTrack, TrackData, unlinkBrowserFromTracks } from '../features/tracks/tracksSlice';
+import {
+  createTrack,
+  setPlaying,
+  setStopped,
+  TrackData,
+  unlinkBrowserFromTracks,
+} from '../features/tracks/tracksSlice';
 import { BandCurrency, BandData, parseBandcampPageData, TralbumCollectInfo, TralbumData } from './helpers/bandcamp';
 import { AppState, Browser, Dispatch } from '../common/types';
 import { log } from './helpers/console';
@@ -19,9 +25,32 @@ function createBrowser(mainWindow: BrowserWindow, dispatch: Dispatch, browserId:
     return { action: 'deny' };
   });
 
+  view.webContents.on('media-started-playing', () => {
+    void (async () => {
+      const titleLinkPlaying = (await view.webContents.executeJavaScript(
+        'document.querySelector(".inline_player .title_link").getAttribute("href");',
+        true,
+      )) as string;
+      console.log('playing lol', { sourceUrl: titleLinkPlaying });
+      dispatch(setPlaying({ sourceUrl: titleLinkPlaying }));
+    })();
+  });
+
+  view.webContents.on('media-paused', () => {
+    void (async () => {
+      const titleLinkPaused = (await view.webContents.executeJavaScript(
+        'document.querySelector(".inline_player .title_link").getAttribute("href");',
+        true,
+      )) as string;
+      console.log('paused lol', { sourceUrl: titleLinkPaused });
+      dispatch(setStopped({ sourceUrl: titleLinkPaused }));
+    })();
+  });
+
   view.webContents.on('did-finish-load', () => {
     const loadedUrl = view.webContents.getURL();
     log('loaded url', loadedUrl);
+
     dispatch(unlinkBrowserFromTracks({ browserId })); // unlink browser from tracks
     if (/bandcamp.com\/track|album/.exec(loadedUrl)) {
       log('url is bandcamp album or track');
@@ -31,16 +60,16 @@ function createBrowser(mainWindow: BrowserWindow, dispatch: Dispatch, browserId:
           true,
         )) as RawBandcampData;
         const bcPageData = parseBandcampPageData(tralbumData, bandData, tralbumCollectInfo, bandCurrency, loadedUrl);
-        log('parsed bandcamp page data');
-        bcPageData.trackinfo.forEach(({ id, title, artist, duration }) => {
-          // pass price where we have it, check url
+        log('parsed bandcamp page data', bcPageData);
+        bcPageData.trackinfo.forEach(({ id, title, title_link, artist, duration }) => {
+          // pass price where we have it
           const trackData: TrackData = {
             title,
             artist,
             duration,
             browserId,
             sourceId: id,
-            url: loadedUrl,
+            url: title_link,
             priceCurrency: bcPageData.currency,
           };
           dispatch(createTrack(trackData));

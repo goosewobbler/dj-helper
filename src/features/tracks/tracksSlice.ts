@@ -73,6 +73,10 @@ function updateTrackData(
   return trackToUpdate;
 }
 
+function trackHasSource(track: Track, sourceUrl: string): boolean {
+  return !!track.sources.find((trackSource) => trackSource.url.includes(sourceUrl));
+}
+
 export const slice = createSlice({
   name: 'tracks',
   initialState,
@@ -97,6 +101,7 @@ export const slice = createSlice({
         artist,
         duration,
         browserId,
+        playing: false,
         sources: [
           {
             sourceId,
@@ -119,14 +124,23 @@ export const slice = createSlice({
       state.filter((track) => track.id === id).map((track, index) => ({ ...track, index })),
     unlinkBrowserFromTracks: (state, { payload: { browserId } }) =>
       state.map((track) => (track.browserId === browserId ? { ...track, browserId: undefined } : track)),
+    setPlaying: (state, { payload: { sourceUrl } }) =>
+      state.map((track) => (trackHasSource(track, sourceUrl) ? { ...track, playing: true } : track)),
+    setStopped: (state, { payload: { sourceUrl } }) =>
+      state.map((track) => (trackHasSource(track, sourceUrl) ? { ...track, playing: false } : track)),
   },
 });
 
-export const { createTrack, updateTrack, deleteTrack, unlinkBrowserFromTracks } = slice.actions;
+export const { createTrack, updateTrack, deleteTrack, unlinkBrowserFromTracks, setPlaying, setStopped } = slice.actions;
 
-export const selectTracks = (state: AppState): Track[] => {
-  log('track selector returning', state);
-  return state.tracks;
-};
+export const selectTracksByBrowserId =
+  (browserId: Track['browserId']) =>
+  (state: AppState): Track[] =>
+    state.tracks.filter((track) => track.browserId === browserId);
+
+export const selectTrackById =
+  (id: Track['id']) =>
+  (state: AppState): Track =>
+    state.tracks.find((track) => track.id === id) as Track;
 
 export const tracksReducer = slice.reducer;

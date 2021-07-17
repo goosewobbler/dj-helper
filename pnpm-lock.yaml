@@ -17,6 +17,7 @@ specifiers:
   '@pmmmwh/react-refresh-webpack-plugin': ^0.4.3
   '@redux-offline/redux-offline': ^2.6.0
   '@reduxjs/toolkit': ^1.6.0
+  '@testing-library/dom': ^8.1.0
   '@testing-library/jest-dom': ^5.14.1
   '@testing-library/react': ^12.0.0
   '@testing-library/user-event': ^13.1.9
@@ -110,9 +111,10 @@ devDependencies:
   '@pmmmwh/react-refresh-webpack-plugin': 0.4.3_aa1c70b7114996ffa7ba5ac67a2c7db3
   '@redux-offline/redux-offline': 2.6.0
   '@reduxjs/toolkit': 1.6.0_react-redux@7.2.4+react@17.0.2
+  '@testing-library/dom': 8.1.0
   '@testing-library/jest-dom': 5.14.1
   '@testing-library/react': 12.0.0_react-dom@17.0.2+react@17.0.2
-  '@testing-library/user-event': 13.1.9
+  '@testing-library/user-event': 13.1.9_@testing-library+dom@8.1.0
   '@testing-library/webdriverio': 3.0.2
   '@types/app-root-path': 1.2.4
   '@types/jest': 26.0.24
@@ -2047,13 +2049,14 @@ packages:
       react-dom: 17.0.2_react@17.0.2
     dev: true
 
-  /@testing-library/user-event/13.1.9:
+  /@testing-library/user-event/13.1.9_@testing-library+dom@8.1.0:
     resolution: {integrity: sha512-NZr0zL2TMOs2qk+dNlqrAdbaRW5dAmYwd1yuQ4r7HpkVEOj0MWuUjDWwKhcLd/atdBy8ZSMHSKp+kXSQe47ezg==}
     engines: {node: '>=10', npm: '>=6'}
     peerDependencies:
       '@testing-library/dom': '>=7.21.4'
     dependencies:
       '@babel/runtime': 7.14.6
+      '@testing-library/dom': 8.1.0
     dev: true
 
   /@testing-library/webdriverio/3.0.2:

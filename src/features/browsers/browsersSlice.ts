@@ -29,3 +29,5 @@ export const { createBrowser } = slice.actions;
 export const selectBrowsers = (state: AppState): Browser[] => state.browsers;
 
 export const browsersReducer = slice.reducer;
+
+export const reducers = slice.caseReducers;

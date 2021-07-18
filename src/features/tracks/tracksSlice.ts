@@ -147,6 +147,7 @@ export const slice = createSlice({
         trackHasSource(track, sourceUrl, sourceId) ? { ...track, embedActive: true } : { ...track, embedActive: false },
       ),
     setEmbedInactive: (state) => state.map((track) => ({ ...track, embedActive: false })),
+    clearAllTracks: () => initialState,
   },
 });
 
@@ -159,6 +160,7 @@ export const {
   setStopped,
   setEmbedActive,
   setEmbedInactive,
+  clearAllTracks,
 } = slice.actions;
 
 export const selectTracksByBrowserId =

@@ -1,12 +1,18 @@
-import React, { ReactElement, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectTrackById } from '../tracks/tracksSlice';
+import React, { ReactElement } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectTrackById, setEmbedActive } from '../tracks/tracksSlice';
 import { Track } from '../../common/types';
 import { log } from '../../main/helpers/console';
+import { Bounds } from '../../main/trackEmbed';
 
 declare global {
   interface Window {
-    api: { isDev: boolean };
+    api: {
+      isDev: boolean;
+      track: {
+        createEmbed(url: string, bounds: Bounds): Promise<unknown>;
+      };
+    };
   }
 }
 
@@ -20,30 +26,22 @@ function displayTrackDuration(duration: number) {
 }
 
 function TrackMeta({ id }: { id: Track['id'] }) {
-  const [embedActive, setEmbedActive] = useState(false);
-  const { artist, title, duration, sources, playing } = useSelector(selectTrackById(id));
+  const dispatch = useDispatch();
+  const { artist, title, duration, sources, playing, embedActive } = useSelector(selectTrackById(id));
   // const [embedIsPlaying, setEmbedIsPlaying] = useState(false);
-  log('zomg loading track', sources, playing);
+  log('zomg loading track', { artist, title, duration, sources, playing, embedActive });
 
-  // useEffect(() => {
-  //   window.addEventListener(
-  //     'embedPlaying',
-  //     () => {
-  //       console.log('received playing');
-  //       setEmbedIsPlaying(true);
-  //     },
-  //     false,
-  //   );
-
-  //   window.addEventListener(
-  //     'embedStopped',
-  //     () => {
-  //       console.log('received stopped');
-  //       setEmbedIsPlaying(false);
-  //     },
-  //     false,
-  //   );
-  // });
+  if (embedActive) {
+    void window.api.track.createEmbed(
+      `https://bandcamp.com/EmbeddedPlayer/size=small/bgcol=ffffff/linkcol=0687f5/track=${sources[0].sourceId}/transparent=true/`,
+      {
+        x: 900,
+        y: 10,
+        width: 400,
+        height: 42,
+      },
+    );
+  }
 
   return (
     <div key={id}>
@@ -51,41 +49,13 @@ function TrackMeta({ id }: { id: Track['id'] }) {
       <span>{title}</span>
       <span>{displayTrackDuration(duration)}</span>
       <span>{playing ? 'OMG this is playing' : ''}</span>
-      {embedActive ? (
-        <iframe
-          id="bandcamp"
-          title={title}
-          style={{ border: 0, width: '100%', height: '42px' }}
-          src={`https://bandcamp.com/EmbeddedPlayer/size=small/bgcol=ffffff/linkcol=0687f5/track=${sources[0].sourceId}/transparent=true/`}
-          seamless
-          // onLoad={() => {
-          //   let embedPlaying = false;
-          //   window.setInterval(() => {
-          //     const parentOrigin = isDev ? 'http://localhost:1212' : 'file:///';
-          //     const nowPlaying = document.getElementById('player')?.classList.contains('playing');
-          //     console.log(
-          //       'wut',
-          //       embedPlaying,
-          //       nowPlaying,
-          //       document.title,
-          //       document.getElementById('player'),
-          //       window.document.getElementById('player')?.classList,
-          //     );
-          //     if (!embedPlaying && nowPlaying) {
-          //       console.log('sending msg - playing');
-          //       window.parent.postMessage('embedPlaying', parentOrigin);
-          //       embedPlaying = true;
-          //     }
-          //     if (embedPlaying && !nowPlaying) {
-          //       console.log('sending msg - stopped');
-          //       window.parent.postMessage('embedStopped', parentOrigin);
-          //       embedPlaying = false;
-          //     }
-          //   }, 1000);
-          // }}
-        />
-      ) : (
-        <button type="button" onClick={() => setEmbedActive(true)}>
+      {embedActive || (
+        <button
+          type="button"
+          onClick={() => {
+            dispatch(setEmbedActive({ sourceId: sources[0].sourceId }));
+          }}
+        >
           Play
         </button>
       )}

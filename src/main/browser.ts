@@ -32,7 +32,7 @@ function createBrowser(mainWindow: BrowserWindow, dispatch: Dispatch, browserId:
         true,
       )) as string;
       console.log('playing lol', { sourceUrl: titleLinkPlaying });
-      dispatch(setPlaying({ sourceUrl: titleLinkPlaying }));
+      dispatch(setPlaying({ sourceUrl: titleLinkPlaying, context: 'browser' }));
     })();
   });
 
@@ -43,7 +43,7 @@ function createBrowser(mainWindow: BrowserWindow, dispatch: Dispatch, browserId:
         true,
       )) as string;
       console.log('paused lol', { sourceUrl: titleLinkPaused });
-      dispatch(setStopped({ sourceUrl: titleLinkPaused }));
+      dispatch(setStopped({ sourceUrl: titleLinkPaused, context: 'browser' }));
     })();
   });
 

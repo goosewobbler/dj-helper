@@ -73,8 +73,13 @@ function updateTrackData(
   return trackToUpdate;
 }
 
-function trackHasSource(track: Track, sourceUrl: string): boolean {
-  return !!track.sources.find((trackSource) => trackSource.url.includes(sourceUrl));
+function trackHasSource(track: Track, sourceUrl: string, sourceId?: number): boolean {
+  return !!track.sources.find((trackSource) => {
+    if (sourceId) {
+      return trackSource.sourceId === sourceId;
+    }
+    return trackSource.url.includes(sourceUrl);
+  });
 }
 
 export const slice = createSlice({
@@ -102,6 +107,7 @@ export const slice = createSlice({
         duration,
         browserId,
         playing: false,
+        embedActive: false,
         sources: [
           {
             sourceId,
@@ -124,14 +130,36 @@ export const slice = createSlice({
       state.filter((track) => track.id === id).map((track, index) => ({ ...track, index })),
     unlinkBrowserFromTracks: (state, { payload: { browserId } }) =>
       state.map((track) => (track.browserId === browserId ? { ...track, browserId: undefined } : track)),
-    setPlaying: (state, { payload: { sourceUrl } }) =>
-      state.map((track) => (trackHasSource(track, sourceUrl) ? { ...track, playing: true } : track)),
-    setStopped: (state, { payload: { sourceUrl } }) =>
-      state.map((track) => (trackHasSource(track, sourceUrl) ? { ...track, playing: false } : track)),
+    setPlaying: (state, { payload: { sourceUrl, context } }) =>
+      state.map((track) =>
+        trackHasSource(track, sourceUrl)
+          ? { ...track, playing: true, playingFrom: context as string, embedActive: true }
+          : { ...track, playing: false, playingFrom: undefined, embedActive: false },
+      ),
+    setStopped: (state, { payload: { sourceUrl, context } }) =>
+      state.map((track) =>
+        trackHasSource(track, sourceUrl) && track.playingFrom === context // only accept setStopped from the same context as the track is being played
+          ? { ...track, playing: false, playingFrom: undefined, embedActive: false }
+          : track,
+      ),
+    setEmbedActive: (state, { payload: { sourceUrl, sourceId } }) =>
+      state.map((track) =>
+        trackHasSource(track, sourceUrl, sourceId) ? { ...track, embedActive: true } : { ...track, embedActive: false },
+      ),
+    setEmbedInactive: (state) => state.map((track) => ({ ...track, embedActive: false })),
   },
 });
 
-export const { createTrack, updateTrack, deleteTrack, unlinkBrowserFromTracks, setPlaying, setStopped } = slice.actions;
+export const {
+  createTrack,
+  updateTrack,
+  deleteTrack,
+  unlinkBrowserFromTracks,
+  setPlaying,
+  setStopped,
+  setEmbedActive,
+  setEmbedInactive,
+} = slice.actions;
 
 export const selectTracksByBrowserId =
   (browserId: Track['browserId']) =>

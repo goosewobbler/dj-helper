@@ -39,6 +39,12 @@ export function createTrackEmbed(
     return { action: 'deny' };
   });
 
+  embed.webContents.on('did-finish-load', () => {
+    void (async () => {
+      await embed.webContents.executeJavaScript('$("#big_play_button").click();', true);
+    })();
+  });
+
   embed.webContents.on('media-started-playing', () => {
     void (async () => {
       const rawTitleLinkPlaying = (await embed.webContents.executeJavaScript(

@@ -6,7 +6,7 @@
     "plugin:node/recommended",
     "plugin:promise/recommended"
   ],
-  "plugins": ["prettier", "import"],
+  "plugins": ["import"],
   "env": {
     "es6": true,
     "node": true
@@ -24,15 +24,15 @@
       "extends": [
         "airbnb-typescript",
         "airbnb/hooks",
+        "prettier",
         "plugin:@typescript-eslint/recommended-requiring-type-checking",
         "plugin:import/recommended",
         "plugin:import/typescript",
-        "plugin:prettier/recommended",
         "plugin:node/recommended",
         "plugin:promise/recommended",
         "plugin:react-hooks/recommended"
       ],
-      "plugins": ["prettier", "import", "@typescript-eslint"],
+      "plugins": ["import", "@typescript-eslint"],
       "parser": "@typescript-eslint/parser",
       "parserOptions": {
         "ecmaFeatures": { "jsx": true },

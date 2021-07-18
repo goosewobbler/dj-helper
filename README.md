@@ -1,3 +1,5 @@
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=goosewobbler_dj-helper&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=goosewobbler_dj-helper) [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=goosewobbler_dj-helper&metric=security_rating)](https://sonarcloud.io/dashboard?id=goosewobbler_dj-helper) [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=goosewobbler_dj-helper&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=goosewobbler_dj-helper) [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=goosewobbler_dj-helper&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=goosewobbler_dj-helper) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=goosewobbler_dj-helper&metric=alert_status)](https://sonarcloud.io/dashboard?id=goosewobbler_dj-helper)
+
 # DJ Helper 
 
 **🚧 Currently pre-alpha, MVP / functional prototype will be v0.1 🚧**

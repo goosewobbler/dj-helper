@@ -19,13 +19,13 @@ describe('App', () => {
     // await app.client.getWindowHandles();
     await app.client.waitUntilWindowLoaded();
     screen = setupBrowser(app.client);
-  });
+  }, 10000);
 
   afterEach(async () => {
     if (app && app.isRunning()) {
       await app.stop();
     }
-  });
+  }, 10000);
 
   it('should launch app', async () => {
     const isVisible = await app.browserWindow.isVisible();

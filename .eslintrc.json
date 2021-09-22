@@ -16,7 +16,8 @@
     "import/extensions": ["error", "never"],
     "import/no-default-export": "error",
     "import/prefer-default-export": "off",
-    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }]
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+    "node/no-unpublished-require": "off"
   },
   "overrides": [
     {
@@ -65,6 +66,8 @@
         "@typescript-eslint/no-non-null-assertion": "off",
         "no-param-reassign": ["error", { "props": false }],
         "no-void": ["error", { "allowAsStatement": true }],
+        "node/no-unsupported-features/es-syntax": "off",
+        "node/no-unpublished-import": "off",
         // duplicated by TS
         "import/named": "off",
         "import/namespace": "off",
@@ -72,6 +75,9 @@
         "import/no-named-as-default-member": "off"
       },
       "settings": {
+        "node": {
+          "tryExtensions": [".js", ".json", ".node", ".ts", ".tsx"]
+        },
         "import/parsers": {
           "@typescript-eslint/parser": [".ts", ".tsx"]
         },

@@ -102,24 +102,36 @@ module.exports = {
   },
   devServer: {
     port: devServerPort,
-    publicPath,
     compress: false,
-    inline: true,
-    lazy: false,
     hot: true,
     headers: { 'Access-Control-Allow-Origin': '*' },
-    contentBase: [`${__dirname}/../static`, `${__dirname}/../dll`],
-    writeToDisk: true,
-    watchOptions: {
-      aggregateTimeout: 300,
-      ignored: ['**/node_modules'],
-      poll: 100,
+    devMiddleware: {    
+      publicPath,
+      writeToDisk: true,
     },
+    static: [
+      {
+        directory: `${__dirname}/../static`,
+        watch: {
+          aggregateTimeout: 300,
+          ignored: ['**/node_modules'],
+          poll: 100,
+        },
+      },
+      {
+        directory: `${__dirname}/../dll`,      
+        watch: {
+          aggregateTimeout: 300,
+          ignored: ['**/node_modules'],
+          poll: 100,
+        },
+      },
+    ],
     historyApiFallback: {
       verbose: true,
       disableDotRule: false,
     },
-    before(app, server, compiler) {
+    onBeforeSetupMiddleware({ compiler }) {
       let modifiedMain = false;
       compiler.hooks.watchRun.tap('ElectronDevServerManagement', ({ modifiedFiles }) => {
         if (modifiedFiles) {

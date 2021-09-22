@@ -50,6 +50,12 @@ describe('ListPane', () => {
           ],
           tracks: [],
           browsers: [],
+          embed: {
+            loadedTrackId: 0,
+            isPlaying: false,
+            loadContext: 'browser',
+            playContext: 'browser',
+          },
         },
       });
     });

@@ -130,38 +130,11 @@ export const slice = createSlice({
       state.filter((track) => track.id === id).map((track, index) => ({ ...track, index })),
     unlinkBrowserFromTracks: (state, { payload: { browserId } }) =>
       state.map((track) => (track.browserId === browserId ? { ...track, browserId: undefined } : track)),
-    setPlaying: (state, { payload: { sourceUrl, context } }) =>
-      state.map((track) =>
-        trackHasSource(track, sourceUrl)
-          ? { ...track, playing: true, playingFrom: context as string, embedActive: true }
-          : { ...track, playing: false, playingFrom: undefined, embedActive: false },
-      ),
-    setStopped: (state, { payload: { sourceUrl, context } }) =>
-      state.map((track) =>
-        trackHasSource(track, sourceUrl) && track.playingFrom === context // only accept setStopped from the same context as the track is being played
-          ? { ...track, playing: false, playingFrom: undefined, embedActive: false }
-          : track,
-      ),
-    setEmbedActive: (state, { payload: { sourceUrl, sourceId } }) =>
-      state.map((track) =>
-        trackHasSource(track, sourceUrl, sourceId) ? { ...track, embedActive: true } : { ...track, embedActive: false },
-      ),
-    setEmbedInactive: (state) => state.map((track) => ({ ...track, embedActive: false })),
     clearAllTracks: () => initialState,
   },
 });
 
-export const {
-  createTrack,
-  updateTrack,
-  deleteTrack,
-  unlinkBrowserFromTracks,
-  setPlaying,
-  setStopped,
-  setEmbedActive,
-  setEmbedInactive,
-  clearAllTracks,
-} = slice.actions;
+export const { createTrack, updateTrack, deleteTrack, unlinkBrowserFromTracks, clearAllTracks } = slice.actions;
 
 export const selectTracksByBrowserId =
   (browserId: Track['browserId']) =>
@@ -172,5 +145,15 @@ export const selectTrackById =
   (id: Track['id']) =>
   (state: AppState): Track =>
     state.tracks.find((track) => track.id === id) as Track;
+
+export const selectTrackByPlaying =
+  () =>
+  (state: AppState): Track =>
+    state.tracks.find((track) => track.playing) as Track;
+
+export const selectTrackBySource =
+  (sourceUrl: TrackSource['url']) =>
+  (state: AppState): Track =>
+    state.tracks.find((track) => trackHasSource(track, sourceUrl)) as Track;
 
 export const tracksReducer = slice.reducer;

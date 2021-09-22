@@ -1,51 +1,36 @@
 import { BrowserView, BrowserWindow } from 'electron';
+import { Store } from '@reduxjs/toolkit';
 import { URL } from 'url';
-import { setPlaying, setStopped } from '../features/tracks/tracksSlice';
-import { Dispatch } from '../common/types';
+import { setPlaying, setPaused, selectTrackByEmbedLoaded } from '../features/embed/embedSlice';
+import { Track } from '../common/types';
 
-export type Bounds = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-};
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 let embed: BrowserView;
 
-export function createTrackEmbed(
+export function initEmbed(
   mainWindow: BrowserWindow,
-  dispatch: Dispatch,
-  trackUrl: string,
-  bounds: Bounds,
-): void {
-  console.log(trackUrl, bounds);
-
-  if (embed && embed.webContents.getURL() === trackUrl) {
-    // we are already displaying an embed of this url
-    return;
-  }
-  if (embed) {
-    // we are already displaying a different embed so remove it first
-    mainWindow.removeBrowserView(embed);
-  }
-
+  reduxStore: Store
+): void {  
+  let currentEmbedTrack: Track;
+  
   embed = new BrowserView();
   mainWindow.addBrowserView(embed);
-  embed.setBounds(bounds);
-  void embed.webContents.loadURL(trackUrl);
+  embed.setBounds({
+    x: 900,
+    y: 10,
+    width: 400,
+    height: 42,
+  });
 
   embed.webContents.setWindowOpenHandler((details) => {
     void embed.webContents.loadURL(details.url);
     return { action: 'deny' };
   });
 
-  embed.webContents.on('did-finish-load', () => {
-    void (async () => {
-      await embed.webContents.executeJavaScript('$("#big_play_button").click();', true);
-    })();
-  });
-
-  embed.webContents.on('media-started-playing', () => {
+  const playHandler = () => {
     void (async () => {
       const rawTitleLinkPlaying = (await embed.webContents.executeJavaScript(
         'document.querySelector(".inline_player #maintextlink").getAttribute("href");',
@@ -53,12 +38,12 @@ export function createTrackEmbed(
       )) as string;
       const { pathname } = new URL(rawTitleLinkPlaying);
       const sourceUrl = pathname;
-      console.log('playing lol', { sourceUrl });
-      dispatch(setPlaying({ sourceUrl, context: 'trackEmbed' }));
+      console.log('playing from embed', { sourceUrl, context: 'trackEmbed' }, Date.now());
+      reduxStore.dispatch(setPlaying({ context: 'trackEmbed' }));
     })();
-  });
+  };
 
-  embed.webContents.on('media-paused', () => {
+  const pauseHandler = () => {
     void (async () => {
       const rawTitleLinkPaused = (await embed.webContents.executeJavaScript(
         'document.querySelector(".inline_player #maintextlink").getAttribute("href");',
@@ -66,8 +51,38 @@ export function createTrackEmbed(
       )) as string;
       const { pathname } = new URL(rawTitleLinkPaused);
       const sourceUrl = pathname;
-      console.log('paused lol', { sourceUrl });
-      dispatch(setStopped({ sourceUrl, context: 'trackEmbed' }));
+      console.log('paused from embed', { sourceUrl, context: 'trackEmbed' }, Date.now());
+      reduxStore.dispatch(setPaused({ context: 'trackEmbed' }));
     })();
+  };
+
+  const loadHandler = () => {
+    void (async () => {
+      await delay(500);
+      const isPlaying = !!(await embed.webContents.executeJavaScript('$("#player").hasClass("playing");', true));
+      console.log('loaded', Date.now(), currentEmbedTrack.playingFrom);
+      if (!isPlaying && currentEmbedTrack.playingFrom !== 'browser') {
+        // lastLoaded = Date.now();
+        console.log('clicking', Date.now());
+        await embed.webContents.executeJavaScript('$("#big_play_button").click().length;', true);
+       // lastClicked = Date.now();
+        console.log('clicked', Date.now());
+      }
+    })();
+  };
+
+  embed.webContents.on('media-started-playing', playHandler);
+  embed.webContents.on('media-paused', pauseHandler);
+  embed.webContents.on('did-finish-load', loadHandler);
+
+  reduxStore.subscribe(() => {
+    const previousEmbedTrack = currentEmbedTrack;
+    const embedTrackSelector = selectTrackByEmbedLoaded();
+    currentEmbedTrack = embedTrackSelector(reduxStore.getState());
+    if (currentEmbedTrack && previousEmbedTrack !== currentEmbedTrack) {
+      const trackUrl = `https://bandcamp.com/EmbeddedPlayer/size=small/bgcol=ffffff/linkcol=0687f5/track=${currentEmbedTrack.sources[0].sourceId}/transparent=true/`;
+      console.log('embed loading', Date.now(), currentEmbedTrack);
+      void embed.webContents.loadURL(trackUrl);
+    }
   });
 }

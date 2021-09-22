@@ -50,7 +50,15 @@ export type Browser = {
   title: string;
 };
 
+export type Embed = {
+  loadedTrackId: TrackSource['sourceId'];
+  isPlaying: boolean;
+  loadContext: string;
+  playContext: string;
+};
+
 export interface AppState {
+  embed: Embed;
   lists: List[];
   tracks: Track[];
   // trackSources: TrackSource[];

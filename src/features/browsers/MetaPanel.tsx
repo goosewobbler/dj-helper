@@ -1,17 +1,14 @@
 import React, { ReactElement } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectTrackById, setEmbedActive } from '../tracks/tracksSlice';
+import { selectTrackById } from '../tracks/tracksSlice';
 import { Track } from '../../common/types';
 import { log } from '../../main/helpers/console';
-import { Bounds } from '../../main/trackEmbed';
+import { loadTrack, trackIsLoaded, trackIsPlaying } from '../embed/embedSlice';
 
 declare global {
   interface Window {
     api: {
       isDev: boolean;
-      track: {
-        createEmbed(url: string, bounds: Bounds): Promise<unknown>;
-      };
     };
   }
 }
@@ -27,33 +24,22 @@ function displayTrackDuration(duration: number) {
 
 function TrackMeta({ id }: { id: Track['id'] }) {
   const dispatch = useDispatch();
-  const { artist, title, duration, sources, playing, embedActive } = useSelector(selectTrackById(id));
-  // const [embedIsPlaying, setEmbedIsPlaying] = useState(false);
-  log('zomg loading track', { artist, title, duration, sources, playing, embedActive });
-
-  if (embedActive) {
-    void window.api.track.createEmbed(
-      `https://bandcamp.com/EmbeddedPlayer/size=small/bgcol=ffffff/linkcol=0687f5/track=${sources[0].sourceId}/transparent=true/`,
-      {
-        x: 900,
-        y: 10,
-        width: 400,
-        height: 42,
-      },
-    );
-  }
+  const { artist, title, duration, sources, playingFrom } = useSelector(selectTrackById(id));
+  const isPlaying = useSelector(trackIsPlaying({ trackId: id }));
+  const isLoaded = useSelector(trackIsLoaded({ trackId: id }));
+  log('zomg loading track', { artist, title, duration, sources, playingFrom });
 
   return (
     <div key={id}>
       <span>{artist}</span>
       <span>{title}</span>
       <span>{displayTrackDuration(duration)}</span>
-      <span>{playing ? 'OMG this is playing' : ''}</span>
-      {embedActive || (
+      <span>{isPlaying ? 'OMG this is playing' : ''}</span>
+      {isLoaded || (
         <button
           type="button"
           onClick={() => {
-            dispatch(setEmbedActive({ sourceId: sources[0].sourceId }));
+            dispatch(loadTrack({ trackId: id, context: 'metapanel' }));
           }}
         >
           Play

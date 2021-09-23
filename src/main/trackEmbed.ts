@@ -3,6 +3,7 @@ import { Store } from '@reduxjs/toolkit';
 import { URL } from 'url';
 import { setPlaying, setPaused, selectTrackByEmbedLoaded } from '../features/embed/embedSlice';
 import { Track } from '../common/types';
+import { log } from './helpers/console';
 
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -60,13 +61,13 @@ export function initEmbed(
     void (async () => {
       await delay(500);
       const isPlaying = !!(await embed.webContents.executeJavaScript('$("#player").hasClass("playing");', true));
-      console.log('loaded', Date.now(), currentEmbedTrack.playingFrom);
+      log('loaded', Date.now(), currentEmbedTrack.playingFrom);
       if (!isPlaying && currentEmbedTrack.playingFrom !== 'browser') {
         // lastLoaded = Date.now();
-        console.log('clicking', Date.now());
+        log('clicking', Date.now());
         await embed.webContents.executeJavaScript('$("#big_play_button").click().length;', true);
        // lastClicked = Date.now();
-        console.log('clicked', Date.now());
+        log('clicked', Date.now());
       }
     })();
   };
@@ -79,9 +80,11 @@ export function initEmbed(
     const previousEmbedTrack = currentEmbedTrack;
     const embedTrackSelector = selectTrackByEmbedLoaded();
     currentEmbedTrack = embedTrackSelector(reduxStore.getState());
-    if (currentEmbedTrack && previousEmbedTrack !== currentEmbedTrack) {
+    // const state = reduxStore.getState();
+    // log('app state yo', state);
+    if (currentEmbedTrack && previousEmbedTrack && previousEmbedTrack.id !== currentEmbedTrack.id) {
       const trackUrl = `https://bandcamp.com/EmbeddedPlayer/size=small/bgcol=ffffff/linkcol=0687f5/track=${currentEmbedTrack.sources[0].sourceId}/transparent=true/`;
-      console.log('embed loading', Date.now(), currentEmbedTrack);
+      log('embed loading', Date.now(), previousEmbedTrack?.title, currentEmbedTrack?.title);
       void embed.webContents.loadURL(trackUrl);
     }
   });

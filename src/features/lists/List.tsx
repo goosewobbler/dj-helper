@@ -24,9 +24,7 @@ export function List({
   onClickDelete,
   onEditingComplete,
 }: ListProps): ReactElement {
-  const isValid = () => {
-    return !!title;
-  };
+  const isValid = () => !!title;
 
   const handleTitleChange = (event: BaseSyntheticEvent): void => {
     onTitleChange(id, (event.target as HTMLInputElement).value);

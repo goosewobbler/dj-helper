@@ -73,6 +73,15 @@ function updateTrackData(
   return trackToUpdate;
 }
 
+function trackHasSource(track: Track, sourceUrl: string, sourceId?: number): boolean {
+  return !!track.sources.find((trackSource) => {
+    if (sourceId) {
+      return trackSource.sourceId === sourceId;
+    }
+    return trackSource.url.includes(sourceUrl);
+  });
+}
+
 export const slice = createSlice({
   name: 'tracks',
   initialState,
@@ -97,6 +106,8 @@ export const slice = createSlice({
         artist,
         duration,
         browserId,
+        playing: false,
+        embedActive: false,
         sources: [
           {
             sourceId,
@@ -119,14 +130,30 @@ export const slice = createSlice({
       state.filter((track) => track.id === id).map((track, index) => ({ ...track, index })),
     unlinkBrowserFromTracks: (state, { payload: { browserId } }) =>
       state.map((track) => (track.browserId === browserId ? { ...track, browserId: undefined } : track)),
+    clearAllTracks: () => initialState,
   },
 });
 
-export const { createTrack, updateTrack, deleteTrack, unlinkBrowserFromTracks } = slice.actions;
+export const { createTrack, updateTrack, deleteTrack, unlinkBrowserFromTracks, clearAllTracks } = slice.actions;
 
-export const selectTracks = (state: AppState): Track[] => {
-  log('track selector returning', state);
-  return state.tracks;
-};
+export const selectTracksByBrowserId =
+  (browserId: Track['browserId']) =>
+  (state: AppState): Track[] =>
+    state.tracks.filter((track) => track.browserId === browserId);
+
+export const selectTrackById =
+  (id: Track['id']) =>
+  (state: AppState): Track =>
+    state.tracks.find((track) => track.id === id) as Track;
+
+export const selectTrackByPlaying =
+  () =>
+  (state: AppState): Track =>
+    state.tracks.find((track) => track.playing) as Track;
+
+export const selectTrackBySource =
+  (sourceUrl: TrackSource['url']) =>
+  (state: AppState): Track =>
+    state.tracks.find((track) => trackHasSource(track, sourceUrl)) as Track;
 
 export const tracksReducer = slice.reducer;

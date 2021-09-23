@@ -1,17 +1,21 @@
 import React, { ReactElement } from 'react';
-import { useSelector } from 'react-redux';
-import { Browser } from '../../common/types';
-import { log } from '../../main/helpers/console';
-import { selectTracks } from '../tracks/tracksSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { clearAllTracks, selectTracksByBrowserId } from '../tracks/tracksSlice';
 import { MetaPanel } from './MetaPanel';
+import { Browser } from '../../common/types';
 
 export function BrowserPane({ browser }: { browser: Browser }): ReactElement {
-  const browserTracks = useSelector(selectTracks).filter((track) => track.browserId === browser.id);
-  log('BP browsertracks', browserTracks);
-  log('BP tracks', useSelector(selectTracks));
+  const dispatch = useDispatch();
+  const { isDev } = window.api;
+  const tracks = useSelector(selectTracksByBrowserId(browser.id));
   return (
     <div>
-      <MetaPanel tracks={browserTracks} />
+      {isDev && (
+        <button type="button" onClick={() => dispatch(clearAllTracks())}>
+          Clear Tracks
+        </button>
+      )}
+      <MetaPanel tracks={tracks} />
       <div className="browserPanel" />
     </div>
   );

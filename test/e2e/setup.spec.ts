@@ -1,6 +1,7 @@
 import path from 'path';
 import { Application } from '@goosewobbler/spectron';
-import { setupBrowser } from '@testing-library/webdriverio';
+import { setupBrowser, WebdriverIOBoundFunctions } from '@testing-library/webdriverio';
+import { queries } from '@testing-library/dom';
 
 const app: Application = new Application({
   path: path.join(
@@ -10,27 +11,42 @@ const app: Application = new Application({
   ),
 });
 
+let screen: WebdriverIOBoundFunctions<typeof queries>;
+
 describe('App', () => {
   beforeEach(async () => {
     await app.start();
     // await app.client.getWindowHandles();
     await app.client.waitUntilWindowLoaded();
-  });
+    screen = setupBrowser(app.client);
+  }, 10000);
 
   afterEach(async () => {
     if (app && app.isRunning()) {
       await app.stop();
     }
-  });
+  }, 10000);
 
   it('should launch app', async () => {
     const isVisible = await app.browserWindow.isVisible();
     expect(isVisible).toBe(true);
   });
 
-  it('should display a new list button', async () => {
-    const { getByRole } = setupBrowser(app.client);
-    const button = await getByRole('button', { name: /New List/i });
-    await button.click();
+  describe('lists', () => {
+    beforeEach(() => {});
+
+    it('should display a new list button', async () => {
+      const button = await screen.getByText('New List');
+      expect(button).toBeDefined();
+    });
+
+    describe('when the new list button is clicked', () => {
+      it('should create a new list input box', async () => {
+        const button = await screen.getByText('New List');
+        await button.click();
+        const input = await screen.getByLabelText('List Title');
+        expect(await input.getValue()).toEqual('New List');
+      });
+    });
   });
 });

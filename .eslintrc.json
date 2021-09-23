@@ -1,6 +1,12 @@
 {
-  "extends": ["airbnb", "prettier", "plugin:import/errors", "plugin:import/warnings"],
-  "plugins": ["import", "prettier"],
+  "extends": [
+    "airbnb",
+    "prettier",
+    "plugin:import/recommended",
+    "plugin:node/recommended",
+    "plugin:promise/recommended"
+  ],
+  "plugins": ["import"],
   "env": {
     "es6": true,
     "node": true
@@ -10,7 +16,8 @@
     "import/extensions": ["error", "never"],
     "import/no-default-export": "error",
     "import/prefer-default-export": "off",
-    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }]
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+    "node/no-unpublished-require": "off"
   },
   "overrides": [
     {
@@ -18,15 +25,15 @@
       "extends": [
         "airbnb-typescript",
         "airbnb/hooks",
-        "plugin:@typescript-eslint/eslint-recommended",
-        "plugin:@typescript-eslint/recommended",
+        "prettier",
         "plugin:@typescript-eslint/recommended-requiring-type-checking",
-        "plugin:import/errors",
+        "plugin:import/recommended",
         "plugin:import/typescript",
-        "plugin:import/warnings",
-        "plugin:prettier/recommended"
+        "plugin:node/recommended",
+        "plugin:promise/recommended",
+        "plugin:react-hooks/recommended"
       ],
-      "plugins": ["import", "prettier", "@typescript-eslint", "react-hooks"],
+      "plugins": ["import", "@typescript-eslint"],
       "parser": "@typescript-eslint/parser",
       "parserOptions": {
         "ecmaFeatures": { "jsx": true },
@@ -50,6 +57,7 @@
             "css": "always"
           }
         ],
+
         "import/no-default-export": "error",
         "import/prefer-default-export": "off",
         "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
@@ -57,9 +65,19 @@
         "react/jsx-filename-extension": ["warn", { "extensions": [".tsx"] }],
         "@typescript-eslint/no-non-null-assertion": "off",
         "no-param-reassign": ["error", { "props": false }],
-        "no-void": ["error", { "allowAsStatement": true }]
+        "no-void": ["error", { "allowAsStatement": true }],
+        "node/no-unsupported-features/es-syntax": "off",
+        "node/no-unpublished-import": "off",
+        // duplicated by TS
+        "import/named": "off",
+        "import/namespace": "off",
+        "import/default": "off",
+        "import/no-named-as-default-member": "off"
       },
       "settings": {
+        "node": {
+          "tryExtensions": [".js", ".json", ".node", ".ts", ".tsx"]
+        },
         "import/parsers": {
           "@typescript-eslint/parser": [".ts", ".tsx"]
         },

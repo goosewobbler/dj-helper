@@ -4,20 +4,8 @@ import React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { App } from './App';
-import { AppState } from '../common/types';
 import { createReduxStore } from '../common/reduxStore';
 import '../css/tailwind.src.pcss';
-
-declare global {
-  interface Window {
-    djHelper: { preloadedState: AppState };
-    api: {
-      app: {
-        getSetup: () => Promise<{ html: string }>;
-      };
-    };
-  }
-}
 
 function render(reduxStore: Store): void {
   ReactDOM.render(

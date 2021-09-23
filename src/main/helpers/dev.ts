@@ -19,11 +19,14 @@ const devToolsExtensions = [
 ];
 
 const installExtension = async (extension: DevToolsExtension): Promise<string | void> => {
-  return electronDevToolsInstaller(extension.ref, {
-    loadExtensionOptions: { allowFileAccess: true },
-  })
-    .then((installedExtension: string) => log(`Added Extension: ${installedExtension}`))
-    .catch((err: Error) => logError(err));
+  try {
+    const installedExtension = await electronDevToolsInstaller(extension.ref, {
+      loadExtensionOptions: { allowFileAccess: true },
+    });
+    log(`Added Extension: ${installedExtension}`);
+  } catch ({ message }) {
+    logError(message as string);
+  }
 };
 
 const installDevToolsExtensions = async (): Promise<void> => {

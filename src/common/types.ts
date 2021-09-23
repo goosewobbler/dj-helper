@@ -40,6 +40,7 @@ export type List = {
   id: number;
   title: string;
   tracks: Track['id'][];
+  active?: boolean;
   editing?: boolean;
   oldTitle?: string;
 };

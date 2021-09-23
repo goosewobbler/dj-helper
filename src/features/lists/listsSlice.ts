@@ -15,6 +15,7 @@ export const slice = createSlice({
         title: initialListTitle,
         tracks: [],
         editing: true,
+        active: true,
       };
       return [...state, newList];
     },
@@ -32,12 +33,19 @@ export const slice = createSlice({
           ? { ...list, editing: undefined, title: list.oldTitle ?? initialListTitle, oldTitle: undefined }
           : list,
       ),
+    selectList: (state, { payload: { id } }: { payload: { id: number } }) =>
+      state.map((list) => (list.id === id ? { ...list, active: true } : { ...list, active: false } )),
   },
 });
 
-export const { createList, deleteList, updateListTitle, editList, revertEditList, finishEditList } = slice.actions;
+export const { createList, deleteList, updateListTitle, editList, revertEditList, finishEditList, selectList } = slice.actions;
 
 export const selectLists = (state: AppState): List[] => state.lists;
+
+export const selectListById =
+  (id: number) =>
+  (state: AppState): List =>
+    state.lists.find((list) => list.id === id) as List;
 
 export const listsReducer = slice.reducer;
 

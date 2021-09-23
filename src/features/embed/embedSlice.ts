@@ -34,7 +34,7 @@ export const { loadTrack, setPlaying, setPaused } = slice.actions;
 export const selectTrackByEmbedLoaded =
   () =>
   (state: AppState): Track =>
-    state.tracks.filter((track) => track.id === state.embed.loadedTrackId)[0];
+    state.tracks.find((track) => track.id === state.embed.loadedTrackId) as Track;
 
 export const trackIsPlaying =
   ({ trackId }: { trackId: Track['id'] }) =>

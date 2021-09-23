@@ -17,7 +17,7 @@ specifiers:
   '@pmmmwh/react-refresh-webpack-plugin': ^0.5.1
   '@redux-offline/redux-offline': ^2.6.0
   '@reduxjs/toolkit': ^1.6.1
-  '@testing-library/dom': ^8.5.0
+  '@testing-library/dom': ^8.6.0
   '@testing-library/jest-dom': ^5.14.1
   '@testing-library/react': ^12.1.0
   '@testing-library/user-event': ^13.2.1
@@ -66,7 +66,7 @@ specifiers:
   eslint-plugin-promise: ^5.1.0
   eslint-plugin-react: ^7.26.0
   eslint-plugin-react-hooks: ^4.2.0
-  eslint-plugin-testing-library: ^4.12.3
+  eslint-plugin-testing-library: ^4.12.4
   file-loader: ^6.2.0
   fork-ts-checker-webpack-plugin: ^6.3.3
   html-webpack-harddisk-plugin: ^2.0.0
@@ -112,10 +112,10 @@ devDependencies:
   '@pmmmwh/react-refresh-webpack-plugin': 0.5.1_312991fefb376084ee8c42874c8ad9c3
   '@redux-offline/redux-offline': 2.6.0
   '@reduxjs/toolkit': 1.6.1_react-redux@7.2.5+react@17.0.2
-  '@testing-library/dom': 8.5.0
+  '@testing-library/dom': 8.6.0
   '@testing-library/jest-dom': 5.14.1
   '@testing-library/react': 12.1.0_react-dom@17.0.2+react@17.0.2
-  '@testing-library/user-event': 13.2.1_@testing-library+dom@8.5.0
+  '@testing-library/user-event': 13.2.1_@testing-library+dom@8.6.0
   '@testing-library/webdriverio': 3.0.4
   '@types/app-root-path': 1.2.4
   '@types/jest': 27.0.2
@@ -161,7 +161,7 @@ devDependencies:
   eslint-plugin-promise: 5.1.0_eslint@7.32.0
   eslint-plugin-react: 7.26.0_eslint@7.32.0
   eslint-plugin-react-hooks: 4.2.0_eslint@7.32.0
-  eslint-plugin-testing-library: 4.12.3_eslint@7.32.0+typescript@4.4.3
+  eslint-plugin-testing-library: 4.12.4_eslint@7.32.0+typescript@4.4.3
   file-loader: 6.2.0_webpack@5.53.0
   fork-ts-checker-webpack-plugin: 6.3.3
   html-webpack-harddisk-plugin: 2.0.0_756b024056a7e87dc8e1353ea5f096b4
@@ -2007,6 +2007,20 @@ packages:
       pretty-format: 27.2.0
     dev: true
 
+  /@testing-library/dom/8.6.0:
+    resolution: {integrity: sha512-EDBMEWK8IVpNF7B7C1knb0lLB4Si9RWte/YTEi6CqmqUK5CYCoecwOOG9pEijU/H6s3u0drUxH5sKT07FCgFIg==}
+    engines: {node: '>=12'}
+    dependencies:
+      '@babel/code-frame': 7.14.5
+      '@babel/runtime': 7.15.4
+      '@types/aria-query': 4.2.2
+      aria-query: 4.2.2
+      chalk: 4.1.2
+      dom-accessibility-api: 0.5.7
+      lz-string: 1.4.4
+      pretty-format: 27.2.0
+    dev: true
+
   /@testing-library/jest-dom/5.14.1:
     resolution: {integrity: sha512-dfB7HVIgTNCxH22M1+KU6viG5of2ldoA5ly8Ar8xkezKHKXjRvznCdbMbqjYGgO2xjRbwnR+rR8MLUIqF3kKbQ==}
     engines: {node: '>=8', npm: '>=6', yarn: '>=1'}
@@ -2035,14 +2049,14 @@ packages:
       react-dom: 17.0.2_react@17.0.2
     dev: true
 
-  /@testing-library/user-event/13.2.1_@testing-library+dom@8.5.0:
+  /@testing-library/user-event/13.2.1_@testing-library+dom@8.6.0:
     resolution: {integrity: sha512-cczlgVl+krjOb3j1625usarNEibI0IFRJrSWX9UsJ1HKYFgCQv9Nb7QAipUDXl3Xdz8NDTsiS78eAkPSxlzTlw==}
     engines: {node: '>=10', npm: '>=6'}
     peerDependencies:
       '@testing-library/dom': '>=7.21.4'
     dependencies:
       '@babel/runtime': 7.15.4
-      '@testing-library/dom': 8.5.0
+      '@testing-library/dom': 8.6.0
     dev: true
 
   /@testing-library/webdriverio/3.0.4:
@@ -5278,8 +5292,8 @@ packages:
       string.prototype.matchall: 4.0.5
     dev: true
 
-  /eslint-plugin-testing-library/4.12.3_eslint@7.32.0+typescript@4.4.3:
-    resolution: {integrity: sha512-P2Sgp+wV3cy0cIL2EkIbPf4e/l1OmyFJvuCpRDACoXyH9kcN6LcEDdhwCGh39yJ3Xg+J02zGTLtCBKdP5+69cA==}
+  /eslint-plugin-testing-library/4.12.4_eslint@7.32.0+typescript@4.4.3:
+    resolution: {integrity: sha512-XZtoeyIZKFTiH8vhwnCaTo/mNrLHoLyufY4kkNg+clzZFeThWPjp+0QfrLam1on1k3JGwiRvoLH/V4QdBaB2oA==}
     engines: {node: ^10.12.0 || >=12.0.0, npm: '>=6'}
     peerDependencies:
       eslint: ^7.5.0

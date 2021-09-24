@@ -41,6 +41,16 @@ export function TrackMeta({ id, context }: { id: Track['id']; context: string })
           {isOnSelectedList ? 'Remove From' : 'Add To'} List
         </button>
       )}
+      {context === 'listPane' && isOnSelectedList && (
+        <button
+          type="button"
+          onClick={() => {
+            dispatch(removeTrackFromSelectedList({ trackId: id }));
+          }}
+        >
+          Remove From List
+        </button>
+      )}
       <span>
         {isPlaying ? (
           'OMG this is playing'

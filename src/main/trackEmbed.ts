@@ -13,6 +13,7 @@ import {
 import { Track } from '../common/types';
 import { log } from './helpers/console';
 import { getNextTrackOnList } from '../features/lists/listsSlice';
+import { getNextTrackOnMetaPanel } from '../features/browsers/browsersSlice';
 
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -96,12 +97,22 @@ export function initEmbed(mainWindow: BrowserWindow, reduxStore: Store): void {
 
       if (pausedByTrackEnding) {
         // assume end of track
+        let nextTrackId;
         log('end of track zomg, playing next...', currentTime, playbackComplete, currentPlayContext);
-        const nextTrackOnListSelector = getNextTrackOnList({
-          id: parseInt(currentPlayContext.replace('list-', '')),
-          currentTrackId: currentEmbedTrack.id,
-        });
-        const nextTrackId = nextTrackOnListSelector(reduxStore.getState());
+        if (currentPlayContext.startsWith('browser')) {
+          const nextTrackOnMetaPanelSelector = getNextTrackOnMetaPanel({
+            id: parseInt(currentPlayContext.replace('browser-', '')),
+            currentTrackId: currentEmbedTrack.id,
+          });
+          nextTrackId = nextTrackOnMetaPanelSelector(reduxStore.getState());
+          await invokePlayHandler(nextTrackId, currentPlayContext);
+        } else {
+          const nextTrackOnListSelector = getNextTrackOnList({
+            id: parseInt(currentPlayContext.replace('list-', '')),
+            currentTrackId: currentEmbedTrack.id,
+          });
+          nextTrackId = nextTrackOnListSelector(reduxStore.getState());
+        }
         await invokePlayHandler(nextTrackId, currentPlayContext);
       }
     })();

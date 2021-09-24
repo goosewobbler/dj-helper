@@ -7,7 +7,7 @@ const initialState: Browser[] = [
     url: 'https://bandcamp.com/wiggleweaver',
     title: 'Bandcamp',
   },
-];  // set initialState to an empty array once tab functionality is complete
+]; // set initialState to an empty array once tab functionality is complete
 
 export const slice = createSlice({
   name: 'browsers',
@@ -21,12 +21,10 @@ export const slice = createSlice({
       };
       return [...state, newBrowser];
     },
-    updatePageUrl: (state, { payload: { id, url }}: { payload: { id: number, url: string; } }) => {
-      return state.map((browser) => browser.id === id ? { ...browser, url, title: 'Loading...' } : browser);
-    },
-    updatePageTitle: (state, { payload: { id, title }}: { payload: { id: number, title: string } }) => {
-      return state.map((browser) => browser.id === id ? { ...browser, title } : browser);
-    },
+    updatePageUrl: (state, { payload: { id, url } }: { payload: { id: number; url: string } }) =>
+      state.map((browser) => (browser.id === id ? { ...browser, url, title: 'Loading...' } : browser)),
+    updatePageTitle: (state, { payload: { id, title } }: { payload: { id: number; title: string } }) =>
+      state.map((browser) => (browser.id === id ? { ...browser, title } : browser)),
   },
 });
 

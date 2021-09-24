@@ -46,7 +46,7 @@ export function initEmbed(mainWindow: BrowserWindow, reduxStore: Store): void {
   const playHandler = () => {
     void (async () => {
       const rawTitleLinkPlaying = (await embed.webContents.executeJavaScript(
-        'document.querySelector(".inline_player #maintextlink").getAttribute("href");',
+        '$(".inline_player #maintextlink").attr("href");',
         true,
       )) as string;
       const { pathname } = new URL(rawTitleLinkPlaying);
@@ -58,20 +58,38 @@ export function initEmbed(mainWindow: BrowserWindow, reduxStore: Store): void {
 
   const pauseHandler = () => {
     void (async () => {
+      const pausedAt = Date.now();
       const rawTitleLinkPaused = (await embed.webContents.executeJavaScript(
-        'document.querySelector(".inline_player #maintextlink").getAttribute("href");',
+        '$(".inline_player #maintextlink").attr("href");',
         true,
       )) as string;
+      const lastPlayButtonClick = (await embed.webContents.executeJavaScript(
+        'window.lastPlayButtonClick',
+        true,
+      )) as number;
+
+      const pausedByClick = pausedAt - lastPlayButtonClick <= 10;
+
       const { pathname } = new URL(rawTitleLinkPaused);
       const sourceUrl = pathname;
       log('paused from embed', { sourceUrl, context: 'trackEmbed' }, Date.now());
       reduxStore.dispatch(setPaused({ context: 'trackEmbed' }));
+
+      if (!pausedByClick) {
+        // assume end of track
+        // get next track
+        log('end of track zomg');
+      }
     })();
   };
 
   const loadHandler = () => {
     void (async () => {
       log('loaded', Date.now());
+      await embed.webContents.executeJavaScript(
+        '$("#big_play_button").on("click", () => { window.lastPlayButtonClick = Date.now(); });',
+        true,
+      );
       await delay(200);
       await triggerPlay();
     })();
@@ -100,11 +118,11 @@ export function initEmbed(mainWindow: BrowserWindow, reduxStore: Store): void {
     }
   });
 
-  ipcMain.handle('play-track', (event, [{ trackId, context }]: [{ trackId: number; context: string }]) => {
+  ipcMain.handle('play-track', async (event, [{ trackId, context }]: [{ trackId: number; context: string }]) => {
     const trackIsLoadedSelector = trackIsLoaded({ trackId });
     const isLoaded = trackIsLoadedSelector(reduxStore.getState());
     if (isLoaded) {
-      void triggerPlay();
+      await triggerPlay();
     } else {
       reduxStore.dispatch(loadTrack({ trackId, context }));
     }

@@ -6,10 +6,11 @@ import { selectBrowserById, updatePageTitle, updatePageUrl } from '../features/b
 import { BandCurrency, BandData, parseBandcampPageData, TralbumCollectInfo, TralbumData } from './helpers/bandcamp';
 import { Browser } from '../common/types';
 import { log } from './helpers/console';
+import { RootState } from '../features/rootReducer';
 
 type RawBandcampData = [TralbumData, BandData, TralbumCollectInfo, BandCurrency];
 
-async function getPageTrackData (view: BrowserView, url: string) {
+async function getPageTrackData(view: BrowserView, url: string) {
   const [tralbumData, bandData, tralbumCollectInfo, bandCurrency] = (await view.webContents.executeJavaScript(
     '[ TralbumData, BandData, TralbumCollectInfo, bandCurrency ]',
     true,
@@ -41,26 +42,25 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: Store, browser: Br
         'document.querySelector(".inline_player .title_link").getAttribute("href");',
         true,
       )) as string;
-      console.log('playing from browser', { sourceUrl: titleLinkPlaying });
+      log('playing from browser', { sourceUrl: titleLinkPlaying });
       const trackData = await getPageTrackData(view, browser.url);
       const playingTrack = trackData.trackinfo.find((track) => track.title_link === titleLinkPlaying);
 
-      if(playingTrack) {
-        reduxStore.dispatch(loadTrack({
-          trackId: playingTrack.id,
-          context: 'browser'
-        }));
+      if (playingTrack) {
+        reduxStore.dispatch(
+          loadTrack({
+            trackId: playingTrack.id,
+            context: 'browser',
+          }),
+        );
         reduxStore.dispatch(setPlaying({ context: 'browser' }));
       }
-      
     })();
   });
 
   view.webContents.on('media-paused', () => {
-    void (async () => {
-      console.log('pausing from browser', { context: 'browser' }, Date.now());
-      reduxStore.dispatch(setPaused({ context: 'browser' }));
-    })();
+    log('pausing from browser', { context: 'browser' }, Date.now());
+    reduxStore.dispatch(setPaused({ context: 'browser' }));
   });
 
   view.webContents.on('page-title-updated', (event, title) => {
@@ -99,17 +99,17 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: Store, browser: Br
     }
   });
 
-  const canNavigateTo = (url: string): boolean => {   
+  const canNavigateTo = (url: string): boolean => {
     const currentUrl = view.webContents.getURL();
-    log('canNavigateTo', url, currentUrl); 
+    log('canNavigateTo', url, currentUrl);
     return !currentlyNavigating && url !== currentUrl;
-  }
+  };
 
   reduxStore.subscribe(() => {
     const browserSelector = selectBrowserById(browser.id);
     const { url } = browserSelector(reduxStore.getState());
 
-    if(canNavigateTo(url)) {
+    if (canNavigateTo(url)) {
       log('loading URL', url);
       currentlyNavigating = true;
       reduxStore.dispatch(unlinkBrowserFromTracks({ browserId: browser.id }));
@@ -119,7 +119,7 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: Store, browser: Br
 }
 
 export function initBrowsers(mainWindow: BrowserWindow, reduxStore: Store): void {
-  const state = reduxStore.getState();
+  const state = reduxStore.getState() as RootState;
 
   state.browsers.forEach((browser: Browser) => {
     createBrowser(mainWindow, reduxStore, browser);

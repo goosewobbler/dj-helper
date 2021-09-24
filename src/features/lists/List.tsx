@@ -2,7 +2,15 @@ import React, { ReactElement, BaseSyntheticEvent, KeyboardEvent, useRef } from '
 import { useDispatch, useSelector } from 'react-redux';
 import { TrackMeta } from '../tracks/TrackMeta';
 import { Chevron } from './Chevron';
-import { deleteList, editList, finishEditList, revertEditList, selectList, selectListById, updateListTitle } from './listsSlice';
+import {
+  deleteList,
+  editList,
+  finishEditList,
+  revertEditList,
+  selectList,
+  selectListById,
+  updateListTitle,
+} from './listsSlice';
 import { Track } from '../../common/types';
 
 const KEY_ENTER = 'Enter';
@@ -13,12 +21,12 @@ export function List({ id }: { id: number }): ReactElement {
   const { title, tracks, editing, active } = useSelector(selectListById(id));
   const isValid = () => !!title;
 
-  const handleClickEdit = (id: number) => dispatch(editList({ id }));
-  const handleClickDelete = (id: number) => dispatch(deleteList({ id }));
+  const handleClickEdit = () => dispatch(editList({ id }));
+  const handleClickDelete = () => dispatch(deleteList({ id }));
   const handleTitleChange = (event: BaseSyntheticEvent): void => {
     dispatch(updateListTitle({ id, title: (event.target as HTMLInputElement).value }));
   };
-  const handleKeyDown = (event: KeyboardEvent, listId: number): void => {
+  const handleKeyDown = (event: KeyboardEvent): void => {
     if (event.key === KEY_ENTER && isValid()) {
       dispatch(finishEditList());
     } else if (event.key === KEY_ESCAPE) {
@@ -28,72 +36,71 @@ export function List({ id }: { id: number }): ReactElement {
 
   const validityRing = `ring-${isValid() ? 'green' : 'red'}-300`;
 
-  // const [setHeight, setHeightState] = useState('0px');
-  // const [setRotate, setRotateState] = useState('accordion__icon');
-
   const content = useRef<HTMLDivElement>(null);
 
   function toggleAccordion() {
     dispatch(selectList({ id }));
-    // setHeightState(
-    //   active ? '0px' : `${content.current.scrollHeight}px`
-    // );
-    // setRotateState(
-    //   active ? 'accordion__icon' : 'accordion__icon rotate'
-    // );
   }
 
+  // accordion
+  // transition: background-color 0.6s ease;
+
   return (
-    <li id={`list-${id}`} className="list">
-      <button className={`accordion ${active ? 'active' : ''}`} onClick={toggleAccordion}>
-        <span className="title" data-testid="title">
-        {editing ? (
-          <>
-            <label htmlFor="list-title">
-              List Title
-              <input
-                id="list-title"
-                className={`ring-4 ring-opacity-30 ${validityRing}`}
-                type="text"
-                onChange={(event): void => handleTitleChange(event)}
-                onKeyDown={(event): void => handleKeyDown(event, id)}
-                placeholder="List Title"
-                value={title}
-              />
-            </label>
-          </>
-        ) : (
-          title
-        )}
-      </span>
-      {!editing && (
-        <span className="action-btns">
-          <button className="p-1 border" type="button" onClick={() => handleClickEdit(id)}>
-            Edit
-          </button>
-          <button className="p-1 border" type="button" onClick={() => handleClickDelete(id)}>
-            Delete
-          </button>
+    <li id={`list-${id}`} className="flex flex-col list">
+      <div
+        className={`accordion transition duration-500 ease-linear outline-none border-none items-center hover:bg-red-400 bg-gray-400 text-gray-700 flex cursor-pointer p-4 ${
+          active ? 'bg-red-400' : ''
+        }`}
+        onClick={toggleAccordion}
+      >
+        <span className="font-sans text-sm font-semibold title" data-testid="title">
+          {editing ? (
+            <>
+              <label htmlFor="list-title">
+                List Title
+                <input
+                  id="list-title"
+                  className={`ring-4 ring-opacity-30 ${validityRing}`}
+                  type="text"
+                  onChange={(event): void => handleTitleChange(event)}
+                  onKeyDown={(event): void => handleKeyDown(event)}
+                  placeholder="List Title"
+                  value={title}
+                />
+              </label>
+            </>
+          ) : (
+            title
+          )}
         </span>
-      )}
-        <Chevron className={`${active ? 'accordion__icon' : 'accordion__icon rotate'}`} />
-      </button>
+        {!editing && (
+          <span className="action-btns">
+            <button className="p-1 border" type="button" onClick={() => handleClickEdit()}>
+              Edit
+            </button>
+            <button className="p-1 border" type="button" onClick={() => handleClickDelete()}>
+              Delete
+            </button>
+          </span>
+        )}
+        <Chevron
+          className={`accordion-icon ml-auto transition-transform duration-500 ease-linear ${
+            active ? 'transform rotate-90' : ''
+          }`}
+        />
+      </div>
       <div
         ref={content}
-        style={{ maxHeight: `${active ? '0px' : `${content?.current?.scrollHeight}px`}` }}
-        className="accordion__content"
+        style={{ maxHeight: `${active ? `${content?.current?.scrollHeight as number}px` : '0px'}` }}
+        className="overflow-hidden duration-500 ease-linear bg-white accordion-content transition-max-height"
       >
-        <ol className="tracks">
-        {tracks.map(
-          (trackId: Track['id']): ReactElement => (
-            <TrackMeta
-              key={trackId}
-              id={trackId}
-              context="listPane"
-            />
-          ),
-        )}
-      </ol>
+        <ol className="p-4 font-sans text-sm font-normal tracks">
+          {tracks.map(
+            (trackId: Track['id']): ReactElement => (
+              <TrackMeta key={trackId} id={trackId} context="listPane" />
+            ),
+          )}
+        </ol>
       </div>
     </li>
   );

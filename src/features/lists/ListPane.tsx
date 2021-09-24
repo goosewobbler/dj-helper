@@ -1,11 +1,7 @@
 import React, { ReactElement } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { List } from './List';
-import {
-  createList,
-  revertEditList,
-  selectLists,
-} from './listsSlice';
+import { createList, revertEditList, selectLists } from './listsSlice';
 
 export function ListPane(): ReactElement {
   const lists = useSelector(selectLists);
@@ -16,10 +12,7 @@ export function ListPane(): ReactElement {
       <ol className="listPane">
         {lists.map(
           (list): ReactElement => (
-            <List
-              key={list.id}
-              id={list.id}
-            />
+            <List key={list.id} id={list.id} />
           ),
         )}
       </ol>

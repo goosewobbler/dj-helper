@@ -2,7 +2,12 @@
  * @type {import("./src/common/types").LooseObject}
  */
 const theme = {
-  extend: {},
+  extend: {
+    transitionProperty: {
+      'background-color': 'background-color',
+      'max-height': 'max-height',
+    },
+  },
 };
 
 /**

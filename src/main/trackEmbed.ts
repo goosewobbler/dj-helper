@@ -1,7 +1,13 @@
-import { BrowserView, BrowserWindow } from 'electron';
+import { BrowserView, BrowserWindow, ipcMain } from 'electron';
 import { Store } from '@reduxjs/toolkit';
 import { URL } from 'url';
-import { setPlaying, setPaused, selectTrackByEmbedLoaded } from '../features/embed/embedSlice';
+import {
+  setPlaying,
+  setPaused,
+  selectTrackByEmbedLoaded,
+  loadTrack,
+  trackIsLoaded,
+} from '../features/embed/embedSlice';
 import { Track } from '../common/types';
 import { log } from './helpers/console';
 
@@ -11,12 +17,9 @@ function delay(ms: number) {
 
 let embed: BrowserView;
 
-export function initEmbed(
-  mainWindow: BrowserWindow,
-  reduxStore: Store
-): void {  
+export function initEmbed(mainWindow: BrowserWindow, reduxStore: Store): void {
   let currentEmbedTrack: Track;
-  
+
   embed = new BrowserView();
   mainWindow.addBrowserView(embed);
   embed.setBounds({
@@ -31,6 +34,15 @@ export function initEmbed(
     return { action: 'deny' };
   });
 
+  const triggerPlay = async () => {
+    const isPlaying = !!(await embed.webContents.executeJavaScript('$("#player").hasClass("playing");', true));
+    if (!isPlaying) {
+      log('clicking', Date.now());
+      await embed.webContents.executeJavaScript('$("#big_play_button").click().length;', true);
+      log('clicked', Date.now());
+    }
+  };
+
   const playHandler = () => {
     void (async () => {
       const rawTitleLinkPlaying = (await embed.webContents.executeJavaScript(
@@ -39,7 +51,7 @@ export function initEmbed(
       )) as string;
       const { pathname } = new URL(rawTitleLinkPlaying);
       const sourceUrl = pathname;
-      console.log('playing from embed', { sourceUrl, context: 'trackEmbed' }, Date.now());
+      log('playing from embed', { sourceUrl, context: 'trackEmbed' }, Date.now());
       reduxStore.dispatch(setPlaying({ context: 'trackEmbed' }));
     })();
   };
@@ -52,23 +64,16 @@ export function initEmbed(
       )) as string;
       const { pathname } = new URL(rawTitleLinkPaused);
       const sourceUrl = pathname;
-      console.log('paused from embed', { sourceUrl, context: 'trackEmbed' }, Date.now());
+      log('paused from embed', { sourceUrl, context: 'trackEmbed' }, Date.now());
       reduxStore.dispatch(setPaused({ context: 'trackEmbed' }));
     })();
   };
 
   const loadHandler = () => {
     void (async () => {
-      await delay(500);
-      const isPlaying = !!(await embed.webContents.executeJavaScript('$("#player").hasClass("playing");', true));
-      log('loaded', Date.now(), currentEmbedTrack.playingFrom);
-      if (!isPlaying && currentEmbedTrack.playingFrom !== 'browser') {
-        // lastLoaded = Date.now();
-        log('clicking', Date.now());
-        await embed.webContents.executeJavaScript('$("#big_play_button").click().length;', true);
-       // lastClicked = Date.now();
-        log('clicked', Date.now());
-      }
+      log('loaded', Date.now());
+      await delay(200);
+      await triggerPlay();
     })();
   };
 
@@ -82,10 +87,26 @@ export function initEmbed(
     currentEmbedTrack = embedTrackSelector(reduxStore.getState());
     // const state = reduxStore.getState();
     // log('app state yo', state);
-    if (currentEmbedTrack && previousEmbedTrack && previousEmbedTrack.id !== currentEmbedTrack.id) {
+    if (!currentEmbedTrack || !previousEmbedTrack) {
+      return;
+    }
+
+    const newTrackToLoad = previousEmbedTrack.id !== currentEmbedTrack.id;
+
+    if (newTrackToLoad) {
       const trackUrl = `https://bandcamp.com/EmbeddedPlayer/size=small/bgcol=ffffff/linkcol=0687f5/track=${currentEmbedTrack.sources[0].sourceId}/transparent=true/`;
       log('embed loading', Date.now(), previousEmbedTrack?.title, currentEmbedTrack?.title);
       void embed.webContents.loadURL(trackUrl);
+    }
+  });
+
+  ipcMain.handle('play-track', (event, [{ trackId, context }]: [{ trackId: number; context: string }]) => {
+    const trackIsLoadedSelector = trackIsLoaded({ trackId });
+    const isLoaded = trackIsLoadedSelector(reduxStore.getState());
+    if (isLoaded) {
+      void triggerPlay();
+    } else {
+      reduxStore.dispatch(loadTrack({ trackId, context }));
     }
   });
 }

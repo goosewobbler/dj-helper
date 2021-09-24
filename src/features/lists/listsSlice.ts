@@ -34,11 +34,22 @@ export const slice = createSlice({
           : list,
       ),
     selectList: (state, { payload: { id } }: { payload: { id: number } }) =>
-      state.map((list) => (list.id === id ? { ...list, active: true } : { ...list, active: false } )),
+      state.map((list) => (list.id === id ? { ...list, active: true } : { ...list, active: false })),
+    addTrackToSelectedList: (state, { payload: { trackId } }: { payload: { trackId: number } }) =>
+      state.map((list) => (list.active ? { ...list, tracks: [...list.tracks, trackId] } : list)),
   },
 });
 
-export const { createList, deleteList, updateListTitle, editList, revertEditList, finishEditList, selectList } = slice.actions;
+export const {
+  createList,
+  deleteList,
+  updateListTitle,
+  editList,
+  revertEditList,
+  finishEditList,
+  selectList,
+  addTrackToSelectedList,
+} = slice.actions;
 
 export const selectLists = (state: AppState): List[] => state.lists;
 

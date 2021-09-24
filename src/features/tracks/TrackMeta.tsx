@@ -31,7 +31,7 @@ export function TrackMeta({ id, context }: { id: Track['id']; context: string })
       <span>{artist}</span>
       <span>{title}</span>
       <span>{displayTrackDuration(duration)}</span>
-      {context === 'metapanel' && (
+      {context.startsWith('browser') && (
         <button
           type="button"
           onClick={() => {

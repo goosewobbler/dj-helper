@@ -21,7 +21,7 @@ export function BrowserPane({ browser }: { browser: Browser }): ReactElement {
           Clear Data
         </button>
       )}
-      <MetaPanel tracks={browser.tracks} />
+      <MetaPanel browser={browser} />
       <div className="browserPanel" />
     </div>
   );

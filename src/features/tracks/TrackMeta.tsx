@@ -17,9 +17,13 @@ function displayTrackDuration(duration: number) {
 
 export function TrackMeta({ id, context }: { id: Track['id']; context: string }) {
   const dispatch = useDispatch();
-  const { artist, title, duration, sources } = useSelector(selectTrackById(id));
+  const track = useSelector(selectTrackById(id));
   const isPlaying = useSelector(trackIsPlaying({ trackId: id }));
   const isOnSelectedList = useSelector(trackIsOnSelectedList({ trackId: id }));
+  if (!track) {
+    return <></>;
+  }
+  const { artist, title, duration, sources } = track;
   log('zomg loading track', { artist, title, duration, sources });
 
   return (

@@ -1,8 +1,14 @@
 import { BrowserView, BrowserWindow } from 'electron';
 import { Store } from '@reduxjs/toolkit';
-import { createTrack, TrackData, unlinkBrowserFromTracks } from '../features/tracks/tracksSlice';
+import { createTrack, selectTrackBySourceUrl, TrackData } from '../features/tracks/tracksSlice';
 import { loadTrack, setPaused, setPlaying } from '../features/embed/embedSlice';
-import { selectBrowserById, updatePageTitle, updatePageUrl } from '../features/browsers/browsersSlice';
+import {
+  addTrack,
+  clearTracks,
+  selectBrowserById,
+  updatePageTitle,
+  updatePageUrl,
+} from '../features/browsers/browsersSlice';
 import { BandCurrency, BandData, parseBandcampPageData, TralbumCollectInfo, TralbumData } from './helpers/bandcamp';
 import { Browser } from '../common/types';
 import { log } from './helpers/console';
@@ -88,12 +94,15 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: Store, browser: Br
             title,
             artist,
             duration,
-            browserId: browser.id,
             sourceId: id,
             url: title_link,
             priceCurrency: pageTrackData.currency,
           };
           reduxStore.dispatch(createTrack(trackData));
+          const trackSelector = selectTrackBySourceUrl(title_link);
+          const track = trackSelector(reduxStore.getState());
+          log('selected browser', browser.id, track);
+          reduxStore.dispatch(addTrack({ id: browser.id, trackId: track.id }));
         });
       })();
     }
@@ -101,7 +110,6 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: Store, browser: Br
 
   const canNavigateTo = (url: string): boolean => {
     const currentUrl = view.webContents.getURL();
-    log('canNavigateTo', url, currentUrl);
     return !currentlyNavigating && url !== currentUrl;
   };
 
@@ -112,7 +120,7 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: Store, browser: Br
     if (canNavigateTo(url)) {
       log('loading URL', url);
       currentlyNavigating = true;
-      reduxStore.dispatch(unlinkBrowserFromTracks({ browserId: browser.id }));
+      reduxStore.dispatch(clearTracks({ id: browser.id }));
       void view.webContents.loadURL(url);
     }
   });

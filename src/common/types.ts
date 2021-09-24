@@ -46,6 +46,7 @@ export type Browser = {
   id: number;
   url: string;
   title: string;
+  tracks: Track['id'][];
 };
 
 export type Embed = {

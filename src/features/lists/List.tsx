@@ -34,10 +34,14 @@ export function List({ id }: { id: number }): ReactElement {
     }
   };
 
+  const content = useRef<HTMLDivElement>(null);
+
   const listKey = `list-${id}`;
   const validityRing = `ring-${isValid() ? 'green' : 'red'}-300`;
-
-  const content = useRef<HTMLDivElement>(null);
+  const accordionContentMaxHeightWhenActive = `${content?.current?.scrollHeight as number}px`;
+  const accordionContentMaxHeight = active ? accordionContentMaxHeightWhenActive : '0px';
+  const chevronAdditionalClassNamesWhenActive = 'transform rotate-90';
+  const chevronAdditionalClassNames = active ? chevronAdditionalClassNamesWhenActive : '';
 
   function toggleAccordion() {
     dispatch(selectList({ id }));
@@ -85,14 +89,12 @@ export function List({ id }: { id: number }): ReactElement {
           </span>
         )}
         <Chevron
-          className={`accordion-icon ml-auto transition-transform duration-500 ease-in-out ${
-            active ? 'transform rotate-90' : ''
-          }`}
+          className={`accordion-icon ml-auto transition-transform duration-500 ease-in-out ${chevronAdditionalClassNames}`}
         />
       </div>
       <div
         ref={content}
-        style={{ maxHeight: `${active ? `${content?.current?.scrollHeight as number}px` : '0px'}` }}
+        style={{ maxHeight: accordionContentMaxHeight }}
         className="overflow-hidden duration-500 ease-in-out bg-white accordion-content transition-max-height"
       >
         <ol className="p-4 font-sans text-sm font-normal tracks">

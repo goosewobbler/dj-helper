@@ -57,8 +57,8 @@ export function TrackMeta({ id, context }: { id: Track['id']; context: string })
         ) : (
           <button
             type="button"
-            onClick={() => {
-              void window.api.invoke('play-track', { trackId: id, context });
+            onClick={async () => {
+              await window.api.invoke('play-track', { trackId: id, context });
             }}
           >
             Play

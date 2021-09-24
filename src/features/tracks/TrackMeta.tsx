@@ -41,7 +41,7 @@ export function TrackMeta({ id, context }: { id: Track['id']; context: string })
           {isOnSelectedList ? 'Remove From' : 'Add To'} List
         </button>
       )}
-      {context === 'listPane' && isOnSelectedList && (
+      {context.startsWith('list-') && isOnSelectedList && (
         <button
           type="button"
           onClick={() => {

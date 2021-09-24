@@ -34,6 +34,7 @@ export function List({ id }: { id: number }): ReactElement {
     }
   };
 
+  const listKey = `list-${id}`;
   const validityRing = `ring-${isValid() ? 'green' : 'red'}-300`;
 
   const content = useRef<HTMLDivElement>(null);
@@ -46,7 +47,7 @@ export function List({ id }: { id: number }): ReactElement {
   // transition: background-color 0.6s ease;
 
   return (
-    <li id={`list-${id}`} className="flex flex-col list">
+    <li id={listKey} className="flex flex-col list">
       <div
         className={`accordion transition duration-500 ease-linear outline-none border-none items-center hover:bg-red-400 bg-gray-400 text-gray-700 flex cursor-pointer p-4 ${
           active ? 'bg-red-400' : ''
@@ -97,7 +98,7 @@ export function List({ id }: { id: number }): ReactElement {
         <ol className="p-4 font-sans text-sm font-normal tracks">
           {tracks.map(
             (trackId: Track['id']): ReactElement => (
-              <TrackMeta key={trackId} id={trackId} context="listPane" />
+              <TrackMeta key={trackId} id={trackId} context={listKey} />
             ),
           )}
         </ol>

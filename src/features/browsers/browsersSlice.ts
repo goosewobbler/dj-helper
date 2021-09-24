@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { AppState, Browser } from '../../common/types';
+import { AppState, Browser, Track } from '../../common/types';
 
 const initialState: Browser[] = [
   {
@@ -43,6 +43,14 @@ export const selectBrowserById =
   (id: number) =>
   (state: AppState): Browser =>
     state.browsers.find((browser) => browser.id === id) as Browser;
+
+export const getNextTrackOnMetaPanel =
+  ({ id, currentTrackId }: { id: number; currentTrackId: number }) =>
+  (state: AppState): Track['id'] => {
+    const panelTracks = (state.browsers.find((browser) => browser.id === id) as Browser).tracks;
+    const currentTrackIndex = panelTracks.findIndex((track) => track === currentTrackId);
+    return panelTracks[currentTrackIndex + 1];
+  };
 
 export const browsersReducer = slice.reducer;
 

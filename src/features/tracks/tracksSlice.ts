@@ -106,8 +106,6 @@ export const slice = createSlice({
         artist,
         duration,
         browserId,
-        playing: false,
-        embedActive: false,
         sources: [
           {
             sourceId,
@@ -145,11 +143,6 @@ export const selectTrackById =
   (id: Track['id']) =>
   (state: AppState): Track =>
     state.tracks.find((track) => track.id === id) as Track;
-
-export const selectTrackByPlaying =
-  () =>
-  (state: AppState): Track =>
-    state.tracks.find((track) => track.playing) as Track;
 
 export const selectTrackBySource =
   (sourceUrl: TrackSource['url']) =>

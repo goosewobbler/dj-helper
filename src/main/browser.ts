@@ -1,15 +1,22 @@
 import { BrowserView, BrowserWindow } from 'electron';
 import { Store } from '@reduxjs/toolkit';
-import { createTrack, TrackData, unlinkBrowserFromTracks } from '../features/tracks/tracksSlice';
+import { createTrack, selectTrackBySourceUrl, TrackData } from '../features/tracks/tracksSlice';
 import { loadTrack, setPaused, setPlaying } from '../features/embed/embedSlice';
-import { selectBrowserById, updatePageTitle, updatePageUrl } from '../features/browsers/browsersSlice';
+import {
+  addTrack,
+  clearTracks,
+  selectBrowserById,
+  updatePageTitle,
+  updatePageUrl,
+} from '../features/browsers/browsersSlice';
 import { BandCurrency, BandData, parseBandcampPageData, TralbumCollectInfo, TralbumData } from './helpers/bandcamp';
 import { Browser } from '../common/types';
 import { log } from './helpers/console';
+import { RootState } from '../features/rootReducer';
 
 type RawBandcampData = [TralbumData, BandData, TralbumCollectInfo, BandCurrency];
 
-async function getPageTrackData (view: BrowserView, url: string) {
+async function getPageTrackData(view: BrowserView, url: string) {
   const [tralbumData, bandData, tralbumCollectInfo, bandCurrency] = (await view.webContents.executeJavaScript(
     '[ TralbumData, BandData, TralbumCollectInfo, bandCurrency ]',
     true,
@@ -41,26 +48,25 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: Store, browser: Br
         'document.querySelector(".inline_player .title_link").getAttribute("href");',
         true,
       )) as string;
-      console.log('playing from browser', { sourceUrl: titleLinkPlaying });
+      log('playing from browser', { sourceUrl: titleLinkPlaying });
       const trackData = await getPageTrackData(view, browser.url);
       const playingTrack = trackData.trackinfo.find((track) => track.title_link === titleLinkPlaying);
 
-      if(playingTrack) {
-        reduxStore.dispatch(loadTrack({
-          trackId: playingTrack.id,
-          context: 'browser'
-        }));
-        reduxStore.dispatch(setPlaying({ context: 'browser' }));
+      if (playingTrack) {
+        reduxStore.dispatch(
+          loadTrack({
+            trackId: playingTrack.id,
+            context: 'browser',
+          }),
+        );
+        reduxStore.dispatch(setPlaying());
       }
-      
     })();
   });
 
   view.webContents.on('media-paused', () => {
-    void (async () => {
-      console.log('pausing from browser', { context: 'browser' }, Date.now());
-      reduxStore.dispatch(setPaused({ context: 'browser' }));
-    })();
+    log('pausing from browser', Date.now());
+    reduxStore.dispatch(setPaused());
   });
 
   view.webContents.on('page-title-updated', (event, title) => {
@@ -88,38 +94,40 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: Store, browser: Br
             title,
             artist,
             duration,
-            browserId: browser.id,
             sourceId: id,
             url: title_link,
             priceCurrency: pageTrackData.currency,
           };
           reduxStore.dispatch(createTrack(trackData));
+          const trackSelector = selectTrackBySourceUrl(title_link);
+          const track = trackSelector(reduxStore.getState());
+          log('selected browser', browser.id, track);
+          reduxStore.dispatch(addTrack({ id: browser.id, trackId: track.id }));
         });
       })();
     }
   });
 
-  const canNavigateTo = (url: string): boolean => {   
+  const canNavigateTo = (url: string): boolean => {
     const currentUrl = view.webContents.getURL();
-    log('canNavigateTo', url, currentUrl); 
     return !currentlyNavigating && url !== currentUrl;
-  }
+  };
 
   reduxStore.subscribe(() => {
     const browserSelector = selectBrowserById(browser.id);
     const { url } = browserSelector(reduxStore.getState());
 
-    if(canNavigateTo(url)) {
+    if (canNavigateTo(url)) {
       log('loading URL', url);
       currentlyNavigating = true;
-      reduxStore.dispatch(unlinkBrowserFromTracks({ browserId: browser.id }));
+      reduxStore.dispatch(clearTracks({ id: browser.id }));
       void view.webContents.loadURL(url);
     }
   });
 }
 
 export function initBrowsers(mainWindow: BrowserWindow, reduxStore: Store): void {
-  const state = reduxStore.getState();
+  const state = reduxStore.getState() as RootState;
 
   state.browsers.forEach((browser: Browser) => {
     createBrowser(mainWindow, reduxStore, browser);

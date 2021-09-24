@@ -1,11 +1,20 @@
 import { Store } from '@reduxjs/toolkit';
-import { syncRenderer } from '@goosewobbler/electron-redux/renderer';
 import React from 'react';
-import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import * as ReactDOM from 'react-dom';
+import { syncRenderer } from '@goosewobbler/electron-redux/renderer';
 import { App } from './App';
 import { createReduxStore } from '../common/reduxStore';
 import '../css/tailwind.src.pcss';
+
+declare global {
+  interface Window {
+    api: {
+      isDev: boolean;
+      invoke(channel: string, ...data: unknown[]): Promise<unknown>;
+    };
+  }
+}
 
 function render(reduxStore: Store): void {
   ReactDOM.render(

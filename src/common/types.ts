@@ -31,15 +31,13 @@ export type Track = {
   duration: number;
   sources: TrackSource[];
   browserId?: number;
-  playing: boolean;
-  playingFrom?: string;
-  embedActive: boolean;
 };
 
 export type List = {
   id: number;
   title: string;
   tracks: Track['id'][];
+  active?: boolean;
   editing?: boolean;
   oldTitle?: string;
 };
@@ -48,6 +46,7 @@ export type Browser = {
   id: number;
   url: string;
   title: string;
+  tracks: Track['id'][];
 };
 
 export type Embed = {

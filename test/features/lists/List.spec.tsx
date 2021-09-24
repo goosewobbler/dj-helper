@@ -6,26 +6,14 @@ let list: RenderResult;
 
 describe('List', () => {
   let onClickDeleteMock: jest.Mock;
-  let onEditingCompleteMock: jest.Mock;
-  let onTitleChangeMock: jest.Mock;
   let onClickEditMock: jest.Mock;
-  let onEditingCancelledMock: jest.Mock;
 
   beforeEach(() => {
     onClickDeleteMock = jest.fn();
-    onEditingCompleteMock = jest.fn();
-    onTitleChangeMock = jest.fn();
     onClickEditMock = jest.fn();
-    onEditingCancelledMock = jest.fn();
     list = render(
       <List
         id={546}
-        title="test list"
-        onClickDelete={onClickDeleteMock}
-        onEditingComplete={onEditingCompleteMock}
-        onTitleChange={onTitleChangeMock}
-        onClickEdit={onClickEditMock}
-        onEditingCancelled={onEditingCancelledMock}
       />,
     );
   });

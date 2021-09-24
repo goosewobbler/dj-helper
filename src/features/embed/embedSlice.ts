@@ -16,20 +16,22 @@ export const slice = createSlice({
       loadContext: context,
       isPlaying: false,
     }),
-    setPlaying: (state, { payload: { context } }: { payload: { context: Embed['playContext'] } }) => ({
+    setPlaying: (state) => ({
       ...state,
       isPlaying: true,
-      playContext: context,
     }),
-    setPaused: (state, { payload: { context } }: { payload: { context: Embed['playContext'] } }) => ({
+    setPaused: (state) => ({
       ...state,
       isPlaying: false,
+    }),
+    setPlayContext: (state, { payload: { context } }: { payload: { context: Embed['playContext'] } }) => ({
+      ...state,
       playContext: context,
     }),
   },
 });
 
-export const { loadTrack, setPlaying, setPaused } = slice.actions;
+export const { loadTrack, setPlaying, setPaused, setPlayContext } = slice.actions;
 
 export const selectTrackByEmbedLoaded =
   () =>
@@ -45,5 +47,10 @@ export const trackIsLoaded =
   ({ trackId }: { trackId: Track['id'] }) =>
   ({ embed }: AppState): boolean =>
     embed.loadedTrackId === trackId;
+
+export const getPlayContext =
+  () =>
+  ({ embed }: AppState): string =>
+    embed.playContext;
 
 export const embedReducer = slice.reducer;

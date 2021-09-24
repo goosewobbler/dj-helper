@@ -67,7 +67,7 @@ export const trackIsOnSelectedList =
     (state.lists.find((list) => list.active) as List).tracks.some((track) => track === trackId);
 
 export const getNextTrackOnList =
-  (id: number, currentTrackId: number) =>
+  ({ id, currentTrackId }: { id: number; currentTrackId: number }) =>
   (state: AppState): Track['id'] => {
     const listTracks = (state.lists.find((list) => list.id === id) as List).tracks;
     const currentTrackIndex = listTracks.findIndex((track) => track === currentTrackId);

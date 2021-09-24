@@ -7,9 +7,12 @@ import {
   selectTrackByEmbedLoaded,
   loadTrack,
   trackIsLoaded,
+  getPlayContext,
+  setPlayContext,
 } from '../features/embed/embedSlice';
 import { Track } from '../common/types';
 import { log } from './helpers/console';
+import { getNextTrackOnList } from '../features/lists/listsSlice';
 
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -35,6 +38,7 @@ export function initEmbed(mainWindow: BrowserWindow, reduxStore: Store): void {
   });
 
   const triggerPlay = async () => {
+    log('trigger play yo');
     const isPlaying = !!(await embed.webContents.executeJavaScript('$("#player").hasClass("playing");', true));
     if (!isPlaying) {
       log('clicking', Date.now());
@@ -43,7 +47,19 @@ export function initEmbed(mainWindow: BrowserWindow, reduxStore: Store): void {
     }
   };
 
-  const playHandler = () => {
+  const invokePlayHandler = async (trackId: number, context: string) => {
+    const trackIsLoadedSelector = trackIsLoaded({ trackId });
+    const isLoaded = trackIsLoadedSelector(reduxStore.getState());
+
+    reduxStore.dispatch(setPlayContext({ context }));
+    if (isLoaded) {
+      await triggerPlay();
+    } else {
+      reduxStore.dispatch(loadTrack({ trackId, context }));
+    }
+  };
+
+  const mediaStartedPlayingHandler = () => {
     void (async () => {
       const rawTitleLinkPlaying = (await embed.webContents.executeJavaScript(
         '$(".inline_player #maintextlink").attr("href");',
@@ -51,53 +67,57 @@ export function initEmbed(mainWindow: BrowserWindow, reduxStore: Store): void {
       )) as string;
       const { pathname } = new URL(rawTitleLinkPlaying);
       const sourceUrl = pathname;
-      log('playing from embed', { sourceUrl, context: 'trackEmbed' }, Date.now());
-      reduxStore.dispatch(setPlaying({ context: 'trackEmbed' }));
+      const embedPlayContextSelector = getPlayContext();
+      const currentPlayContext = embedPlayContextSelector(reduxStore.getState());
+      log('playing from embed', { sourceUrl, context: currentPlayContext }, Date.now());
+      reduxStore.dispatch(setPlaying());
     })();
   };
 
-  const pauseHandler = () => {
+  const mediaPausedHandler = () => {
     void (async () => {
-      const pausedAt = Date.now();
-      const rawTitleLinkPaused = (await embed.webContents.executeJavaScript(
-        '$(".inline_player #maintextlink").attr("href");',
-        true,
-      )) as string;
-      const lastPlayButtonClick = (await embed.webContents.executeJavaScript(
-        'window.lastPlayButtonClick',
-        true,
-      )) as number;
+      // const pausedAt = Date.now();
+      // const rawTitleLinkPaused = (await embed.webContents.executeJavaScript(
+      //   '$(".inline_player #maintextlink").attr("href");',
+      //   true,
+      // )) as string;
+      const playbackComplete = (await embed.webContents.executeJavaScript('window.playbackComplete', true)) as boolean;
+      const currentTime = (await embed.webContents.executeJavaScript('$("#currenttime").text();', true)) as string;
 
-      const pausedByClick = pausedAt - lastPlayButtonClick <= 10;
+      // const hasRecentPlayButtonClick = Number.isNaN(lastPlayButtonClick) ? false : pausedAt - lastPlayButtonClick <= 5;
+      const pausedByTrackEnding = currentTime === '00:00' && playbackComplete;
 
-      const { pathname } = new URL(rawTitleLinkPaused);
-      const sourceUrl = pathname;
-      log('paused from embed', { sourceUrl, context: 'trackEmbed' }, Date.now());
-      reduxStore.dispatch(setPaused({ context: 'trackEmbed' }));
+      // const { pathname } = new URL(rawTitleLinkPaused);
+      // const sourceUrl = pathname;
 
-      if (!pausedByClick) {
+      const embedPlayContextSelector = getPlayContext();
+      const currentPlayContext = embedPlayContextSelector(reduxStore.getState());
+      reduxStore.dispatch(setPaused());
+
+      if (pausedByTrackEnding) {
         // assume end of track
-        // get next track
-        log('end of track zomg');
+        log('end of track zomg, playing next...', currentTime, playbackComplete, currentPlayContext);
+        const nextTrackOnListSelector = getNextTrackOnList({
+          id: parseInt(currentPlayContext.replace('list-', '')),
+          currentTrackId: currentEmbedTrack.id,
+        });
+        const nextTrackId = nextTrackOnListSelector(reduxStore.getState());
+        await invokePlayHandler(nextTrackId, currentPlayContext);
       }
     })();
   };
 
-  const loadHandler = () => {
+  const loadFinishedHandler = () => {
     void (async () => {
       log('loaded', Date.now());
       await embed.webContents.executeJavaScript(
-        '$("#big_play_button").on("click", () => { window.lastPlayButtonClick = Date.now(); });',
+        '$("audio").on("ended", () => { window.playbackComplete = true }).length;',
         true,
       );
       await delay(200);
       await triggerPlay();
     })();
   };
-
-  embed.webContents.on('media-started-playing', playHandler);
-  embed.webContents.on('media-paused', pauseHandler);
-  embed.webContents.on('did-finish-load', loadHandler);
 
   reduxStore.subscribe(() => {
     const previousEmbedTrack = currentEmbedTrack;
@@ -118,13 +138,14 @@ export function initEmbed(mainWindow: BrowserWindow, reduxStore: Store): void {
     }
   });
 
-  ipcMain.handle('play-track', async (event, [{ trackId, context }]: [{ trackId: number; context: string }]) => {
-    const trackIsLoadedSelector = trackIsLoaded({ trackId });
-    const isLoaded = trackIsLoadedSelector(reduxStore.getState());
-    if (isLoaded) {
-      await triggerPlay();
-    } else {
-      reduxStore.dispatch(loadTrack({ trackId, context }));
-    }
-  });
+  embed.webContents.on('media-started-playing', mediaStartedPlayingHandler);
+  embed.webContents.on('media-paused', mediaPausedHandler);
+  embed.webContents.on('did-finish-load', loadFinishedHandler);
+  ipcMain.handle(
+    'play-track',
+    async (_event: unknown, [{ trackId, context }]: [{ trackId: number; context: string }]) => {
+      log('play track handler', trackId, context);
+      await invokePlayHandler(trackId, context);
+    },
+  );
 }

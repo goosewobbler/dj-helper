@@ -53,14 +53,14 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: Store, browser: Br
             context: 'browser',
           }),
         );
-        reduxStore.dispatch(setPlaying({ context: 'browser' }));
+        reduxStore.dispatch(setPlaying());
       }
     })();
   });
 
   view.webContents.on('media-paused', () => {
-    log('pausing from browser', { context: 'browser' }, Date.now());
-    reduxStore.dispatch(setPaused({ context: 'browser' }));
+    log('pausing from browser', Date.now());
+    reduxStore.dispatch(setPaused());
   });
 
   view.webContents.on('page-title-updated', (event, title) => {

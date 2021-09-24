@@ -43,16 +43,16 @@ export function List({ id }: { id: number }): ReactElement {
     dispatch(selectList({ id }));
   }
 
-  // accordion
-  // transition: background-color 0.6s ease;
-
   return (
     <li id={listKey} className="flex flex-col list">
       <div
-        className={`accordion transition duration-500 ease-linear outline-none border-none items-center hover:bg-red-400 bg-gray-400 text-gray-700 flex cursor-pointer p-4 ${
+        className={`accordion transition duration-500 ease-in-out outline-none border-none items-center hover:bg-red-400 bg-gray-400 text-gray-700 flex cursor-pointer p-4 ${
           active ? 'bg-red-400' : ''
         }`}
+        role="menuitem"
         onClick={toggleAccordion}
+        onKeyPress={toggleAccordion}
+        tabIndex={0}
       >
         <span className="font-sans text-sm font-semibold title" data-testid="title">
           {editing ? (
@@ -85,7 +85,7 @@ export function List({ id }: { id: number }): ReactElement {
           </span>
         )}
         <Chevron
-          className={`accordion-icon ml-auto transition-transform duration-500 ease-linear ${
+          className={`accordion-icon ml-auto transition-transform duration-500 ease-in-out ${
             active ? 'transform rotate-90' : ''
           }`}
         />
@@ -93,7 +93,7 @@ export function List({ id }: { id: number }): ReactElement {
       <div
         ref={content}
         style={{ maxHeight: `${active ? `${content?.current?.scrollHeight as number}px` : '0px'}` }}
-        className="overflow-hidden duration-500 ease-linear bg-white accordion-content transition-max-height"
+        className="overflow-hidden duration-500 ease-in-out bg-white accordion-content transition-max-height"
       >
         <ol className="p-4 font-sans text-sm font-normal tracks">
           {tracks.map(

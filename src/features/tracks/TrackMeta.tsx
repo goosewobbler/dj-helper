@@ -4,7 +4,7 @@ import { trackIsPlaying } from '../embed/embedSlice';
 import { selectTrackById } from './tracksSlice';
 import { Track } from '../../common/types';
 import { log } from '../../main/helpers/console';
-import { addTrackToSelectedList } from '../lists/listsSlice';
+import { addTrackToSelectedList, removeTrackFromSelectedList, trackIsOnSelectedList } from '../lists/listsSlice';
 
 function displayTrackDuration(duration: number) {
   const date = new Date(duration * 1000);
@@ -19,6 +19,7 @@ export function TrackMeta({ id, context }: { id: Track['id']; context: string })
   const dispatch = useDispatch();
   const { artist, title, duration, sources } = useSelector(selectTrackById(id));
   const isPlaying = useSelector(trackIsPlaying({ trackId: id }));
+  const isOnSelectedList = useSelector(trackIsOnSelectedList({ trackId: id }));
   log('zomg loading track', { artist, title, duration, sources });
 
   return (
@@ -30,10 +31,14 @@ export function TrackMeta({ id, context }: { id: Track['id']; context: string })
         <button
           type="button"
           onClick={() => {
-            dispatch(addTrackToSelectedList({ trackId: id }));
+            if (isOnSelectedList) {
+              dispatch(removeTrackFromSelectedList({ trackId: id }));
+            } else {
+              dispatch(addTrackToSelectedList({ trackId: id }));
+            }
           }}
         >
-          Add To List
+          {isOnSelectedList ? 'Remove From' : 'Add To'} List
         </button>
       )}
       <span>

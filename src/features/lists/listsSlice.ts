@@ -37,6 +37,8 @@ export const slice = createSlice({
       state.map((list) => (list.id === id ? { ...list, active: true } : { ...list, active: false })),
     addTrackToSelectedList: (state, { payload: { trackId } }: { payload: { trackId: number } }) =>
       state.map((list) => (list.active ? { ...list, tracks: [...list.tracks, trackId] } : list)),
+    removeTrackFromSelectedList: (state, { payload: { trackId } }: { payload: { trackId: number } }) =>
+      state.map((list) => (list.active ? { ...list, tracks: list.tracks.filter((track) => track !== trackId) } : list)),
   },
 });
 
@@ -49,6 +51,7 @@ export const {
   finishEditList,
   selectList,
   addTrackToSelectedList,
+  removeTrackFromSelectedList,
 } = slice.actions;
 
 export const selectLists = (state: AppState): List[] => state.lists;
@@ -57,6 +60,11 @@ export const selectListById =
   (id: number) =>
   (state: AppState): List =>
     state.lists.find((list) => list.id === id) as List;
+
+export const trackIsOnSelectedList =
+  ({ trackId }: { trackId: number }) =>
+  (state: AppState): boolean =>
+    (state.lists.find((list) => list.active) as List).tracks.some((track) => track === trackId);
 
 export const listsReducer = slice.reducer;
 

@@ -31,9 +31,6 @@ export type Track = {
   duration: number;
   sources: TrackSource[];
   browserId?: number;
-  playing: boolean;
-  playingFrom?: string;
-  embedActive: boolean;
 };
 
 export type List = {

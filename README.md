@@ -1,8 +1,8 @@
-[![dependencies Status](https://status.david-dm.org/gh/goosewobbler/dj-helper.svg)](https://david-dm.org/goosewobbler/dj-helper) [![devDependencies Status](https://status.david-dm.org/gh/goosewobbler/dj-helper.svg?type=dev)](https://david-dm.org/goosewobbler/dj-helper?type=dev)   
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=goosewobbler_dj-helper&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=goosewobbler_dj-helper) [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=goosewobbler_dj-helper&metric=security_rating)](https://sonarcloud.io/dashboard?id=goosewobbler_dj-helper) [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=goosewobbler_dj-helper&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=goosewobbler_dj-helper) [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=goosewobbler_dj-helper&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=goosewobbler_dj-helper) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=goosewobbler_dj-helper&metric=alert_status)](https://sonarcloud.io/dashboard?id=goosewobbler_dj-helper)    
+[![dependencies Status](https://status.david-dm.org/gh/goosewobbler/dj-helper.svg)](https://david-dm.org/goosewobbler/dj-helper) [![devDependencies Status](https://status.david-dm.org/gh/goosewobbler/dj-helper.svg?type=dev)](https://david-dm.org/goosewobbler/dj-helper?type=dev)  
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=goosewobbler_dj-helper&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=goosewobbler_dj-helper) [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=goosewobbler_dj-helper&metric=security_rating)](https://sonarcloud.io/dashboard?id=goosewobbler_dj-helper) [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=goosewobbler_dj-helper&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=goosewobbler_dj-helper) [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=goosewobbler_dj-helper&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=goosewobbler_dj-helper) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=goosewobbler_dj-helper&metric=alert_status)](https://sonarcloud.io/dashboard?id=goosewobbler_dj-helper)  
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
-# DJ Helper 
+# DJ Helper
 
 **🚧 Currently pre-alpha, MVP / functional prototype will be v0.1 🚧**
 
@@ -12,13 +12,13 @@ This is an app for helping DJs to construct and manage lists of tracks whilst br
 
 Most music apps these days are geared around streaming, with DJs and digital record collectors being overlooked. Existing apps serving this demographic broadly fall into three categories:
 
-* Local Music Management / Playback (iTunes, Clementine, etc.)
-* Online Music Acquisition (Bandcamp, Beatport, etc.)
-* DJ Software (Rekordbox, Traktor, etc.)
+- Local Music Management / Playback (iTunes, Clementine, etc.)
+- Online Music Acquisition (Bandcamp, Beatport, etc.)
+- DJ Software (Rekordbox, Traktor, etc.)
 
-The problem is that the places for acquiring new digital music are online and totally separated from the places where the downloaded tracks end up.  Having to cross-reference different offline and online lists with all the different music platforms and manage the state of each track (non-triaged / triaged / listened / bought / downloaded / in library) is tedious. 
+The problem is that the places for acquiring new digital music are online and totally separated from the places where the downloaded tracks end up. Having to cross-reference different offline and online lists with all the different music platforms and manage the state of each track (non-triaged / triaged / listened / bought / downloaded / in library) is tedious.
 
-This problem will be made a lot easier if the gaps between local library, DJ software and online download platform can be bridged in some way.
+This problem will be made a lot easier if the gaps between local library, DJ software and online streaming / download platforms can be bridged in some way.
 
 ## Setup
 
@@ -30,13 +30,13 @@ pnpm i
 
 ## Development
 
-Start the development server: 
+Start the development server:
 
 ```
 pnpm dev
-``` 
+```
 
-Hot Module Replacement (HMR) with React Fast Refresh and Webpack Dev Server is in use for rapid iteration on the `renderer` process, however when changing files running on the `main` process you will likely need to restart Electron.
+Hot Module Replacement (HMR) with React Fast Refresh and Webpack Dev Server is in use for rapid iteration on both `renderer` and `main` processes.
 
 ### Tech Stack
 

@@ -4,7 +4,13 @@ import { trackIsPlaying } from '../embed/embedSlice';
 import { selectTrackById } from './tracksSlice';
 import { Track } from '../../common/types';
 import { log } from '../../main/helpers/console';
-import { addTrackToSelectedList, removeTrackFromSelectedList, trackIsOnSelectedList } from '../lists/listsSlice';
+import {
+  addTrackToSelectedList,
+  moveTrackDown,
+  moveTrackUp,
+  removeTrackFromSelectedList,
+  trackIsOnSelectedList,
+} from '../lists/listsSlice';
 
 function displayTrackDuration(duration: number) {
   const date = new Date(duration * 1000);
@@ -15,7 +21,17 @@ function displayTrackDuration(duration: number) {
   return hours === '00' ? `${minutes}:${seconds}` : `${hours}:${minutes}:${seconds}`;
 }
 
-export function TrackMeta({ id, context }: { id: Track['id']; context: string }) {
+export function TrackMeta({
+  id,
+  context,
+  listIndex,
+  listTotalTracks,
+}: {
+  id: Track['id'];
+  context: string;
+  listIndex?: number;
+  listTotalTracks?: number;
+}) {
   const dispatch = useDispatch();
   const track = useSelector(selectTrackById(id));
   const isPlaying = useSelector(trackIsPlaying({ trackId: id }));
@@ -24,6 +40,8 @@ export function TrackMeta({ id, context }: { id: Track['id']; context: string })
     return <></>;
   }
   const { artist, title, duration, sources } = track;
+  const isListContext = context.startsWith('list-');
+  const isBrowserContext = context.startsWith('browser-');
   log('zomg loading track', { artist, title, duration, sources });
 
   return (
@@ -31,7 +49,7 @@ export function TrackMeta({ id, context }: { id: Track['id']; context: string })
       <span>{artist}</span>
       <span>{title}</span>
       <span>{displayTrackDuration(duration)}</span>
-      {context.startsWith('browser') && (
+      {isBrowserContext && (
         <button
           type="button"
           onClick={() => {
@@ -45,7 +63,7 @@ export function TrackMeta({ id, context }: { id: Track['id']; context: string })
           {isOnSelectedList ? 'Remove From' : 'Add To'} List
         </button>
       )}
-      {context.startsWith('list-') && isOnSelectedList && (
+      {isListContext && isOnSelectedList && (
         <button
           type="button"
           onClick={() => {
@@ -53,6 +71,26 @@ export function TrackMeta({ id, context }: { id: Track['id']; context: string })
           }}
         >
           Remove From List
+        </button>
+      )}
+      {isListContext && (listIndex as number) > 0 && (
+        <button
+          type="button"
+          onClick={() => {
+            dispatch(moveTrackUp({ trackId: id }));
+          }}
+        >
+          Move Track Up
+        </button>
+      )}
+      {isListContext && (listIndex as number) < (listTotalTracks as number) - 1 && (
+        <button
+          type="button"
+          onClick={() => {
+            dispatch(moveTrackDown({ trackId: id }));
+          }}
+        >
+          Move Track Down
         </button>
       )}
       <span>

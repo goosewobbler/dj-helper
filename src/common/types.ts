@@ -56,10 +56,16 @@ export type Embed = {
   loadedTrackId?: TrackSource['sourceId'];
 };
 
+export type Settings = {
+  darkModeEnabled: boolean;
+  autoplayEnabled: boolean;
+  trackPreviewEmbedSize: 'small' | 'medium';
+};
+
 export interface AppState {
   embed: Embed;
   lists: List[];
   tracks: Track[];
-  // trackSources: TrackSource[];
   browsers: Browser[];
+  settings: Settings;
 }

@@ -18,7 +18,13 @@ const KEY_ESCAPE = 'Escape';
 
 export function List({ id }: { id: number }): ReactElement {
   const dispatch = useDispatch();
-  const { title, tracks, editing, active } = useSelector(selectListById(id));
+  const list = useSelector(selectListById(id));
+  const content = useRef<HTMLDivElement>(null);
+
+  if (!list) {
+    return <></>;
+  }
+  const { title, tracks, editing, active } = list;
   const isValid = () => !!title;
 
   const handleClickEdit = () => dispatch(editList({ id }));
@@ -34,8 +40,6 @@ export function List({ id }: { id: number }): ReactElement {
     }
   };
 
-  const content = useRef<HTMLDivElement>(null);
-
   const listKey = `list-${id}`;
   const validityRing = `ring-${isValid() ? 'green' : 'red'}-300`;
   const accordionContentMaxHeightWhenActive = `${content?.current?.scrollHeight as number}px`;
@@ -48,7 +52,7 @@ export function List({ id }: { id: number }): ReactElement {
   }
 
   return (
-    <li id={listKey} className="flex flex-col list">
+    <li id={listKey} className="flex flex-col list" data-testid="list">
       <div
         className={`accordion transition duration-500 ease-in-out outline-none border-none items-center hover:bg-red-400 bg-gray-400 text-gray-700 flex cursor-pointer p-4 ${
           active ? 'bg-red-400' : ''
@@ -99,8 +103,14 @@ export function List({ id }: { id: number }): ReactElement {
       >
         <ol className="p-4 font-sans text-sm font-normal tracks">
           {tracks.map(
-            (trackId: Track['id']): ReactElement => (
-              <TrackMeta key={trackId} id={trackId} context={listKey} />
+            (trackId: Track['id'], index: number): ReactElement => (
+              <TrackMeta
+                key={trackId}
+                id={trackId}
+                context={listKey}
+                listIndex={index}
+                listTotalTracks={tracks.length}
+              />
             ),
           )}
         </ol>

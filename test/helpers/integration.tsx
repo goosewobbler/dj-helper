@@ -1,3 +1,4 @@
+/* eslint import/export: off */
 import React, { ComponentType, ReactNode, ReactElement } from 'react';
 import { render as rtlRender, RenderResult } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -6,7 +7,7 @@ import { Provider } from 'react-redux';
 import { rootReducer } from '../../src/features/rootReducer';
 import { AppState } from '../../src/common/types';
 
-function buildWrapper(store: EnhancedStore): ComponentType {
+function buildWrapper(store: EnhancedStore): ComponentType<{ children: ReactElement }> {
   return function Wrapper({ children }: { children?: ReactNode }) {
     return <Provider store={store}>{children}</Provider>;
   };

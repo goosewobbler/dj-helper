@@ -33,7 +33,7 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: Store, browser: Br
   log('creating browser', browser.id);
 
   mainWindow.setBrowserView(view);
-  view.setBounds({ x: 300, y: 400, width: 1200, height: 550 }); // y: 65
+  view.setBounds({ x: 500, y: 400, width: 1000, height: 590 });
   view.setAutoResize({ horizontal: true });
 
   view.webContents.setWindowOpenHandler(({ url }) => {

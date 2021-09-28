@@ -3,6 +3,24 @@ import { AppState, List, Track } from '../../common/types';
 
 const initialListTitle = 'New List';
 
+function reorderTracks(tracks: List['tracks'], trackIdToMove: Track['id'], direction: string) {
+  const indexOfTrackIdToMove = tracks.indexOf(trackIdToMove);
+  if (indexOfTrackIdToMove === -1) {
+    return tracks;
+  }
+
+  const newIndex = direction === 'up' ? indexOfTrackIdToMove - 1 : indexOfTrackIdToMove + 1;
+
+  // clone array and remove track
+  const otherTracks = Array.from(tracks);
+  otherTracks.splice(indexOfTrackIdToMove, 1);
+
+  // insert track at the desired index
+  const tracksBefore = otherTracks.slice(0, newIndex);
+  const tracksAfter = otherTracks.slice(newIndex);
+  return tracksBefore.concat([trackIdToMove]).concat(tracksAfter);
+}
+
 export const initialState: List[] = [];
 
 export const slice = createSlice({
@@ -39,6 +57,10 @@ export const slice = createSlice({
       state.map((list) => (list.active ? { ...list, tracks: [...list.tracks, trackId] } : list)),
     removeTrackFromSelectedList: (state, { payload: { trackId } }: { payload: { trackId: number } }) =>
       state.map((list) => (list.active ? { ...list, tracks: list.tracks.filter((track) => track !== trackId) } : list)),
+    moveTrackUp: (state, { payload: { trackId } }: { payload: { trackId: number } }) =>
+      state.map((list) => (list.active ? { ...list, tracks: reorderTracks(list.tracks, trackId, 'up') } : list)),
+    moveTrackDown: (state, { payload: { trackId } }: { payload: { trackId: number } }) =>
+      state.map((list) => (list.active ? { ...list, tracks: reorderTracks(list.tracks, trackId, 'down') } : list)),
   },
 });
 
@@ -52,6 +74,8 @@ export const {
   selectList,
   addTrackToSelectedList,
   removeTrackFromSelectedList,
+  moveTrackUp,
+  moveTrackDown,
 } = slice.actions;
 
 export const selectLists = (state: AppState): List[] => state.lists;

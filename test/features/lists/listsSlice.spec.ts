@@ -1,12 +1,44 @@
-import { reducers } from '../../../src/features/lists/listsSlice';
+import { Settings } from '../../../src/common/types';
+import { reducers, trackIsOnSelectedList, getNextTrackOnList } from '../../../src/features/lists/listsSlice';
 
-const { createList, deleteList, updateListTitle, editList, finishEditList, revertEditList } = reducers;
+const {
+  createList,
+  deleteList,
+  updateListTitle,
+  editList,
+  finishEditList,
+  revertEditList,
+  moveTrackUp,
+  moveTrackDown,
+  addTrackToSelectedList,
+  removeTrackFromSelectedList,
+} = reducers;
+
+function getState(activeListIndex: number) {
+  const lists = [
+    { id: 1, title: 'first list', active: false, tracks: [1, 2, 3] },
+    { id: 2, title: 'second list', active: false, tracks: [] },
+    { id: 3, title: 'third list', active: false, tracks: [] },
+  ];
+  lists[activeListIndex].active = true;
+  return {
+    embed: { isPlaying: false },
+    tracks: [],
+    browsers: [],
+    lists,
+    settings: {
+      darkModeEnabled: false,
+      autoplayEnabled: true,
+      trackPreviewEmbedSize: 'small' as Settings['trackPreviewEmbedSize'],
+    },
+  };
+}
 
 describe('listsSlice', () => {
   describe('createList', () => {
     it('should create a new list with the expected values', () => {
       const lists = createList([]);
-      expect(lists).toEqual([{ id: 1, editing: true, title: 'New List', tracks: [] }]);
+      expect(lists).toEqual([{ id: 1, active: true, editing: true, title: 'New List', tracks: [] }]);
     });
 
     describe('when there are existing lists', () => {
@@ -18,7 +50,7 @@ describe('listsSlice', () => {
         expect(lists).toEqual([
           { id: 1, title: 'first list', tracks: [] },
           { id: 2, title: 'second list', tracks: [] },
-          { id: 3, editing: true, title: 'New List', tracks: [] },
+          { id: 3, active: true, editing: true, title: 'New List', tracks: [] },
         ]);
       });
     });
@@ -117,6 +149,152 @@ describe('listsSlice', () => {
         { id: 2, title: 'New List', tracks: [] },
         { id: 3, title: 'third list', tracks: [] },
       ]);
+    });
+  });
+
+  describe('moveTrackUp', () => {
+    it('should move a track up', () => {
+      const lists = moveTrackUp(
+        [
+          { id: 1, title: 'first list', active: true, tracks: [1, 2, 3] },
+          { id: 2, title: 'second list', tracks: [] },
+          { id: 3, title: 'third list', tracks: [] },
+        ],
+        { payload: { trackId: 3 } },
+      );
+      expect(lists).toEqual([
+        { id: 1, title: 'first list', active: true, tracks: [1, 3, 2] },
+        { id: 2, title: 'second list', tracks: [] },
+        { id: 3, title: 'third list', tracks: [] },
+      ]);
+    });
+
+    it('should handle a non-existent track and return the existing order', () => {
+      const lists = moveTrackUp(
+        [
+          { id: 1, title: 'first list', active: true, tracks: [1, 2, 3] },
+          { id: 2, title: 'second list', tracks: [] },
+          { id: 3, title: 'third list', tracks: [] },
+        ],
+        { payload: { trackId: 5 } },
+      );
+      expect(lists).toEqual([
+        { id: 1, title: 'first list', active: true, tracks: [1, 2, 3] },
+        { id: 2, title: 'second list', tracks: [] },
+        { id: 3, title: 'third list', tracks: [] },
+      ]);
+    });
+  });
+
+  describe('moveTrackDown', () => {
+    it('should move a track down', () => {
+      const lists = moveTrackDown(
+        [
+          { id: 1, title: 'first list', active: true, tracks: [1, 2, 3] },
+          { id: 2, title: 'second list', tracks: [] },
+          { id: 3, title: 'third list', tracks: [] },
+        ],
+        { payload: { trackId: 1 } },
+      );
+      expect(lists).toEqual([
+        { id: 1, title: 'first list', active: true, tracks: [2, 1, 3] },
+        { id: 2, title: 'second list', tracks: [] },
+        { id: 3, title: 'third list', tracks: [] },
+      ]);
+    });
+
+    it('should handle a non-existent track and return the existing order', () => {
+      const lists = moveTrackDown(
+        [
+          { id: 1, title: 'first list', active: true, tracks: [1, 2, 3] },
+          { id: 2, title: 'second list', tracks: [] },
+          { id: 3, title: 'third list', tracks: [] },
+        ],
+        { payload: { trackId: 5 } },
+      );
+      expect(lists).toEqual([
+        { id: 1, title: 'first list', active: true, tracks: [1, 2, 3] },
+        { id: 2, title: 'second list', tracks: [] },
+        { id: 3, title: 'third list', tracks: [] },
+      ]);
+    });
+  });
+
+  describe('addTrackToSelectedList', () => {
+    it('should add a track to the selected list', () => {
+      const lists = addTrackToSelectedList(
+        [
+          { id: 1, title: 'first list', active: true, tracks: [1, 2, 3] },
+          { id: 2, title: 'second list', tracks: [] },
+          { id: 3, title: 'third list', tracks: [] },
+        ],
+        { payload: { trackId: 5 } },
+      );
+      expect(lists).toEqual([
+        { id: 1, title: 'first list', active: true, tracks: [1, 2, 3, 5] },
+        { id: 2, title: 'second list', tracks: [] },
+        { id: 3, title: 'third list', tracks: [] },
+      ]);
+    });
+  });
+
+  describe('removeTrackFromSelectedList', () => {
+    it('should add a track to the selected list', () => {
+      const lists = removeTrackFromSelectedList(
+        [
+          { id: 1, title: 'first list', active: true, tracks: [1, 2, 3] },
+          { id: 2, title: 'second list', tracks: [] },
+          { id: 3, title: 'third list', tracks: [] },
+        ],
+        { payload: { trackId: 2 } },
+      );
+      expect(lists).toEqual([
+        { id: 1, title: 'first list', active: true, tracks: [1, 3] },
+        { id: 2, title: 'second list', tracks: [] },
+        { id: 3, title: 'third list', tracks: [] },
+      ]);
+    });
+  });
+
+  describe('selectors', () => {
+    describe('trackIsOnSelectedList', () => {
+      it('should return true when a track is on the selected list', () => {
+        const isOnListSelector = trackIsOnSelectedList({ trackId: 2 });
+        const isOnList = isOnListSelector(getState(0));
+        expect(isOnList).toEqual(true);
+      });
+
+      it('should return false when a track is not on the selected list', () => {
+        const isOnListSelector = trackIsOnSelectedList({ trackId: 5 });
+        const isOnList = isOnListSelector(getState(1));
+        expect(isOnList).toEqual(false);
+      });
+    });
+
+    describe('getNextTrackOnList', () => {
+      it('should return the next track on a list', () => {
+        const nextTrackSelector = getNextTrackOnList({ id: 1, currentTrackId: 2 });
+        const nextTrack = nextTrackSelector(getState(0));
+        expect(nextTrack).toEqual(3);
+      });
+
+      it('should return the next track on an unselected list', () => {
+        const nextTrackSelector = getNextTrackOnList({ id: 1, currentTrackId: 2 });
+        const nextTrack = nextTrackSelector(getState(0));
+        expect(nextTrack).toEqual(3);
+      });
+
+      it('should return the first track when the current track is not on the list', () => {
+        const nextTrackSelector = getNextTrackOnList({ id: 1, currentTrackId: 5 });
+        const nextTrack = nextTrackSelector(getState(0));
+        expect(nextTrack).toEqual(1);
+      });
+
+      it('should return undefined when there is no next track', () => {
+        const nextTrackSelector = getNextTrackOnList({ id: 1, currentTrackId: 3 });
+        const nextTrack = nextTrackSelector(getState(0));
+        expect(nextTrack).toEqual(undefined);
+      });
     });
   });
 });

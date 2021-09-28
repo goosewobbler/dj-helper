@@ -52,7 +52,7 @@ export function List({ id }: { id: number }): ReactElement {
   }
 
   return (
-    <li id={listKey} className="flex flex-col list">
+    <li id={listKey} className="flex flex-col list" data-testid="list">
       <div
         className={`accordion transition duration-500 ease-in-out outline-none border-none items-center hover:bg-red-400 bg-gray-400 text-gray-700 flex cursor-pointer p-4 ${
           active ? 'bg-red-400' : ''

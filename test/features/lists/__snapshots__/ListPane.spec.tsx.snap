@@ -8,6 +8,7 @@ exports[`ListPane given a number of lists should render the expected html 1`] = 
     >
       <li
         class="flex flex-col list"
+        data-testid="list"
         id="list-1"
       >
         <div
@@ -61,6 +62,7 @@ exports[`ListPane given a number of lists should render the expected html 1`] = 
       </li>
       <li
         class="flex flex-col list"
+        data-testid="list"
         id="list-2"
       >
         <div
@@ -114,6 +116,7 @@ exports[`ListPane given a number of lists should render the expected html 1`] = 
       </li>
       <li
         class="flex flex-col list"
+        data-testid="list"
         id="list-3"
       >
         <div
@@ -189,6 +192,7 @@ exports[`ListPane given a number of lists when a list delete button is clicked s
     >
       <li
         class="flex flex-col list"
+        data-testid="list"
         id="list-1"
       >
         <div
@@ -242,6 +246,7 @@ exports[`ListPane given a number of lists when a list delete button is clicked s
       </li>
       <li
         class="flex flex-col list"
+        data-testid="list"
         id="list-2"
       >
         <div
@@ -317,6 +322,7 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
     >
       <li
         class="flex flex-col list"
+        data-testid="list"
         id="list-1"
       >
         <div
@@ -370,6 +376,7 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
       </li>
       <li
         class="flex flex-col list"
+        data-testid="list"
         id="list-2"
       >
         <div
@@ -418,6 +425,7 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
       </li>
       <li
         class="flex flex-col list"
+        data-testid="list"
         id="list-3"
       >
         <div
@@ -493,6 +501,7 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
     >
       <li
         class="flex flex-col list"
+        data-testid="list"
         id="list-1"
       >
         <div
@@ -546,6 +555,7 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
       </li>
       <li
         class="flex flex-col list"
+        data-testid="list"
         id="list-2"
       >
         <div
@@ -599,6 +609,7 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
       </li>
       <li
         class="flex flex-col list"
+        data-testid="list"
         id="list-3"
       >
         <div
@@ -674,6 +685,7 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
     >
       <li
         class="flex flex-col list"
+        data-testid="list"
         id="list-1"
       >
         <div
@@ -727,6 +739,7 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
       </li>
       <li
         class="flex flex-col list"
+        data-testid="list"
         id="list-2"
       >
         <div
@@ -780,6 +793,7 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
       </li>
       <li
         class="flex flex-col list"
+        data-testid="list"
         id="list-3"
       >
         <div
@@ -855,6 +869,7 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
     >
       <li
         class="flex flex-col list"
+        data-testid="list"
         id="list-1"
       >
         <div
@@ -908,6 +923,7 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
       </li>
       <li
         class="flex flex-col list"
+        data-testid="list"
         id="list-2"
       >
         <div
@@ -961,6 +977,7 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
       </li>
       <li
         class="flex flex-col list"
+        data-testid="list"
         id="list-3"
       >
         <div
@@ -1014,6 +1031,7 @@ exports[`ListPane given a number of lists when a list edit button is clicked and
       </li>
       <li
         class="flex flex-col list"
+        data-testid="list"
         id="list-4"
       >
         <div
@@ -1084,6 +1102,7 @@ exports[`ListPane given a number of lists when a list edit button is clicked sho
     >
       <li
         class="flex flex-col list"
+        data-testid="list"
         id="list-1"
       >
         <div
@@ -1137,6 +1156,7 @@ exports[`ListPane given a number of lists when a list edit button is clicked sho
       </li>
       <li
         class="flex flex-col list"
+        data-testid="list"
         id="list-2"
       >
         <div
@@ -1185,6 +1205,7 @@ exports[`ListPane given a number of lists when a list edit button is clicked sho
       </li>
       <li
         class="flex flex-col list"
+        data-testid="list"
         id="list-3"
       >
         <div
@@ -1260,6 +1281,7 @@ exports[`ListPane given a number of lists when the new list button is clicked sh
     >
       <li
         class="flex flex-col list"
+        data-testid="list"
         id="list-1"
       >
         <div
@@ -1313,6 +1335,7 @@ exports[`ListPane given a number of lists when the new list button is clicked sh
       </li>
       <li
         class="flex flex-col list"
+        data-testid="list"
         id="list-2"
       >
         <div
@@ -1366,6 +1389,7 @@ exports[`ListPane given a number of lists when the new list button is clicked sh
       </li>
       <li
         class="flex flex-col list"
+        data-testid="list"
         id="list-3"
       >
         <div
@@ -1419,6 +1443,7 @@ exports[`ListPane given a number of lists when the new list button is clicked sh
       </li>
       <li
         class="flex flex-col list"
+        data-testid="list"
         id="list-4"
       >
         <div
@@ -1510,6 +1535,7 @@ exports[`ListPane initial render when the new list button is clicked should rend
     >
       <li
         class="flex flex-col list"
+        data-testid="list"
         id="list-1"
       >
         <div

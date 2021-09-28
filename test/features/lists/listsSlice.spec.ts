@@ -247,6 +247,11 @@ describe('listsSlice', () => {
           { id: 2, title: 'second list', tracks: [] },
           { id: 3, title: 'third list', tracks: [] },
         ],
+        settings: {
+          darkModeEnabled: false,
+          autoplayEnabled: true,
+          trackPreviewEmbedSize: 'small',
+        },
       });
       expect(isOnList).toEqual(true);
     });
@@ -262,6 +267,11 @@ describe('listsSlice', () => {
           { id: 2, title: 'second list', tracks: [] },
           { id: 3, title: 'third list', tracks: [] },
         ],
+        settings: {
+          darkModeEnabled: false,
+          autoplayEnabled: true,
+          trackPreviewEmbedSize: 'small',
+        },
       });
       expect(isOnList).toEqual(false);
     });
@@ -279,6 +289,11 @@ describe('listsSlice', () => {
           { id: 2, title: 'second list', tracks: [] },
           { id: 3, title: 'third list', tracks: [] },
         ],
+        settings: {
+          darkModeEnabled: false,
+          autoplayEnabled: true,
+          trackPreviewEmbedSize: 'small',
+        },
       });
       expect(nextTrack).toEqual(3);
     });
@@ -294,6 +309,11 @@ describe('listsSlice', () => {
           { id: 2, title: 'second list', active: true, tracks: [] },
           { id: 3, title: 'third list', tracks: [] },
         ],
+        settings: {
+          darkModeEnabled: false,
+          autoplayEnabled: true,
+          trackPreviewEmbedSize: 'small',
+        },
       });
       expect(nextTrack).toEqual(3);
     });
@@ -309,6 +329,11 @@ describe('listsSlice', () => {
           { id: 2, title: 'second list', tracks: [] },
           { id: 3, title: 'third list', tracks: [] },
         ],
+        settings: {
+          darkModeEnabled: false,
+          autoplayEnabled: true,
+          trackPreviewEmbedSize: 'small',
+        },
       });
       expect(nextTrack).toEqual(1);
     });
@@ -324,6 +349,11 @@ describe('listsSlice', () => {
           { id: 2, title: 'second list', tracks: [] },
           { id: 3, title: 'third list', tracks: [] },
         ],
+        settings: {
+          darkModeEnabled: false,
+          autoplayEnabled: true,
+          trackPreviewEmbedSize: 'small',
+        },
       });
       expect(nextTrack).toEqual(undefined);
     });

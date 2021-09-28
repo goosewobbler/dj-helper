@@ -20,6 +20,11 @@ describe('List', () => {
           },
         ],
         browsers: [],
+        settings: {
+          darkModeEnabled: false,
+          autoplayEnabled: true,
+          trackPreviewEmbedSize: 'small',
+        },
       },
     });
   });

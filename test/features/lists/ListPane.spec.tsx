@@ -56,6 +56,11 @@ describe('ListPane', () => {
             loadContext: 'browser',
             playContext: 'browser',
           },
+          settings: {
+            darkModeEnabled: false,
+            autoplayEnabled: true,
+            trackPreviewEmbedSize: 'small',
+          },
         },
       });
     });

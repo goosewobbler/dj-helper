@@ -18,7 +18,13 @@ const KEY_ESCAPE = 'Escape';
 
 export function List({ id }: { id: number }): ReactElement {
   const dispatch = useDispatch();
-  const { title, tracks, editing, active } = useSelector(selectListById(id));
+  const list = useSelector(selectListById(id));
+  const content = useRef<HTMLDivElement>(null);
+
+  if (!list) {
+    return <></>;
+  }
+  const { title, tracks, editing, active } = list;
   const isValid = () => !!title;
 
   const handleClickEdit = () => dispatch(editList({ id }));
@@ -33,8 +39,6 @@ export function List({ id }: { id: number }): ReactElement {
       dispatch(revertEditList());
     }
   };
-
-  const content = useRef<HTMLDivElement>(null);
 
   const listKey = `list-${id}`;
   const validityRing = `ring-${isValid() ? 'green' : 'red'}-300`;
@@ -99,8 +103,14 @@ export function List({ id }: { id: number }): ReactElement {
       >
         <ol className="p-4 font-sans text-sm font-normal tracks">
           {tracks.map(
-            (trackId: Track['id']): ReactElement => (
-              <TrackMeta key={trackId} id={trackId} context={listKey} />
+            (trackId: Track['id'], index: number): ReactElement => (
+              <TrackMeta
+                key={trackId}
+                id={trackId}
+                context={listKey}
+                listIndex={index}
+                listTotalTracks={tracks.length}
+              />
             ),
           )}
         </ol>

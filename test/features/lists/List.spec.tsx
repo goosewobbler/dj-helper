@@ -11,15 +11,18 @@ describe('List', () => {
   beforeEach(() => {
     onClickDeleteMock = jest.fn();
     onClickEditMock = jest.fn();
-    list = render(
-      <List
-        id={546}
-      />,
-    );
+    list = render(<List id={546} />, {
+      preloadedState: {
+        lists: [{ id: 546, title: 'list one', tracks: [] }],
+        embed: { isPlaying: false },
+        tracks: [],
+        browsers: [],
+      },
+    });
   });
 
   it('should render a List with the expected title', () => {
-    expect(screen.getByTestId('title')).toHaveTextContent('test list');
+    expect(screen.getByTestId('title')).toHaveTextContent('list one');
   });
 
   it('should render the expected html', () => {

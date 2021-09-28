@@ -3,95 +3,112 @@
 exports[`List should render the expected html 1`] = `
 <div>
   <li
-    class="list"
+    class="flex flex-col list"
     id="list-546"
   >
-    <span
-      class="title"
-      data-testid="title"
+    <div
+      class="accordion transition duration-500 ease-in-out outline-none border-none items-center hover:bg-red-400 bg-gray-400 text-gray-700 flex cursor-pointer p-4 "
+      role="menuitem"
+      tabindex="0"
     >
-      test list
-    </span>
-    <span
-      class="action-btns"
+      <span
+        class="font-sans text-sm font-semibold title"
+        data-testid="title"
+      >
+        list one
+      </span>
+      <span
+        class="action-btns"
+      >
+        <button
+          class="p-1 border"
+          type="button"
+        >
+          Edit
+        </button>
+        <button
+          class="p-1 border"
+          type="button"
+        >
+          Delete
+        </button>
+      </span>
+      <svg
+        class="accordion-icon ml-auto transition-transform duration-500 ease-in-out "
+        height="20"
+        viewBox="0 0 266 438"
+        width="20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="m258.476 235.971-194.344 194.343c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901l154.021-154.746-154.021-154.745c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0l194.343 194.343c9.373 9.372 9.373 24.568.001 33.941z"
+          fill="#777"
+        />
+      </svg>
+    </div>
+    <div
+      class="overflow-hidden duration-500 ease-in-out bg-white accordion-content transition-max-height"
+      style="max-height: 0px;"
     >
-      <button
-        class="p-1 border"
-        type="button"
-      >
-        Edit
-      </button>
-      <button
-        class="p-1 border"
-        type="button"
-      >
-        Delete
-      </button>
-    </span>
+      <ol
+        class="p-4 font-sans text-sm font-normal tracks"
+      />
+    </div>
   </li>
 </div>
 `;
 
-exports[`List when the delete button is clicked should render the expected html 1`] = `
-<div>
-  <li
-    class="list"
-    id="list-546"
-  >
-    <span
-      class="title"
-      data-testid="title"
-    >
-      test list
-    </span>
-    <span
-      class="action-btns"
-    >
-      <button
-        class="p-1 border"
-        type="button"
-      >
-        Edit
-      </button>
-      <button
-        class="p-1 border"
-        type="button"
-      >
-        Delete
-      </button>
-    </span>
-  </li>
-</div>
-`;
+exports[`List when the delete button is clicked should render the expected html 1`] = `<div />`;
 
 exports[`List when the edit button is clicked should render the expected html 1`] = `
 <div>
   <li
-    class="list"
+    class="flex flex-col list"
     id="list-546"
   >
-    <span
-      class="title"
-      data-testid="title"
+    <div
+      class="accordion transition duration-500 ease-in-out outline-none border-none items-center hover:bg-red-400 bg-gray-400 text-gray-700 flex cursor-pointer p-4 bg-red-400"
+      role="menuitem"
+      tabindex="0"
     >
-      test list
-    </span>
-    <span
-      class="action-btns"
+      <span
+        class="font-sans text-sm font-semibold title"
+        data-testid="title"
+      >
+        <label
+          for="list-title"
+        >
+          List Title
+          <input
+            class="ring-4 ring-opacity-30 ring-green-300"
+            id="list-title"
+            placeholder="List Title"
+            type="text"
+            value="list one"
+          />
+        </label>
+      </span>
+      <svg
+        class="accordion-icon ml-auto transition-transform duration-500 ease-in-out transform rotate-90"
+        height="20"
+        viewBox="0 0 266 438"
+        width="20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="m258.476 235.971-194.344 194.343c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901l154.021-154.746-154.021-154.745c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0l194.343 194.343c9.373 9.372 9.373 24.568.001 33.941z"
+          fill="#777"
+        />
+      </svg>
+    </div>
+    <div
+      class="overflow-hidden duration-500 ease-in-out bg-white accordion-content transition-max-height"
+      style="max-height: 0px;"
     >
-      <button
-        class="p-1 border"
-        type="button"
-      >
-        Edit
-      </button>
-      <button
-        class="p-1 border"
-        type="button"
-      >
-        Delete
-      </button>
-    </span>
+      <ol
+        class="p-4 font-sans text-sm font-normal tracks"
+      />
+    </div>
   </li>
 </div>
 `;

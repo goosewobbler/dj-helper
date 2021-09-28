@@ -1,7 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { AppState, Embed, Track } from '../../common/types';
 
-const initialState = {} as Embed;
+const initialState = {
+  isPlaying: false,
+} as Embed;
 
 export const slice = createSlice({
   name: 'embed',
@@ -51,6 +53,6 @@ export const trackIsLoaded =
 export const getPlayContext =
   () =>
   ({ embed }: AppState): string =>
-    embed.playContext;
+    embed.playContext as string;
 
 export const embedReducer = slice.reducer;

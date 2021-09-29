@@ -45,10 +45,65 @@ export function TrackMeta({
   log('zomg loading track', { artist, title, duration, sources });
 
   return (
-    <div key={id}>
-      <span>{artist}</span>
-      <span>{title}</span>
-      <span>{displayTrackDuration(duration)}</span>
+    <div key={id} className="group">
+      <span
+        className={`inline-block overflow-hidden whitespace-nowrap overflow-ellipsis ${
+          isListContext ? 'w-24' : 'w-32'
+        }`}
+      >
+        {artist}
+      </span>
+      <span
+        className={`inline-block overflow-hidden whitespace-nowrap overflow-ellipsis ${
+          isListContext ? 'w-56' : 'w-80'
+        }`}
+      >
+        {title}
+      </span>
+      <span className="inline-block w-10 overflow-hidden whitespace-nowrap">{displayTrackDuration(duration)}</span>
+      <span className="inline-block w-20 opacity-0 group-hover:opacity-100">
+        {isListContext && (listIndex as number) > 0 && (
+          <button
+            type="button"
+            onClick={() => {
+              dispatch(moveTrackUp({ trackId: id }));
+            }}
+          >
+            ⇧
+          </button>
+        )}
+        {isListContext && (listIndex as number) < (listTotalTracks as number) - 1 && (
+          <button
+            type="button"
+            onClick={() => {
+              dispatch(moveTrackDown({ trackId: id }));
+            }}
+          >
+            ⇩
+          </button>
+        )}
+      </span>
+      <span>
+        <button
+          type="button"
+          onClick={async () => {
+            log('invoke play', { trackId: id, context });
+            await window.api.invoke(`${isPlaying ? 'pause' : 'play'}-track`, { trackId: id, context });
+          }}
+        >
+          {isPlaying ? '⏸' : '▶️'}
+        </button>
+      </span>
+      {isListContext && isOnSelectedList && (
+        <button
+          type="button"
+          onClick={() => {
+            dispatch(removeTrackFromSelectedList({ trackId: id }));
+          }}
+        >
+          ❌
+        </button>
+      )}
       {isBrowserContext && (
         <button
           type="button"
@@ -60,54 +115,9 @@ export function TrackMeta({
             }
           }}
         >
-          {isOnSelectedList ? 'Remove From' : 'Add To'} List
+          {isOnSelectedList ? '❌' : '➕'}
         </button>
       )}
-      {isListContext && isOnSelectedList && (
-        <button
-          type="button"
-          onClick={() => {
-            dispatch(removeTrackFromSelectedList({ trackId: id }));
-          }}
-        >
-          Remove From List
-        </button>
-      )}
-      {isListContext && (listIndex as number) > 0 && (
-        <button
-          type="button"
-          onClick={() => {
-            dispatch(moveTrackUp({ trackId: id }));
-          }}
-        >
-          Move Track Up
-        </button>
-      )}
-      {isListContext && (listIndex as number) < (listTotalTracks as number) - 1 && (
-        <button
-          type="button"
-          onClick={() => {
-            dispatch(moveTrackDown({ trackId: id }));
-          }}
-        >
-          Move Track Down
-        </button>
-      )}
-      <span>
-        {isPlaying ? (
-          'OMG this is playing'
-        ) : (
-          <button
-            type="button"
-            onClick={async () => {
-              log('invoke play', { trackId: id, context });
-              await window.api.invoke('play-track', { trackId: id, context });
-            }}
-          >
-            Play
-          </button>
-        )}
-      </span>
     </div>
   );
 }

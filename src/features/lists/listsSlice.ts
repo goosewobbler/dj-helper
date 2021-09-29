@@ -88,7 +88,7 @@ export const selectListById =
 export const trackIsOnSelectedList =
   ({ trackId }: { trackId: number }) =>
   (state: AppState): boolean =>
-    (state.lists.find((list) => list.active) as List).tracks.some((track) => track === trackId);
+    (state.lists.find((list) => list.active) as List)?.tracks.some((track) => track === trackId);
 
 export const getNextTrackOnList =
   ({ id, currentTrackId }: { id: number; currentTrackId: number }) =>

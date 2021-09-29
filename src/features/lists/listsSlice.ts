@@ -35,7 +35,7 @@ export const slice = createSlice({
         editing: true,
         active: true,
       };
-      return [...state, newList];
+      return [...state.map((list) => ({ ...list, active: false })), newList];
     },
     updateListTitle: (state, { payload: { id, title } }: { payload: { id: number; title: string } }) =>
       state.map((list) => (list.id === id ? { ...list, title } : list)),

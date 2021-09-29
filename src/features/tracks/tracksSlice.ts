@@ -121,11 +121,10 @@ export const slice = createSlice({
       }),
     deleteTrack: (state, { payload: { id } }) =>
       state.filter((track) => track.id === id).map((track, index) => ({ ...track, index })),
-    clearAllTracks: () => initialState,
   },
 });
 
-export const { createTrack, updateTrack, deleteTrack, clearAllTracks } = slice.actions;
+export const { createTrack, updateTrack, deleteTrack } = slice.actions;
 
 export const selectTrackById =
   (id: Track['id']) =>

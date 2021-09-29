@@ -31,11 +31,10 @@ export const slice = createSlice({
       state.map((browser) => (browser.id === id ? { ...browser, tracks: [...browser.tracks, trackId] } : browser)),
     clearTracks: (state, { payload: { id } }: { payload: { id: number } }) =>
       state.map((browser) => (browser.id === id ? { ...browser, tracks: [] } : browser)),
-    clearAllBrowsers: () => initialState,
   },
 });
 
-export const { createBrowser, updatePageUrl, updatePageTitle, addTrack, clearTracks, clearAllBrowsers } = slice.actions;
+export const { createBrowser, updatePageUrl, updatePageTitle, addTrack, clearTracks } = slice.actions;
 
 export const selectBrowsers = (state: AppState): Browser[] => state.browsers;
 

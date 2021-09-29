@@ -35,7 +35,7 @@ export const slice = createSlice({
         editing: true,
         active: true,
       };
-      return [...state, newList];
+      return [...state.map((list) => ({ ...list, active: false })), newList];
     },
     updateListTitle: (state, { payload: { id, title } }: { payload: { id: number; title: string } }) =>
       state.map((list) => (list.id === id ? { ...list, title } : list)),
@@ -88,7 +88,7 @@ export const selectListById =
 export const trackIsOnSelectedList =
   ({ trackId }: { trackId: number }) =>
   (state: AppState): boolean =>
-    (state.lists.find((list) => list.active) as List).tracks.some((track) => track === trackId);
+    (state.lists.find((list) => list.active) as List)?.tracks.some((track) => track === trackId);
 
 export const getNextTrackOnList =
   ({ id, currentTrackId }: { id: number; currentTrackId: number }) =>

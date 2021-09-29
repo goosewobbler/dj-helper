@@ -48,8 +48,20 @@ describe('listsSlice', () => {
           { id: 2, title: 'second list', tracks: [] },
         ]);
         expect(lists).toEqual([
+          { id: 1, active: false, title: 'first list', tracks: [] },
+          { id: 2, active: false, title: 'second list', tracks: [] },
+          { id: 3, active: true, editing: true, title: 'New List', tracks: [] },
+        ]);
+      });
+
+      it('should mark existing active lists as inactive', () => {
+        const lists = createList([
           { id: 1, title: 'first list', tracks: [] },
-          { id: 2, title: 'second list', tracks: [] },
+          { id: 2, active: true, title: 'second list', tracks: [] },
+        ]);
+        expect(lists).toEqual([
+          { id: 1, active: false, title: 'first list', tracks: [] },
+          { id: 2, active: false, title: 'second list', tracks: [] },
           { id: 3, active: true, editing: true, title: 'New List', tracks: [] },
         ]);
       });

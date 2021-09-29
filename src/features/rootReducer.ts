@@ -1,11 +1,12 @@
-import { combineReducers } from '@reduxjs/toolkit';
+import { combineReducers, Action } from '@reduxjs/toolkit';
 import { embedReducer } from './embed/embedSlice';
 import { listsReducer } from './lists/listsSlice';
 import { tracksReducer } from './tracks/tracksSlice';
 import { browsersReducer } from './browsers/browsersSlice';
 import { settingsReducer } from './settings/settingsSlice';
+import { AppState } from '../common/types';
 
-export const rootReducer = combineReducers({
+const combinedReducers = combineReducers({
   embed: embedReducer,
   lists: listsReducer,
   tracks: tracksReducer,
@@ -13,4 +14,13 @@ export const rootReducer = combineReducers({
   settings: settingsReducer,
 });
 
-export type RootState = ReturnType<typeof rootReducer>;
+export const resetStoreAction = { type: 'store/reset' };
+
+export const rootReducer = (state: AppState | undefined, action: Action) => {
+  if (action === resetStoreAction) {
+    return combinedReducers(undefined, action);
+  }
+  return combinedReducers(state, action);
+};
+
+export type RootState = ReturnType<typeof combinedReducers>;

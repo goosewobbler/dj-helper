@@ -1,7 +1,7 @@
 import React, { ReactElement, BaseSyntheticEvent, KeyboardEvent, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { TrackMeta } from '../tracks/TrackMeta';
-import { Chevron } from './Chevron';
+import { ChevronIcon } from './ChevronIcon';
 import {
   deleteList,
   editList,
@@ -92,7 +92,7 @@ export function List({ id }: { id: number }): ReactElement {
             </button>
           </span>
         )}
-        <Chevron
+        <ChevronIcon
           className={`accordion-icon ml-auto transition-transform duration-500 ease-in-out ${chevronAdditionalClassNames}`}
         />
       </div>

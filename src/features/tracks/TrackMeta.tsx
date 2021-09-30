@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { trackIsPlaying } from '../embed/embedSlice';
+import { requestPause, requestPlay, trackIsPlaying } from '../embed/embedSlice';
 import { selectTrackById } from './tracksSlice';
 import { Track } from '../../common/types';
 import { log } from '../../main/helpers/console';
@@ -61,7 +61,7 @@ export function TrackMeta({
         {title}
       </span>
       <span className="inline-block w-10 overflow-hidden whitespace-nowrap">{displayTrackDuration(duration)}</span>
-      <span className="inline-block w-20 opacity-0 group-hover:opacity-100">
+      <span className="inline-block w-10 opacity-0 group-hover:opacity-100">
         {isListContext && (listIndex as number) > 0 && (
           <button
             type="button"
@@ -86,9 +86,9 @@ export function TrackMeta({
       <span>
         <button
           type="button"
-          onClick={async () => {
+          onClick={() => {
             log('invoke play', { trackId: id, context });
-            await window.api.invoke(`${isPlaying ? 'pause' : 'play'}-track`, { trackId: id, context });
+            dispatch(isPlaying ? requestPause() : requestPlay({ trackSourceId: id, context }));
           }}
         >
           {isPlaying ? '⏸' : '▶️'}

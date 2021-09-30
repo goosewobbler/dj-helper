@@ -51,10 +51,14 @@ describe('ListPane', () => {
           tracks: [],
           browsers: [],
           embed: {
-            loadedTrackId: 0,
+            trackSourceId: 0,
+            triggerLoad: false,
+            triggerPlay: false,
+            triggerPause: false,
             isPlaying: false,
-            loadContext: 'browser',
-            playContext: 'browser',
+            isPaused: false,
+            isLoading: false,
+            trackContext: 'browser',
           },
           settings: {
             darkModeEnabled: false,

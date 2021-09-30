@@ -22,7 +22,14 @@ function getState(activeListIndex: number) {
   ];
   lists[activeListIndex].active = true;
   return {
-    embed: { isPlaying: false },
+    embed: {
+      triggerLoad: false,
+      triggerPlay: false,
+      triggerPause: false,
+      isPlaying: false,
+      isPaused: false,
+      isLoading: false,
+    },
     tracks: [],
     browsers: [],
     lists,

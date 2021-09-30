@@ -11,6 +11,7 @@ import {
   removeTrackFromSelectedList,
   trackIsOnSelectedList,
 } from '../lists/listsSlice';
+import { PlayPauseButton } from './PlayPauseButton';
 
 function displayTrackDuration(duration: number) {
   const date = new Date(duration * 1000);
@@ -84,15 +85,13 @@ export function TrackMeta({
         )}
       </span>
       <span>
-        <button
-          type="button"
+        <PlayPauseButton
+          isPlaying={isPlaying}
           onClick={() => {
             log('invoke play', { trackId: id, context });
             dispatch(isPlaying ? requestPause() : requestPlay({ trackId: id, context }));
           }}
-        >
-          {isPlaying ? '⏸' : '▶️'}
-        </button>
+        />
       </span>
       {isListContext && isOnSelectedList && (
         <button

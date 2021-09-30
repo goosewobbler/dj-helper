@@ -56,6 +56,7 @@ export type Embed = {
   isPlaying: boolean;
   isPaused: boolean;
   isLoading: boolean;
+  triggerContext?: string;
   trackContext?: string;
   trackId?: Track['id'];
 };

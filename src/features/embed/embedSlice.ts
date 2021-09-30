@@ -1,8 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { AppState, Embed, Track } from '../../common/types';
+import { log } from '../../main/helpers/console';
 
 const initialState = {
+  triggerLoad: false,
+  triggerPlay: false,
+  triggerPause: false,
   isPlaying: false,
+  isPaused: false,
+  isLoading: false,
 } as Embed;
 
 export type PlayRequest = { trackId: Track['id']; context: Embed['trackContext'] };
@@ -39,12 +45,13 @@ export const slice = createSlice({
       isLoading: true,
     }),
     setLoadComplete: (state) => {
-      const previousTrackWasPlaying = state.isPlaying;
+      log('load complete setting triggerPlay', !state.triggerLoad);
       return {
         ...state,
         triggerLoad: false,
-        triggerPlay: !previousTrackWasPlaying,
+        triggerPlay: true,
         triggerPause: false,
+        triggerContext: 'loadComplete',
         isPlaying: false,
         isPaused: false,
         isLoading: false,

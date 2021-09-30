@@ -26,15 +26,31 @@ export const slice = createSlice({
       isPaused: false,
       isLoading: false,
     }),
-    setPaused: (state) => ({
-      ...state,
-      triggerLoad: false,
-      triggerPlay: false,
-      triggerPause: false,
-      isPlaying: false,
-      isPaused: true,
-      isLoading: false,
-    }),
+    setPaused: (state) => {
+      if (!state.triggerPause) {
+        // discard pause events that weren't triggered
+        return {
+          ...state,
+          triggerLoad: false,
+          triggerPlay: false,
+          triggerPause: false,
+          triggerLoadOnPause: false,
+          isPlaying: false,
+          isPaused: false,
+          isLoading: false,
+        };
+      }
+      return {
+        ...state,
+        triggerLoad: false,
+        triggerPlay: false,
+        triggerPause: false,
+        triggerLoadOnPause: false,
+        isPlaying: false,
+        isPaused: true,
+        isLoading: false,
+      };
+    },
     setLoading: (state) => ({
       ...state,
       triggerLoad: false,
@@ -68,6 +84,12 @@ export const slice = createSlice({
         // requested track already loaded - trigger play without load
         return { ...state, triggerPlay: true };
       }
+
+      // log('request play setting previousTrackWasPlaying', state.isPlaying);
+      // if (state.isPlaying) {
+      //   // current track is playing - we need to pause it first
+      //   return { ...state, trackId, trackContext: context, triggerPause: true, triggerLoadOnPause: true };
+      // }
 
       return { ...state, trackId, trackContext: context, triggerLoad: true };
     },

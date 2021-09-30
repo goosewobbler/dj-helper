@@ -60,14 +60,15 @@ export function initEmbed(mainWindow: BrowserWindow, reduxStore: Store): void {
       const pausedByTrackEnding = currentTime === '00:00' && playbackComplete;
       const { trackContext, trackId } = (reduxStore.getState() as AppState).embed;
 
+      log('media paused', (reduxStore.getState() as AppState).embed);
+
       if (Date.now() - lastClickPlayTime < 300) {
         // occasionally the media will be paused ~250ms after clicking play - here we detect this and click play again
+        log('rage click incoming');
         trigger('play', 'rageClick');
-        return;
       }
 
       log('dispatching setPaused');
-
       reduxStore.dispatch(setPaused());
 
       log(Date.now() - lastClickPlayTime);
@@ -112,6 +113,7 @@ export function initEmbed(mainWindow: BrowserWindow, reduxStore: Store): void {
       reduxStore.dispatch(setLoading());
       void embed.webContents.loadURL(trackUrl);
     } else if (triggerPlay) {
+      log('triggering play wut');
       void trigger('play', triggerContext);
     } else if (triggerPause) {
       void trigger('pause', triggerContext);

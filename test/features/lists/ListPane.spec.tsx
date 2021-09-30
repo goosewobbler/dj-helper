@@ -51,7 +51,7 @@ describe('ListPane', () => {
           tracks: [],
           browsers: [],
           embed: {
-            trackSourceId: 0,
+            trackId: 0,
             triggerLoad: false,
             triggerPlay: false,
             triggerPause: false,

@@ -88,7 +88,7 @@ export function TrackMeta({
           type="button"
           onClick={() => {
             log('invoke play', { trackId: id, context });
-            dispatch(isPlaying ? requestPause() : requestPlay({ trackSourceId: id, context }));
+            dispatch(isPlaying ? requestPause() : requestPlay({ trackId: id, context }));
           }}
         >
           {isPlaying ? '⏸' : '▶️'}

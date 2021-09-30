@@ -1,10 +1,11 @@
 import { BrowserView, BrowserWindow } from 'electron';
 import { Store } from '@reduxjs/toolkit';
 import { setPlaying, setPaused, setLoadComplete, setLoading, requestPlay } from '../features/embed/embedSlice';
-import { AppState, Track, TrackSource } from '../common/types';
+import { AppState, Track } from '../common/types';
 import { log } from './helpers/console';
 import { getNextTrackOnList } from '../features/lists/listsSlice';
 import { getNextTrackOnMetaPanel } from '../features/browsers/browsersSlice';
+import { selectTrackSourceByIndex } from '../features/tracks/tracksSlice';
 
 // function delay(ms: number) {
 //   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -76,7 +77,7 @@ export function initEmbed(mainWindow: BrowserWindow, reduxStore: Store): void {
           currentTrackId: currentEmbedTrack.id,
         });
         const nextTrackId = nextTrackFromContextSelector(reduxStore.getState());
-        reduxStore.dispatch(requestPlay({ trackSourceId: nextTrackId, context: currentTrackContext }));
+        reduxStore.dispatch(requestPlay({ trackId: nextTrackId, context: currentTrackContext }));
       }
     })();
   };
@@ -93,11 +94,13 @@ export function initEmbed(mainWindow: BrowserWindow, reduxStore: Store): void {
   };
 
   reduxStore.subscribe(() => {
-    const { triggerLoad, triggerPlay, triggerPause, trackSourceId } = (reduxStore.getState() as AppState).embed;
+    const appState = reduxStore.getState() as AppState;
+    const { triggerLoad, triggerPlay, triggerPause, trackId } = appState.embed;
 
     if (triggerLoad) {
-      const trackId = trackSourceId as TrackSource['sourceId'];
-      const trackUrl = `https://bandcamp.com/EmbeddedPlayer/size=small/bgcol=ffffff/linkcol=0687f5/track=${trackId}/transparent=true/`;
+      const trackSourceSelector = selectTrackSourceByIndex(trackId as Track['id'], 0);
+      const trackSource = trackSourceSelector(appState);
+      const trackUrl = `https://bandcamp.com/EmbeddedPlayer/size=small/bgcol=ffffff/linkcol=0687f5/track=${trackSource.sourceId}/transparent=true/`;
       log('embed loading', Date.now(), currentEmbedTrack?.title);
       reduxStore.dispatch(setLoading());
       void embed.webContents.loadURL(trackUrl);

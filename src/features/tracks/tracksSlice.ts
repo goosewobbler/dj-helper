@@ -136,4 +136,9 @@ export const selectTrackBySourceUrl =
   (state: AppState): Track =>
     state.tracks.find((track) => trackHasSource(track, sourceUrl)) as Track;
 
+export const selectTrackSourceByIndex =
+  (trackId: Track['id'], index: number) =>
+  (state: AppState): TrackSource =>
+    state.tracks.find((track) => track.id === trackId)?.sources[index] as TrackSource;
+
 export const tracksReducer = slice.reducer;

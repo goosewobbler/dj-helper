@@ -57,7 +57,7 @@ export type Embed = {
   isPaused: boolean;
   isLoading: boolean;
   trackContext?: string;
-  trackSourceId?: TrackSource['sourceId'];
+  trackId?: Track['id'];
 };
 
 export type Settings = {

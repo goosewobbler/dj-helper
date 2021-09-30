@@ -55,7 +55,7 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: Store, browser: Br
       if (playingTrack) {
         reduxStore.dispatch(
           requestPlay({
-            trackSourceId: playingTrack.id,
+            trackId: playingTrack.id,
             context: 'browser',
           }),
         );

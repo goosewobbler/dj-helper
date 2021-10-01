@@ -12,6 +12,10 @@ import {
   trackIsOnSelectedList,
 } from '../lists/listsSlice';
 import { PlayPauseButton } from './PlayPauseButton';
+import { AddRemoveListButton } from './AddRemoveListButton';
+import { CrossIcon } from './CrossIcon';
+import { UpArrowIcon } from './UpArrowIcon';
+import { DownArrowIcon } from './DownArrowIcon';
 
 function displayTrackDuration(duration: number) {
   const date = new Date(duration * 1000);
@@ -70,7 +74,7 @@ export function TrackMeta({
               dispatch(moveTrackUp({ trackId: id }));
             }}
           >
-            ⇧
+            <UpArrowIcon className="up-arrow-icon" />
           </button>
         )}
         {isListContext && (listIndex as number) < (listTotalTracks as number) - 1 && (
@@ -80,11 +84,11 @@ export function TrackMeta({
               dispatch(moveTrackDown({ trackId: id }));
             }}
           >
-            ⇩
+            <DownArrowIcon className="down-arrow-icon" />
           </button>
         )}
       </span>
-      <span>
+      <span className="inline-block w-5">
         <PlayPauseButton
           isPlaying={isPlaying}
           onClick={() => {
@@ -100,12 +104,12 @@ export function TrackMeta({
             dispatch(removeTrackFromSelectedList({ trackId: id }));
           }}
         >
-          ❌
+          <CrossIcon className="cross-icon" />
         </button>
       )}
       {isBrowserContext && (
-        <button
-          type="button"
+        <AddRemoveListButton
+          isOnSelectedList={isOnSelectedList}
           onClick={() => {
             if (isOnSelectedList) {
               dispatch(removeTrackFromSelectedList({ trackId: id }));
@@ -113,9 +117,7 @@ export function TrackMeta({
               dispatch(addTrackToSelectedList({ trackId: id }));
             }
           }}
-        >
-          {isOnSelectedList ? '❌' : '➕'}
-        </button>
+        />
       )}
     </div>
   );

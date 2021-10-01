@@ -12,6 +12,8 @@ import {
   updateListTitle,
 } from './listsSlice';
 import { Track } from '../../common/types';
+import { EditIcon } from './EditIcon';
+import { TrashIcon } from './TrashIcon';
 
 const KEY_ENTER = 'Enter';
 const KEY_ESCAPE = 'Escape';
@@ -84,11 +86,11 @@ export function List({ id }: { id: number }): ReactElement {
         </span>
         {!editing && (
           <span className="action-btns">
-            <button className="p-1 border" type="button" onClick={() => handleClickEdit()}>
-              Edit
+            <button className="p-1" type="button" onClick={() => handleClickEdit()}>
+              <EditIcon className="edit-icon" />
             </button>
-            <button className="p-1 border" type="button" onClick={() => handleClickDelete()}>
-              Delete
+            <button className="p-1" type="button" onClick={() => handleClickDelete()}>
+              <TrashIcon className="trash-icon" />
             </button>
           </span>
         )}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { trackIsPlaying } from '../embed/embedSlice';
+import { requestPause, requestPlay, trackIsPlaying } from '../embed/embedSlice';
 import { selectTrackById } from './tracksSlice';
 import { Track } from '../../common/types';
 import { log } from '../../main/helpers/console';
@@ -11,6 +11,11 @@ import {
   removeTrackFromSelectedList,
   trackIsOnSelectedList,
 } from '../lists/listsSlice';
+import { PlayPauseButton } from './PlayPauseButton';
+import { AddRemoveListButton } from './AddRemoveListButton';
+import { CrossIcon } from './CrossIcon';
+import { UpArrowIcon } from './UpArrowIcon';
+import { DownArrowIcon } from './DownArrowIcon';
 
 function displayTrackDuration(duration: number) {
   const date = new Date(duration * 1000);
@@ -45,24 +50,53 @@ export function TrackMeta({
   log('zomg loading track', { artist, title, duration, sources });
 
   return (
-    <div key={id}>
-      <span>{artist}</span>
-      <span>{title}</span>
-      <span>{displayTrackDuration(duration)}</span>
-      {isBrowserContext && (
-        <button
-          type="button"
+    <div key={id} className="group">
+      <span
+        className={`inline-block overflow-hidden whitespace-nowrap overflow-ellipsis ${
+          isListContext ? 'w-24' : 'w-32'
+        }`}
+      >
+        {artist}
+      </span>
+      <span
+        className={`inline-block overflow-hidden whitespace-nowrap overflow-ellipsis ${
+          isListContext ? 'w-56' : 'w-80'
+        }`}
+      >
+        {title}
+      </span>
+      <span className="inline-block w-10 overflow-hidden whitespace-nowrap">{displayTrackDuration(duration)}</span>
+      <span className="inline-block w-10 opacity-0 group-hover:opacity-100">
+        {isListContext && (listIndex as number) > 0 && (
+          <button
+            type="button"
+            onClick={() => {
+              dispatch(moveTrackUp({ trackId: id }));
+            }}
+          >
+            <UpArrowIcon className="up-arrow-icon" />
+          </button>
+        )}
+        {isListContext && (listIndex as number) < (listTotalTracks as number) - 1 && (
+          <button
+            type="button"
+            onClick={() => {
+              dispatch(moveTrackDown({ trackId: id }));
+            }}
+          >
+            <DownArrowIcon className="down-arrow-icon" />
+          </button>
+        )}
+      </span>
+      <span className="inline-block w-5">
+        <PlayPauseButton
+          isPlaying={isPlaying}
           onClick={() => {
-            if (isOnSelectedList) {
-              dispatch(removeTrackFromSelectedList({ trackId: id }));
-            } else {
-              dispatch(addTrackToSelectedList({ trackId: id }));
-            }
+            log('invoke play', { trackId: id, context });
+            dispatch(isPlaying ? requestPause() : requestPlay({ trackId: id, context }));
           }}
-        >
-          {isOnSelectedList ? 'Remove From' : 'Add To'} List
-        </button>
-      )}
+        />
+      </span>
       {isListContext && isOnSelectedList && (
         <button
           type="button"
@@ -70,44 +104,21 @@ export function TrackMeta({
             dispatch(removeTrackFromSelectedList({ trackId: id }));
           }}
         >
-          Remove From List
+          <CrossIcon className="cross-icon" />
         </button>
       )}
-      {isListContext && (listIndex as number) > 0 && (
-        <button
-          type="button"
+      {isBrowserContext && (
+        <AddRemoveListButton
+          isOnSelectedList={isOnSelectedList}
           onClick={() => {
-            dispatch(moveTrackUp({ trackId: id }));
+            if (isOnSelectedList) {
+              dispatch(removeTrackFromSelectedList({ trackId: id }));
+            } else {
+              dispatch(addTrackToSelectedList({ trackId: id }));
+            }
           }}
-        >
-          Move Track Up
-        </button>
+        />
       )}
-      {isListContext && (listIndex as number) < (listTotalTracks as number) - 1 && (
-        <button
-          type="button"
-          onClick={() => {
-            dispatch(moveTrackDown({ trackId: id }));
-          }}
-        >
-          Move Track Down
-        </button>
-      )}
-      <span>
-        {isPlaying ? (
-          'OMG this is playing'
-        ) : (
-          <button
-            type="button"
-            onClick={async () => {
-              log('invoke play', { trackId: id, context });
-              await window.api.invoke('play-track', { trackId: id, context });
-            }}
-          >
-            Play
-          </button>
-        )}
-      </span>
     </div>
   );
 }

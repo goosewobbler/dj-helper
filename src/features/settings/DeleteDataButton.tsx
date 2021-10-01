@@ -12,6 +12,7 @@ export function DeleteDataButton(): ReactElement {
   const [fadeExplosion, setFadeExplosion] = useState(false);
 
   if (clicked) {
+    // TODO: clean this up
     setTimeout(() => {
       setClicked(false);
       setDisplayExplosion(true);

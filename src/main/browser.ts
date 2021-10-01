@@ -1,7 +1,7 @@
 import { BrowserView, BrowserWindow } from 'electron';
 import { Store } from '@reduxjs/toolkit';
 import { createTrack, selectTrackBySourceUrl, TrackData } from '../features/tracks/tracksSlice';
-import { loadTrack, setPaused, setPlaying } from '../features/embed/embedSlice';
+import { requestPlay, setPaused, setPlaying } from '../features/embed/embedSlice';
 import {
   addTrack,
   clearTracks,
@@ -54,7 +54,7 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: Store, browser: Br
 
       if (playingTrack) {
         reduxStore.dispatch(
-          loadTrack({
+          requestPlay({
             trackId: playingTrack.id,
             context: 'browser',
           }),

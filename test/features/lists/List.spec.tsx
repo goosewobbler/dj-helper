@@ -9,7 +9,14 @@ describe('List', () => {
     list = render(<List id={546} />, {
       preloadedState: {
         lists: [{ id: 546, title: 'list one', tracks: [] }],
-        embed: { isPlaying: false },
+        embed: {
+          triggerLoad: false,
+          triggerPlay: false,
+          triggerPause: false,
+          isPlaying: false,
+          isPaused: false,
+          isLoading: false,
+        },
         tracks: [
           {
             id: 1,

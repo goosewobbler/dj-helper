@@ -50,10 +50,15 @@ export type Browser = {
 };
 
 export type Embed = {
+  triggerLoad: boolean;
+  triggerPlay: boolean;
+  triggerPause: boolean;
   isPlaying: boolean;
-  loadContext?: string;
-  playContext?: string;
-  loadedTrackId?: TrackSource['sourceId'];
+  isPaused: boolean;
+  isLoading: boolean;
+  triggerContext?: string;
+  trackContext?: string;
+  trackId?: Track['id'];
 };
 
 export type Settings = {

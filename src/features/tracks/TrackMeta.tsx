@@ -47,10 +47,11 @@ export function TrackMeta({
   const { artist, title, duration, sources } = track;
   const isListContext = context.startsWith('list-');
   const isBrowserContext = context.startsWith('browser-');
+  const isPlayingAdditionalStyles = isPlaying ? 'bg-blue-200' : '';
   log('zomg loading track', { artist, title, duration, sources });
 
   return (
-    <div key={id} className="group">
+    <div key={id} className={`group ${isPlayingAdditionalStyles}`}>
       <span
         className={`inline-block overflow-hidden whitespace-nowrap overflow-ellipsis ${
           isListContext ? 'w-24' : 'w-32'
@@ -88,7 +89,7 @@ export function TrackMeta({
           </button>
         )}
       </span>
-      <span className="inline-block w-5">
+      <span className="inline-block w-8 opacity-0 group-hover:opacity-100">
         <PlayPauseButton
           isPlaying={isPlaying}
           onClick={() => {
@@ -97,28 +98,30 @@ export function TrackMeta({
           }}
         />
       </span>
-      {isListContext && isOnSelectedList && (
-        <button
-          type="button"
-          onClick={() => {
-            dispatch(removeTrackFromSelectedList({ trackId: id }));
-          }}
-        >
-          <CrossIcon className="cross-icon" />
-        </button>
-      )}
-      {isBrowserContext && (
-        <AddRemoveListButton
-          isOnSelectedList={isOnSelectedList}
-          onClick={() => {
-            if (isOnSelectedList) {
+      <span className="inline-block w-5 opacity-0 group-hover:opacity-100">
+        {isListContext && isOnSelectedList && (
+          <button
+            type="button"
+            onClick={() => {
               dispatch(removeTrackFromSelectedList({ trackId: id }));
-            } else {
-              dispatch(addTrackToSelectedList({ trackId: id }));
-            }
-          }}
-        />
-      )}
+            }}
+          >
+            <CrossIcon className="cross-icon" />
+          </button>
+        )}
+        {isBrowserContext && (
+          <AddRemoveListButton
+            isOnSelectedList={isOnSelectedList}
+            onClick={() => {
+              if (isOnSelectedList) {
+                dispatch(removeTrackFromSelectedList({ trackId: id }));
+              } else {
+                dispatch(addTrackToSelectedList({ trackId: id }));
+              }
+            }}
+          />
+        )}
+      </span>
     </div>
   );
 }

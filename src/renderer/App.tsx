@@ -6,6 +6,7 @@ import { selectBrowsers } from '../features/browsers/browsersSlice';
 import { Tabs } from '../features/browsers/Tabs';
 import { ListPane } from '../features/lists/ListPane';
 import { SettingsPanel } from '../features/settings/SettingsPanel';
+import { StatusBar } from '../features/status/StatusBar';
 
 export const App = (): ReactElement => {
   const browsers = useSelector(selectBrowsers);
@@ -22,7 +23,7 @@ export const App = (): ReactElement => {
         <div className="flex flex-col flex-grow-0 flex-shrink-0 w-1/3 p-2 section">
           <ListPane />
         </div>
-        <div className="flex flex-col flex-grow flex-shrink-0 w-2/3 p-2 section">
+        <div className="relative flex flex-col flex-grow flex-shrink-0 w-2/3 p-2 section -top-14">
           <div className="flex flex-col flex-grow">
             <Tabs headings={tabHeadings}>
               {browsers.map(
@@ -33,6 +34,7 @@ export const App = (): ReactElement => {
             </Tabs>
           </div>
         </div>
+        <StatusBar />
       </div>
     </div>
   );

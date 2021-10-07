@@ -32,9 +32,29 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: Store, browser: Br
 
   log('creating browser', browser.id);
 
+  let browserWidth = 1000;
+
+  const setBounds = () => {
+    const { height: windowHeight } = mainWindow.getBounds();
+    const statusBarHeight = 64;
+    const headerBarHeight = 62;
+    const metaPanelHeight = 326;
+    const listPaneWidth = 538;
+    view.setBounds({
+      x: listPaneWidth,
+      y: headerBarHeight + metaPanelHeight,
+      width: browserWidth,
+      height: windowHeight - statusBarHeight - headerBarHeight - metaPanelHeight - 10,
+    });
+  };
+
   mainWindow.setBrowserView(view);
-  view.setBounds({ x: 500, y: 400, width: 1000, height: 590 });
   view.setAutoResize({ horizontal: true });
+  setBounds();
+
+  mainWindow.on('resize', () => {
+    setBounds();
+  });
 
   view.webContents.setWindowOpenHandler(({ url }) => {
     log('windowOpenHandler', url);

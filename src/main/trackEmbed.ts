@@ -16,14 +16,25 @@ let lastClickPlayTime: number;
 
 export function initEmbed(mainWindow: BrowserWindow, reduxStore: Store): void {
   let currentEmbedTrack: Track;
+  let embedHeight = 42;
+  let embedWidth = 400;
+
+  const setBounds = () => {
+    const { height } = mainWindow.getBounds();
+    embed.setBounds({
+      x: 10,
+      y: height - embedHeight - 33,
+      width: embedWidth,
+      height: embedHeight,
+    });
+  };
 
   embed = new BrowserView();
   mainWindow.addBrowserView(embed);
-  embed.setBounds({
-    x: 900,
-    y: 10,
-    width: 400,
-    height: 42,
+  setBounds();
+
+  mainWindow.on('resize', () => {
+    setBounds();
   });
 
   embed.webContents.setWindowOpenHandler((details) => {

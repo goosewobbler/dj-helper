@@ -42,7 +42,7 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: Store, browser: Br
     const listPaneWidth = 538;
     view.setBounds({
       x: listPaneWidth,
-      y: headerBarHeight + metaPanelHeight,
+      y: headerBarHeight + metaPanelHeight - 10,
       width: browserWidth,
       height: windowHeight - statusBarHeight - headerBarHeight - metaPanelHeight - 10,
     });

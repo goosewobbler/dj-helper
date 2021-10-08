@@ -31,6 +31,9 @@ const theme = {
     animation: {
       explode: 'wiggle 1.6s ease-in-out',
     },
+    fontFamily: {
+      sans: ['Aqua', 'Helvetica', 'Arial', 'sans-serif'],
+    },
   },
 };
 
@@ -44,7 +47,7 @@ const variants = {
 /**
  * @type {unknown[]}
  */
-const plugins = [];
+const plugins = [require('tailwindcss-nested-groups')];
 
 /**
  * @type {string[]}

@@ -88,6 +88,7 @@ specifiers:
   stylelint-config-prettier: ^8.0.2
   stylelint-config-standard: ^22.0.0
   tailwindcss: ^2.2.16
+  tailwindcss-nested-groups: ^1.2.4
   ts-jest: ^27.0.5
   typescript: ^4.4.3
   url-loader: ^4.1.1
@@ -95,6 +96,7 @@ specifiers:
   webpack-bundle-analyzer: ^4.4.2
   webpack-cli: ^4.9.0
   webpack-dev-server: ^4.3.1
+  webpack-electron-reload: ^1.0.1
 
 dependencies:
   '@goosewobbler/electron-redux': 1.0.4_electron@15.1.1
@@ -183,6 +185,7 @@ devDependencies:
   stylelint-config-prettier: 8.0.2_stylelint@13.13.1
   stylelint-config-standard: 22.0.0_stylelint@13.13.1
   tailwindcss: 2.2.16_autoprefixer@10.3.7
+  tailwindcss-nested-groups: 1.2.4_tailwindcss@2.2.16
   ts-jest: 27.0.5_0e1c26b09cb1f777ebd6af05250fea84
   typescript: 4.4.3
   url-loader: 4.1.1_file-loader@6.2.0+webpack@5.57.1
@@ -190,6 +193,7 @@ devDependencies:
   webpack-bundle-analyzer: 4.4.2
   webpack-cli: 4.9.0_a89793404bc1515b4fff89276f5c4bb6
   webpack-dev-server: 4.3.1_webpack-cli@4.9.0+webpack@5.57.1
+  webpack-electron-reload: 1.0.1_electron@15.1.1
 
 packages:
 
@@ -10598,6 +10602,16 @@ packages:
       strip-ansi: 6.0.1
     dev: true
 
+  /tailwindcss-nested-groups/1.2.4_tailwindcss@2.2.16:
+    resolution: {integrity: sha512-SrW9VTgH5/PmW/E0q1+TC7TckhVfonDpiYiLKsRYX57FEcM3LemiH7JYcsTlubM+eAVkd9Jjj03pTiyfnDBibQ==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      tailwindcss: '>=1 <=2'
+    dependencies:
+      postcss-selector-parser: 6.0.6
+      tailwindcss: 2.2.16_autoprefixer@10.3.7
+    dev: true
+
   /tailwindcss/2.2.16_autoprefixer@10.3.7:
     resolution: {integrity: sha512-EireCtpQyyJ4Xz8NYzHafBoy4baCOO96flM0+HgtsFcIQ9KFy/YBK3GEtlnD+rXen0e4xm8t3WiUcKBJmN6yjg==}
     engines: {node: '>=12.13.0'}
@@ -11445,6 +11459,15 @@ packages:
       - debug
       - supports-color
       - utf-8-validate
+    dev: true
+
+  /webpack-electron-reload/1.0.1_electron@15.1.1:
+    resolution: {integrity: sha512-5sHtuSUEjD40A62b2floqoUr2sktiUIb6CHe/eYRD7QXcdLMDQIhdidKfA/bJl1n27awmuUKGo4VtZs8kp8xCw==}
+    peerDependencies:
+      electron: '>=0.0.0'
+    dependencies:
+      cross-spawn: 7.0.3
+      electron: 15.1.1
     dev: true
 
   /webpack-merge/5.8.0:

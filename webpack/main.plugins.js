@@ -1,6 +1,7 @@
 const { ProgressPlugin } = require('webpack');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+// const ElectronReloadPlugin = require('webpack-electron-reload');
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -15,6 +16,9 @@ if (!isDev) {
       reportFilename: 'report.main.html',
       statsFilename: 'stats.main.json',
     }),
+    // ElectronReloadPlugin({
+    //   path: path.join(__dirname, './dist/main.dev.js'),
+    // }),
   );
 }
 

@@ -5,6 +5,7 @@ import { requestPlay, setPaused, setPlaying } from '../features/embed/embedSlice
 import {
   addTrack,
   clearTracks,
+  selectActiveBrowser,
   selectBrowserById,
   updatePageTitle,
   updatePageUrl,
@@ -134,14 +135,22 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: Store, browser: Br
   };
 
   reduxStore.subscribe(() => {
+    const state = reduxStore.getState();
     const browserSelector = selectBrowserById(browser.id);
-    const { url } = browserSelector(reduxStore.getState());
+    const { url } = browserSelector(state);
 
     if (canNavigateTo(url)) {
       log('loading URL', url);
       currentlyNavigating = true;
       reduxStore.dispatch(clearTracks({ id: browser.id }));
       void view.webContents.loadURL(url);
+    }
+
+    const activeBrowserSelector = selectActiveBrowser();
+    const browserIsActive = browser.id === activeBrowserSelector(state).id;
+
+    if (!browserIsActive) {
+      view.setBounds({ x: 0, y: 0, width: 0, height: 0 });
     }
   });
 }

@@ -47,6 +47,7 @@ export type Browser = {
   url: string;
   title: string;
   tracks: Track['id'][];
+  active: boolean;
 };
 
 export type Embed = {

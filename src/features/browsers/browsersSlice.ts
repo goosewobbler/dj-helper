@@ -4,9 +4,10 @@ import { AppState, Browser, Track } from '../../common/types';
 const initialState: Browser[] = [
   {
     id: 1,
-    url: 'https://bandcamp.com/wiggleweaver',
+    url: 'https://bandcamp.com/wiggleweaver/wishlist',
     title: 'Bandcamp',
     tracks: [],
+    active: true,
   },
 ]; // set initialState to an empty array once tab functionality is complete
 
@@ -20,7 +21,9 @@ export const slice = createSlice({
         url,
         title,
         tracks: [],
+        active: true,
       };
+      //TODO: set existing browsers to inactive
       return [...state, newBrowser];
     },
     updatePageUrl: (state, { payload: { id, url } }: { payload: { id: number; url: string } }) =>
@@ -42,6 +45,11 @@ export const selectBrowserById =
   (id: number) =>
   (state: AppState): Browser =>
     state.browsers.find((browser) => browser.id === id) as Browser;
+
+export const selectActiveBrowser =
+  () =>
+  (state: AppState): Browser =>
+    state.browsers.find((browser) => browser.active) as Browser;
 
 export const getNextTrackOnMetaPanel =
   ({ id, currentTrackId }: { id: number; currentTrackId: number }) =>

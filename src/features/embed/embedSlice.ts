@@ -73,6 +73,13 @@ export const slice = createSlice({
         isLoading: false,
       };
     },
+    requestLoad: (state) => {
+      if (!state.trackId || state.isLoading) {
+        return state;
+      }
+
+      return { ...state, triggerLoad: true };
+    },
     requestPlay: (state, { payload: { trackId, context } }: { payload: PlayRequest }) => {
       const previousTrack = state.trackId;
 
@@ -103,7 +110,8 @@ export const slice = createSlice({
   },
 });
 
-export const { requestPlay, requestPause, setPlaying, setPaused, setLoading, setLoadComplete } = slice.actions;
+export const { requestLoad, requestPlay, requestPause, setPlaying, setPaused, setLoading, setLoadComplete } =
+  slice.actions;
 
 export const selectTrackByEmbedLoaded =
   () =>

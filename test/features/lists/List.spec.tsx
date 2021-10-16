@@ -32,6 +32,9 @@ describe('List', () => {
           autoplayEnabled: true,
           trackPreviewEmbedSize: 'small',
         },
+        status: {
+          resizing: false,
+        },
       },
     });
   });

@@ -10,6 +10,7 @@ import {
   updatePageTitle,
   updatePageUrl,
 } from '../features/browsers/browsersSlice';
+import { setResizing, resizeComplete } from '../features/status/statusSlice';
 import { BandCurrency, BandData, parseBandcampPageData, TralbumCollectInfo, TralbumData } from './helpers/bandcamp';
 import { Browser } from '../common/types';
 import { log } from './helpers/console';
@@ -37,7 +38,8 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: Store, browser: Br
 
   const setBounds = () => {
     const { height: windowHeight } = mainWindow.getBounds();
-    const statusBarHeight = 64;
+    const { trackPreviewEmbedSize } = reduxStore.getState().settings;
+    const statusBarHeight = trackPreviewEmbedSize === 'small' ? 64 : 124;
     const headerBarHeight = 62;
     const metaPanelHeight = 326;
     const listPaneWidth = 538;
@@ -51,10 +53,10 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: Store, browser: Br
 
   mainWindow.setBrowserView(view);
   view.setAutoResize({ horizontal: true });
-  setBounds();
+  reduxStore.dispatch(setResizing());
 
   mainWindow.on('resize', () => {
-    setBounds();
+    reduxStore.dispatch(setResizing());
   });
 
   view.webContents.setWindowOpenHandler(({ url }) => {
@@ -144,6 +146,11 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: Store, browser: Br
       currentlyNavigating = true;
       reduxStore.dispatch(clearTracks({ id: browser.id }));
       void view.webContents.loadURL(url);
+    }
+
+    if (state.status.resizing) {
+      setBounds();
+      reduxStore.dispatch(resizeComplete());
     }
 
     const activeBrowserSelector = selectActiveBrowser();

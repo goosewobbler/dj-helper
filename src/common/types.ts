@@ -68,10 +68,15 @@ export type Settings = {
   trackPreviewEmbedSize: 'small' | 'medium';
 };
 
+export type Status = {
+  resizing: boolean;
+};
+
 export interface AppState {
   embed: Embed;
   lists: List[];
   tracks: Track[];
   browsers: Browser[];
   settings: Settings;
+  status: Status;
 }

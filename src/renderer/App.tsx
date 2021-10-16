@@ -5,7 +5,6 @@ import { BrowserPane } from '../features/browsers/BrowserPane';
 import { selectBrowsers } from '../features/browsers/browsersSlice';
 import { Tabs } from '../features/browsers/Tabs';
 import { ListPane } from '../features/lists/ListPane';
-import { SettingsPanel } from '../features/settings/SettingsPanel';
 import { StatusBar } from '../features/status/StatusBar';
 
 export const App = (): ReactElement => {
@@ -17,7 +16,6 @@ export const App = (): ReactElement => {
         <h1 className="text-3xl text-primary-text" key="title">
           DJ Helper
         </h1>
-        <SettingsPanel />
       </div>
       <div className="flex flex-grow content">
         <div className="flex flex-col flex-grow-0 flex-shrink-0 w-1/3 p-2 section">

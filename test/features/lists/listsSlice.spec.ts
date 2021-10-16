@@ -38,6 +38,9 @@ function getState(activeListIndex: number) {
       autoplayEnabled: true,
       trackPreviewEmbedSize: 'small' as Settings['trackPreviewEmbedSize'],
     },
+    status: {
+      resizing: false,
+    },
   };
 }
 

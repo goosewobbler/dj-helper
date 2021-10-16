@@ -16,11 +16,17 @@ let lastClickPlayTime: number;
 
 export function initEmbed(mainWindow: BrowserWindow, reduxStore: Store): void {
   let currentEmbedTrack: Track;
-  let embedHeight = 42;
-  let embedWidth = 400;
 
-  const setBounds = () => {
+  const setBounds = (embedSize?: string) => {
     const { height } = mainWindow.getBounds();
+
+    if (!embedSize) {
+      const { trackPreviewEmbedSize } = reduxStore.getState().settings;
+      embedSize = trackPreviewEmbedSize;
+    }
+
+    const embedHeight = embedSize === 'med' ? 100 : 42;
+    const embedWidth = 400;
     embed.setBounds({
       x: 10,
       y: height - embedHeight - 33,
@@ -115,12 +121,14 @@ export function initEmbed(mainWindow: BrowserWindow, reduxStore: Store): void {
   reduxStore.subscribe(() => {
     const appState = reduxStore.getState() as AppState;
     const { triggerLoad, triggerPlay, triggerPause, trackId, triggerContext } = appState.embed;
+    const { trackPreviewEmbedSize } = appState.settings;
 
     if (triggerLoad) {
       const trackSourceSelector = selectTrackSourceByIndex(trackId as Track['id'], 0);
       const trackSource = trackSourceSelector(appState);
-      const trackUrl = `https://bandcamp.com/EmbeddedPlayer/size=small/bgcol=ffffff/linkcol=0687f5/track=${trackSource.sourceId}/transparent=true/`;
+      const trackUrl = `https://bandcamp.com/EmbeddedPlayer/size=${trackPreviewEmbedSize}/bgcol=ffffff/linkcol=0687f5/track=${trackSource.sourceId}/transparent=true/`;
       log('embed loading', Date.now(), currentEmbedTrack?.title);
+      setBounds(trackPreviewEmbedSize);
       reduxStore.dispatch(setLoading());
       void embed.webContents.loadURL(trackUrl);
     } else if (triggerPlay) {

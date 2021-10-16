@@ -65,6 +65,9 @@ describe('ListPane', () => {
             autoplayEnabled: true,
             trackPreviewEmbedSize: 'small',
           },
+          status: {
+            resizing: false,
+          },
         },
       });
     });

@@ -2,24 +2,20 @@ import { createSlice } from '@reduxjs/toolkit';
 import { Status } from '../../common/types';
 
 const initialState = {
-  resizing: false,
+  statusText: '',
 } as Status;
 
 export const slice = createSlice({
   name: 'status',
   initialState,
   reducers: {
-    setResizing: (state) => ({
+    setStatus: (state, { payload: { statusText } }: { payload: { statusText: string } }) => ({
       ...state,
-      resizing: true,
-    }),
-    resizeComplete: (state) => ({
-      ...state,
-      resizing: false,
+      statusText,
     }),
   },
 });
 
-export const { setResizing, resizeComplete } = slice.actions;
+export const { setStatus } = slice.actions;
 
 export const statusReducer = slice.reducer;

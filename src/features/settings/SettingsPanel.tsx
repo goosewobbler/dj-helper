@@ -1,8 +1,7 @@
 import React, { ReactElement } from 'react';
 import { useDispatch, useSelector, batch } from 'react-redux';
 import { getSettingValue, setSetting } from './settingsSlice';
-import { requestLoad } from '../embed/embedSlice';
-import { setResizing } from '../status/statusSlice';
+import { requestResize } from '../embed/embedSlice';
 import { DeleteDataButton } from './DeleteDataButton';
 import { Switch } from './Switch';
 
@@ -14,12 +13,12 @@ export function SettingsPanel(): ReactElement {
     <div>
       <DeleteDataButton />
       <Switch
+        id="embed-size-switch"
         isOn={isSmallEmbed}
         handleToggle={() => {
           batch(() => {
             dispatch(setSetting({ settingKey: 'trackPreviewEmbedSize', settingValue: embedSize(!isSmallEmbed) }));
-            dispatch(setResizing());
-            dispatch(requestLoad());
+            dispatch(requestResize());
           });
         }}
       />

@@ -58,6 +58,7 @@ describe('ListPane', () => {
             isPlaying: false,
             isPaused: false,
             isLoading: false,
+            isResizing: false,
             trackContext: 'browser',
           },
           settings: {
@@ -66,7 +67,7 @@ describe('ListPane', () => {
             trackPreviewEmbedSize: 'small',
           },
           status: {
-            resizing: false,
+            statusText: '',
           },
         },
       });

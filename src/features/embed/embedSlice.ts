@@ -9,6 +9,8 @@ const initialState = {
   isPlaying: false,
   isPaused: false,
   isLoading: false,
+  isResizing: false,
+  // triggerResize, triggerPlayAfterLoad
 } as Embed;
 
 export type PlayRequest = { trackId: Track['id']; context: Embed['trackContext'] };
@@ -25,6 +27,7 @@ export const slice = createSlice({
       isPlaying: true,
       isPaused: false,
       isLoading: false,
+      isResizing: false,
     }),
     setPaused: (state) => {
       if (!state.triggerPause) {
@@ -34,10 +37,10 @@ export const slice = createSlice({
           triggerLoad: false,
           triggerPlay: false,
           triggerPause: false,
-          triggerLoadOnPause: false,
           isPlaying: false,
           isPaused: false,
           isLoading: false,
+          isResizing: false,
         };
       }
       return {
@@ -45,10 +48,10 @@ export const slice = createSlice({
         triggerLoad: false,
         triggerPlay: false,
         triggerPause: false,
-        triggerLoadOnPause: false,
         isPlaying: false,
         isPaused: true,
         isLoading: false,
+        isResizing: false,
       };
     },
     setLoading: (state) => ({
@@ -61,16 +64,39 @@ export const slice = createSlice({
       isLoading: true,
     }),
     setLoadComplete: (state) => {
-      log('load complete setting triggerPlay', !state.triggerLoad);
+      log('load complete');
+      if (state.isResizing) {
+        // load after resize does not trigger play unless already playing
+        log('isResizing');
+        return {
+          ...state,
+          triggerLoad: false,
+          triggerPlay: false,
+          triggerPause: false,
+          isPlaying: false,
+          isPaused: false,
+          isLoading: false,
+          isResizing: false,
+        };
+      }
       return {
         ...state,
         triggerLoad: false,
         triggerPlay: true,
         triggerPause: false,
-        triggerContext: 'loadComplete',
         isPlaying: false,
         isPaused: false,
         isLoading: false,
+        isResizing: false,
+        triggerContext: 'loadComplete',
+      };
+    },
+    requestResize: (state) => {
+      log('resize requested', state.trackId);
+      return {
+        ...state,
+        isResizing: true,
+        triggerLoad: state.trackId !== undefined, // triggerLoad if there is a track to load
       };
     },
     requestLoad: (state) => {
@@ -82,8 +108,10 @@ export const slice = createSlice({
     },
     requestPlay: (state, { payload: { trackId, context } }: { payload: PlayRequest }) => {
       const previousTrack = state.trackId;
+      log('request play', state);
 
       if (!trackId || state.isLoading) {
+        log('not playing', trackId, state.isLoading);
         return state;
       }
 
@@ -91,12 +119,6 @@ export const slice = createSlice({
         // requested track already loaded - trigger play without load
         return { ...state, triggerPlay: true };
       }
-
-      // log('request play setting previousTrackWasPlaying', state.isPlaying);
-      // if (state.isPlaying) {
-      //   // current track is playing - we need to pause it first
-      //   return { ...state, trackId, trackContext: context, triggerPause: true, triggerLoadOnPause: true };
-      // }
 
       return { ...state, trackId, trackContext: context, triggerLoad: true };
     },
@@ -110,8 +132,16 @@ export const slice = createSlice({
   },
 });
 
-export const { requestLoad, requestPlay, requestPause, setPlaying, setPaused, setLoading, setLoadComplete } =
-  slice.actions;
+export const {
+  requestLoad,
+  requestPlay,
+  requestPause,
+  requestResize,
+  setPlaying,
+  setPaused,
+  setLoading,
+  setLoadComplete,
+} = slice.actions;
 
 export const selectTrackByEmbedLoaded =
   () =>

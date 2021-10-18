@@ -10,9 +10,8 @@ import {
   updatePageTitle,
   updatePageUrl,
 } from '../features/browsers/browsersSlice';
-import { setResizing, resizeComplete } from '../features/status/statusSlice';
 import { BandCurrency, BandData, parseBandcampPageData, TralbumCollectInfo, TralbumData } from './helpers/bandcamp';
-import { Browser } from '../common/types';
+import { AppState, Browser } from '../common/types';
 import { log } from './helpers/console';
 import { RootState } from '../features/rootReducer';
 
@@ -34,11 +33,11 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: Store, browser: Br
 
   log('creating browser', browser.id);
 
-  let browserWidth = 1000;
+  const browserWidth = 1000;
 
   const setBounds = () => {
     const { height: windowHeight } = mainWindow.getBounds();
-    const { trackPreviewEmbedSize } = reduxStore.getState().settings;
+    const { trackPreviewEmbedSize } = (reduxStore.getState() as AppState).settings;
     const statusBarHeight = trackPreviewEmbedSize === 'small' ? 64 : 124;
     const headerBarHeight = 62;
     const metaPanelHeight = 326;
@@ -53,10 +52,10 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: Store, browser: Br
 
   mainWindow.setBrowserView(view);
   view.setAutoResize({ horizontal: true });
-  reduxStore.dispatch(setResizing());
+  setBounds();
 
   mainWindow.on('resize', () => {
-    reduxStore.dispatch(setResizing());
+    setBounds();
   });
 
   view.webContents.setWindowOpenHandler(({ url }) => {
@@ -123,7 +122,7 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: Store, browser: Br
           };
           reduxStore.dispatch(createTrack(trackData));
           const trackSelector = selectTrackBySourceUrl(title_link);
-          const track = trackSelector(reduxStore.getState());
+          const track = trackSelector(reduxStore.getState() as AppState);
           log('selected browser', browser.id, track);
           reduxStore.dispatch(addTrack({ id: browser.id, trackId: track.id }));
         });
@@ -137,7 +136,7 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: Store, browser: Br
   };
 
   reduxStore.subscribe(() => {
-    const state = reduxStore.getState();
+    const state = reduxStore.getState() as AppState;
     const browserSelector = selectBrowserById(browser.id);
     const { url } = browserSelector(state);
 
@@ -148,9 +147,8 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: Store, browser: Br
       void view.webContents.loadURL(url);
     }
 
-    if (state.status.resizing) {
+    if (state.embed.isResizing) {
       setBounds();
-      reduxStore.dispatch(resizeComplete());
     }
 
     const activeBrowserSelector = selectActiveBrowser();

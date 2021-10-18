@@ -29,6 +29,7 @@ function getState(activeListIndex: number) {
       isPlaying: false,
       isPaused: false,
       isLoading: false,
+      isResizing: false,
     },
     tracks: [],
     browsers: [],
@@ -39,7 +40,7 @@ function getState(activeListIndex: number) {
       trackPreviewEmbedSize: 'small' as Settings['trackPreviewEmbedSize'],
     },
     status: {
-      resizing: false,
+      statusText: '',
     },
   };
 }

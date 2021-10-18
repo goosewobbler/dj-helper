@@ -16,6 +16,7 @@ describe('List', () => {
           isPlaying: false,
           isPaused: false,
           isLoading: false,
+          isResizing: false,
         },
         tracks: [
           {
@@ -33,7 +34,7 @@ describe('List', () => {
           trackPreviewEmbedSize: 'small',
         },
         status: {
-          resizing: false,
+          statusText: '',
         },
       },
     });

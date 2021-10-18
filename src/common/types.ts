@@ -57,6 +57,7 @@ export type Embed = {
   isPlaying: boolean;
   isPaused: boolean;
   isLoading: boolean;
+  isResizing: boolean;
   triggerContext?: string;
   trackContext?: string;
   trackId?: Track['id'];
@@ -69,7 +70,7 @@ export type Settings = {
 };
 
 export type Status = {
-  resizing: boolean;
+  statusText: string;
 };
 
 export interface AppState {

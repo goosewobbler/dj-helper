@@ -1,5 +1,5 @@
-import { Settings } from '../../../src/common/types';
 import { reducers, trackIsOnSelectedList, getNextTrackOnList } from '../../../src/features/lists/listsSlice';
+import { mockState } from '../../helpers/mockState';
 
 const {
   createList,
@@ -21,28 +21,8 @@ function getState(activeListIndex: number) {
     { id: 3, title: 'third list', active: false, tracks: [] },
   ];
   lists[activeListIndex].active = true;
-  return {
-    embed: {
-      triggerLoad: false,
-      triggerPlay: false,
-      triggerPause: false,
-      isPlaying: false,
-      isPaused: false,
-      isLoading: false,
-      isResizing: false,
-    },
-    tracks: [],
-    browsers: [],
-    lists,
-    settings: {
-      darkModeEnabled: false,
-      autoplayEnabled: true,
-      trackPreviewEmbedSize: 'small' as Settings['trackPreviewEmbedSize'],
-    },
-    status: {
-      statusText: '',
-    },
-  };
+
+  return mockState({ lists });
 }
 
 describe('listsSlice', () => {

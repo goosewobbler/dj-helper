@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { render, screen, RenderResult, userEvent } from '../../helpers/integration';
 import { ListPane } from '../../../src/features/lists/ListPane';
+import { mockState } from '../../helpers/mockState';
 
 describe('ListPane', () => {
   let listPane: RenderResult;
@@ -42,34 +43,13 @@ describe('ListPane', () => {
   describe('given a number of lists', () => {
     beforeEach(() => {
       listPane = render(<ListPane />, {
-        preloadedState: {
+        preloadedState: mockState({
           lists: [
             { id: 1, title: 'test list one', tracks: [] },
             { id: 2, title: 'test list two', tracks: [] },
             { id: 3, title: 'test list three', tracks: [] },
           ],
-          tracks: [],
-          browsers: [],
-          embed: {
-            trackId: 0,
-            triggerLoad: false,
-            triggerPlay: false,
-            triggerPause: false,
-            isPlaying: false,
-            isPaused: false,
-            isLoading: false,
-            isResizing: false,
-            trackContext: 'browser',
-          },
-          settings: {
-            darkModeEnabled: false,
-            autoplayEnabled: true,
-            trackPreviewEmbedSize: 'small',
-          },
-          status: {
-            statusText: '',
-          },
-        },
+        }),
       });
     });
 

@@ -11,6 +11,7 @@ module.exports = (context) => {
   return [
     {
       enforce: 'pre',
+      exclude: /node_modules/,
       test: /\.js$/,
       loader: 'source-map-loader',
     },

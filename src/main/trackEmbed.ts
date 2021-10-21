@@ -1,6 +1,6 @@
 import { BrowserView, BrowserWindow, ipcMain } from 'electron';
 import { mediaLoaded, mediaPlaying, mediaPaused } from '../features/embed/embedSlice';
-import { AppStore, PauseContext, Track, TrackPreviewEmbedSize } from '../common/types';
+import { AppStore, Track, TrackPreviewEmbedSize } from '../common/types';
 import { log } from './helpers/console';
 import { selectTrackSourceByIndex } from '../features/tracks/tracksSlice';
 // function delay(ms: number) {
@@ -77,8 +77,12 @@ export function initEmbed(mainWindow: BrowserWindow, reduxStore: AppStore): void
         void trigger('play');
       }
 
-      log('dispatching setPaused');
-      dispatch(mediaPaused({ pauseContext: PauseContext[pausedByTrackEnding ? 'TrackComplete' : 'UserAction'] }));
+      log('dispatching setPaused, track ended = ', pausedByTrackEnding);
+      await dispatch(mediaPaused());
+      if (pausedByTrackEnding) {
+        log('sending autoplay message');
+        mainWindow.webContents.send('handle-autoplay');
+      }
 
       log(Date.now() - lastClickPlayTime);
     })();

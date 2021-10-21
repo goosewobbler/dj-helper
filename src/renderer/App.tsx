@@ -4,23 +4,21 @@ import { Browser } from '../common/types';
 import { BrowserPane } from '../features/browsers/BrowserPane';
 import { selectBrowsers } from '../features/browsers/browsersSlice';
 import { Tabs } from '../features/browsers/Tabs';
-import { currentTrackHasFinished, loadAndPlayNextTrack, selectTrackByEmbedLoaded } from '../features/embed/embedSlice';
+import { handleAutoplay } from '../features/embed/embedSlice';
 import { ListPane } from '../features/lists/ListPane';
-import { getSettingValue } from '../features/settings/settingsSlice';
 import { StatusBar } from '../features/status/StatusBar';
+import { log } from '../main/helpers/console';
 
 export const App = (): ReactElement => {
-  const dispatch = useDispatch();
   const browsers = useSelector(selectBrowsers);
+  const dispatch = useDispatch();
   const tabHeadings = browsers.map((browser) => browser.title);
 
-  const autoPlayEnabled = useSelector(getSettingValue({ settingKey: 'autoplayEnabled' }));
-  const currentTrack = useSelector(selectTrackByEmbedLoaded());
-  const playbackComplete = useSelector(currentTrackHasFinished());
-
-  if (autoPlayEnabled && playbackComplete) {
-    dispatch(loadAndPlayNextTrack(currentTrack.id));
-  }
+  window.api.removeAllListeners('handle-autoplay');
+  window.api.on('handle-autoplay', () => {
+    log('dispatching handle-autoplay');
+    dispatch(handleAutoplay());
+  });
 
   return (
     <div className="flex flex-col flex-grow bg-primary-background">

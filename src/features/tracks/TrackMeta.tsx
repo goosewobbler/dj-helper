@@ -52,7 +52,7 @@ export function TrackMeta({
   log('zomg loading track', { artist, title, duration, sources });
 
   return (
-    <div key={id} className={`group-scope ${isPlayingAdditionalStyles}`}>
+    <div key={id} className={`group-scope h-10 ${isPlayingAdditionalStyles}`}>
       <span
         className={`inline-block overflow-hidden whitespace-nowrap overflow-ellipsis ${
           isListContext ? 'w-24' : 'w-32'
@@ -90,7 +90,7 @@ export function TrackMeta({
           </button>
         )}
       </span>
-      <span className="inline-block w-8 opacity-0 group-scope-hover:opacity-100">
+      <span className="inline-block w-16 opacity-0 group-scope-hover:opacity-100">
         <PlayPauseButton
           isPlaying={isPlaying}
           showSpinner={showSpinner}

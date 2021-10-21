@@ -1,4 +1,5 @@
 import { Store } from '@reduxjs/toolkit';
+import { IpcRenderer } from 'electron';
 import React from 'react';
 import { Provider } from 'react-redux';
 import * as ReactDOM from 'react-dom';
@@ -12,6 +13,8 @@ declare global {
     api: {
       isDev: boolean;
       invoke(channel: string, ...data: unknown[]): Promise<unknown>;
+      on(channel: string, listener: (...args: unknown[]) => void): IpcRenderer | undefined;
+      removeAllListeners(channel: string): IpcRenderer | undefined;
     };
   }
 }

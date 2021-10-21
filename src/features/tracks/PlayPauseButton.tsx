@@ -13,7 +13,7 @@ export function PlayPauseButton({
   onClick: () => void;
 }): ReactElement {
   return showSpinner ? (
-    <SpinnerIcon />
+    <SpinnerIcon className="animate-spin" />
   ) : (
     <button type="button" onClick={() => onClick()}>
       {isPlaying ? <PauseIcon className="pause" /> : <PlayIcon className="play" />}

@@ -25,7 +25,7 @@ export const { setSetting } = slice.actions;
 
 export const getSettingValue =
   ({ settingKey }: { settingKey: string }) =>
-  ({ settings }: AppState): string =>
-    settings[settingKey as keyof Settings] as string;
+  ({ settings }: AppState) =>
+    settings[settingKey as keyof Settings];
 
 export const settingsReducer = slice.reducer;

@@ -15,11 +15,6 @@ export enum EmbedStatus {
   Paused = 'PAUSED',
 }
 
-export enum PauseContext {
-  TrackComplete = 'TRACK_COMPLETE',
-  UserAction = 'USER_ACTION',
-}
-
 export enum LoadContextType {
   Browser = 'BROWSER',
   List = 'LIST',
@@ -82,7 +77,6 @@ export type Browser = {
 export type Embed = {
   status: EmbedStatus;
   loadContext?: LoadContext;
-  pauseContext?: PauseContext;
   trackId?: Track['id'];
 };
 

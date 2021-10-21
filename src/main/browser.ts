@@ -10,7 +10,7 @@ import {
   updatePageUrl,
 } from '../features/browsers/browsersSlice';
 import { BandCurrency, BandData, parseBandcampPageData, TralbumCollectInfo, TralbumData } from './helpers/bandcamp';
-import { AppStore, Browser, PauseContext, TrackPreviewEmbedSize } from '../common/types';
+import { AppStore, Browser, TrackPreviewEmbedSize } from '../common/types';
 import { log } from './helpers/console';
 
 type RawBandcampData = [TralbumData, BandData, TralbumCollectInfo, BandCurrency];
@@ -49,7 +49,10 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: AppStore, browser:
 
   mainWindow.setBrowserView(view);
   view.setAutoResize({ horizontal: true });
-  setBounds();
+
+  setTimeout(() => {
+    setBounds();
+  }, 1000);
 
   mainWindow.on('resize', () => {
     setBounds();
@@ -85,7 +88,7 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: AppStore, browser:
 
   view.webContents.on('media-paused', () => {
     log('pausing from browser', Date.now());
-    dispatch(mediaPaused({ pauseContext: PauseContext.UserAction }));
+    dispatch(mediaPaused());
   });
 
   view.webContents.on('page-title-updated', (event, title) => {

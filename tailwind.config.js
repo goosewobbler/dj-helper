@@ -29,8 +29,8 @@ const theme = {
       },
       ripple: {
         '0%': {
-          top: '36px',
-          left: '36px',
+          top: '24px',
+          left: '24px',
           width: '0',
           height: '0',
           opacity: '1',
@@ -38,8 +38,8 @@ const theme = {
         '100%': {
           top: '0px',
           left: '0px',
-          width: '72px',
-          height: '72px',
+          width: '24px',
+          height: '24px',
           opacity: '0',
         },
       },

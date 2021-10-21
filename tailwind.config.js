@@ -27,26 +27,9 @@ const theme = {
         '99%': { transform: 'rotate(40deg) scale(1.5, 1.5)' },
         '100%': { transform: 'scale(2, 2)' },
       },
-      ripple: {
-        '0%': {
-          top: '24px',
-          left: '24px',
-          width: '0',
-          height: '0',
-          opacity: '1',
-        },
-        '100%': {
-          top: '0px',
-          left: '0px',
-          width: '24px',
-          height: '24px',
-          opacity: '0',
-        },
-      },
     },
     animation: {
       explode: 'wiggle 1.6s ease-in-out',
-      ripple: 'ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite',
     },
     fontFamily: {
       sans: ['Aqua', 'Helvetica', 'Arial', 'sans-serif'],

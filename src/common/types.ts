@@ -15,6 +15,27 @@ export enum EmbedStatus {
   Paused = 'PAUSED',
 }
 
+export enum PauseContext {
+  TrackComplete = 'TRACK_COMPLETE',
+  UserAction = 'USER_ACTION',
+}
+
+export enum LoadContextType {
+  Browser = 'BROWSER',
+  List = 'LIST',
+  Settings = 'SETTINGS',
+}
+
+export enum TrackPreviewEmbedSize {
+  Small = 'SMALL',
+  Medium = 'MEDIUM',
+}
+
+export type LoadContext = {
+  contextId?: number;
+  contextType: LoadContextType;
+};
+
 export interface Response {
   body: string;
   headers: Headers;
@@ -60,14 +81,15 @@ export type Browser = {
 
 export type Embed = {
   status: EmbedStatus;
-  trackContext?: string;
+  loadContext?: LoadContext;
+  pauseContext?: PauseContext;
   trackId?: Track['id'];
 };
 
 export type Settings = {
   darkModeEnabled: boolean;
   autoplayEnabled: boolean;
-  trackPreviewEmbedSize: 'small' | 'medium';
+  trackPreviewEmbedSize: TrackPreviewEmbedSize;
 };
 
 export type Status = {

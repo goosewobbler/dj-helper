@@ -11,7 +11,7 @@ import {
   selectListById,
   updateListTitle,
 } from './listsSlice';
-import { Track } from '../../common/types';
+import { LoadContextType, Track } from '../../common/types';
 import { EditIcon } from './EditIcon';
 import { TrashIcon } from './TrashIcon';
 
@@ -109,7 +109,7 @@ export function List({ id }: { id: number }): ReactElement {
               <TrackMeta
                 key={trackId}
                 id={trackId}
-                context={listKey}
+                context={{ contextId: id, contextType: LoadContextType.List }}
                 listIndex={index}
                 listTotalTracks={tracks.length}
               />

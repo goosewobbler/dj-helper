@@ -10,7 +10,7 @@ import {
   updatePageUrl,
 } from '../features/browsers/browsersSlice';
 import { BandCurrency, BandData, parseBandcampPageData, TralbumCollectInfo, TralbumData } from './helpers/bandcamp';
-import { AppStore, Browser } from '../common/types';
+import { AppStore, Browser, PauseContext, TrackPreviewEmbedSize } from '../common/types';
 import { log } from './helpers/console';
 
 type RawBandcampData = [TralbumData, BandData, TralbumCollectInfo, BandCurrency];
@@ -32,19 +32,17 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: AppStore, browser:
 
   log('creating browser', browser.id);
 
-  const browserWidth = 1000;
-
   const setBounds = () => {
-    const { height: windowHeight } = mainWindow.getBounds();
+    const { height: windowHeight, width: windowWidth } = mainWindow.getBounds();
     const { trackPreviewEmbedSize } = getState().settings;
-    const statusBarHeight = trackPreviewEmbedSize === 'small' ? 64 : 124;
+    const statusBarHeight = trackPreviewEmbedSize === TrackPreviewEmbedSize.Small ? 65 : 145;
     const headerBarHeight = 62;
     const metaPanelHeight = 326;
     const listPaneWidth = 538;
     view.setBounds({
       x: listPaneWidth,
       y: headerBarHeight + metaPanelHeight - 10,
-      width: browserWidth,
+      width: windowWidth - listPaneWidth,
       height: windowHeight - statusBarHeight - headerBarHeight - metaPanelHeight - 10,
     });
   };
@@ -87,7 +85,7 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: AppStore, browser:
 
   view.webContents.on('media-paused', () => {
     log('pausing from browser', Date.now());
-    dispatch(mediaPaused());
+    dispatch(mediaPaused({ pauseContext: PauseContext.UserAction }));
   });
 
   view.webContents.on('page-title-updated', (event, title) => {

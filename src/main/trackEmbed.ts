@@ -1,9 +1,7 @@
 import { BrowserView, BrowserWindow, ipcMain } from 'electron';
-import { loadAndPlayTrack, mediaLoaded, mediaPlaying, mediaPaused } from '../features/embed/embedSlice';
-import { AppStore, Track } from '../common/types';
+import { mediaLoaded, mediaPlaying, mediaPaused } from '../features/embed/embedSlice';
+import { AppStore, PauseContext, Track, TrackPreviewEmbedSize } from '../common/types';
 import { log } from './helpers/console';
-import { getNextTrackOnList } from '../features/lists/listsSlice';
-import { getNextTrackOnMetaPanel } from '../features/browsers/browsersSlice';
 import { selectTrackSourceByIndex } from '../features/tracks/tracksSlice';
 // function delay(ms: number) {
 //   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -17,8 +15,14 @@ export function initEmbed(mainWindow: BrowserWindow, reduxStore: AppStore): void
 
   const setBounds = (embedSize = getState().settings.trackPreviewEmbedSize) => {
     const { height } = mainWindow.getBounds();
-    const embedHeight = embedSize === 'medium' ? 100 : 42;
-    const embedWidth = 400;
+    const embedHeight = embedSize === TrackPreviewEmbedSize.Medium ? 120 : 42;
+    const embedWidth = 500;
+    log('setting bounds', {
+      x: 10,
+      y: height - embedHeight - 33,
+      width: embedWidth,
+      height: embedHeight,
+    });
     embed.setBounds({
       x: 10,
       y: height - embedHeight - 33,
@@ -64,7 +68,6 @@ export function initEmbed(mainWindow: BrowserWindow, reduxStore: AppStore): void
       const playbackComplete = (await embed.webContents.executeJavaScript('window.playbackComplete', true)) as boolean;
       const currentTime = (await embed.webContents.executeJavaScript('$("#currenttime").text();', true)) as string;
       const pausedByTrackEnding = currentTime === '00:00' && playbackComplete;
-      const { trackContext, trackId } = getState().embed;
 
       log('media paused', getState().embed);
 
@@ -75,23 +78,9 @@ export function initEmbed(mainWindow: BrowserWindow, reduxStore: AppStore): void
       }
 
       log('dispatching setPaused');
-      dispatch(mediaPaused());
+      dispatch(mediaPaused({ pauseContext: PauseContext[pausedByTrackEnding ? 'TrackComplete' : 'UserAction'] }));
 
       log(Date.now() - lastClickPlayTime);
-      if (pausedByTrackEnding) {
-        log('end of track zomg, playing next...', currentTime, playbackComplete, trackContext);
-        const nextTrackSelectorMap = {
-          browser: getNextTrackOnMetaPanel,
-          list: getNextTrackOnList,
-        };
-        const [currentTrackContextType, currentTrackContextId] = (trackContext as string).split('-');
-        const nextTrackFromContextSelector = nextTrackSelectorMap[currentTrackContextType as 'browser' | 'list']({
-          id: parseInt(currentTrackContextId),
-          currentTrackId: trackId as Track['id'],
-        });
-        const nextTrackId = nextTrackFromContextSelector(getState());
-        dispatch(loadAndPlayTrack({ trackId: nextTrackId, context: trackContext }));
-      }
     })();
   };
 
@@ -123,7 +112,8 @@ export function initEmbed(mainWindow: BrowserWindow, reduxStore: AppStore): void
         embed.webContents.once('did-finish-load', loadFinishedHandler);
         const trackSourceSelector = selectTrackSourceByIndex(trackId as Track['id'], 0);
         const trackSource = trackSourceSelector(appState);
-        const trackUrl = `https://bandcamp.com/EmbeddedPlayer/size=${trackPreviewEmbedSize}/bgcol=ffffff/linkcol=0687f5/track=${trackSource.sourceId}/transparent=true/`;
+        const embedSize = trackPreviewEmbedSize.toLowerCase();
+        const trackUrl = `https://bandcamp.com/EmbeddedPlayer/size=${embedSize}/bgcol=ffffff/linkcol=0687f5/track=${trackSource.sourceId}/transparent=true/`;
         void embed.webContents.loadURL(trackUrl);
         setBounds(trackPreviewEmbedSize);
       }),

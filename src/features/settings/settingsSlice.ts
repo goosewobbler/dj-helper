@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { AppState, Settings } from '../../common/types';
+import { AppState, Settings, TrackPreviewEmbedSize } from '../../common/types';
 
 const initialState = {
   darkModeEnabled: false,
   autoplayEnabled: true,
-  trackPreviewEmbedSize: 'small',
+  trackPreviewEmbedSize: TrackPreviewEmbedSize.Small,
 } as Settings;
 
 export const slice = createSlice({

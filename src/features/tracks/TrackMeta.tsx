@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { embedRequestInFlight, loadAndPlayTrack, pauseTrack, trackIsPlaying } from '../embed/embedSlice';
 import { selectTrackById } from './tracksSlice';
-import { Track } from '../../common/types';
+import { LoadContext, LoadContextType, Track } from '../../common/types';
 import { log } from '../../main/helpers/console';
 import {
   addTrackToSelectedList,
@@ -33,7 +33,7 @@ export function TrackMeta({
   listTotalTracks,
 }: {
   id: Track['id'];
-  context: string;
+  context: LoadContext;
   listIndex?: number;
   listTotalTracks?: number;
 }) {
@@ -46,8 +46,8 @@ export function TrackMeta({
     return <></>;
   }
   const { artist, title, duration, sources } = track;
-  const isListContext = context.startsWith('list-');
-  const isBrowserContext = context.startsWith('browser-');
+  const isListContext = context.contextType === LoadContextType.List;
+  const isBrowserContext = context.contextType === LoadContextType.Browser;
   const isPlayingAdditionalStyles = isPlaying ? 'bg-blue-200' : '';
   log('zomg loading track', { artist, title, duration, sources });
 

@@ -4,11 +4,13 @@ import { getSettingValue, setSetting } from './settingsSlice';
 import { resizeEmbed } from '../embed/embedSlice';
 import { DeleteDataButton } from './DeleteDataButton';
 import { Switch } from './Switch';
+import { TrackPreviewEmbedSize } from '../../common/types';
 
 export function SettingsPanel(): ReactElement {
   const dispatch = useDispatch();
-  const isSmallEmbed = useSelector(getSettingValue({ settingKey: 'trackPreviewEmbedSize' })) === 'small';
-  const embedSize = (isSmall: boolean) => (isSmall ? 'small' : 'med');
+  const isSmallEmbed =
+    useSelector(getSettingValue({ settingKey: 'trackPreviewEmbedSize' })) === TrackPreviewEmbedSize.Small;
+  const embedSize = (isSmall: boolean) => TrackPreviewEmbedSize[isSmall ? 'Small' : 'Medium'];
   return (
     <div>
       <DeleteDataButton />

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { requestPause, requestPlay, trackIsPlaying } from '../embed/embedSlice';
+import { embedRequestInFlight, loadAndPlayTrack, pauseTrack, trackIsPlaying } from '../embed/embedSlice';
 import { selectTrackById } from './tracksSlice';
 import { Track } from '../../common/types';
 import { log } from '../../main/helpers/console';
@@ -41,6 +41,7 @@ export function TrackMeta({
   const track = useSelector(selectTrackById(id));
   const isPlaying = useSelector(trackIsPlaying({ trackId: id }));
   const isOnSelectedList = useSelector(trackIsOnSelectedList({ trackId: id }));
+  const showSpinner = useSelector(embedRequestInFlight());
   if (!track) {
     return <></>;
   }
@@ -92,9 +93,10 @@ export function TrackMeta({
       <span className="inline-block w-8 opacity-0 group-scope-hover:opacity-100">
         <PlayPauseButton
           isPlaying={isPlaying}
+          showSpinner={showSpinner}
           onClick={() => {
             log('invoke play', { trackId: id, context });
-            dispatch(isPlaying ? requestPause() : requestPlay({ trackId: id, context }));
+            dispatch(isPlaying ? pauseTrack() : loadAndPlayTrack({ trackId: id, context }));
           }}
         />
       </span>

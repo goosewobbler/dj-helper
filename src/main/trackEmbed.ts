@@ -1,19 +1,10 @@
-import { BrowserView, BrowserWindow } from 'electron';
-import { Store } from '@reduxjs/toolkit';
-import {
-  setPlaying,
-  setPaused,
-  setLoadComplete,
-  setLoading,
-  requestPlay,
-  requestResize,
-} from '../features/embed/embedSlice';
-import { AppState, Embed, Track } from '../common/types';
+import { BrowserView, BrowserWindow, ipcMain } from 'electron';
+import { loadAndPlayTrack, mediaLoaded, mediaPlaying, mediaPaused } from '../features/embed/embedSlice';
+import { AppStore, Track } from '../common/types';
 import { log } from './helpers/console';
 import { getNextTrackOnList } from '../features/lists/listsSlice';
 import { getNextTrackOnMetaPanel } from '../features/browsers/browsersSlice';
 import { selectTrackSourceByIndex } from '../features/tracks/tracksSlice';
-
 // function delay(ms: number) {
 //   return new Promise((resolve) => setTimeout(resolve, ms));
 // }
@@ -21,18 +12,12 @@ import { selectTrackSourceByIndex } from '../features/tracks/tracksSlice';
 let embed: BrowserView;
 let lastClickPlayTime: number;
 
-export function initEmbed(mainWindow: BrowserWindow, reduxStore: Store): void {
-  let currentEmbedTrack: Track;
+export function initEmbed(mainWindow: BrowserWindow, reduxStore: AppStore): void {
+  const { dispatch, getState } = reduxStore;
 
-  const setBounds = (embedSize?: string) => {
+  const setBounds = (embedSize = getState().settings.trackPreviewEmbedSize) => {
     const { height } = mainWindow.getBounds();
-
-    if (!embedSize) {
-      const { trackPreviewEmbedSize } = (reduxStore.getState() as AppState).settings;
-      embedSize = trackPreviewEmbedSize;
-    }
-
-    const embedHeight = embedSize === 'med' ? 100 : 42;
+    const embedHeight = embedSize === 'medium' ? 100 : 42;
     const embedWidth = 400;
     embed.setBounds({
       x: 10,
@@ -44,10 +29,10 @@ export function initEmbed(mainWindow: BrowserWindow, reduxStore: Store): void {
 
   embed = new BrowserView();
   mainWindow.addBrowserView(embed);
-  reduxStore.dispatch(requestResize());
+  setBounds();
 
   mainWindow.on('resize', () => {
-    reduxStore.dispatch(requestResize());
+    setBounds();
   });
 
   embed.webContents.setWindowOpenHandler((details) => {
@@ -55,13 +40,10 @@ export function initEmbed(mainWindow: BrowserWindow, reduxStore: Store): void {
     return { action: 'deny' };
   });
 
-  const trigger = async (toTrigger: string, triggerContext: Embed['triggerContext']) => {
+  const trigger = async (toTrigger: string) => {
     const isPlaying = !!(await embed.webContents.executeJavaScript('$("#player").hasClass("playing");', true));
     const canClick = (!isPlaying && toTrigger === 'play') || (isPlaying && toTrigger === 'pause');
     log(`trigger ${toTrigger}`, isPlaying, canClick);
-    // if (triggerContext === 'loadComplete') {
-    //   await delay(1000);
-    // }
     if (canClick) {
       log('clicking', Date.now());
       await embed.webContents.executeJavaScript('$("#big_play_button").click().length;', true);
@@ -74,7 +56,7 @@ export function initEmbed(mainWindow: BrowserWindow, reduxStore: Store): void {
 
   const mediaStartedPlayingHandler = () => {
     log('playing from embed', Date.now());
-    reduxStore.dispatch(setPlaying());
+    dispatch(mediaPlaying());
   };
 
   const mediaPausedHandler = () => {
@@ -82,18 +64,18 @@ export function initEmbed(mainWindow: BrowserWindow, reduxStore: Store): void {
       const playbackComplete = (await embed.webContents.executeJavaScript('window.playbackComplete', true)) as boolean;
       const currentTime = (await embed.webContents.executeJavaScript('$("#currenttime").text();', true)) as string;
       const pausedByTrackEnding = currentTime === '00:00' && playbackComplete;
-      const { trackContext, trackId } = (reduxStore.getState() as AppState).embed;
+      const { trackContext, trackId } = getState().embed;
 
-      log('media paused', (reduxStore.getState() as AppState).embed);
+      log('media paused', getState().embed);
 
       if (Date.now() - lastClickPlayTime < 300) {
         // occasionally the media will be paused ~250ms after clicking play - here we detect this and click play again
         log('rage click incoming');
-        void trigger('play', 'rageClick');
+        void trigger('play');
       }
 
       log('dispatching setPaused');
-      reduxStore.dispatch(setPaused());
+      dispatch(mediaPaused());
 
       log(Date.now() - lastClickPlayTime);
       if (pausedByTrackEnding) {
@@ -107,48 +89,43 @@ export function initEmbed(mainWindow: BrowserWindow, reduxStore: Store): void {
           id: parseInt(currentTrackContextId),
           currentTrackId: trackId as Track['id'],
         });
-        const nextTrackId = nextTrackFromContextSelector(reduxStore.getState() as AppState);
-        reduxStore.dispatch(requestPlay({ trackId: nextTrackId, context: trackContext }));
+        const nextTrackId = nextTrackFromContextSelector(getState());
+        dispatch(loadAndPlayTrack({ trackId: nextTrackId, context: trackContext }));
       }
     })();
   };
 
-  const loadFinishedHandler = () => {
-    void (async () => {
-      log('loaded', Date.now());
-      await embed.webContents.executeJavaScript(
-        '$("audio").on("ended", () => { window.playbackComplete = true }).length;',
-        true,
-      );
-
-      reduxStore.dispatch(setLoadComplete());
-    })();
-  };
-
-  reduxStore.subscribe(() => {
-    const appState = reduxStore.getState() as AppState;
-    const { triggerLoad, triggerPlay, triggerPause, trackId, triggerContext } = appState.embed;
-    const { trackPreviewEmbedSize } = appState.settings;
-
-    // console.log('embed subscribe', appState.embed);
-
-    if (triggerLoad) {
-      const trackSourceSelector = selectTrackSourceByIndex(trackId as Track['id'], 0);
-      const trackSource = trackSourceSelector(appState);
-      const trackUrl = `https://bandcamp.com/EmbeddedPlayer/size=${trackPreviewEmbedSize}/bgcol=ffffff/linkcol=0687f5/track=${trackSource.sourceId}/transparent=true/`;
-      log('embed loading', Date.now(), currentEmbedTrack?.title);
-      void embed.webContents.loadURL(trackUrl);
-      setBounds(trackPreviewEmbedSize);
-      reduxStore.dispatch(setLoading());
-    } else if (triggerPlay) {
-      log('triggering play wut');
-      void trigger('play', triggerContext);
-    } else if (triggerPause) {
-      void trigger('pause', triggerContext);
-    }
-  });
-
   embed.webContents.on('media-started-playing', mediaStartedPlayingHandler);
   embed.webContents.on('media-paused', mediaPausedHandler);
-  embed.webContents.on('did-finish-load', loadFinishedHandler);
+
+  ipcMain.handle('play-track', () => trigger('play'));
+  ipcMain.handle('pause-track', () => trigger('pause'));
+  ipcMain.handle(
+    'load-track',
+    (_event, [trackId]) =>
+      new Promise((resolve) => {
+        if (!trackId) {
+          resolve(false);
+        }
+        const loadFinishedHandler = () => {
+          void (async () => {
+            log('loaded', Date.now());
+            dispatch(mediaLoaded());
+            await embed.webContents.executeJavaScript(
+              '$("audio").on("ended", () => { window.playbackComplete = true }).length;',
+              true,
+            );
+            resolve(true);
+          })();
+        };
+        const appState = getState();
+        const { trackPreviewEmbedSize } = appState.settings;
+        embed.webContents.once('did-finish-load', loadFinishedHandler);
+        const trackSourceSelector = selectTrackSourceByIndex(trackId as Track['id'], 0);
+        const trackSource = trackSourceSelector(appState);
+        const trackUrl = `https://bandcamp.com/EmbeddedPlayer/size=${trackPreviewEmbedSize}/bgcol=ffffff/linkcol=0687f5/track=${trackSource.sourceId}/transparent=true/`;
+        void embed.webContents.loadURL(trackUrl);
+        setBounds(trackPreviewEmbedSize);
+      }),
+  );
 }

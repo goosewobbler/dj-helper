@@ -1,7 +1,6 @@
-import { BrowserView, BrowserWindow } from 'electron';
-import { Store } from '@reduxjs/toolkit';
+import { BrowserView, BrowserWindow, ipcMain } from 'electron';
 import { createTrack, selectTrackBySourceUrl, TrackData } from '../features/tracks/tracksSlice';
-import { requestPlay, setPaused, setPlaying } from '../features/embed/embedSlice';
+import { mediaPaused, mediaPlaying } from '../features/embed/embedSlice';
 import {
   addTrack,
   clearTracks,
@@ -11,9 +10,8 @@ import {
   updatePageUrl,
 } from '../features/browsers/browsersSlice';
 import { BandCurrency, BandData, parseBandcampPageData, TralbumCollectInfo, TralbumData } from './helpers/bandcamp';
-import { AppState, Browser } from '../common/types';
+import { AppStore, Browser } from '../common/types';
 import { log } from './helpers/console';
-import { RootState } from '../features/rootReducer';
 
 type RawBandcampData = [TralbumData, BandData, TralbumCollectInfo, BandCurrency];
 
@@ -27,7 +25,8 @@ async function getPageTrackData(view: BrowserView, url: string) {
   return bcPageData;
 }
 
-function createBrowser(mainWindow: BrowserWindow, reduxStore: Store, browser: Browser) {
+function createBrowser(mainWindow: BrowserWindow, reduxStore: AppStore, browser: Browser) {
+  const { dispatch, getState, subscribe } = reduxStore;
   const view = new BrowserView();
   let currentlyNavigating = false;
 
@@ -37,7 +36,7 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: Store, browser: Br
 
   const setBounds = () => {
     const { height: windowHeight } = mainWindow.getBounds();
-    const { trackPreviewEmbedSize } = (reduxStore.getState() as AppState).settings;
+    const { trackPreviewEmbedSize } = getState().settings;
     const statusBarHeight = trackPreviewEmbedSize === 'small' ? 64 : 124;
     const headerBarHeight = 62;
     const metaPanelHeight = 326;
@@ -60,7 +59,7 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: Store, browser: Br
 
   view.webContents.setWindowOpenHandler(({ url }) => {
     log('windowOpenHandler', url);
-    reduxStore.dispatch(updatePageUrl({ id: browser.id, url }));
+    dispatch(updatePageUrl({ id: browser.id, url }));
     return { action: 'deny' };
   });
 
@@ -75,30 +74,30 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: Store, browser: Br
       const playingTrack = trackData.trackinfo.find((track) => track.title_link === titleLinkPlaying);
 
       if (playingTrack) {
-        reduxStore.dispatch(
-          requestPlay({
-            trackId: playingTrack.id,
-            context: 'browser',
-          }),
+        dispatch(
+          mediaPlaying(),
+          // mediaPlaying({
+          //   trackId: playingTrack.id,
+          //   context: 'browser',
+          // }),
         );
-        reduxStore.dispatch(setPlaying());
       }
     })();
   });
 
   view.webContents.on('media-paused', () => {
     log('pausing from browser', Date.now());
-    reduxStore.dispatch(setPaused());
+    dispatch(mediaPaused());
   });
 
   view.webContents.on('page-title-updated', (event, title) => {
-    reduxStore.dispatch(updatePageTitle({ id: browser.id, title }));
+    dispatch(updatePageTitle({ id: browser.id, title }));
   });
 
   view.webContents.on('will-navigate', (event, url) => {
     log('will-navigate', url);
     event.preventDefault();
-    reduxStore.dispatch(updatePageUrl({ id: browser.id, url }));
+    dispatch(updatePageUrl({ id: browser.id, url }));
   });
 
   view.webContents.on('did-finish-load', () => {
@@ -120,11 +119,11 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: Store, browser: Br
             url: title_link,
             priceCurrency: pageTrackData.currency,
           };
-          reduxStore.dispatch(createTrack(trackData));
+          dispatch(createTrack(trackData));
           const trackSelector = selectTrackBySourceUrl(title_link);
-          const track = trackSelector(reduxStore.getState() as AppState);
+          const track = trackSelector(getState());
           log('selected browser', browser.id, track);
-          reduxStore.dispatch(addTrack({ id: browser.id, trackId: track.id }));
+          dispatch(addTrack({ id: browser.id, trackId: track.id }));
         });
       })();
     }
@@ -135,20 +134,16 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: Store, browser: Br
     return !currentlyNavigating && url !== currentUrl;
   };
 
-  reduxStore.subscribe(() => {
-    const state = reduxStore.getState() as AppState;
+  subscribe(() => {
+    const state = getState();
     const browserSelector = selectBrowserById(browser.id);
     const { url } = browserSelector(state);
 
     if (canNavigateTo(url)) {
       log('loading URL', url);
       currentlyNavigating = true;
-      reduxStore.dispatch(clearTracks({ id: browser.id }));
+      dispatch(clearTracks({ id: browser.id }));
       void view.webContents.loadURL(url);
-    }
-
-    if (state.embed.isResizing) {
-      setBounds();
     }
 
     const activeBrowserSelector = selectActiveBrowser();
@@ -158,10 +153,12 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: Store, browser: Br
       view.setBounds({ x: 0, y: 0, width: 0, height: 0 });
     }
   });
+
+  ipcMain.handle('resize-browsers', () => setBounds());
 }
 
-export function initBrowsers(mainWindow: BrowserWindow, reduxStore: Store): void {
-  const state = reduxStore.getState() as RootState;
+export function initBrowsers(mainWindow: BrowserWindow, reduxStore: AppStore): void {
+  const state = reduxStore.getState();
 
   state.browsers.forEach((browser: Browser) => {
     createBrowser(mainWindow, reduxStore, browser);

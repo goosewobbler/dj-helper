@@ -1,11 +1,19 @@
-import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
+import { AnyAction, ThunkAction, ThunkDispatch, Action, Unsubscribe } from '@reduxjs/toolkit';
 
 export type AnyObject = Record<string, unknown>;
 export interface LooseObject {
   [Key: string]: AnyObject | [] | string[] | string | number | boolean;
 }
 
-export type Dispatch = ThunkDispatch<AppState, undefined, AnyAction>;
+export enum EmbedStatus {
+  Idle = 'IDLE',
+  LoadRequested = 'LOAD_REQUESTED',
+  Loaded = 'LOADED',
+  PlayRequested = 'PLAY_REQUESTED',
+  Playing = 'PLAYING',
+  PauseRequested = 'PAUSE_REQUESTED',
+  Paused = 'PAUSED',
+}
 
 export interface Response {
   body: string;
@@ -51,14 +59,7 @@ export type Browser = {
 };
 
 export type Embed = {
-  triggerLoad: boolean;
-  triggerPlay: boolean;
-  triggerPause: boolean;
-  isPlaying: boolean;
-  isPaused: boolean;
-  isLoading: boolean;
-  isResizing: boolean;
-  triggerContext?: string;
+  status: EmbedStatus;
   trackContext?: string;
   trackId?: Track['id'];
 };
@@ -81,3 +82,11 @@ export interface AppState {
   settings: Settings;
   status: Status;
 }
+
+export type AppThunk = ThunkAction<void, AppState, unknown, Action<string>>;
+export type Dispatch = ThunkDispatch<AppState, undefined, AnyAction>;
+export type AppStore = {
+  dispatch: Dispatch;
+  getState: () => AppState;
+  subscribe: (listener: () => void) => Unsubscribe;
+};

@@ -1,4 +1,4 @@
-import { Browser, List, Settings, Track } from '../../src/common/types';
+import { Browser, EmbedStatus, List, Settings, Track } from '../../src/common/types';
 
 export function mockState({
   browsers = [],
@@ -13,13 +13,7 @@ export function mockState({
     lists,
     embed: {
       trackId: 0,
-      triggerLoad: false,
-      triggerPlay: false,
-      triggerPause: false,
-      isPlaying: false,
-      isPaused: false,
-      isLoading: false,
-      isResizing: false,
+      status: EmbedStatus.Idle,
       trackContext: 'browser',
     },
     tracks,

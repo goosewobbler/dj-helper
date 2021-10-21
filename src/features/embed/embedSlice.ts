@@ -1,147 +1,111 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { AppState, Embed, Track } from '../../common/types';
+import { AppState, AppThunk, Embed, Track, EmbedStatus } from '../../common/types';
 import { log } from '../../main/helpers/console';
 
 const initialState = {
-  triggerLoad: false,
-  triggerPlay: false,
-  triggerPause: false,
-  isPlaying: false,
-  isPaused: false,
-  isLoading: false,
-  isResizing: false,
-  // triggerResize, triggerPlayAfterLoad
+  status: EmbedStatus.Idle,
 } as Embed;
 
-export type PlayRequest = { trackId: Track['id']; context: Embed['trackContext'] };
+type EmbedContext = { trackId?: Track['id']; context: Embed['trackContext'] };
 
 export const slice = createSlice({
   name: 'embed',
   initialState,
   reducers: {
-    setPlaying: (state) => ({
-      ...state,
-      triggerLoad: false,
-      triggerPlay: false,
-      triggerPause: false,
-      isPlaying: true,
-      isPaused: false,
-      isLoading: false,
-      isResizing: false,
-    }),
-    setPaused: (state) => {
-      if (!state.triggerPause) {
-        // discard pause events that weren't triggered
-        return {
-          ...state,
-          triggerLoad: false,
-          triggerPlay: false,
-          triggerPause: false,
-          isPlaying: false,
-          isPaused: false,
-          isLoading: false,
-          isResizing: false,
-        };
+    requestLoad: (state, { payload: { trackId, context } }: { payload: EmbedContext }) => {
+      const loadedTrack = state.trackId;
+      const isResize = context === 'resize';
+      log('request load', trackId, context);
+
+      if (isResize) {
+        return { ...state, trackId: loadedTrack, trackContext: 'resize', status: EmbedStatus.LoadRequested };
       }
-      return {
-        ...state,
-        triggerLoad: false,
-        triggerPlay: false,
-        triggerPause: false,
-        isPlaying: false,
-        isPaused: true,
-        isLoading: false,
-        isResizing: false,
-      };
-    },
-    setLoading: (state) => ({
-      ...state,
-      triggerLoad: false,
-      triggerPlay: false,
-      triggerPause: false,
-      isPlaying: false,
-      isPaused: false,
-      isLoading: true,
-    }),
-    setLoadComplete: (state) => {
-      log('load complete');
-      if (state.isResizing) {
-        // load after resize does not trigger play unless already playing
-        log('isResizing');
-        return {
-          ...state,
-          triggerLoad: false,
-          triggerPlay: false,
-          triggerPause: false,
-          isPlaying: false,
-          isPaused: false,
-          isLoading: false,
-          isResizing: false,
-        };
-      }
-      return {
-        ...state,
-        triggerLoad: false,
-        triggerPlay: true,
-        triggerPause: false,
-        isPlaying: false,
-        isPaused: false,
-        isLoading: false,
-        isResizing: false,
-        triggerContext: 'loadComplete',
-      };
-    },
-    requestResize: (state) => {
-      log('resize requested', state.trackId);
-      return {
-        ...state,
-        isResizing: true,
-        triggerLoad: state.trackId !== undefined, // triggerLoad if there is a track to load
-      };
-    },
-    requestLoad: (state) => {
-      if (!state.trackId || state.isLoading) {
+
+      if (!trackId || loadedTrack === trackId) {
         return state;
       }
 
-      return { ...state, triggerLoad: true };
+      switch (state.status) {
+        case EmbedStatus.Loaded:
+        case EmbedStatus.Idle:
+        case EmbedStatus.Paused:
+        case EmbedStatus.Playing:
+          return { ...state, trackId, trackContext: context, status: EmbedStatus.LoadRequested };
+        default:
+          return state;
+      }
     },
-    requestPlay: (state, { payload: { trackId, context } }: { payload: PlayRequest }) => {
-      const previousTrack = state.trackId;
+    mediaLoaded: (state) => {
+      if (state.status === EmbedStatus.LoadRequested) {
+        return { ...state, status: EmbedStatus.Loaded };
+      }
+
+      return state;
+    },
+    requestPlay: (state) => {
+      const loadedTrack = state.trackId;
       log('request play', state);
 
-      if (!trackId || state.isLoading) {
-        log('not playing', trackId, state.isLoading);
-        return state;
+      if (loadedTrack && state.status === EmbedStatus.Loaded) {
+        return { ...state, status: EmbedStatus.PlayRequested };
+      }
+      return state;
+    },
+    mediaPlaying: (state) => {
+      if ([EmbedStatus.PlayRequested, EmbedStatus.Paused].includes(state.status)) {
+        return { ...state, status: EmbedStatus.Playing };
       }
 
-      if (previousTrack === trackId) {
-        // requested track already loaded - trigger play without load
-        return { ...state, triggerPlay: true };
-      }
-
-      return { ...state, trackId, trackContext: context, triggerLoad: true };
+      return state;
     },
     requestPause: (state) => {
-      if (state.isLoading) {
-        return state;
+      if (state.status === EmbedStatus.Playing) {
+        return { ...state, status: EmbedStatus.PauseRequested };
       }
 
-      return { ...state, triggerPause: true };
+      return state;
+    },
+    mediaPaused: (state) => {
+      if (state.status === EmbedStatus.PauseRequested) {
+        return { ...state, status: EmbedStatus.Paused };
+      }
+
+      return state;
     },
   },
 });
 
-export const {
-  requestLoad,
-  requestPlay,
-  requestPause,
-  requestResize,
-  setPlaying,
-  setPaused,
-  setLoading,
-  setLoadComplete,
-} = slice.actions;
+export const { requestLoad, mediaLoaded, requestPlay, mediaPlaying, requestPause, mediaPaused } = slice.actions;
+
+export const pauseTrack = (): AppThunk => async (dispatch, getState) => {
+  dispatch(requestPause());
+  if (getState().embed.status === EmbedStatus.PauseRequested) {
+    await window.api.invoke('pause-track');
+  }
+};
+
+export const loadAndPlayTrack =
+  ({ trackId, context }: EmbedContext): AppThunk =>
+  async (dispatch, getState) => {
+    dispatch(requestLoad({ trackId, context }));
+    if (getState().embed.status === EmbedStatus.LoadRequested) {
+      await window.api.invoke('load-track', trackId);
+      log('loaded yo', getState().embed);
+      if (getState().embed.status === EmbedStatus.Loaded) {
+        dispatch(requestPlay());
+        await window.api.invoke('play-track');
+      }
+    }
+  };
+
+export const resizeEmbed = (): AppThunk => async (dispatch, getState) => {
+  dispatch(requestLoad({ context: 'resize' }));
+  const embedState = getState().embed;
+  if (embedState.status === EmbedStatus.LoadRequested) {
+    await window.api.invoke('load-track', embedState.trackId);
+    await window.api.invoke('resize-browsers');
+  }
+};
 
 export const selectTrackByEmbedLoaded =
   () =>
@@ -151,11 +115,21 @@ export const selectTrackByEmbedLoaded =
 export const trackIsPlaying =
   ({ trackId }: { trackId: Track['id'] }) =>
   ({ embed }: AppState): boolean =>
-    embed.trackId === trackId && embed.isPlaying;
+    embed.trackId === trackId && embed.status === EmbedStatus.Playing;
+
+export const trackIsPaused =
+  ({ trackId }: { trackId: Track['id'] }) =>
+  ({ embed }: AppState): boolean =>
+    embed.trackId === trackId && embed.status === EmbedStatus.Paused;
 
 export const trackIsLoaded =
   ({ trackId }: { trackId: Track['id'] }) =>
   ({ embed }: AppState): boolean =>
     embed.trackId === trackId;
+
+export const embedRequestInFlight =
+  () =>
+  ({ embed }: AppState): boolean =>
+    [EmbedStatus.LoadRequested, EmbedStatus.PauseRequested, EmbedStatus.PlayRequested].includes(embed.status);
 
 export const embedReducer = slice.reducer;

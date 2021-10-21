@@ -23,7 +23,7 @@ export const slice = createSlice({
         tracks: [],
         active: true,
       };
-      //TODO: set existing browsers to inactive
+      // TODO: set existing browsers to inactive
       return [...state, newBrowser];
     },
     updatePageUrl: (state, { payload: { id, url } }: { payload: { id: number; url: string } }) =>

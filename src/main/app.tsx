@@ -12,7 +12,7 @@ export const createApp = async (mainWindow: Electron.BrowserWindow, isDev: boole
   initBrowsers(mainWindow, reduxStore);
   initEmbed(mainWindow, reduxStore);
 
-  log(`DJ Helper v${currentVersion} is starting${isDev ? ' in development mode...' : '...'}`);
+  log(`DJ Helper v${currentVersion} is starting${isDev ? ' in development mode' : ''}...`);
 
   return Promise.resolve();
 };

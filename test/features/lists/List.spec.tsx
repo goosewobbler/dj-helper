@@ -1,22 +1,15 @@
 import * as React from 'react';
 import { render, screen, RenderResult, userEvent } from '../../helpers/integration';
 import { List } from '../../../src/features/lists/List';
+import { mockState } from '../../helpers/mockState';
 
 let list: RenderResult;
 
 describe('List', () => {
   beforeEach(() => {
     list = render(<List id={546} />, {
-      preloadedState: {
+      preloadedState: mockState({
         lists: [{ id: 546, title: 'list one', tracks: [] }],
-        embed: {
-          triggerLoad: false,
-          triggerPlay: false,
-          triggerPause: false,
-          isPlaying: false,
-          isPaused: false,
-          isLoading: false,
-        },
         tracks: [
           {
             id: 1,
@@ -26,13 +19,7 @@ describe('List', () => {
             sources: [{ sourceId: 1, url: 'https://github.com/goosewobbler' }],
           },
         ],
-        browsers: [],
-        settings: {
-          darkModeEnabled: false,
-          autoplayEnabled: true,
-          trackPreviewEmbedSize: 'small',
-        },
-      },
+      }),
     });
   });
 

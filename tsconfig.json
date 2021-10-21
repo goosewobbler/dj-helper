@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "ES2020",
+    "module": "CommonJS",
     "moduleResolution": "node",
     "esModuleInterop": true,
     "strict": true,
@@ -21,6 +21,7 @@
     "allowJs": true,
     "checkJs": true,
     "noEmit": true,
+    "types": ["node", "webdriverio/async", "mocha", "webpack-env"],
     "typeRoots": ["./types", "./node_modules/@types"]
   },
   "include": [

@@ -32,7 +32,7 @@ export function DeleteDataButton(): ReactElement {
   const explosionAdditionalClassNames = fadeExplosion ? 'opacity-0 scale-150' : 'opacity-100';
 
   return (
-    <div>
+    <div className="inline-block float-right mt-4 mr-4 w-30">
       {isDev && (
         <button
           type="button"

@@ -1,11 +1,35 @@
-import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
+import { AnyAction, ThunkAction, ThunkDispatch, Action, Unsubscribe } from '@reduxjs/toolkit';
 
 export type AnyObject = Record<string, unknown>;
 export interface LooseObject {
   [Key: string]: AnyObject | [] | string[] | string | number | boolean;
 }
 
-export type Dispatch = ThunkDispatch<AppState, undefined, AnyAction>;
+export enum EmbedStatus {
+  Idle = 'IDLE',
+  LoadRequested = 'LOAD_REQUESTED',
+  Loaded = 'LOADED',
+  PlayRequested = 'PLAY_REQUESTED',
+  Playing = 'PLAYING',
+  PauseRequested = 'PAUSE_REQUESTED',
+  Paused = 'PAUSED',
+}
+
+export enum LoadContextType {
+  Browser = 'BROWSER',
+  List = 'LIST',
+  Settings = 'SETTINGS',
+}
+
+export enum TrackPreviewEmbedSize {
+  Small = 'SMALL',
+  Medium = 'MEDIUM',
+}
+
+export type LoadContext = {
+  contextId?: number;
+  contextType: LoadContextType;
+};
 
 export interface Response {
   body: string;
@@ -47,24 +71,23 @@ export type Browser = {
   url: string;
   title: string;
   tracks: Track['id'][];
+  active: boolean;
 };
 
 export type Embed = {
-  triggerLoad: boolean;
-  triggerPlay: boolean;
-  triggerPause: boolean;
-  isPlaying: boolean;
-  isPaused: boolean;
-  isLoading: boolean;
-  triggerContext?: string;
-  trackContext?: string;
+  status: EmbedStatus;
+  loadContext?: LoadContext;
   trackId?: Track['id'];
 };
 
 export type Settings = {
   darkModeEnabled: boolean;
   autoplayEnabled: boolean;
-  trackPreviewEmbedSize: 'small' | 'medium';
+  trackPreviewEmbedSize: TrackPreviewEmbedSize;
+};
+
+export type Status = {
+  statusText: string;
 };
 
 export interface AppState {
@@ -73,4 +96,13 @@ export interface AppState {
   tracks: Track[];
   browsers: Browser[];
   settings: Settings;
+  status: Status;
 }
+
+export type AppThunk = ThunkAction<void, AppState, unknown, Action<string>>;
+export type Dispatch = ThunkDispatch<AppState, undefined, AnyAction>;
+export type AppStore = {
+  dispatch: Dispatch;
+  getState: () => AppState;
+  subscribe: (listener: () => void) => Unsubscribe;
+};

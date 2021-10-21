@@ -5,6 +5,7 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+// const ElectronReloadPlugin = require('webpack-electron-reload');
 
 const plugins = [];
 const isDev = process.env.NODE_ENV === 'development';
@@ -50,6 +51,7 @@ plugins.push(
   }),
   new HtmlWebpackHarddiskPlugin(),
   new ReactRefreshWebpackPlugin(),
+  // ElectronReloadPlugin(),
 );
 
 module.exports = plugins;

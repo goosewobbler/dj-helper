@@ -25,6 +25,11 @@ void (async () => {
   }
 })();
 
+// process.on('SIGSTOP', () => {
+//   log('Received SIGSTOP. Closing...');
+//   mainWindow?.close();
+// });
+
 async function createWindow(): Promise<void> {
   mainWindow = new BrowserWindow({
     show: false,

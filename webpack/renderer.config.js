@@ -27,7 +27,8 @@ const startMain = () => {
     .on('spawn', () => {
       startingMainProcess = false;
     })
-    .on('close', (code) => {
+    .on('exit', (code) => {
+      console.log('received close', code);
       if (!startingMainProcess) {
         // can exit parent process if main is not about to restart
         process.exit(code);
@@ -105,7 +106,7 @@ module.exports = {
     compress: false,
     hot: true,
     headers: { 'Access-Control-Allow-Origin': '*' },
-    devMiddleware: {    
+    devMiddleware: {
       publicPath,
       writeToDisk: true,
     },
@@ -119,7 +120,7 @@ module.exports = {
         },
       },
       {
-        directory: `${__dirname}/../dll`,      
+        directory: `${__dirname}/../dll`,
         watch: {
           aggregateTimeout: 300,
           ignored: ['**/node_modules'],
@@ -132,24 +133,36 @@ module.exports = {
       disableDotRule: false,
     },
     onBeforeSetupMiddleware({ compiler }) {
-      let modifiedMain = false;
+      let requiresRestart = false;
       compiler.hooks.watchRun.tap('ElectronDevServerManagement', ({ modifiedFiles }) => {
         if (modifiedFiles) {
-          modifiedMain = Array.from(modifiedFiles).some((modifiedFilePath) =>
-            modifiedFilePath.includes(`${cwd()}/src/main`),
+          requiresRestart = Array.from(modifiedFiles).some(
+            (modifiedFilePath) =>
+              modifiedFilePath.includes(`${cwd()}/src/main`) || modifiedFilePath.includes(`${cwd()}/src/renderer`),
           );
+          // if (requiresRestart) {
+
+          //   console.log('killing main');
+
+          //   // mainProcess.kill('SIGSTOP');
+          //   // process.exit(0);
+          // }
         }
       });
       compiler.hooks.done.tap('ElectronDevServerManagement', () => {
+        console.log('compile complete', requiresRestart, typeof mainProcess, mainProcess);
         if (!mainProcess) {
           // first run => start main process
+          console.log('first run');
           startingMainProcess = true;
           startMain();
-        } else if (modifiedMain) {
-          // already running & main files modified => restart
-          mainProcess.kill();
+        } else if (requiresRestart) {
+          console.log('restarting', mainProcess.exitCode);
+          // process.kill(mainProcess.pid);
           startingMainProcess = true;
-          buildMain().on('close', () => startMain());
+          // already running & main files modified => restart
+
+          // buildMain().on('close', () => startMain());
         }
       });
     },

@@ -1,8 +1,8 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { requestPause, requestPlay, trackIsPlaying } from '../embed/embedSlice';
+import { embedRequestInFlight, loadAndPlayTrack, pauseTrack, trackIsPlaying } from '../embed/embedSlice';
 import { selectTrackById } from './tracksSlice';
-import { Track } from '../../common/types';
+import { LoadContext, LoadContextType, Track } from '../../common/types';
 import { log } from '../../main/helpers/console';
 import {
   addTrackToSelectedList,
@@ -33,7 +33,7 @@ export function TrackMeta({
   listTotalTracks,
 }: {
   id: Track['id'];
-  context: string;
+  context: LoadContext;
   listIndex?: number;
   listTotalTracks?: number;
 }) {
@@ -41,16 +41,18 @@ export function TrackMeta({
   const track = useSelector(selectTrackById(id));
   const isPlaying = useSelector(trackIsPlaying({ trackId: id }));
   const isOnSelectedList = useSelector(trackIsOnSelectedList({ trackId: id }));
+  const showSpinner = useSelector(embedRequestInFlight());
   if (!track) {
     return <></>;
   }
   const { artist, title, duration, sources } = track;
-  const isListContext = context.startsWith('list-');
-  const isBrowserContext = context.startsWith('browser-');
+  const isListContext = context.contextType === LoadContextType.List;
+  const isBrowserContext = context.contextType === LoadContextType.Browser;
+  const isPlayingAdditionalStyles = isPlaying ? 'bg-blue-200' : '';
   log('zomg loading track', { artist, title, duration, sources });
 
   return (
-    <div key={id} className="group">
+    <div key={id} className={`group-scope h-10 ${isPlayingAdditionalStyles}`}>
       <span
         className={`inline-block overflow-hidden whitespace-nowrap overflow-ellipsis ${
           isListContext ? 'w-24' : 'w-32'
@@ -66,7 +68,7 @@ export function TrackMeta({
         {title}
       </span>
       <span className="inline-block w-10 overflow-hidden whitespace-nowrap">{displayTrackDuration(duration)}</span>
-      <span className="inline-block w-10 opacity-0 group-hover:opacity-100">
+      <span className="inline-block w-10 opacity-0 group-scope-hover:opacity-100">
         {isListContext && (listIndex as number) > 0 && (
           <button
             type="button"
@@ -88,37 +90,40 @@ export function TrackMeta({
           </button>
         )}
       </span>
-      <span className="inline-block w-5">
+      <span className="inline-block w-16 opacity-0 group-scope-hover:opacity-100">
         <PlayPauseButton
           isPlaying={isPlaying}
+          showSpinner={showSpinner}
           onClick={() => {
             log('invoke play', { trackId: id, context });
-            dispatch(isPlaying ? requestPause() : requestPlay({ trackId: id, context }));
+            dispatch(isPlaying ? pauseTrack() : loadAndPlayTrack({ trackId: id, context }));
           }}
         />
       </span>
-      {isListContext && isOnSelectedList && (
-        <button
-          type="button"
-          onClick={() => {
-            dispatch(removeTrackFromSelectedList({ trackId: id }));
-          }}
-        >
-          <CrossIcon className="cross-icon" />
-        </button>
-      )}
-      {isBrowserContext && (
-        <AddRemoveListButton
-          isOnSelectedList={isOnSelectedList}
-          onClick={() => {
-            if (isOnSelectedList) {
+      <span className="inline-block w-5 opacity-0 group-scope-hover:opacity-100">
+        {isListContext && isOnSelectedList && (
+          <button
+            type="button"
+            onClick={() => {
               dispatch(removeTrackFromSelectedList({ trackId: id }));
-            } else {
-              dispatch(addTrackToSelectedList({ trackId: id }));
-            }
-          }}
-        />
-      )}
+            }}
+          >
+            <CrossIcon className="cross-icon" />
+          </button>
+        )}
+        {isBrowserContext && (
+          <AddRemoveListButton
+            isOnSelectedList={isOnSelectedList}
+            onClick={() => {
+              if (isOnSelectedList) {
+                dispatch(removeTrackFromSelectedList({ trackId: id }));
+              } else {
+                dispatch(addTrackToSelectedList({ trackId: id }));
+              }
+            }}
+          />
+        )}
+      </span>
     </div>
   );
 }

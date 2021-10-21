@@ -12,7 +12,7 @@ module.exports = {
     },
   },
   clearMocks: true,
-  testPathIgnorePatterns: ['.node_modules_production'],
+  testPathIgnorePatterns: ['.node_modules_production', 'e2e'],
   modulePathIgnorePatterns: ['.node_modules_production'],
   testMatch: ['**/test/**/*.spec.(ts|tsx)'],
   setupFilesAfterEnv: ['./test/setup.ts'],

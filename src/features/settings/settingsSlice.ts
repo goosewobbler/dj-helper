@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { AppState, Settings } from '../../common/types';
+import { AppState, Settings, TrackPreviewEmbedSize } from '../../common/types';
 
 const initialState = {
   darkModeEnabled: false,
   autoplayEnabled: true,
-  trackPreviewEmbedSize: 'small',
+  trackPreviewEmbedSize: TrackPreviewEmbedSize.Small,
 } as Settings;
 
 export const slice = createSlice({
@@ -25,7 +25,7 @@ export const { setSetting } = slice.actions;
 
 export const getSettingValue =
   ({ settingKey }: { settingKey: string }) =>
-  ({ settings }: AppState): string =>
-    settings[settingKey as keyof Settings] as string;
+  ({ settings }: AppState) =>
+    settings[settingKey as keyof Settings];
 
 export const settingsReducer = slice.reducer;

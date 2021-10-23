@@ -27,7 +27,7 @@ export const App = (): ReactElement => {
           DJ Helper
         </h1>
       </div>
-      <div className="flex flex-grow content">
+      <div className="flex flex-grow font-sans content">
         <div className="flex flex-col flex-grow-0 flex-shrink-0 w-1/3 p-2 section">
           <ListPane />
         </div>

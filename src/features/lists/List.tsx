@@ -64,7 +64,7 @@ export function List({ id }: { id: number }): ReactElement {
         onKeyPress={toggleAccordion}
         tabIndex={0}
       >
-        <span className="font-sans text-sm title w-80" data-testid="title">
+        <span className="text-sm title w-80" data-testid="title">
           {editing ? (
             <>
               <label htmlFor="list-title">
@@ -103,7 +103,7 @@ export function List({ id }: { id: number }): ReactElement {
         style={{ maxHeight: accordionContentMaxHeight }}
         className="overflow-hidden duration-500 ease-in-out bg-white accordion-content transition-max-height"
       >
-        <ol className="p-4 font-sans text-sm font-normal tracks">
+        <ol className="p-4 text-sm font-normal tracks">
           {tracks.map(
             (trackId: Track['id'], index: number): ReactElement => (
               <TrackMeta

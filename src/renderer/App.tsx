@@ -23,7 +23,7 @@ export const App = (): ReactElement => {
   return (
     <div className="flex flex-col flex-grow bg-primary-background">
       <div className="flex items-center justify-between flex-shrink-0 p-3 bg-indigo-200 border-b shadow-md header bg-header-5">
-        <h1 className="text-3xl text-primary-text" key="title">
+        <h1 className="text-3xl text-primary-text font-title" key="title">
           DJ Helper
         </h1>
       </div>

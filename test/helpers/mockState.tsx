@@ -21,6 +21,7 @@ export function mockState({
     settings: {
       darkModeEnabled: false,
       autoplayEnabled: true,
+      windowBounds: { x: 0, y: 0, width: 1500, height: 1000 },
       trackPreviewEmbedSize: 'small' as Settings['trackPreviewEmbedSize'],
     },
     status: {

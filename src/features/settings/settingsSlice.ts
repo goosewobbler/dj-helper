@@ -1,9 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { AppState, Settings, TrackPreviewEmbedSize } from '../../common/types';
+import { AppState, LooseObject, Settings, TrackPreviewEmbedSize } from '../../common/types';
 
 const initialState = {
   darkModeEnabled: false,
   autoplayEnabled: true,
+  windowBounds: { x: 0, y: 0, width: 1500, height: 1000 },
   trackPreviewEmbedSize: TrackPreviewEmbedSize.Small,
 } as Settings;
 
@@ -13,7 +14,9 @@ export const slice = createSlice({
   reducers: {
     setSetting: (
       state,
-      { payload: { settingKey, settingValue } }: { payload: { settingKey: string; settingValue: boolean | string } },
+      {
+        payload: { settingKey, settingValue },
+      }: { payload: { settingKey: string; settingValue: boolean | string | LooseObject } },
     ) => ({
       ...state,
       [settingKey]: settingValue,

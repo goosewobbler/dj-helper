@@ -1,4 +1,5 @@
 import { AnyAction, ThunkAction, ThunkDispatch, Action, Unsubscribe } from '@reduxjs/toolkit';
+import { Rectangle } from 'electron';
 
 export type AnyObject = Record<string, unknown>;
 export interface LooseObject {
@@ -83,6 +84,7 @@ export type Embed = {
 export type Settings = {
   darkModeEnabled: boolean;
   autoplayEnabled: boolean;
+  windowBounds: Rectangle;
   trackPreviewEmbedSize: TrackPreviewEmbedSize;
 };
 

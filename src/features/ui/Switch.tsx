@@ -5,7 +5,7 @@ export const Switch = ({ id, isOn, handleToggle }: { id: string; isOn: boolean; 
     <label className="switch-label" htmlFor={id}>
       <span className="switch-button" />
       Small Embed
-      <input checked={isOn} onChange={handleToggle} className="switch-checkbox" id={id} type="checkbox" />
+      <input checked={isOn} onChange={handleToggle} className="ml-1 switch-checkbox" id={id} type="checkbox" />
     </label>
   </div>
 );

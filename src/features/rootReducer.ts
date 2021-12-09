@@ -1,20 +1,23 @@
 import { combineReducers, Action } from '@reduxjs/toolkit';
-import { embedReducer } from './embed/embedSlice';
+import { embedReducer, handleInit as initEmbed } from './embed/embedSlice';
 import { listsReducer } from './lists/listsSlice';
 import { tracksReducer } from './tracks/tracksSlice';
 import { browsersReducer } from './browsers/browsersSlice';
-import { settingsReducer } from './settings/settingsSlice';
-import { statusReducer } from './status/statusSlice';
-import { AppState } from '../common/types';
+import { uiReducer } from './ui/uiSlice';
+import { AppState, AppThunk } from '../common/types';
 
 const combinedReducers = combineReducers({
   embed: embedReducer,
   lists: listsReducer,
   tracks: tracksReducer,
   browsers: browsersReducer,
-  settings: settingsReducer,
-  status: statusReducer,
+  ui: uiReducer,
 });
+
+export const storeHydrated = (): AppThunk => async (dispatch) => {
+  dispatch(initEmbed());
+  await window.api.invoke('update-window-bounds');
+};
 
 export const resetStoreAction = { type: 'store/reset' };
 

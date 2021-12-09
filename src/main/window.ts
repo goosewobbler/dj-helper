@@ -1,23 +1,20 @@
-import { BrowserWindow } from 'electron';
+import { BrowserWindow, ipcMain } from 'electron';
 import { AppStore } from '../common/types';
-import { setSetting } from '../features/settings/settingsSlice';
+import { windowBoundsChanged } from '../features/ui/uiSlice';
 
 export function initWindow(mainWindow: BrowserWindow, reduxStore: AppStore): void {
-  const { dispatch, subscribe, getState } = reduxStore;
+  const { dispatch, getState } = reduxStore;
 
-  function storeWindowBounds() {
+  function boundsChangeHandler() {
     const { x, y, width, height } = mainWindow.getBounds();
-    dispatch(setSetting({ settingKey: 'windowBounds', settingValue: { x, y, width, height } }));
+    dispatch(windowBoundsChanged({ x, y, width, height }));
   }
 
-  mainWindow.on('resize', storeWindowBounds);
-  mainWindow.on('move', storeWindowBounds);
+  mainWindow.on('resize', boundsChangeHandler);
+  mainWindow.on('move', boundsChangeHandler);
 
-  subscribe(() => {
-    const { windowBounds } = getState().settings;
-
-    if (windowBounds !== mainWindow.getBounds()) {
-      mainWindow.setBounds(windowBounds, true);
-    }
+  ipcMain.handle('update-window-bounds', () => {
+    const { windowBounds } = getState().ui;
+    mainWindow.setBounds(windowBounds, true);
   });
 }

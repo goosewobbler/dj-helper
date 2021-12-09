@@ -13,16 +13,10 @@ let lastClickPlayTime: number;
 export function initEmbed(mainWindow: BrowserWindow, reduxStore: AppStore): void {
   const { dispatch, getState } = reduxStore;
 
-  const setBounds = (embedSize = getState().settings.trackPreviewEmbedSize) => {
+  const setBounds = (embedSize = getState().ui.trackPreviewEmbedSize) => {
     const { height } = mainWindow.getBounds();
     const embedHeight = embedSize === TrackPreviewEmbedSize.Medium ? 120 : 42;
     const embedWidth = 500;
-    log('setting bounds', {
-      x: 10,
-      y: height - embedHeight - 33,
-      width: embedWidth,
-      height: embedHeight,
-    });
     embed.setBounds({
       x: 10,
       y: height - embedHeight - 33,
@@ -112,7 +106,7 @@ export function initEmbed(mainWindow: BrowserWindow, reduxStore: AppStore): void
           })();
         };
         const appState = getState();
-        const { trackPreviewEmbedSize } = appState.settings;
+        const { trackPreviewEmbedSize } = appState.ui;
         embed.webContents.once('did-finish-load', loadFinishedHandler);
         const trackSourceSelector = selectTrackSourceByIndex(trackId as Track['id'], 0);
         const trackSource = trackSourceSelector(appState);

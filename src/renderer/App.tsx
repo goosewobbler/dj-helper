@@ -6,7 +6,7 @@ import { selectBrowsers } from '../features/browsers/browsersSlice';
 import { Tabs } from '../features/browsers/Tabs';
 import { handleAutoplay } from '../features/embed/embedSlice';
 import { ListPane } from '../features/lists/ListPane';
-import { StatusBar } from '../features/status/StatusBar';
+import { StatusBar } from '../features/ui/StatusBar';
 import { log } from '../main/helpers/console';
 
 export const App = (): ReactElement => {

@@ -2,8 +2,8 @@ import { configureStore, StoreEnhancer, Store } from '@reduxjs/toolkit';
 import { offline } from '@redux-offline/redux-offline';
 import offlineConfig from '@redux-offline/redux-offline/lib/defaults';
 import ElectronStore from 'electron-store';
-import { rootReducer } from '../features/rootReducer';
-import { AnyObject } from './types';
+import { rootReducer, storeHydrated } from '../features/rootReducer';
+import { AnyObject, AppStore } from './types';
 
 function createElectronStorage() {
   const store = new ElectronStore({});
@@ -29,7 +29,10 @@ export function createReduxStore({
     if (context === 'main') {
       offlineConfig.persistOptions = { storage: createElectronStorage() };
     } else {
-      offlineConfig.persistCallback = () => resolve(store);
+      offlineConfig.persistCallback = () => {
+        (store as AppStore).dispatch(storeHydrated());
+        resolve(store);
+      };
     }
     enhancers.push(offline(offlineConfig) as StoreEnhancer);
 

@@ -1,4 +1,4 @@
-import { Browser, EmbedStatus, List, Settings, Track } from '../../src/common/types';
+import { Browser, EmbedStatus, List, Track, UI } from '../../src/common/types';
 
 export function mockState({
   browsers = [],
@@ -15,17 +15,15 @@ export function mockState({
       trackId: 0,
       status: EmbedStatus.Idle,
       trackContext: 'browser',
+      autoplayEnabled: true,
     },
     tracks,
     browsers,
-    settings: {
-      darkModeEnabled: false,
-      autoplayEnabled: true,
-      windowBounds: { x: 0, y: 0, width: 1500, height: 1000 },
-      trackPreviewEmbedSize: 'small' as Settings['trackPreviewEmbedSize'],
-    },
-    status: {
+    ui: {
       statusText: '',
+      darkModeEnabled: false,
+      windowBounds: { x: 0, y: 0, width: 1500, height: 1000 },
+      trackPreviewEmbedSize: 'small' as UI['trackPreviewEmbedSize'],
     },
   };
 }

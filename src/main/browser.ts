@@ -34,7 +34,7 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: AppStore, browser:
 
   const setBounds = () => {
     const { height: windowHeight, width: windowWidth } = mainWindow.getBounds();
-    const { trackPreviewEmbedSize } = getState().settings;
+    const { trackPreviewEmbedSize } = getState().ui;
     const statusBarHeight = trackPreviewEmbedSize === TrackPreviewEmbedSize.Small ? 65 : 145;
     const headerBarHeight = 62;
     const metaPanelHeight = 326;

@@ -43,7 +43,7 @@ export function TrackMeta({
   const isOnSelectedList = useSelector(trackIsOnSelectedList({ trackId: id }));
   const showSpinner = useSelector(embedRequestInFlight());
   if (!track) {
-    return <></>;
+    return <> </>;
   }
   const { artist, title, duration, sources } = track;
   const isListContext = context.contextType === LoadContextType.List;

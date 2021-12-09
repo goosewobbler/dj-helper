@@ -6,7 +6,7 @@ import { selectBrowsers } from '../features/browsers/browsersSlice';
 import { Tabs } from '../features/browsers/Tabs';
 import { handleAutoplay } from '../features/embed/embedSlice';
 import { ListPane } from '../features/lists/ListPane';
-import { StatusBar } from '../features/status/StatusBar';
+import { StatusBar } from '../features/ui/StatusBar';
 import { log } from '../main/helpers/console';
 
 export const App = (): ReactElement => {
@@ -23,11 +23,11 @@ export const App = (): ReactElement => {
   return (
     <div className="flex flex-col flex-grow bg-primary-background">
       <div className="flex items-center justify-between flex-shrink-0 p-3 bg-indigo-200 border-b shadow-md header bg-header-5">
-        <h1 className="text-3xl text-primary-text" key="title">
+        <h1 className="text-3xl text-primary-text font-title" key="title">
           DJ Helper
         </h1>
       </div>
-      <div className="flex flex-grow content">
+      <div className="flex flex-grow font-sans content">
         <div className="flex flex-col flex-grow-0 flex-shrink-0 w-1/3 p-2 section">
           <ListPane />
         </div>

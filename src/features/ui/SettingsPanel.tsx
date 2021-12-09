@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import { useDispatch, useSelector, batch } from 'react-redux';
-import { getSettingValue, setSetting } from './settingsSlice';
+import { selectTrackPreviewEmbedSize, trackPreviewEmbedSizeToggled } from './uiSlice';
 import { resizeEmbed } from '../embed/embedSlice';
 import { DeleteDataButton } from './DeleteDataButton';
 import { Switch } from './Switch';
@@ -8,8 +8,7 @@ import { TrackPreviewEmbedSize } from '../../common/types';
 
 export function SettingsPanel(): ReactElement {
   const dispatch = useDispatch();
-  const isSmallEmbed =
-    useSelector(getSettingValue({ settingKey: 'trackPreviewEmbedSize' })) === TrackPreviewEmbedSize.Small;
+  const isSmallEmbed = useSelector(selectTrackPreviewEmbedSize()) === TrackPreviewEmbedSize.Small;
   const embedSize = (isSmall: boolean) => TrackPreviewEmbedSize[isSmall ? 'Small' : 'Medium'];
   return (
     <div>
@@ -20,7 +19,7 @@ export function SettingsPanel(): ReactElement {
         handleToggle={() => {
           batch(() => {
             const size = embedSize(!isSmallEmbed);
-            dispatch(setSetting({ settingKey: 'trackPreviewEmbedSize', settingValue: size }));
+            dispatch(trackPreviewEmbedSizeToggled(size));
             dispatch(resizeEmbed());
           });
         }}

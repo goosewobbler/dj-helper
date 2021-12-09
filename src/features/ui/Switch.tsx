@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const Switch = ({ id, isOn, handleToggle }: { id: string; isOn: boolean; handleToggle: () => void }) => (
-  <div className="inline-block float-right mt-4 mr-4 ">
+  <div className="inline-block float-right mt-4 mr-4">
     <label className="switch-label" htmlFor={id}>
       <span className="switch-button" />
       Small Embed

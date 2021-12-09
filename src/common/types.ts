@@ -1,4 +1,5 @@
 import { AnyAction, ThunkAction, ThunkDispatch, Action, Unsubscribe } from '@reduxjs/toolkit';
+import { Rectangle } from 'electron';
 
 export type AnyObject = Record<string, unknown>;
 export interface LooseObject {
@@ -75,28 +76,24 @@ export type Browser = {
 };
 
 export type Embed = {
+  autoplayEnabled: boolean;
   status: EmbedStatus;
   loadContext?: LoadContext;
   trackId?: Track['id'];
 };
 
-export type Settings = {
+export type UI = {
+  statusText: string;
   darkModeEnabled: boolean;
-  autoplayEnabled: boolean;
+  windowBounds: Rectangle;
   trackPreviewEmbedSize: TrackPreviewEmbedSize;
 };
-
-export type Status = {
-  statusText: string;
-};
-
 export interface AppState {
   embed: Embed;
   lists: List[];
   tracks: Track[];
   browsers: Browser[];
-  settings: Settings;
-  status: Status;
+  ui: UI;
 }
 
 export type AppThunk = ThunkAction<void, AppState, unknown, Action<string>>;

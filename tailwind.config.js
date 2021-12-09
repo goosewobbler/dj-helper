@@ -32,7 +32,8 @@ const theme = {
       explode: 'wiggle 1.6s ease-in-out',
     },
     fontFamily: {
-      sans: ['Aqua', 'Helvetica', 'Arial', 'sans-serif'],
+      sans: ['Jura', 'Helvetica', 'Arial', 'sans-serif'],
+      title: ['Radiotechnika', 'Helvetica', 'Arial', 'sans-serif'],
     },
   },
 };

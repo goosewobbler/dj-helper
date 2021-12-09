@@ -59,10 +59,7 @@ rules.push({
 
 rules.push({
   test: /\.(png|jpe?g|gif|svg|eot|ttf|woff|woff2)$/i,
-  loader: 'url-loader', // deprecated - https://webpack.js.org/guides/asset-modules/
-  options: {
-    limit: 8192,
-  },
+  type: 'asset/resource',
 });
 
 const baseEntry = [`webpack-dev-server/client?http://localhost:${devServerPort}/`];

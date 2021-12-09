@@ -34,7 +34,7 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: AppStore, browser:
 
   const setBounds = () => {
     const { height: windowHeight, width: windowWidth } = mainWindow.getBounds();
-    const { trackPreviewEmbedSize } = getState().settings;
+    const { trackPreviewEmbedSize } = getState().ui;
     const statusBarHeight = trackPreviewEmbedSize === TrackPreviewEmbedSize.Small ? 65 : 145;
     const headerBarHeight = 62;
     const metaPanelHeight = 326;
@@ -135,12 +135,12 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: AppStore, browser:
     return !currentlyNavigating && url !== currentUrl;
   };
 
-  subscribe(() => {
+  const updateBrowserFromState = (forceNavigate: boolean) => {
     const state = getState();
     const browserSelector = selectBrowserById(browser.id);
     const { url } = browserSelector(state);
 
-    if (canNavigateTo(url)) {
+    if (forceNavigate || canNavigateTo(url)) {
       log('loading URL', url);
       currentlyNavigating = true;
       dispatch(clearTracks({ id: browser.id }));
@@ -153,8 +153,11 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: AppStore, browser:
     if (!browserIsActive) {
       view.setBounds({ x: 0, y: 0, width: 0, height: 0 });
     }
-  });
+  };
 
+  subscribe(() => updateBrowserFromState);
+
+  ipcMain.handle('init-browsers', () => updateBrowserFromState(true));
   ipcMain.handle('resize-browsers', () => setBounds());
 }
 

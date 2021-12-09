@@ -74,14 +74,16 @@ export const slice = createSlice({
 
       return state;
     },
+    reset: () => initialState,
   },
 });
 
-export const { requestLoad, mediaLoaded, requestPlay, mediaPlaying, requestPause, mediaPaused } = slice.actions;
+export const { requestLoad, mediaLoaded, requestPlay, mediaPlaying, requestPause, mediaPaused, reset } = slice.actions;
 
 export const loadTrack =
   ({ trackId, context }: EmbedContext): AppThunk =>
   async (dispatch, getState) => {
+    log('load requested', { trackId, context });
     dispatch(requestLoad({ trackId, context }));
     if (getState().embed.status === EmbedStatus.LoadRequested) {
       await window.api.invoke('load-track', trackId);
@@ -155,11 +157,21 @@ export const loadAndPlayNextTrack = (): AppThunk => (dispatch, getState) => {
 
 export const handleAutoplay = (): AppThunk => (dispatch, getState) => {
   const state = getState();
-  const { trackId } = state.embed;
-  const { autoplayEnabled } = state.settings;
+  const { trackId, autoplayEnabled } = state.embed;
   log('handleAutoplay', autoplayEnabled, trackId);
   if (autoplayEnabled && trackId) {
     dispatch(loadAndPlayNextTrack());
+  }
+};
+
+export const handleInit = (): AppThunk => (dispatch, getState) => {
+  const { trackId, loadContext, status } = getState().embed;
+  log('handleInit', trackId);
+  dispatch(reset());
+  if ([EmbedStatus.PlayRequested, EmbedStatus.Playing].includes(status)) {
+    dispatch(loadAndPlayTrack({ trackId, context: loadContext }));
+  } else {
+    dispatch(loadTrack({ trackId, context: loadContext }));
   }
 };
 
@@ -185,7 +197,9 @@ export const trackIsLoaded =
 
 export const embedRequestInFlight =
   () =>
-  ({ embed }: AppState): boolean =>
-    [EmbedStatus.LoadRequested, EmbedStatus.PauseRequested, EmbedStatus.PlayRequested].includes(embed.status);
+  ({ embed }: AppState): boolean => {
+    log('embedRequestInFlight', embed);
+    return [EmbedStatus.LoadRequested, EmbedStatus.PauseRequested, EmbedStatus.PlayRequested].includes(embed.status);
+  };
 
 export const embedReducer = slice.reducer;

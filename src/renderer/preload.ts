@@ -7,6 +7,7 @@ const validChannels = [
   'play-track',
   'pause-track',
   'load-track',
+  'init-browsers',
   'resize-browsers',
   'handle-autoplay',
   'update-window-bounds',

@@ -17,6 +17,7 @@ const combinedReducers = combineReducers({
 export const storeHydrated = (): AppThunk => async (dispatch) => {
   dispatch(initEmbed());
   await window.api.invoke('update-window-bounds');
+  await window.api.invoke('init-browsers');
 };
 
 export const resetStoreAction = { type: 'store/reset' };

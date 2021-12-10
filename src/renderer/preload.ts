@@ -11,6 +11,7 @@ const validChannels = [
   'resize-browsers',
   'handle-autoplay',
   'update-window-bounds',
+  'window-resized',
 ];
 
 const invoke = (channel: string, ...data: unknown[]): Promise<unknown> =>

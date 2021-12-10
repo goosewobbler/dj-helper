@@ -38,8 +38,7 @@ const startMain = () => {
 };
 
 rules.push({
-  test: /\.pcss$/,
-  exclude: /node_modules/,
+  test: /\.p*css$/,
   use: [
     {
       loader: MiniCssExtractPlugin.loader,

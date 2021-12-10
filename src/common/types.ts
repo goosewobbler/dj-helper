@@ -86,6 +86,14 @@ export type UI = {
   statusText: string;
   darkModeEnabled: boolean;
   windowBounds: Rectangle;
+  horizontalSplitterDimensions: {
+    listPaneWidth: number;
+    browserPaneWidth: number;
+  };
+  verticalSplitterDimensions: {
+    browserPanelHeight: number;
+    metaPanelHeight: number;
+  };
   trackPreviewEmbedSize: TrackPreviewEmbedSize;
 };
 export interface AppState {

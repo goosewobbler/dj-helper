@@ -8,7 +8,7 @@ import { TrackPreviewEmbedSize } from '../../common/types';
 
 export function SettingsPanel(): ReactElement {
   const dispatch = useDispatch();
-  const isSmallEmbed = useSelector(selectTrackPreviewEmbedSize()) === TrackPreviewEmbedSize.Small;
+  const isSmallEmbed = useSelector(selectTrackPreviewEmbedSize) === TrackPreviewEmbedSize.Small;
   const embedSize = (isSmall: boolean) => TrackPreviewEmbedSize[isSmall ? 'Small' : 'Medium'];
   return (
     <div>

@@ -5,6 +5,8 @@ const initialState = {
   statusText: '',
   darkModeEnabled: false,
   windowBounds: { x: 0, y: 0, width: 1500, height: 1000 },
+  horizontalSplitterDimensions: { listPaneWidth: 538, browserPaneWidth: 962 },
+  verticalSplitterDimensions: { browserPanelHeight: 547, metaPanelHeight: 326 },
   trackPreviewEmbedSize: TrackPreviewEmbedSize.Small,
 } as UI;
 
@@ -23,6 +25,34 @@ export const slice = createSlice({
       ...state,
       windowBounds,
     }),
+    verticalSplitterMoved: (
+      state,
+      {
+        payload: [metaPanelHeight, browserPanelHeight],
+      }: {
+        payload: [
+          UI['verticalSplitterDimensions']['metaPanelHeight'],
+          UI['verticalSplitterDimensions']['browserPanelHeight'],
+        ];
+      },
+    ) => ({
+      ...state,
+      verticalSplitterDimensions: { metaPanelHeight, browserPanelHeight },
+    }),
+    horizontalSplitterMoved: (
+      state,
+      {
+        payload: [listPaneWidth, browserPaneWidth],
+      }: {
+        payload: [
+          UI['horizontalSplitterDimensions']['listPaneWidth'],
+          UI['horizontalSplitterDimensions']['browserPaneWidth'],
+        ];
+      },
+    ) => ({
+      ...state,
+      horizontalSplitterDimensions: { listPaneWidth, browserPaneWidth },
+    }),
     setStatus: (state, { payload: { statusText } }: { payload: { statusText: string } }) => ({
       ...state,
       statusText,
@@ -30,21 +60,22 @@ export const slice = createSlice({
   },
 });
 
-export const { trackPreviewEmbedSizeToggled, windowBoundsChanged, setStatus } = slice.actions;
+export const {
+  trackPreviewEmbedSizeToggled,
+  windowBoundsChanged,
+  verticalSplitterMoved,
+  horizontalSplitterMoved,
+  setStatus,
+} = slice.actions;
 
-export const selectTrackPreviewEmbedSize =
-  () =>
-  ({ ui }: AppState) =>
-    ui.trackPreviewEmbedSize;
+export const selectTrackPreviewEmbedSize = ({ ui }: AppState) => ui.trackPreviewEmbedSize;
 
-export const selectDarkModeEnabled =
-  () =>
-  ({ ui }: AppState) =>
-    ui.darkModeEnabled;
+export const selectDarkModeEnabled = ({ ui }: AppState) => ui.darkModeEnabled;
 
-export const selectStatusText =
-  () =>
-  ({ ui }: AppState) =>
-    ui.statusText;
+export const selectStatusText = ({ ui }: AppState) => ui.statusText;
+
+export const selectHorizontalSplitterDimensions = ({ ui }: AppState) => ui.horizontalSplitterDimensions;
+
+export const selectVerticalSplitterDimensions = ({ ui }: AppState) => ui.verticalSplitterDimensions;
 
 export const uiReducer = slice.reducer;

@@ -25,6 +25,13 @@ async function getPageTrackData(view: BrowserView, url: string) {
   return bcPageData;
 }
 
+type Sizes = {
+  listPaneWidth?: number;
+  browserPaneWidth?: number;
+  browserPanelHeight?: number;
+  metaPanelHeight?: number;
+};
+
 function createBrowser(mainWindow: BrowserWindow, reduxStore: AppStore, browser: Browser) {
   const { dispatch, getState, subscribe } = reduxStore;
   const view = new BrowserView();
@@ -32,31 +39,62 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: AppStore, browser:
 
   log('creating browser', browser.id);
 
-  const setBounds = () => {
-    const { height: windowHeight, width: windowWidth } = mainWindow.getBounds();
-    const { trackPreviewEmbedSize } = getState().ui;
-    const statusBarHeight = trackPreviewEmbedSize === TrackPreviewEmbedSize.Small ? 65 : 145;
+  const setBounds = (sizes?: Sizes) => {
     const headerBarHeight = 62;
-    const metaPanelHeight = 326;
-    const listPaneWidth = 538;
-    view.setBounds({
-      x: listPaneWidth,
-      y: headerBarHeight + metaPanelHeight - 10,
-      width: windowWidth - listPaneWidth,
-      height: windowHeight - statusBarHeight - headerBarHeight - metaPanelHeight - 10,
-    });
+    const newBounds = view.getBounds();
+    const {
+      trackPreviewEmbedSize,
+      verticalSplitterDimensions: {
+        browserPanelHeight: browserPanelHeightFromState,
+        metaPanelHeight: metaPanelHeightFromState,
+      },
+      horizontalSplitterDimensions: {
+        browserPaneWidth: browserPaneWidthFromState,
+        listPaneWidth: listPaneWidthFromState,
+      },
+    } = getState().ui;
+    const statusBarHeight = trackPreviewEmbedSize === TrackPreviewEmbedSize.Small ? 65 : 145;
+
+    if (sizes) {
+      const { listPaneWidth, browserPaneWidth, browserPanelHeight, metaPanelHeight } = sizes;
+
+      if (listPaneWidth && browserPaneWidth) {
+        // horizontal resize
+        newBounds.x = Math.round(listPaneWidth + 6);
+        newBounds.width = Math.round(browserPaneWidth - 5);
+      } else if (browserPanelHeight && metaPanelHeight) {
+        // vertical resize
+        newBounds.y = Math.round(headerBarHeight + metaPanelHeight + 5);
+        log('vertical resize', browserPanelHeight, statusBarHeight);
+        newBounds.height = Math.round(browserPanelHeight - statusBarHeight - 65);
+      }
+    } else {
+      // calculate bounds from state
+      // const { height: windowHeight } = mainWindow.getBounds();
+      log('setting browser panel height from state', browserPanelHeightFromState);
+      newBounds.x = Math.round(listPaneWidthFromState + 6);
+      newBounds.y = Math.round(headerBarHeight + metaPanelHeightFromState + 5);
+      newBounds.width = Math.round(browserPaneWidthFromState - 5);
+      newBounds.height = Math.round(browserPanelHeightFromState - statusBarHeight - 65);
+    }
+
+    log('setting bounds', newBounds);
+    view.setBounds(newBounds);
+
+    // view.setBounds({
+    //   x: listPaneWidth,
+    //   y: headerBarHeight + metaPanelHeight + 10,
+    //   width: browserPaneWidth,
+    //   height: (browserPanelHeight || windowHeight - statusBarHeight - headerBarHeight - metaPanelHeight) - 10,
+    // });
   };
 
   mainWindow.setBrowserView(view);
-  view.setAutoResize({ horizontal: true });
+  // view.setAutoResize({ horizontal: true });
 
   setTimeout(() => {
     setBounds();
   }, 1000);
-
-  mainWindow.on('resize', () => {
-    setBounds();
-  });
 
   view.webContents.setWindowOpenHandler(({ url }) => {
     log('windowOpenHandler', url);
@@ -135,7 +173,7 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: AppStore, browser:
     return !currentlyNavigating && url !== currentUrl;
   };
 
-  const updateBrowserFromState = (forceNavigate: boolean) => {
+  const updateBrowserFromState = (forceNavigate?: boolean) => {
     const state = getState();
     const browserSelector = selectBrowserById(browser.id);
     const { url } = browserSelector(state);
@@ -155,10 +193,10 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: AppStore, browser:
     }
   };
 
-  subscribe(() => updateBrowserFromState);
+  subscribe(updateBrowserFromState);
 
   ipcMain.handle('init-browsers', () => updateBrowserFromState(true));
-  ipcMain.handle('resize-browsers', () => setBounds());
+  ipcMain.handle('resize-browsers', (_event, args: [Sizes]) => setBounds(...args));
 }
 
 export function initBrowsers(mainWindow: BrowserWindow, reduxStore: AppStore): void {

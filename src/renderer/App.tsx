@@ -1,23 +1,63 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Browser } from '../common/types';
-import { BrowserPane } from '../features/browsers/BrowserPane';
+import { SplitPane } from 'react-multi-split-pane';
 import { selectBrowsers } from '../features/browsers/browsersSlice';
 import { Tabs } from '../features/browsers/Tabs';
 import { handleAutoplay } from '../features/embed/embedSlice';
 import { ListPane } from '../features/lists/ListPane';
 import { StatusBar } from '../features/ui/StatusBar';
+import { MetaPanel } from '../features/browsers/MetaPanel';
+import { Browser } from '../common/types';
 import { log } from '../main/helpers/console';
+import {
+  horizontalSplitterMoved,
+  selectHorizontalSplitterDimensions,
+  selectVerticalSplitterDimensions,
+  verticalSplitterMoved,
+} from '../features/ui/uiSlice';
+
+let previousCallTime = 0;
+
+const debounce = (callback: () => Promise<unknown>) => {
+  const timeout = 5;
+  const callTime = Date.now();
+
+  log('debounce yo', callTime, previousCallTime);
+
+  // return () => {
+  if (previousCallTime === 0 || callTime - previousCallTime > timeout) {
+    log('debounce calling callback', callTime, previousCallTime);
+    previousCallTime = callTime;
+    void callback();
+  }
+  // };
+};
 
 export const App = (): ReactElement => {
   const browsers = useSelector(selectBrowsers);
+  const { listPaneWidth, browserPaneWidth } = useSelector(selectHorizontalSplitterDimensions);
+  const { metaPanelHeight, browserPanelHeight } = useSelector(selectVerticalSplitterDimensions);
   const dispatch = useDispatch();
+  const listPane = useRef<HTMLDivElement>(null);
+  const browserPane = useRef<HTMLDivElement>(null);
+  const browserPanel = useRef<HTMLDivElement>(null);
+  const metaPanel = useRef<HTMLDivElement>(null);
   const tabHeadings = browsers.map((browser) => browser.title);
 
   window.api.removeAllListeners('handle-autoplay');
+  window.api.removeAllListeners('window-resized');
   window.api.on('handle-autoplay', () => {
     log('dispatching handle-autoplay');
     dispatch(handleAutoplay());
+  });
+  window.api.on('window-resized', () => {
+    const browserPanelHeightFromRef = browserPanel.current?.clientHeight;
+    const browserPaneWidthFromRef = browserPane.current?.clientWidth;
+    const listPaneWidthFromRef = listPane.current?.clientWidth;
+    const metaPanelHeightFromRef = metaPanel.current?.clientHeight;
+    dispatch(horizontalSplitterMoved([listPaneWidthFromRef, browserPaneWidthFromRef] as [number, number]));
+    dispatch(verticalSplitterMoved([metaPanelHeightFromRef, browserPanelHeightFromRef] as [number, number]));
+    void window.api.invoke('resize-browsers');
   });
 
   return (
@@ -28,20 +68,50 @@ export const App = (): ReactElement => {
         </h1>
       </div>
       <div className="flex flex-grow font-sans content">
-        <div className="flex flex-col flex-grow-0 flex-shrink-0 w-1/3 p-2 section">
-          <ListPane />
-        </div>
-        <div className="relative flex flex-col flex-grow flex-shrink-0 w-2/3 p-2 section -top-14">
-          <div className="flex flex-col flex-grow">
-            <Tabs headings={tabHeadings}>
-              {browsers.map(
-                (browser: Browser): ReactElement => (
-                  <BrowserPane key={browser.id} browser={browser} />
-                ),
-              )}
-            </Tabs>
+        <SplitPane
+          split="vertical"
+          defaultSizes={[listPaneWidth, browserPaneWidth]}
+          onChange={(sizes) =>
+            debounce(() =>
+              window.api.invoke('resize-browsers', {
+                listPaneWidth: sizes[0],
+                browserPaneWidth: sizes[1],
+              }),
+            )
+          }
+          onDragFinished={(sizes) => dispatch(horizontalSplitterMoved(sizes as [number, number]))}
+        >
+          <div className="flex flex-grow p-2 section" ref={listPane}>
+            <ListPane />
           </div>
-        </div>
+
+          <div className="flex flex-grow" ref={browserPane}>
+            <SplitPane
+              split="horizontal"
+              defaultSizes={[metaPanelHeight, browserPanelHeight]}
+              onChange={(sizes) =>
+                debounce(() =>
+                  window.api.invoke('resize-browsers', {
+                    metaPanelHeight: sizes[0],
+                    browserPanelHeight: sizes[1],
+                  }),
+                )
+              }
+              onDragFinished={(sizes) => dispatch(verticalSplitterMoved(sizes as [number, number]))}
+            >
+              <div className="p-2 section -top-14" ref={metaPanel}>
+                <Tabs headings={tabHeadings}>
+                  {browsers.map(
+                    (browser: Browser): ReactElement => (
+                      <MetaPanel key={browser.id} browser={browser} />
+                    ),
+                  )}
+                </Tabs>
+              </div>
+              <div className="flex flex-grow" ref={browserPanel} />
+            </SplitPane>
+          </div>
+        </SplitPane>
         <StatusBar />
       </div>
     </div>

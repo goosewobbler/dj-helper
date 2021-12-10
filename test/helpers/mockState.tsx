@@ -23,6 +23,8 @@ export function mockState({
       statusText: '',
       darkModeEnabled: false,
       windowBounds: { x: 0, y: 0, width: 1500, height: 1000 },
+      horizontalSplitterDimensions: { listPaneWidth: 538, browserPaneWidth: 962 },
+      verticalSplitterDimensions: { browserPanelHeight: 547, metaPanelHeight: 326 },
       trackPreviewEmbedSize: 'small' as UI['trackPreviewEmbedSize'],
     },
   };

@@ -7,7 +7,6 @@ import { syncRenderer } from '@goosewobbler/electron-redux/renderer';
 import { App } from './App';
 import { createReduxStore } from '../common/reduxStore';
 import '../css/tailwind.src.pcss';
-import 'allotment/dist/style.css';
 
 declare global {
   interface Window {

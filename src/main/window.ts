@@ -10,7 +10,10 @@ export function initWindow(mainWindow: BrowserWindow, reduxStore: AppStore): voi
     dispatch(windowBoundsChanged({ x, y, width, height }));
   }
 
-  mainWindow.on('resize', boundsChangeHandler);
+  mainWindow.on('resize', () => {
+    mainWindow.webContents.send('window-resized');
+    boundsChangeHandler();
+  });
   mainWindow.on('move', boundsChangeHandler);
 
   ipcMain.handle('update-window-bounds', () => {

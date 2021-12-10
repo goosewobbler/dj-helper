@@ -42,17 +42,8 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: AppStore, browser:
   const setBounds = (sizes?: Sizes) => {
     const headerBarHeight = 62;
     const newBounds = view.getBounds();
-    const {
-      trackPreviewEmbedSize,
-      verticalSplitterDimensions: {
-        browserPanelHeight: browserPanelHeightFromState,
-        metaPanelHeight: metaPanelHeightFromState,
-      },
-      horizontalSplitterDimensions: {
-        browserPaneWidth: browserPaneWidthFromState,
-        listPaneWidth: listPaneWidthFromState,
-      },
-    } = getState().ui;
+    const state = getState();
+    const { trackPreviewEmbedSize } = state.ui;
     const statusBarHeight = trackPreviewEmbedSize === TrackPreviewEmbedSize.Small ? 65 : 145;
 
     if (sizes) {
@@ -70,8 +61,16 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: AppStore, browser:
       }
     } else {
       // calculate bounds from state
-      // const { height: windowHeight } = mainWindow.getBounds();
-      log('setting browser panel height from state', browserPanelHeightFromState);
+      const {
+        verticalSplitterDimensions: {
+          browserPanelHeight: browserPanelHeightFromState,
+          metaPanelHeight: metaPanelHeightFromState,
+        },
+        horizontalSplitterDimensions: {
+          browserPaneWidth: browserPaneWidthFromState,
+          listPaneWidth: listPaneWidthFromState,
+        },
+      } = state.ui;
       newBounds.x = Math.round(listPaneWidthFromState + 6);
       newBounds.y = Math.round(headerBarHeight + metaPanelHeightFromState + 5);
       newBounds.width = Math.round(browserPaneWidthFromState - 5);
@@ -80,17 +79,9 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: AppStore, browser:
 
     log('setting bounds', newBounds);
     view.setBounds(newBounds);
-
-    // view.setBounds({
-    //   x: listPaneWidth,
-    //   y: headerBarHeight + metaPanelHeight + 10,
-    //   width: browserPaneWidth,
-    //   height: (browserPanelHeight || windowHeight - statusBarHeight - headerBarHeight - metaPanelHeight) - 10,
-    // });
   };
 
   mainWindow.setBrowserView(view);
-  // view.setAutoResize({ horizontal: true });
 
   setTimeout(() => {
     setBounds();
@@ -113,13 +104,7 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: AppStore, browser:
       const playingTrack = trackData.trackinfo.find((track) => track.title_link === titleLinkPlaying);
 
       if (playingTrack) {
-        dispatch(
-          mediaPlaying(),
-          // mediaPlaying({
-          //   trackId: playingTrack.id,
-          //   context: 'browser',
-          // }),
-        );
+        dispatch(mediaPlaying());
       }
     })();
   });

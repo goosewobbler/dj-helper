@@ -39,7 +39,6 @@ specifiers:
   '@typescript-eslint/eslint-plugin': ^5.6.0
   '@typescript-eslint/parser': ^5.6.0
   '@wdio/mocha-framework': ^7.16.6
-  allotment: ^1.4.1
   autoprefixer: ^10.4.0
   babel-loader: ^8.2.3
   classnames: ^2.2.6
@@ -82,6 +81,7 @@ specifiers:
   prettier: ^2.5.1
   react: ^17.0.2
   react-dom: ^17.0.2
+  react-multi-split-pane: ^0.3.2
   react-redux: ^7.2.6
   react-refresh: ^0.11.0
   redux-devtools-extension: ^2.13.9
@@ -140,7 +140,6 @@ devDependencies:
   '@typescript-eslint/eslint-plugin': 5.6.0_16d83f5c41c3abb1061a82b07c18e4f3
   '@typescript-eslint/parser': 5.6.0_eslint@8.4.1+typescript@4.5.2
   '@wdio/mocha-framework': 7.16.6
-  allotment: 1.4.1_react-dom@17.0.2+react@17.0.2
   autoprefixer: 10.4.0
   babel-loader: 8.2.3_8dd2b11efd9b7265f9b7da54f0e73ab1
   classnames: 2.3.1
@@ -183,6 +182,7 @@ devDependencies:
   prettier: 2.5.1
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
+  react-multi-split-pane: 0.3.2_react-dom@17.0.2+react@17.0.2
   react-redux: 7.2.6_react-dom@17.0.2+react@17.0.2
   react-refresh: 0.11.0
   redux-devtools-extension: 2.13.9
@@ -1901,10 +1901,6 @@ packages:
       chalk: 4.1.2
     dev: true
 
-  /@juggle/resize-observer/3.3.1:
-    resolution: {integrity: sha512-zMM9Ds+SawiUkakS7y94Ymqx+S0ORzpG3frZirN3l+UlXUmSUR7hF4wxCVqW+ei94JzV5kt0uXBcoOEAuiydrw==}
-    dev: true
-
   /@malept/cross-spawn-promise/1.1.1:
     resolution: {integrity: sha512-RTBGWL5FWQcg9orDOCcp4LvItNzUPcyEU9bwaeJX0rJ1IQxzucC48Y0/sQLp/g6t99IQgAlGIaesJS+gTn7tVQ==}
     engines: {node: '>= 10'}
@@ -3132,21 +3128,6 @@ packages:
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
       uri-js: 4.4.1
-    dev: true
-
-  /allotment/1.4.1_react-dom@17.0.2+react@17.0.2:
-    resolution: {integrity: sha512-rFBgjJ6ZEtgIsGdv1l2Zq+G2IKDEOE22LSoA7qKUvYsK6UfJsQSknc4q0TfdECTzq4lQQ/IJSJvvpocDtsKAuw==}
-    peerDependencies:
-      react: ^17.0.0
-      react-dom: ^17.0.0
-    dependencies:
-      classnames: 2.3.1
-      eventemitter3: 4.0.7
-      lodash.clamp: 4.0.3
-      lodash.debounce: 4.0.8
-      react: 17.0.2
-      react-dom: 17.0.2_react@17.0.2
-      use-resize-observer: 8.0.0_react-dom@17.0.2+react@17.0.2
     dev: true
 
   /alphanum-sort/1.0.2:
@@ -8403,10 +8384,6 @@ packages:
     resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
     dev: true
 
-  /lodash.clamp/4.0.3:
-    resolution: {integrity: sha1-XCS+3u7vB1NWDcK0y0Zx+Qpt36o=}
-    dev: true
-
   /lodash.clonedeep/4.5.0:
     resolution: {integrity: sha1-4j8/nE+Pvd6HJSnBBxhXoIblzO8=}
     dev: true
@@ -10197,6 +10174,16 @@ packages:
     resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
     dev: true
 
+  /react-multi-split-pane/0.3.2_react-dom@17.0.2+react@17.0.2:
+    resolution: {integrity: sha512-SBoqkHHtfPJOeTmbwmiPPKiJzpeTBpfd8Ww6NJrmflatG2ogdRGVqUdFAPbfebRP4bSkOEFCebUeB52b9YUSCA==}
+    peerDependencies:
+      react: ^16.14.0 || ^17.0.1
+      react-dom: ^16.14.0 || ^17.0.1
+    dependencies:
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
+    dev: true
+
   /react-redux/7.2.6_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha512-10RPdsz0UUrRL1NZE0ejTkucnclYSgXp5q+tB5SWx2qeG2ZJQJyymgAhwKy73yiL/13btfB6fPr+rgbMAaZIAQ==}
     peerDependencies:
@@ -11955,17 +11942,6 @@ packages:
     dependencies:
       punycode: 1.3.2
       querystring: 0.2.0
-    dev: true
-
-  /use-resize-observer/8.0.0_react-dom@17.0.2+react@17.0.2:
-    resolution: {integrity: sha512-n0iKSeiQpJCyaFh5JA0qsVLBIovsF4EIIR1G6XiBwKJN66ZrD4Oj62bjcuTAATPKiSp6an/2UZZxCf/67fk3sQ==}
-    peerDependencies:
-      react: '>=16.8.0'
-      react-dom: '>=16.8.0'
-    dependencies:
-      '@juggle/resize-observer': 3.3.1
-      react: 17.0.2
-      react-dom: 17.0.2_react@17.0.2
     dev: true
 
   /utf8-byte-length/1.0.4:

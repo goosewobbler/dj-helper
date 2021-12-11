@@ -15,7 +15,7 @@ export function PlayPauseButton({
   return showSpinner ? (
     <SpinnerIcon className="animate-spin" />
   ) : (
-    <button type="button" onClick={() => onClick()}>
+    <button className="cursor-pointer" type="button" onClick={() => onClick()}>
       {isPlaying ? <PauseIcon className="pause" /> : <PlayIcon className="play" />}
     </button>
   );

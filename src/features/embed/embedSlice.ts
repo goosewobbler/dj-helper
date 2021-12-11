@@ -6,6 +6,7 @@ import { getNextTrackOnList } from '../lists/listsSlice';
 
 const initialState = {
   status: EmbedStatus.Idle,
+  autoplayEnabled: true,
 } as Embed;
 
 type EmbedContext = { trackId?: Track['id']; context?: Embed['loadContext']; isResize?: boolean };
@@ -74,11 +75,24 @@ export const slice = createSlice({
 
       return state;
     },
+    autoplayEnabledToggled: (state, { payload: autoplayEnabled }: { payload: Embed['autoplayEnabled'] }) => ({
+      ...state,
+      autoplayEnabled,
+    }),
     reset: () => initialState,
   },
 });
 
-export const { requestLoad, mediaLoaded, requestPlay, mediaPlaying, requestPause, mediaPaused, reset } = slice.actions;
+export const {
+  requestLoad,
+  mediaLoaded,
+  requestPlay,
+  mediaPlaying,
+  requestPause,
+  mediaPaused,
+  autoplayEnabledToggled,
+  reset,
+} = slice.actions;
 
 export const loadTrack =
   ({ trackId, context }: EmbedContext): AppThunk =>
@@ -179,6 +193,8 @@ export const selectTrackByEmbedLoaded =
   () =>
   (state: AppState): Track =>
     state.tracks.find((track) => track.id === state.embed.trackId) as Track;
+
+export const selectAutoplayEnabled = (state: AppState): boolean => state.embed.autoplayEnabled;
 
 export const trackIsPlaying =
   ({ trackId }: { trackId: Track['id'] }) =>

@@ -99,7 +99,7 @@ export const App = (): ReactElement => {
               }
               onDragFinished={(sizes) => dispatch(verticalSplitterMoved(sizes as [number, number]))}
             >
-              <div className="p-2 section -top-14" ref={metaPanel}>
+              <div className="w-full p-2 section" ref={metaPanel}>
                 <Tabs headings={tabHeadings}>
                   {browsers.map(
                     (browser: Browser): ReactElement => (

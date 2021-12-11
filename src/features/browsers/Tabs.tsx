@@ -1,4 +1,6 @@
 import React, { useState, ReactElement, ReactNode } from 'react';
+import { useAppDispatch } from '../../common/hooks';
+import { createBrowser } from './browsersSlice';
 
 type TabsProps = {
   children: ReactNode[];
@@ -28,6 +30,7 @@ const renderHeadings = (
 
 export const Tabs = ({ children, headings }: TabsProps): ReactElement => {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const dispatch = useAppDispatch();
   const onClick = (index: number): void => {
     setSelectedIndex(index);
   };
@@ -35,7 +38,18 @@ export const Tabs = ({ children, headings }: TabsProps): ReactElement => {
   return (
     <>
       <div className="flex justify-between" data-testid="header">
-        <ul className="flex px-0 pt-2 pb-4">{renderHeadings(headings, selectedIndex, onClick)}</ul>
+        <ul className="flex px-0 pt-2 pb-4">
+          {renderHeadings(headings, selectedIndex, onClick)}
+          <li>
+            <button
+              className="p-1 mx-2 my-0 text-lg border-0 border-solid outline-none text-primary-text"
+              type="button"
+              onClick={() => dispatch(createBrowser({}))}
+            >
+              +
+            </button>
+          </li>
+        </ul>
       </div>
       <div className="relative flex flex-col flex-grow w-full h-full" data-testid="panels">
         {children[selectedIndex]}

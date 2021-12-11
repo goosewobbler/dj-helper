@@ -8,8 +8,6 @@ const {
   editList,
   finishEditList,
   revertEditList,
-  moveTrackUp,
-  moveTrackDown,
   addTrackToSelectedList,
   removeTrackFromSelectedList,
 } = reducers;
@@ -150,74 +148,6 @@ describe('listsSlice', () => {
       expect(lists).toEqual([
         { id: 1, title: 'first list', tracks: [] },
         { id: 2, title: 'New List', tracks: [] },
-        { id: 3, title: 'third list', tracks: [] },
-      ]);
-    });
-  });
-
-  describe('moveTrackUp', () => {
-    it('should move a track up', () => {
-      const lists = moveTrackUp(
-        [
-          { id: 1, title: 'first list', active: true, tracks: [1, 2, 3] },
-          { id: 2, title: 'second list', tracks: [] },
-          { id: 3, title: 'third list', tracks: [] },
-        ],
-        { payload: { trackId: 3 } },
-      );
-      expect(lists).toEqual([
-        { id: 1, title: 'first list', active: true, tracks: [1, 3, 2] },
-        { id: 2, title: 'second list', tracks: [] },
-        { id: 3, title: 'third list', tracks: [] },
-      ]);
-    });
-
-    it('should handle a non-existent track and return the existing order', () => {
-      const lists = moveTrackUp(
-        [
-          { id: 1, title: 'first list', active: true, tracks: [1, 2, 3] },
-          { id: 2, title: 'second list', tracks: [] },
-          { id: 3, title: 'third list', tracks: [] },
-        ],
-        { payload: { trackId: 5 } },
-      );
-      expect(lists).toEqual([
-        { id: 1, title: 'first list', active: true, tracks: [1, 2, 3] },
-        { id: 2, title: 'second list', tracks: [] },
-        { id: 3, title: 'third list', tracks: [] },
-      ]);
-    });
-  });
-
-  describe('moveTrackDown', () => {
-    it('should move a track down', () => {
-      const lists = moveTrackDown(
-        [
-          { id: 1, title: 'first list', active: true, tracks: [1, 2, 3] },
-          { id: 2, title: 'second list', tracks: [] },
-          { id: 3, title: 'third list', tracks: [] },
-        ],
-        { payload: { trackId: 1 } },
-      );
-      expect(lists).toEqual([
-        { id: 1, title: 'first list', active: true, tracks: [2, 1, 3] },
-        { id: 2, title: 'second list', tracks: [] },
-        { id: 3, title: 'third list', tracks: [] },
-      ]);
-    });
-
-    it('should handle a non-existent track and return the existing order', () => {
-      const lists = moveTrackDown(
-        [
-          { id: 1, title: 'first list', active: true, tracks: [1, 2, 3] },
-          { id: 2, title: 'second list', tracks: [] },
-          { id: 3, title: 'third list', tracks: [] },
-        ],
-        { payload: { trackId: 5 } },
-      );
-      expect(lists).toEqual([
-        { id: 1, title: 'first list', active: true, tracks: [1, 2, 3] },
-        { id: 2, title: 'second list', tracks: [] },
         { id: 3, title: 'third list', tracks: [] },
       ]);
     });

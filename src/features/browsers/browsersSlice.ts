@@ -19,7 +19,7 @@ export const slice = createSlice({
       state,
       {
         payload: { url = initialState[0].url, title = initialState[0].title },
-      }: { payload: { url: string; title: string } },
+      }: { payload: { url?: string; title?: string } },
     ) => {
       const newBrowser: Browser = {
         id: state.length + 1,

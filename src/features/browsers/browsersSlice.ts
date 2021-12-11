@@ -15,7 +15,12 @@ export const slice = createSlice({
   name: 'browsers',
   initialState,
   reducers: {
-    createBrowser: (state, { payload: { url, title } }: { payload: { url: string; title: string } }) => {
+    createBrowser: (
+      state,
+      {
+        payload: { url = initialState[0].url, title = initialState[0].title },
+      }: { payload: { url: string; title: string } },
+    ) => {
       const newBrowser: Browser = {
         id: state.length + 1,
         url,

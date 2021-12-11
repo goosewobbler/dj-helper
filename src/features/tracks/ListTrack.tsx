@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd';
 import { XYCoord } from 'dnd-core';
 import { selectTrackById } from './tracksSlice';
@@ -7,6 +6,7 @@ import { LoadContext, Track } from '../../common/types';
 import { removeTrackFromSelectedList } from '../lists/listsSlice';
 import { CrossIcon } from './CrossIcon';
 import { BaseTrack } from './BaseTrack';
+import { useAppDispatch, useAppSelector } from '../../common/hooks';
 
 interface DragItem {
   index: number;
@@ -25,8 +25,8 @@ export function ListTrack({
   listIndex?: number;
   moveTrack?: (dragIndex: number, hoverIndex: number) => void;
 }) {
-  const dispatch = useDispatch();
-  const track = useSelector(selectTrackById(id));
+  const dispatch = useAppDispatch();
+  const track = useAppSelector(selectTrackById(id));
   const dragRef = useRef<HTMLDivElement>(null);
   const [{ isDragging }, drag] = useDrag({
     type: 'track',

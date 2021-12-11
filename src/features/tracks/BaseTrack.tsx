@@ -1,10 +1,10 @@
 import React, { ReactElement } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { embedRequestInFlight, loadAndPlayTrack, pauseTrack, trackIsPlaying } from '../embed/embedSlice';
 import { selectTrackById } from './tracksSlice';
 import { LoadContext, Track } from '../../common/types';
 import { log } from '../../main/helpers/console';
 import { PlayPauseButton } from './PlayPauseButton';
+import { useAppDispatch, useAppSelector } from '../../common/hooks';
 
 function displayTrackDuration(duration: number) {
   const date = new Date(duration * 1000);
@@ -24,10 +24,10 @@ export function BaseTrack({
   context: LoadContext;
   additionalButtons: ReactElement;
 }) {
-  const dispatch = useDispatch();
-  const track = useSelector(selectTrackById(id));
-  const isPlaying = useSelector(trackIsPlaying({ trackId: id }));
-  const showSpinner = useSelector(embedRequestInFlight());
+  const dispatch = useAppDispatch();
+  const track = useAppSelector(selectTrackById(id));
+  const isPlaying = useAppSelector(trackIsPlaying({ trackId: id }));
+  const showSpinner = useAppSelector(embedRequestInFlight());
 
   if (!track) {
     return <> </>;

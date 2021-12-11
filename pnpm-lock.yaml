@@ -47,6 +47,7 @@ specifiers:
   cross-env: ^7.0.3
   css-loader: ^6.5.1
   cssnano: ^5.0.12
+  dnd-core: ^14.0.1
   electron: ^16.0.4
   electron-builder: ^22.14.5
   electron-debug: ^3.2.0
@@ -76,7 +77,7 @@ specifiers:
   jest: ^27.4.4
   mini-css-extract-plugin: ^2.4.5
   node-loader: ^2.0.0
-  postcss-cli: ^9.0.2
+  postcss-cli: ^9.1.0
   postcss-loader: ^6.2.1
   prettier: ^2.5.1
   react: ^17.0.2
@@ -92,7 +93,7 @@ specifiers:
   stylelint: ^14.1.0
   stylelint-config-prettier: ^9.0.3
   stylelint-config-standard: ^24.0.0
-  tailwindcss: ^3.0.0
+  tailwindcss: ^3.0.1
   tailwindcss-nested-groups: ^1.2.4
   ts-jest: ^27.1.1
   ts-node: ^10.4.0
@@ -150,6 +151,7 @@ devDependencies:
   cross-env: 7.0.3
   css-loader: 6.5.1_webpack@5.65.0
   cssnano: 5.0.12
+  dnd-core: 14.0.1
   electron: 16.0.4
   electron-builder: 22.14.5
   electron-debug: 3.2.0
@@ -179,7 +181,7 @@ devDependencies:
   jest: 27.4.4_ts-node@10.4.0
   mini-css-extract-plugin: 2.4.5_webpack@5.65.0
   node-loader: 2.0.0_webpack@5.65.0
-  postcss-cli: 9.0.2_ts-node@10.4.0
+  postcss-cli: 9.1.0_ts-node@10.4.0
   postcss-loader: 6.2.1_webpack@5.65.0
   prettier: 2.5.1
   react: 17.0.2
@@ -195,8 +197,8 @@ devDependencies:
   stylelint: 14.1.0
   stylelint-config-prettier: 9.0.3_stylelint@14.1.0
   stylelint-config-standard: 24.0.0_stylelint@14.1.0
-  tailwindcss: 3.0.0_6d1fa3babc9cc84b994ff99ef39d1aff
-  tailwindcss-nested-groups: 1.2.4_tailwindcss@3.0.0
+  tailwindcss: 3.0.1_6d1fa3babc9cc84b994ff99ef39d1aff
+  tailwindcss-nested-groups: 1.2.4_tailwindcss@3.0.1
   ts-jest: 27.1.1_b1e62d4ec9144088555daf61e2739fdf
   ts-node: 10.4.0_74e588db5264178750052e53ffe97b8f
   typescript: 4.5.3
@@ -9410,8 +9412,8 @@ packages:
       postcss-value-parser: 4.2.0
     dev: true
 
-  /postcss-cli/9.0.2_ts-node@10.4.0:
-    resolution: {integrity: sha512-08Wujoy7YGhKCFrGsT9OXqWjtHlGQ+JmyaD/4McjCiwor2IUTRVzXiJd+xmLTGdSWjceS6/TePaJQwBlkVWHiw==}
+  /postcss-cli/9.1.0_ts-node@10.4.0:
+    resolution: {integrity: sha512-zvDN2ADbWfza42sAnj+O2uUWyL0eRL1V+6giM2vi4SqTR3gTYy8XzcpfwccayF2szcUif0HMmXiEaDv9iEhcpw==}
     engines: {node: '>=12'}
     hasBin: true
     peerDependencies:
@@ -11303,18 +11305,18 @@ packages:
       strip-ansi: 6.0.1
     dev: true
 
-  /tailwindcss-nested-groups/1.2.4_tailwindcss@3.0.0:
+  /tailwindcss-nested-groups/1.2.4_tailwindcss@3.0.1:
     resolution: {integrity: sha512-SrW9VTgH5/PmW/E0q1+TC7TckhVfonDpiYiLKsRYX57FEcM3LemiH7JYcsTlubM+eAVkd9Jjj03pTiyfnDBibQ==}
     engines: {node: '>=10'}
     peerDependencies:
       tailwindcss: '>=1 <=2'
     dependencies:
       postcss-selector-parser: 6.0.6
-      tailwindcss: 3.0.0_6d1fa3babc9cc84b994ff99ef39d1aff
+      tailwindcss: 3.0.1_6d1fa3babc9cc84b994ff99ef39d1aff
     dev: true
 
-  /tailwindcss/3.0.0_6d1fa3babc9cc84b994ff99ef39d1aff:
-    resolution: {integrity: sha512-UPAp2PS5vojAvGClJFIkdh2hfFyaSWo09Ma9j2vZYW+ANhTvpUHFjY85JgtrvvXXREtDvOXy2BxW1yHOz8apCg==}
+  /tailwindcss/3.0.1_6d1fa3babc9cc84b994ff99ef39d1aff:
+    resolution: {integrity: sha512-EVDXVZkcueZ77/zfOJw7XkzCuxe5TCiT/S9pw9P183oRzSuwMZ7WO+W/L76jbJQA5qxGeUBJOVOLVBuAUfeZ3g==}
     engines: {node: '>=12.13.0'}
     hasBin: true
     peerDependencies:

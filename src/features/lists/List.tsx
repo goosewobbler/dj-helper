@@ -1,11 +1,12 @@
-import React, { ReactElement, BaseSyntheticEvent, KeyboardEvent, useRef } from 'react';
+import React, { ReactElement, BaseSyntheticEvent, KeyboardEvent, useRef, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { TrackMeta } from '../tracks/TrackMeta';
+import { ListTrack } from '../tracks/ListTrack';
 import { ChevronIcon } from './ChevronIcon';
 import {
   deleteList,
   editList,
   finishEditList,
+  moveTrackToIndex,
   revertEditList,
   selectList,
   selectListById,
@@ -22,9 +23,17 @@ export function List({ id }: { id: number }): ReactElement {
   const dispatch = useDispatch();
   const list = useSelector(selectListById(id));
   const content = useRef<HTMLDivElement>(null);
+  const moveTrack = useCallback(
+    (dragIndex: number, hoverIndex: number) => {
+      const dragTrack = list.tracks[dragIndex];
+
+      dispatch(moveTrackToIndex({ trackId: dragTrack, newIndex: hoverIndex }));
+    },
+    [list.tracks, dispatch],
+  );
 
   if (!list) {
-    return <></>;
+    return <> </>;
   }
   const { title, tracks, editing, active } = list;
   const isValid = () => !!title;
@@ -66,20 +75,18 @@ export function List({ id }: { id: number }): ReactElement {
       >
         <span className="text-sm title w-80" data-testid="title">
           {editing ? (
-            <>
-              <label htmlFor="list-title">
-                List Title
-                <input
-                  id="list-title"
-                  className={`ring-4 ring-opacity-30 ${validityRing}`}
-                  type="text"
-                  onChange={(event): void => handleTitleChange(event)}
-                  onKeyDown={(event): void => handleKeyDown(event)}
-                  placeholder="List Title"
-                  value={title}
-                />
-              </label>
-            </>
+            <label htmlFor="list-title">
+              List Title
+              <input
+                id="list-title"
+                className={`ring-4 ring-opacity-30 ${validityRing}`}
+                type="text"
+                onChange={(event): void => handleTitleChange(event)}
+                onKeyDown={(event): void => handleKeyDown(event)}
+                placeholder="List Title"
+                value={title}
+              />
+            </label>
           ) : (
             title
           )}
@@ -106,12 +113,12 @@ export function List({ id }: { id: number }): ReactElement {
         <ol className="p-4 text-sm font-normal tracks">
           {tracks.map(
             (trackId: Track['id'], index: number): ReactElement => (
-              <TrackMeta
+              <ListTrack
                 key={trackId}
                 id={trackId}
                 context={{ contextId: id, contextType: LoadContextType.List }}
                 listIndex={index}
-                listTotalTracks={tracks.length}
+                moveTrack={moveTrack}
               />
             ),
           )}

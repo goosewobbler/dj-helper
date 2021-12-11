@@ -3,6 +3,8 @@ import { IpcRenderer } from 'electron';
 import React from 'react';
 import { Provider } from 'react-redux';
 import * as ReactDOM from 'react-dom';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { syncRenderer } from '@goosewobbler/electron-redux/renderer';
 import { App } from './App';
 import { createReduxStore } from '../common/reduxStore';
@@ -22,7 +24,9 @@ declare global {
 function render(reduxStore: Store): void {
   ReactDOM.render(
     <Provider store={reduxStore}>
-      <App />
+      <DndProvider backend={HTML5Backend}>
+        <App />
+      </DndProvider>
     </Provider>,
     document.getElementById('app'),
   );

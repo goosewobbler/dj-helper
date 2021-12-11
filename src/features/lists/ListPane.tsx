@@ -16,7 +16,7 @@ export function ListPane(): ReactElement {
           ),
         )}
       </ol>
-      <div className="">
+      <div className="mt-2">
         <button
           className="p-1 bg-blue-100 border"
           type="button"

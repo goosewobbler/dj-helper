@@ -1,7 +1,7 @@
-import React, { useState, ReactElement, ReactNodeArray, ReactNode } from 'react';
+import React, { useState, ReactElement, ReactNode } from 'react';
 
 type TabsProps = {
-  children: ReactNodeArray;
+  children: ReactNode[];
   headings: string[];
 };
 

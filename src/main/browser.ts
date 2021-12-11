@@ -32,8 +32,17 @@ type Sizes = {
   metaPanelHeight?: number;
 };
 
+type LoadedBrowser = {
+  id: Browser['id'];
+  view: BrowserView;
+  navigate: (url: string, forceNavigate?: boolean) => void;
+  setBounds: (sizes?: Sizes) => void;
+};
+
+const loadedBrowsers: LoadedBrowser[] = [];
+
 function createBrowser(mainWindow: BrowserWindow, reduxStore: AppStore, browser: Browser) {
-  const { dispatch, getState, subscribe } = reduxStore;
+  const { dispatch, getState } = reduxStore;
   const view = new BrowserView();
   let currentlyNavigating = false;
 
@@ -80,8 +89,6 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: AppStore, browser:
     log('setting bounds', newBounds);
     view.setBounds(newBounds);
   };
-
-  mainWindow.setBrowserView(view);
 
   setTimeout(() => {
     setBounds();
@@ -158,36 +165,84 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: AppStore, browser:
     return !currentlyNavigating && url !== currentUrl;
   };
 
-  const updateBrowserFromState = (forceNavigate?: boolean) => {
-    const state = getState();
-    const browserSelector = selectBrowserById(browser.id);
-    const { url } = browserSelector(state);
-
+  const navigate = (url: string, forceNavigate?: boolean) => {
     if (forceNavigate || canNavigateTo(url)) {
       log('loading URL', url);
       currentlyNavigating = true;
       dispatch(clearTracks({ id: browser.id }));
       void view.webContents.loadURL(url);
     }
-
-    const activeBrowserSelector = selectActiveBrowser();
-    const browserIsActive = browser.id === activeBrowserSelector(state).id;
-
-    if (!browserIsActive) {
-      view.setBounds({ x: 0, y: 0, width: 0, height: 0 });
-    }
   };
 
-  subscribe(updateBrowserFromState);
-
-  ipcMain.handle('init-browsers', () => updateBrowserFromState(true));
-  ipcMain.handle('resize-browsers', (_event, args: [Sizes]) => setBounds(...args));
+  return {
+    view,
+    navigate,
+    setBounds,
+  };
 }
 
 export function initBrowsers(mainWindow: BrowserWindow, reduxStore: AppStore): void {
-  const state = reduxStore.getState();
+  const { subscribe, getState } = reduxStore;
+  const activeBrowserSelector = selectActiveBrowser();
 
-  state.browsers.forEach((browser: Browser) => {
-    createBrowser(mainWindow, reduxStore, browser);
+  subscribe(() => {
+    const state = getState();
+
+    loadedBrowsers.forEach((loadedBrowser: LoadedBrowser, loadedBrowserIndex: number) => {
+      // check if this initialised browser has been removed from the store
+      if (!state.browsers.find((browser) => browser.id === loadedBrowser.id)) {
+        mainWindow.removeBrowserView(loadedBrowser.view);
+        loadedBrowsers.splice(loadedBrowserIndex, 1);
+      }
+
+      // navigate where necessary
+      const browserSelector = selectBrowserById(loadedBrowser.id);
+      const { url } = browserSelector(state);
+      loadedBrowser.navigate(url);
+    });
+
+    state.browsers.forEach((browser: Browser) => {
+      // initialise the browser if it is not loaded
+      if (!loadedBrowsers.find((loadedBrowser) => loadedBrowser.id === browser.id)) {
+        const { view, navigate, setBounds } = createBrowser(mainWindow, reduxStore, browser);
+        mainWindow.addBrowserView(view);
+        loadedBrowsers.push({
+          id: browser.id,
+          view,
+          navigate,
+          setBounds,
+        });
+      }
+    });
+
+    loadedBrowsers.forEach((loadedBrowser: LoadedBrowser) => {
+      // navigate where necessary
+      const browserSelector = selectBrowserById(loadedBrowser.id);
+      const { url } = browserSelector(state);
+      loadedBrowser.navigate(url);
+
+      // show or hide depending on display status
+      const browserIsActive = loadedBrowser.id === activeBrowserSelector(state).id;
+
+      if (!browserIsActive) {
+        loadedBrowser.view.setBounds({ x: 0, y: 0, width: 0, height: 0 });
+      } else {
+        loadedBrowser.setBounds();
+      }
+    });
+  });
+
+  ipcMain.handle('init-browsers', () => {
+    loadedBrowsers.forEach((loadedBrowser) => {
+      const { browsers } = getState();
+      const { url } = browsers.find((browser) => loadedBrowser.id === browser.id) as Browser;
+      loadedBrowser.navigate(url, true);
+    });
+  });
+  ipcMain.handle('resize-browsers', (_event, args: [Sizes]) => {
+    const state = getState();
+    const activeBrowserId = activeBrowserSelector(state).id;
+    const activeBrowser = loadedBrowsers.find((loadedBrowser) => loadedBrowser.id === activeBrowserId) as LoadedBrowser;
+    activeBrowser.setBounds(...args);
   });
 }

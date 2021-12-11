@@ -1,7 +1,7 @@
 {
   "name": "dj-helper",
   "description": "A tool for constructing DJ sets",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "author": "Sam Maister <goosewobbler@protonmail.com>",
   "license": "UNLICENSED",
   "repository": {

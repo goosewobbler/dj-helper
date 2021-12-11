@@ -1,6 +1,6 @@
-import React, { useState, ReactElement, ReactNode } from 'react';
-import { useAppDispatch } from '../../common/hooks';
-import { createBrowser } from './browsersSlice';
+import React, { ReactElement, ReactNode } from 'react';
+import { useAppDispatch, useAppSelector } from '../../common/hooks';
+import { createBrowser, selectActiveBrowser, tabSelected } from './browsersSlice';
 
 type TabsProps = {
   children: ReactNode[];
@@ -29,10 +29,11 @@ const renderHeadings = (
   });
 
 export const Tabs = ({ children, headings }: TabsProps): ReactElement => {
-  const [selectedIndex, setSelectedIndex] = useState(0);
   const dispatch = useAppDispatch();
+  const activeBrowser = useAppSelector(selectActiveBrowser());
+  const selectedIndex = activeBrowser.id;
   const onClick = (index: number): void => {
-    setSelectedIndex(index);
+    dispatch(tabSelected({ id: index }));
   };
 
   return (

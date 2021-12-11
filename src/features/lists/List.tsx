@@ -1,6 +1,6 @@
 import React, { ReactElement, BaseSyntheticEvent, KeyboardEvent, useRef, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { TrackMeta } from '../tracks/TrackMeta';
+import { ListTrack } from '../tracks/ListTrack';
 import { ChevronIcon } from './ChevronIcon';
 import {
   deleteList,
@@ -113,7 +113,7 @@ export function List({ id }: { id: number }): ReactElement {
         <ol className="p-4 text-sm font-normal tracks">
           {tracks.map(
             (trackId: Track['id'], index: number): ReactElement => (
-              <TrackMeta
+              <ListTrack
                 key={trackId}
                 id={trackId}
                 context={{ contextId: id, contextType: LoadContextType.List }}

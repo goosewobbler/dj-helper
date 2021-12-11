@@ -28,8 +28,9 @@ export const slice = createSlice({
         tracks: [],
         active: true,
       };
-      // TODO: set existing browsers to inactive
-      return [...state, newBrowser];
+      // existing browsers set to inactive
+      const existingBrowsers = state.map((browser) => ({ ...browser, active: false }));
+      return [...existingBrowsers, newBrowser];
     },
     updatePageUrl: (state, { payload: { id, url } }: { payload: { id: number; url: string } }) =>
       state.map((browser) => (browser.id === id ? { ...browser, url, title: 'Loading...' } : browser)),

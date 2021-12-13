@@ -1,3 +1,5 @@
+import { URL } from 'url';
+
 export interface TralbumTrackInfo {
   track_id: number;
   artist: string | null;
@@ -41,6 +43,15 @@ export type ParsedBandcampData = {
 
 const isTrackPage = (url: string) => url.includes('/track/');
 
+function buildTrackUrl(url: string, title_link: string) {
+  if (isTrackPage(url)) {
+    return url;
+  }
+
+  const { origin } = new URL(url);
+  return `${origin}${title_link}`;
+}
+
 export const parseBandcampPageData = (
   TralbumData: TralbumData,
   BandData: BandData,
@@ -55,7 +66,7 @@ export const parseBandcampPageData = (
     artist: track.artist || TralbumData.current.artist || BandData.name,
     duration: track.duration,
     title: track.title,
-    title_link: isTrackPage(url) ? url : `${url}${track.title_link}`,
+    title_link: buildTrackUrl(url, track.title_link),
     id: track.track_id,
   })),
   bandName: BandData.name,

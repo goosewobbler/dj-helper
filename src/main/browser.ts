@@ -1,4 +1,5 @@
 import { BrowserView, BrowserWindow, ipcMain } from 'electron';
+import { URL } from 'url';
 import { createTrack, selectTrackBySourceUrl, TrackData } from '../features/tracks/tracksSlice';
 import { mediaPaused, mediaPlaying } from '../features/embed/embedSlice';
 import {
@@ -16,12 +17,18 @@ import { log } from './helpers/console';
 
 type RawBandcampData = [TralbumData, BandData, TralbumCollectInfo, BandCurrency];
 
+export function sanitiseUrl(url: string) {
+  const { origin, pathname } = new URL(url);
+
+  return `${origin}${pathname}`;
+}
+
 async function getPageTrackData(view: BrowserView, url: string) {
   const [tralbumData, bandData, tralbumCollectInfo, bandCurrency] = (await view.webContents.executeJavaScript(
     '[ TralbumData, BandData, TralbumCollectInfo, bandCurrency ]',
     true,
   )) as RawBandcampData;
-  const bcPageData = parseBandcampPageData(tralbumData, bandData, tralbumCollectInfo, bandCurrency, url);
+  const bcPageData = parseBandcampPageData(tralbumData, bandData, tralbumCollectInfo, bandCurrency, sanitiseUrl(url));
   log('parsed bandcamp page data', bcPageData);
   return bcPageData;
 }
@@ -77,7 +84,7 @@ function initBrowserView(reduxStore: AppStore, browser: Browser) {
 
   view.webContents.setWindowOpenHandler(({ url }) => {
     log('windowOpenHandler', url);
-    dispatch(createBrowser({ url }));
+    dispatch(createBrowser({ url: sanitiseUrl(url) }));
     return { action: 'deny' };
   });
 
@@ -109,7 +116,7 @@ function initBrowserView(reduxStore: AppStore, browser: Browser) {
   view.webContents.on('will-navigate', (event, url) => {
     log('will-navigate', url);
     event.preventDefault();
-    dispatch(updatePageUrl({ id: browser.id, url }));
+    dispatch(updatePageUrl({ id: browser.id, url: sanitiseUrl(url) }));
   });
 
   view.webContents.on('did-finish-load', () => {
@@ -132,9 +139,11 @@ function initBrowserView(reduxStore: AppStore, browser: Browser) {
             priceCurrency: pageTrackData.currency,
           };
           dispatch(createTrack(trackData));
+          log('creating track', title_link);
           const trackSelector = selectTrackBySourceUrl(title_link);
           const track = trackSelector(getState());
           log('selected browser', browser.id, track);
+          log(getState());
           dispatch(addTrack({ id: browser.id, trackId: track.id }));
         });
       })();

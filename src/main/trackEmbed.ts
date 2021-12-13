@@ -3,6 +3,8 @@ import { mediaLoaded, mediaPlaying, mediaPaused } from '../features/embed/embedS
 import { AppStore, Track, TrackPreviewEmbedSize } from '../common/types';
 import { log } from './helpers/console';
 import { selectTrackSourceByIndex } from '../features/tracks/tracksSlice';
+import { createBrowser } from '../features/browsers/browsersSlice';
+import { sanitiseUrl } from './browser';
 // function delay(ms: number) {
 //   return new Promise((resolve) => setTimeout(resolve, ms));
 // }
@@ -33,8 +35,8 @@ export function initEmbed(mainWindow: BrowserWindow, reduxStore: AppStore): void
     setBounds();
   });
 
-  embed.webContents.setWindowOpenHandler((details) => {
-    void embed.webContents.loadURL(details.url);
+  embed.webContents.setWindowOpenHandler(({ url }) => {
+    dispatch(createBrowser({ url: sanitiseUrl(url) }));
     return { action: 'deny' };
   });
 

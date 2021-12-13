@@ -1,15 +1,16 @@
 import React, { ReactElement } from 'react';
-import { useDispatch, useSelector, batch } from 'react-redux';
+import { batch } from 'react-redux';
 import { selectTrackPreviewEmbedSize, trackPreviewEmbedSizeToggled } from './uiSlice';
 import { autoplayEnabledToggled, resizeEmbed, selectAutoplayEnabled } from '../embed/embedSlice';
 import { DeleteDataButton } from './DeleteDataButton';
 import { Switch } from './Switch';
 import { TrackPreviewEmbedSize } from '../../common/types';
+import { useAppDispatch, useAppSelector } from '../../common/hooks';
 
 export function SettingsPanel(): ReactElement {
-  const dispatch = useDispatch();
-  const isSmallEmbed = useSelector(selectTrackPreviewEmbedSize) === TrackPreviewEmbedSize.Small;
-  const isAutoplayEnabled = useSelector(selectAutoplayEnabled);
+  const dispatch = useAppDispatch();
+  const isSmallEmbed = useAppSelector(selectTrackPreviewEmbedSize) === TrackPreviewEmbedSize.Small;
+  const isAutoplayEnabled = useAppSelector(selectAutoplayEnabled);
   const embedSize = (isSmall: boolean) => TrackPreviewEmbedSize[isSmall ? 'Small' : 'Medium'];
   return (
     <div>

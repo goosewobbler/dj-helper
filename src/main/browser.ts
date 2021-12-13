@@ -1,9 +1,11 @@
 import { BrowserView, BrowserWindow, ipcMain } from 'electron';
+import { URL } from 'url';
 import { createTrack, selectTrackBySourceUrl, TrackData } from '../features/tracks/tracksSlice';
 import { mediaPaused, mediaPlaying } from '../features/embed/embedSlice';
 import {
   addTrack,
   clearTracks,
+  createBrowser,
   selectActiveBrowser,
   selectBrowserById,
   updatePageTitle,
@@ -15,12 +17,18 @@ import { log } from './helpers/console';
 
 type RawBandcampData = [TralbumData, BandData, TralbumCollectInfo, BandCurrency];
 
+export function sanitiseUrl(url: string) {
+  const { origin, pathname } = new URL(url);
+
+  return `${origin}${pathname}`;
+}
+
 async function getPageTrackData(view: BrowserView, url: string) {
   const [tralbumData, bandData, tralbumCollectInfo, bandCurrency] = (await view.webContents.executeJavaScript(
     '[ TralbumData, BandData, TralbumCollectInfo, bandCurrency ]',
     true,
   )) as RawBandcampData;
-  const bcPageData = parseBandcampPageData(tralbumData, bandData, tralbumCollectInfo, bandCurrency, url);
+  const bcPageData = parseBandcampPageData(tralbumData, bandData, tralbumCollectInfo, bandCurrency, sanitiseUrl(url));
   log('parsed bandcamp page data', bcPageData);
   return bcPageData;
 }
@@ -32,8 +40,17 @@ type Sizes = {
   metaPanelHeight?: number;
 };
 
-function createBrowser(mainWindow: BrowserWindow, reduxStore: AppStore, browser: Browser) {
-  const { dispatch, getState, subscribe } = reduxStore;
+type LoadedBrowser = {
+  id: Browser['id'];
+  view: BrowserView;
+  navigate: (url: string, forceNavigate?: boolean) => void;
+  setBounds: (sizes?: Sizes) => void;
+};
+
+const loadedBrowsers: LoadedBrowser[] = [];
+
+function initBrowserView(reduxStore: AppStore, browser: Browser) {
+  const { dispatch, getState } = reduxStore;
   const view = new BrowserView();
   let currentlyNavigating = false;
 
@@ -53,43 +70,21 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: AppStore, browser:
         // horizontal resize
         newBounds.x = Math.round(listPaneWidth + 6);
         newBounds.width = Math.round(browserPaneWidth - 5);
-      } else if (browserPanelHeight && metaPanelHeight) {
+      }
+      if (browserPanelHeight && metaPanelHeight) {
         // vertical resize
         newBounds.y = Math.round(headerBarHeight + metaPanelHeight + 5);
         log('vertical resize', browserPanelHeight, statusBarHeight);
         newBounds.height = Math.round(browserPanelHeight - statusBarHeight - 65);
       }
-    } else {
-      // calculate bounds from state
-      const {
-        verticalSplitterDimensions: {
-          browserPanelHeight: browserPanelHeightFromState,
-          metaPanelHeight: metaPanelHeightFromState,
-        },
-        horizontalSplitterDimensions: {
-          browserPaneWidth: browserPaneWidthFromState,
-          listPaneWidth: listPaneWidthFromState,
-        },
-      } = state.ui;
-      newBounds.x = Math.round(listPaneWidthFromState + 6);
-      newBounds.y = Math.round(headerBarHeight + metaPanelHeightFromState + 5);
-      newBounds.width = Math.round(browserPaneWidthFromState - 5);
-      newBounds.height = Math.round(browserPanelHeightFromState - statusBarHeight - 65);
     }
 
-    log('setting bounds', newBounds);
     view.setBounds(newBounds);
   };
 
-  mainWindow.setBrowserView(view);
-
-  setTimeout(() => {
-    setBounds();
-  }, 1000);
-
   view.webContents.setWindowOpenHandler(({ url }) => {
     log('windowOpenHandler', url);
-    dispatch(updatePageUrl({ id: browser.id, url }));
+    dispatch(createBrowser({ url: sanitiseUrl(url) }));
     return { action: 'deny' };
   });
 
@@ -121,7 +116,7 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: AppStore, browser:
   view.webContents.on('will-navigate', (event, url) => {
     log('will-navigate', url);
     event.preventDefault();
-    dispatch(updatePageUrl({ id: browser.id, url }));
+    dispatch(updatePageUrl({ id: browser.id, url: sanitiseUrl(url) }));
   });
 
   view.webContents.on('did-finish-load', () => {
@@ -144,9 +139,11 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: AppStore, browser:
             priceCurrency: pageTrackData.currency,
           };
           dispatch(createTrack(trackData));
+          log('creating track', title_link);
           const trackSelector = selectTrackBySourceUrl(title_link);
           const track = trackSelector(getState());
           log('selected browser', browser.id, track);
+          log(getState());
           dispatch(addTrack({ id: browser.id, trackId: track.id }));
         });
       })();
@@ -158,36 +155,90 @@ function createBrowser(mainWindow: BrowserWindow, reduxStore: AppStore, browser:
     return !currentlyNavigating && url !== currentUrl;
   };
 
-  const updateBrowserFromState = (forceNavigate?: boolean) => {
-    const state = getState();
-    const browserSelector = selectBrowserById(browser.id);
-    const { url } = browserSelector(state);
-
+  const navigate = (url: string, forceNavigate?: boolean) => {
     if (forceNavigate || canNavigateTo(url)) {
       log('loading URL', url);
       currentlyNavigating = true;
       dispatch(clearTracks({ id: browser.id }));
       void view.webContents.loadURL(url);
     }
-
-    const activeBrowserSelector = selectActiveBrowser();
-    const browserIsActive = browser.id === activeBrowserSelector(state).id;
-
-    if (!browserIsActive) {
-      view.setBounds({ x: 0, y: 0, width: 0, height: 0 });
-    }
   };
 
-  subscribe(updateBrowserFromState);
+  setBounds();
 
-  ipcMain.handle('init-browsers', () => updateBrowserFromState(true));
-  ipcMain.handle('resize-browsers', (_event, args: [Sizes]) => setBounds(...args));
+  return {
+    view,
+    navigate,
+    setBounds,
+  };
 }
 
 export function initBrowsers(mainWindow: BrowserWindow, reduxStore: AppStore): void {
-  const state = reduxStore.getState();
+  const { subscribe, getState } = reduxStore;
+  const activeBrowserSelector = selectActiveBrowser();
 
-  state.browsers.forEach((browser: Browser) => {
-    createBrowser(mainWindow, reduxStore, browser);
+  subscribe(() => {
+    const state = getState();
+
+    loadedBrowsers.forEach((loadedBrowser: LoadedBrowser, loadedBrowserIndex: number) => {
+      // check if this initialised browser has been removed from the store
+      if (!state.browsers.find((browser) => browser.id === loadedBrowser.id)) {
+        mainWindow.removeBrowserView(loadedBrowser.view);
+        loadedBrowsers.splice(loadedBrowserIndex, 1);
+      }
+
+      // navigate where necessary
+      const browserSelector = selectBrowserById(loadedBrowser.id);
+      const { url } = browserSelector(state);
+      loadedBrowser.navigate(url);
+    });
+
+    state.browsers.forEach((browser: Browser) => {
+      // initialise the browser if it is not loaded
+      if (!loadedBrowsers.find((loadedBrowser) => loadedBrowser.id === browser.id)) {
+        const { view, navigate, setBounds } = initBrowserView(reduxStore, browser);
+        mainWindow.addBrowserView(view);
+        loadedBrowsers.push({
+          id: browser.id,
+          view,
+          navigate,
+          setBounds,
+        });
+      }
+    });
+
+    loadedBrowsers.forEach((loadedBrowser: LoadedBrowser) => {
+      // navigate where necessary
+      const browserSelector = selectBrowserById(loadedBrowser.id);
+      const { url } = browserSelector(state);
+      loadedBrowser.navigate(url);
+
+      // show or hide depending on display status
+      const browserIsActive = loadedBrowser.id === activeBrowserSelector(state).id;
+
+      if (!browserIsActive) {
+        loadedBrowser.view.setBounds({ x: 0, y: 0, width: 0, height: 0 });
+      } else {
+        const {
+          verticalSplitterDimensions: { browserPanelHeight, metaPanelHeight },
+          horizontalSplitterDimensions: { browserPaneWidth, listPaneWidth },
+        } = state.ui;
+        loadedBrowser.setBounds({ browserPanelHeight, metaPanelHeight, browserPaneWidth, listPaneWidth });
+      }
+    });
+  });
+
+  ipcMain.handle('init-browsers', () => {
+    loadedBrowsers.forEach((loadedBrowser) => {
+      const { browsers } = getState();
+      const { url } = browsers.find((browser) => loadedBrowser.id === browser.id) as Browser;
+      loadedBrowser.navigate(url, true);
+    });
+  });
+  ipcMain.handle('resize-browsers', (_event, args: [Sizes]) => {
+    const state = getState();
+    const activeBrowserId = activeBrowserSelector(state).id;
+    const activeBrowser = loadedBrowsers.find((loadedBrowser) => loadedBrowser.id === activeBrowserId) as LoadedBrowser;
+    activeBrowser.setBounds(...args);
   });
 }

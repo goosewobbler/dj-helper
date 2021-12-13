@@ -14,13 +14,16 @@ const combinedReducers = combineReducers({
   ui: uiReducer,
 });
 
+export const resetStoreAction = { type: 'store/reset' };
+
 export const storeHydrated = (): AppThunk => async (dispatch) => {
+  // uncomment to reset store
+  // dispatch(resetStoreAction);
+
   dispatch(initEmbed());
   await window.api.invoke('update-window-bounds');
   await window.api.invoke('init-browsers');
 };
-
-export const resetStoreAction = { type: 'store/reset' };
 
 export const rootReducer = (state: AppState | undefined, action: Action) => {
   if (action === resetStoreAction) {

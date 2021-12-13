@@ -1,11 +1,11 @@
 import React, { ReactElement } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../common/hooks';
 import { List } from './List';
 import { createList, revertEditList, selectLists } from './listsSlice';
 
 export function ListPane(): ReactElement {
-  const lists = useSelector(selectLists);
-  const dispatch = useDispatch();
+  const lists = useAppSelector(selectLists);
+  const dispatch = useAppDispatch();
 
   return (
     <div>

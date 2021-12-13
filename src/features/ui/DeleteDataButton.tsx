@@ -1,12 +1,12 @@
 import React, { ReactElement, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../common/hooks';
 import { resetStoreAction } from '../rootReducer';
 import { BombIcon } from './BombIcon';
 import { ExplosionIcon } from './ExplosionIcon';
 
 export function DeleteDataButton(): ReactElement {
   const { isDev } = window.api;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [clicked, setClicked] = useState(false);
   const [displayExplosion, setDisplayExplosion] = useState(false);
   const [fadeExplosion, setFadeExplosion] = useState(false);

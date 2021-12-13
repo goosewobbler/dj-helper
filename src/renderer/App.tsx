@@ -1,5 +1,4 @@
 import React, { ReactElement, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { SplitPane } from 'react-multi-split-pane';
 import { selectBrowsers } from '../features/browsers/browsersSlice';
 import { Tabs } from '../features/browsers/Tabs';
@@ -15,6 +14,7 @@ import {
   selectVerticalSplitterDimensions,
   verticalSplitterMoved,
 } from '../features/ui/uiSlice';
+import { useAppDispatch, useAppSelector } from '../common/hooks';
 
 let previousCallTime = 0;
 
@@ -34,10 +34,10 @@ const debounce = (callback: () => Promise<unknown>) => {
 };
 
 export const App = (): ReactElement => {
-  const browsers = useSelector(selectBrowsers);
-  const { listPaneWidth, browserPaneWidth } = useSelector(selectHorizontalSplitterDimensions);
-  const { metaPanelHeight, browserPanelHeight } = useSelector(selectVerticalSplitterDimensions);
-  const dispatch = useDispatch();
+  const browsers = useAppSelector(selectBrowsers);
+  const { listPaneWidth, browserPaneWidth } = useAppSelector(selectHorizontalSplitterDimensions);
+  const { metaPanelHeight, browserPanelHeight } = useAppSelector(selectVerticalSplitterDimensions);
+  const dispatch = useAppDispatch();
   const listPane = useRef<HTMLDivElement>(null);
   const browserPane = useRef<HTMLDivElement>(null);
   const browserPanel = useRef<HTMLDivElement>(null);

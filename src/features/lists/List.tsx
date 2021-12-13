@@ -1,5 +1,4 @@
 import React, { ReactElement, BaseSyntheticEvent, KeyboardEvent, useRef, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { ListTrack } from '../tracks/ListTrack';
 import { ChevronIcon } from './ChevronIcon';
 import {
@@ -15,13 +14,14 @@ import {
 import { LoadContextType, Track } from '../../common/types';
 import { EditIcon } from './EditIcon';
 import { TrashIcon } from './TrashIcon';
+import { useAppDispatch, useAppSelector } from '../../common/hooks';
 
 const KEY_ENTER = 'Enter';
 const KEY_ESCAPE = 'Escape';
 
 export function List({ id }: { id: number }): ReactElement {
-  const dispatch = useDispatch();
-  const list = useSelector(selectListById(id));
+  const dispatch = useAppDispatch();
+  const list = useAppSelector(selectListById(id));
   const content = useRef<HTMLDivElement>(null);
   const moveTrack = useCallback(
     (dragIndex: number, hoverIndex: number) => {

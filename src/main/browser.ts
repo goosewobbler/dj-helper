@@ -42,7 +42,7 @@ type LoadedBrowser = {
 
 const loadedBrowsers: LoadedBrowser[] = [];
 
-function initBrowserView(mainWindow: BrowserWindow, reduxStore: AppStore, browser: Browser) {
+function initBrowserView(reduxStore: AppStore, browser: Browser) {
   const { dispatch, getState } = reduxStore;
   const view = new BrowserView();
   let currentlyNavigating = false;
@@ -185,7 +185,7 @@ export function initBrowsers(mainWindow: BrowserWindow, reduxStore: AppStore): v
     state.browsers.forEach((browser: Browser) => {
       // initialise the browser if it is not loaded
       if (!loadedBrowsers.find((loadedBrowser) => loadedBrowser.id === browser.id)) {
-        const { view, navigate, setBounds } = initBrowserView(mainWindow, reduxStore, browser);
+        const { view, navigate, setBounds } = initBrowserView(reduxStore, browser);
         mainWindow.addBrowserView(view);
         loadedBrowsers.push({
           id: browser.id,

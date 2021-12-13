@@ -57,7 +57,7 @@ export const selectBrowserById =
 export const selectActiveBrowser =
   () =>
   (state: AppState): Browser =>
-    state.browsers.find((browser) => browser.active) as Browser;
+    state.browsers.find((browser) => browser.active === true) as Browser;
 
 export const getNextTrackOnMetaPanel =
   ({ id, currentTrackId }: { id: number; currentTrackId: number }) =>

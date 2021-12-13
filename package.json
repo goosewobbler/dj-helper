@@ -52,6 +52,7 @@
     "@babel/preset-typescript": "^7.16.0",
     "@babel/register": "^7.16.0",
     "@goosewobbler/spectron": "^17.0.0-alpha3",
+    "@headlessui/react": "^1.4.2",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
     "@redux-offline/redux-offline": "^2.6.0",
     "@reduxjs/toolkit": "^1.7.0",

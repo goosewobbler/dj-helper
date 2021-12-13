@@ -42,10 +42,13 @@ export const slice = createSlice({
       state.map((browser) => (browser.id === id ? { ...browser, tracks: [] } : browser)),
     tabSelected: (state, { payload: { id } }: { payload: { id: number } }) =>
       state.map((browser) => ({ ...browser, active: browser.id === id })),
+    tabClosed: (state, { payload: { id } }: { payload: { id: number } }) =>
+      state.filter((browser) => browser.id !== id),
   },
 });
 
-export const { createBrowser, updatePageUrl, updatePageTitle, addTrack, clearTracks, tabSelected } = slice.actions;
+export const { createBrowser, updatePageUrl, updatePageTitle, addTrack, clearTracks, tabSelected, tabClosed } =
+  slice.actions;
 
 export const selectBrowsers = (state: AppState): Browser[] => state.browsers;
 

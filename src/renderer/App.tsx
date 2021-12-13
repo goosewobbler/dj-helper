@@ -5,8 +5,6 @@ import { Tabs } from '../features/browsers/Tabs';
 import { handleAutoplay } from '../features/embed/embedSlice';
 import { ListPane } from '../features/lists/ListPane';
 import { StatusBar } from '../features/ui/StatusBar';
-import { MetaPanel } from '../features/browsers/MetaPanel';
-import { Browser } from '../common/types';
 import { log } from '../main/helpers/console';
 import {
   horizontalSplitterMoved,
@@ -42,7 +40,6 @@ export const App = (): ReactElement => {
   const browserPane = useRef<HTMLDivElement>(null);
   const browserPanel = useRef<HTMLDivElement>(null);
   const metaPanel = useRef<HTMLDivElement>(null);
-  const tabHeadings = browsers.map((browser) => browser.title);
 
   window.api.removeAllListeners('handle-autoplay');
   window.api.removeAllListeners('window-resized');
@@ -100,13 +97,7 @@ export const App = (): ReactElement => {
               onDragFinished={(sizes) => dispatch(verticalSplitterMoved(sizes as [number, number]))}
             >
               <div className="w-full p-2 section" ref={metaPanel}>
-                <Tabs headings={tabHeadings}>
-                  {browsers.map(
-                    (browser: Browser): ReactElement => (
-                      <MetaPanel key={browser.id} browser={browser} />
-                    ),
-                  )}
-                </Tabs>
+                <Tabs browsers={browsers} />
               </div>
               <div className="flex flex-grow" ref={browserPanel} />
             </SplitPane>

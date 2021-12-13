@@ -1,60 +1,78 @@
-import React, { ReactElement, ReactNode } from 'react';
+import React, { ReactElement } from 'react';
+import { Tab } from '@headlessui/react';
 import { useAppDispatch, useAppSelector } from '../../common/hooks';
-import { createBrowser, selectActiveBrowser, tabSelected } from './browsersSlice';
+import { createBrowser, selectActiveBrowser, tabClosed, tabSelected } from './browsersSlice';
+import { Browser } from '../../common/types';
+import { MetaPanel } from './MetaPanel';
 
-type TabsProps = {
-  children: ReactNode[];
-  headings: string[];
-};
+function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(' ');
+}
 
-const renderHeadings = (
-  headings: string[],
-  selectedIndex: number,
-  onClick: (index: number) => void,
-): React.ReactNode[] =>
-  headings.map((heading, index): ReactNode => {
-    const selected = selectedIndex === index;
-    const borderBottomWidth = `border-b-${selected ? '4' : '2'}`;
-    const borderBottomColor = `border-${selected ? 'selected-item' : 'primary-text'}`;
-    return (
-      <button
-        className={`p-1 outline-none border-0 text-lg my-0 mx-2 text-primary-text border-solid ${borderBottomWidth} ${borderBottomColor}`}
-        type="button"
-        key={heading}
-        onClick={(): void => onClick(index)}
-      >
-        {heading}
-      </button>
-    );
-  });
-
-export const Tabs = ({ children, headings }: TabsProps): ReactElement => {
+export const Tabs = ({ browsers }: { browsers: Browser[] }): ReactElement => {
   const dispatch = useAppDispatch();
   const activeBrowser = useAppSelector(selectActiveBrowser());
-  const selectedIndex = activeBrowser.id;
-  const onClick = (index: number): void => {
-    dispatch(tabSelected({ id: index }));
-  };
+  const isSelected = (id: number) => id === activeBrowser.id;
 
   return (
-    <>
+    <Tab.Group
+      defaultIndex={activeBrowser.id}
+      onChange={(index) => {
+        dispatch(tabSelected({ id: index }));
+      }}
+    >
       <div className="flex justify-between" data-testid="header">
-        <ul className="flex px-0 pt-2 pb-4">
-          {renderHeadings(headings, selectedIndex, onClick)}
-          <li>
-            <button
-              className="p-1 mx-2 my-0 text-lg border-0 border-solid outline-none text-primary-text"
-              type="button"
-              onClick={() => dispatch(createBrowser({}))}
-            >
-              +
-            </button>
-          </li>
-        </ul>
+        <Tab.List>
+          {browsers.map(
+            (browser: Browser, index: number): ReactElement => (
+              <Tab key={browser.id}>
+                {() => (
+                  <button
+                    type="button"
+                    className={classNames(
+                      isSelected(browser.id) ? 'text-gray-900' : 'text-gray-500 hover:text-gray-700',
+                      'rounded-r-lg rounded-l-lg',
+                      'group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-4 text-sm font-medium text-center hover:bg-gray-50 focus:z-10',
+                    )}
+                  >
+                    <span>
+                      {browser.title}
+                      <button type="button" onClick={() => dispatch(tabClosed({ id: index }))}>
+                        x
+                      </button>
+                    </span>
+                    <span
+                      aria-hidden="true"
+                      className={classNames(
+                        isSelected(browser.id) ? 'bg-indigo-500' : 'bg-transparent',
+                        'absolute inset-x-0 bottom-0 h-0.5',
+                      )}
+                    />
+                  </button>
+                )}
+              </Tab>
+            ),
+          )}
+          <button
+            className="p-1 mx-2 my-0 text-lg border-0 border-solid outline-none text-primary-text"
+            type="button"
+            onClick={() => dispatch(createBrowser({}))}
+          >
+            +
+          </button>
+        </Tab.List>
       </div>
       <div className="relative flex flex-col flex-grow w-full h-full" data-testid="panels">
-        {children[selectedIndex]}
+        <Tab.Panels>
+          {browsers.map(
+            (browser: Browser): ReactElement => (
+              <Tab.Panel key={browser.id}>
+                <MetaPanel browser={browser} />
+              </Tab.Panel>
+            ),
+          )}
+        </Tab.Panels>
       </div>
-    </>
+    </Tab.Group>
   );
 };

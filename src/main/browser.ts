@@ -164,6 +164,8 @@ function initBrowserView(reduxStore: AppStore, browser: Browser) {
     }
   };
 
+  setBounds();
+
   return {
     view,
     navigate,

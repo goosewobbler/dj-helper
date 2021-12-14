@@ -11,7 +11,7 @@ import {
   updatePageUrl,
 } from '../features/browsers/browsersSlice';
 import { BandCurrency, BandData, parseBandcampPageData, TralbumCollectInfo, TralbumData } from './helpers/bandcamp';
-import { AppStore, Browser, TrackPreviewEmbedSize } from '../common/types';
+import { AnyObject, AppStore, Browser, TrackPreviewEmbedSize } from '../common/types';
 import { log } from './helpers/console';
 
 type RawBandcampData = [TralbumData, BandData, TralbumCollectInfo, BandCurrency];
@@ -55,12 +55,17 @@ function initBrowserView(reduxStore: AppStore, browser: Browser) {
 
   log('creating browser', browser.id);
 
+  function shallowEquals(a: AnyObject, b: AnyObject) {
+    return Object.entries(a).every(([key, value]) => value === b[key]);
+  }
+
   const setBounds = (sizes?: Sizes) => {
     const headerBarHeight = 62;
-    const newBounds = view.getBounds();
+    const bounds = { ...view.getBounds() };
     const state = getState();
     const { trackPreviewEmbedSize } = state.ui;
     const statusBarHeight = trackPreviewEmbedSize === TrackPreviewEmbedSize.Small ? 65 : 145;
+    const newBounds = { ...bounds };
 
     if (sizes) {
       const { listPaneWidth, browserPaneWidth, browserPanelHeight, metaPanelHeight } = sizes;
@@ -73,12 +78,14 @@ function initBrowserView(reduxStore: AppStore, browser: Browser) {
       if (browserPanelHeight && metaPanelHeight) {
         // vertical resize
         newBounds.y = Math.round(headerBarHeight + metaPanelHeight + 5);
-        log('vertical resize', browserPanelHeight, statusBarHeight);
         newBounds.height = Math.round(browserPanelHeight - statusBarHeight - 65);
       }
     }
 
-    view.setBounds(newBounds);
+    if (!shallowEquals(bounds, newBounds)) {
+      log('resizing');
+      view.setBounds(newBounds);
+    }
   };
 
   view.webContents.setWindowOpenHandler(({ url }) => {

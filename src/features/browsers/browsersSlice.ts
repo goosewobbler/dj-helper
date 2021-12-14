@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { AppState, Browser, Track } from '../../common/types';
+import { log } from '../../main/helpers/console';
 
 const initialState: Browser[] = [
   {
@@ -41,13 +42,16 @@ export const slice = createSlice({
     clearTracks: (state, { payload: { id } }: { payload: { id: number } }) =>
       state.map((browser) => (browser.id === id ? { ...browser, tracks: [] } : browser)),
     tabSelected: (state, { payload: { id } }: { payload: { id: number } }) =>
-      state.map((browser) => ({ ...browser, active: browser.id === id })),
-    tabClosed: (state, { payload: { id } }: { payload: { id: number } }) =>
-      state.filter((browser) => browser.id !== id),
+      state.map((browser) => {
+        log('checking if should be active', `${browser.id} === ${id}`, browser.id === id);
+        return { ...browser, active: browser.id === id };
+      }),
+    deleteBrowser: (state, { payload: { id } }: { payload: { id: number } }) =>
+      state.filter((browser) => browser.id !== id).map((browser, index) => ({ ...browser, id: index })),
   },
 });
 
-export const { createBrowser, updatePageUrl, updatePageTitle, addTrack, clearTracks, tabSelected, tabClosed } =
+export const { createBrowser, updatePageUrl, updatePageTitle, addTrack, clearTracks, tabSelected, deleteBrowser } =
   slice.actions;
 
 export const selectBrowsers = (state: AppState): Browser[] => state.browsers;
@@ -59,8 +63,9 @@ export const selectBrowserById =
 
 export const selectActiveBrowser =
   () =>
-  (state: AppState): Browser =>
-    state.browsers.find((browser) => browser.active === true) as Browser;
+  (state: AppState): Browser => {
+    return state.browsers.find((browser) => browser.active === true) as Browser;
+  };
 
 export const getNextTrackOnMetaPanel =
   ({ id, currentTrackId }: { id: number; currentTrackId: number }) =>

@@ -1,24 +1,56 @@
 import React, { ReactElement } from 'react';
+import { batch } from 'react-redux';
 import { Tab } from '@headlessui/react';
-import { useAppDispatch, useAppSelector } from '../../common/hooks';
-import { createBrowser, selectActiveBrowser, tabClosed, tabSelected } from './browsersSlice';
-import { Browser } from '../../common/types';
+import { useAppDispatch } from '../../common/hooks';
+import { createBrowser, deleteBrowser, tabSelected } from './browsersSlice';
+import { AppThunk, Browser, TabHistoryAction } from '../../common/types';
 import { MetaPanel } from './MetaPanel';
+import { updateTabHistory } from '../ui/uiSlice';
+import { log } from '../../main/helpers/console';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
-export const Tabs = ({ browsers }: { browsers: Browser[] }): ReactElement => {
+const clickNewTabHandler = (): AppThunk => (dispatch, getState) => {
+  batch(() => {
+    dispatch(createBrowser({}));
+    const { browsers } = getState();
+    const newBrowser = browsers[browsers.length - 1];
+    dispatch(updateTabHistory({ tabId: newBrowser.id, action: TabHistoryAction.Created }));
+  });
+};
+
+const clickCloseTabHandler =
+  (tabIndex: number, activeBrowser: Browser): AppThunk =>
+  (dispatch, getState) => {
+    batch(() => {
+      dispatch(updateTabHistory({ tabId: tabIndex, action: TabHistoryAction.Deleted }));
+      if (tabIndex === activeBrowser.id) {
+        const {
+          ui: { tabHistory },
+        } = getState();
+        const previouslyActiveBrowserId = tabHistory[tabHistory.length - 1];
+        dispatch(tabSelected({ id: previouslyActiveBrowserId }));
+        log('selected tab', previouslyActiveBrowserId, tabHistory);
+      }
+      dispatch(deleteBrowser({ id: tabIndex }));
+    });
+  };
+
+export const Tabs = ({ browsers, activeBrowser }: { browsers: Browser[]; activeBrowser: Browser }): ReactElement => {
   const dispatch = useAppDispatch();
-  const activeBrowser = useAppSelector(selectActiveBrowser());
   const isSelected = (id: number) => id === activeBrowser.id;
 
   return (
     <Tab.Group
-      defaultIndex={activeBrowser.id}
+      defaultIndex={activeBrowser ? activeBrowser.id : 0}
       onChange={(index) => {
-        dispatch(tabSelected({ id: index }));
+        batch(() => {
+          log('tab onChange', index);
+          dispatch(tabSelected({ id: index }));
+          dispatch(updateTabHistory({ tabId: index, action: TabHistoryAction.Selected }));
+        });
       }}
     >
       <div className="flex justify-between" data-testid="header">
@@ -37,7 +69,7 @@ export const Tabs = ({ browsers }: { browsers: Browser[] }): ReactElement => {
                   >
                     <span>
                       {browser.title}
-                      <button type="button" onClick={() => dispatch(tabClosed({ id: index }))}>
+                      <button type="button" onClick={() => dispatch(clickCloseTabHandler(index, activeBrowser))}>
                         x
                       </button>
                     </span>
@@ -56,7 +88,7 @@ export const Tabs = ({ browsers }: { browsers: Browser[] }): ReactElement => {
           <button
             className="p-1 mx-2 my-0 text-lg border-0 border-solid outline-none text-primary-text"
             type="button"
-            onClick={() => dispatch(createBrowser({}))}
+            onClick={() => dispatch(clickNewTabHandler())}
           >
             +
           </button>

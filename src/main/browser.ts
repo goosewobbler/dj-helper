@@ -7,7 +7,6 @@ import {
   clearTracks,
   createBrowser,
   selectActiveBrowser,
-  selectBrowserById,
   updatePageTitle,
   updatePageUrl,
 } from '../features/browsers/browsersSlice';
@@ -143,7 +142,7 @@ function initBrowserView(reduxStore: AppStore, browser: Browser) {
           const trackSelector = selectTrackBySourceUrl(title_link);
           const track = trackSelector(getState());
           log('selected browser', browser.id, track);
-          log(getState());
+          // log(getState());
           dispatch(addTrack({ id: browser.id, trackId: track.id }));
         });
       })();
@@ -167,6 +166,7 @@ function initBrowserView(reduxStore: AppStore, browser: Browser) {
   setBounds();
 
   return {
+    id: browser.id,
     view,
     navigate,
     setBounds,
@@ -179,19 +179,11 @@ export function initBrowsers(mainWindow: BrowserWindow, reduxStore: AppStore): v
 
   subscribe(() => {
     const state = getState();
-
-    loadedBrowsers.forEach((loadedBrowser: LoadedBrowser, loadedBrowserIndex: number) => {
-      // check if this initialised browser has been removed from the store
-      if (!state.browsers.find((browser) => browser.id === loadedBrowser.id)) {
-        mainWindow.removeBrowserView(loadedBrowser.view);
-        loadedBrowsers.splice(loadedBrowserIndex, 1);
-      }
-
-      // navigate where necessary
-      const browserSelector = selectBrowserById(loadedBrowser.id);
-      const { url } = browserSelector(state);
-      loadedBrowser.navigate(url);
-    });
+    const activeBrowser = activeBrowserSelector(state);
+    if (!activeBrowser) {
+      // discard intermediary updates where no browser is active
+      return;
+    }
 
     state.browsers.forEach((browser: Browser) => {
       // initialise the browser if it is not loaded
@@ -207,24 +199,30 @@ export function initBrowsers(mainWindow: BrowserWindow, reduxStore: AppStore): v
       }
     });
 
-    loadedBrowsers.forEach((loadedBrowser: LoadedBrowser) => {
-      // navigate where necessary
-      const browserSelector = selectBrowserById(loadedBrowser.id);
-      const { url } = browserSelector(state);
-      loadedBrowser.navigate(url);
+    loadedBrowsers.forEach((loadedBrowser: LoadedBrowser, loadedBrowserIndex: number) => {
+      const browserFromState = state.browsers.find((browser) => browser.id === loadedBrowser.id);
 
-      // show or hide depending on display status
-      const browserIsActive = loadedBrowser.id === activeBrowserSelector(state).id;
+      if (!browserFromState) {
+        // browser has been removed from state
+        mainWindow.removeBrowserView(loadedBrowser.view);
+        loadedBrowsers.splice(loadedBrowserIndex, 1);
+        log('removed loaded browser', loadedBrowser);
+        return;
+      }
 
-      if (!browserIsActive) {
-        loadedBrowser.view.setBounds({ x: 0, y: 0, width: 0, height: 0 });
-      } else {
+      if (browserFromState.active) {
         const {
           verticalSplitterDimensions: { browserPanelHeight, metaPanelHeight },
           horizontalSplitterDimensions: { browserPaneWidth, listPaneWidth },
         } = state.ui;
         loadedBrowser.setBounds({ browserPanelHeight, metaPanelHeight, browserPaneWidth, listPaneWidth });
+      } else {
+        loadedBrowser.view.setBounds({ x: 0, y: 0, width: 0, height: 0 });
       }
+
+      // navigate where necessary
+      log('calling browser navigate to', browserFromState.url);
+      loadedBrowser.navigate(browserFromState.url);
     });
   });
 
@@ -237,8 +235,12 @@ export function initBrowsers(mainWindow: BrowserWindow, reduxStore: AppStore): v
   });
   ipcMain.handle('resize-browsers', (_event, args: [Sizes]) => {
     const state = getState();
-    const activeBrowserId = activeBrowserSelector(state).id;
-    const activeBrowser = loadedBrowsers.find((loadedBrowser) => loadedBrowser.id === activeBrowserId) as LoadedBrowser;
-    activeBrowser.setBounds(...args);
+    const activeBrowser = activeBrowserSelector(state);
+    if (activeBrowser) {
+      const activeLoadedBrowser = loadedBrowsers.find(
+        (loadedBrowser) => loadedBrowser.id === activeBrowser.id,
+      ) as LoadedBrowser;
+      activeLoadedBrowser.setBounds(...args);
+    }
   });
 }

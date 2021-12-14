@@ -1,6 +1,6 @@
-import React, { ReactElement, useRef } from 'react';
+import React, { ReactElement, useMemo, useRef, useState } from 'react';
 import { SplitPane } from 'react-multi-split-pane';
-import { selectBrowsers } from '../features/browsers/browsersSlice';
+import { selectActiveBrowser, selectBrowsers } from '../features/browsers/browsersSlice';
 import { Tabs } from '../features/browsers/Tabs';
 import { handleAutoplay } from '../features/embed/embedSlice';
 import { ListPane } from '../features/lists/ListPane';
@@ -40,6 +40,22 @@ export const App = (): ReactElement => {
   const browserPane = useRef<HTMLDivElement>(null);
   const browserPanel = useRef<HTMLDivElement>(null);
   const metaPanel = useRef<HTMLDivElement>(null);
+  const activeBrowser = useAppSelector(selectActiveBrowser());
+  const [cachedActiveBrowser, setCachedActiveBrowser] = useState(activeBrowser);
+  // const [cachedBrowsers, setCachedBrowsers] = useState(browsers);
+
+  log('app render', activeBrowser, cachedActiveBrowser);
+  if (activeBrowser && activeBrowser.id !== cachedActiveBrowser.id) {
+    log('updating tabs activeBrowser', activeBrowser.id);
+    setCachedActiveBrowser(activeBrowser);
+  }
+  // if (cachedBrowsers.length !== browsers.length) {
+  //   setCachedBrowsers(browsers);
+  // }
+  const displayTabs = useMemo(
+    () => <Tabs browsers={browsers} activeBrowser={cachedActiveBrowser} />,
+    [browsers, cachedActiveBrowser],
+  );
 
   window.api.removeAllListeners('handle-autoplay');
   window.api.removeAllListeners('window-resized');
@@ -97,7 +113,7 @@ export const App = (): ReactElement => {
               onDragFinished={(sizes) => dispatch(verticalSplitterMoved(sizes as [number, number]))}
             >
               <div className="w-full p-2 section" ref={metaPanel}>
-                <Tabs browsers={browsers} />
+                {displayTabs}
               </div>
               <div className="flex flex-grow" ref={browserPanel} />
             </SplitPane>

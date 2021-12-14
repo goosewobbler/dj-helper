@@ -1,7 +1,7 @@
-import React, { ReactElement, useMemo, useRef, useState } from 'react';
+import React, { ReactElement, useRef } from 'react';
 import { SplitPane } from 'react-multi-split-pane';
 import { selectActiveBrowser, selectBrowsers } from '../features/browsers/browsersSlice';
-import { Tabs } from '../features/browsers/Tabs';
+import { TabbedInterface } from '../features/browsers/Tabs';
 import { handleAutoplay } from '../features/embed/embedSlice';
 import { ListPane } from '../features/lists/ListPane';
 import { StatusBar } from '../features/ui/StatusBar';
@@ -41,21 +41,21 @@ export const App = (): ReactElement => {
   const browserPanel = useRef<HTMLDivElement>(null);
   const metaPanel = useRef<HTMLDivElement>(null);
   const activeBrowser = useAppSelector(selectActiveBrowser());
-  const [cachedActiveBrowser, setCachedActiveBrowser] = useState(activeBrowser);
+  // const [cachedActiveBrowser, setCachedActiveBrowser] = useState(activeBrowser);
   // const [cachedBrowsers, setCachedBrowsers] = useState(browsers);
 
-  log('app render', activeBrowser, cachedActiveBrowser);
-  if (activeBrowser && activeBrowser.id !== cachedActiveBrowser.id) {
-    log('updating tabs activeBrowser', activeBrowser.id);
-    setCachedActiveBrowser(activeBrowser);
-  }
+  // log('app render', activeBrowser, cachedActiveBrowser);
+  // if (activeBrowser && activeBrowser.id !== cachedActiveBrowser.id) {
+  //   log('updating tabs activeBrowser', activeBrowser.id);
+  //   setCachedActiveBrowser(activeBrowser);
+  // }
   // if (cachedBrowsers.length !== browsers.length) {
   //   setCachedBrowsers(browsers);
   // }
-  const displayTabs = useMemo(
-    () => <Tabs browsers={browsers} activeBrowser={cachedActiveBrowser} />,
-    [browsers, cachedActiveBrowser],
-  );
+  // const displayTabs = useMemo(
+  //   () => <Tabs browsers={browsers} activeBrowser={cachedActiveBrowser} />,
+  //   [browsers, cachedActiveBrowser],
+  // );
 
   window.api.removeAllListeners('handle-autoplay');
   window.api.removeAllListeners('window-resized');
@@ -113,7 +113,7 @@ export const App = (): ReactElement => {
               onDragFinished={(sizes) => dispatch(verticalSplitterMoved(sizes as [number, number]))}
             >
               <div className="w-full p-2 section" ref={metaPanel}>
-                {displayTabs}
+                <TabbedInterface browsers={browsers} activeBrowser={activeBrowser} />
               </div>
               <div className="flex flex-grow" ref={browserPanel} />
             </SplitPane>

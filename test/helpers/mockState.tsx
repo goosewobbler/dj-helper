@@ -26,6 +26,7 @@ export function mockState({
       horizontalSplitterDimensions: { listPaneWidth: 538, browserPaneWidth: 962 },
       verticalSplitterDimensions: { browserPanelHeight: 547, metaPanelHeight: 326 },
       trackPreviewEmbedSize: 'small' as UI['trackPreviewEmbedSize'],
+      tabHistory: [0],
     },
   };
 }

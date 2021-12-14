@@ -7,12 +7,11 @@ import {
   clearTracks,
   createBrowser,
   selectActiveBrowser,
-  selectBrowserById,
   updatePageTitle,
   updatePageUrl,
 } from '../features/browsers/browsersSlice';
 import { BandCurrency, BandData, parseBandcampPageData, TralbumCollectInfo, TralbumData } from './helpers/bandcamp';
-import { AppStore, Browser, TrackPreviewEmbedSize } from '../common/types';
+import { AnyObject, AppStore, Browser, TrackPreviewEmbedSize } from '../common/types';
 import { log } from './helpers/console';
 
 type RawBandcampData = [TralbumData, BandData, TralbumCollectInfo, BandCurrency];
@@ -56,12 +55,17 @@ function initBrowserView(reduxStore: AppStore, browser: Browser) {
 
   log('creating browser', browser.id);
 
+  function shallowEquals(a: AnyObject, b: AnyObject) {
+    return Object.entries(a).every(([key, value]) => value === b[key]);
+  }
+
   const setBounds = (sizes?: Sizes) => {
     const headerBarHeight = 62;
-    const newBounds = view.getBounds();
+    const bounds = { ...view.getBounds() };
     const state = getState();
     const { trackPreviewEmbedSize } = state.ui;
     const statusBarHeight = trackPreviewEmbedSize === TrackPreviewEmbedSize.Small ? 65 : 145;
+    const newBounds = { ...bounds };
 
     if (sizes) {
       const { listPaneWidth, browserPaneWidth, browserPanelHeight, metaPanelHeight } = sizes;
@@ -74,12 +78,14 @@ function initBrowserView(reduxStore: AppStore, browser: Browser) {
       if (browserPanelHeight && metaPanelHeight) {
         // vertical resize
         newBounds.y = Math.round(headerBarHeight + metaPanelHeight + 5);
-        log('vertical resize', browserPanelHeight, statusBarHeight);
         newBounds.height = Math.round(browserPanelHeight - statusBarHeight - 65);
       }
     }
 
-    view.setBounds(newBounds);
+    if (!shallowEquals(bounds, newBounds)) {
+      log('resizing');
+      view.setBounds(newBounds);
+    }
   };
 
   view.webContents.setWindowOpenHandler(({ url }) => {
@@ -143,7 +149,7 @@ function initBrowserView(reduxStore: AppStore, browser: Browser) {
           const trackSelector = selectTrackBySourceUrl(title_link);
           const track = trackSelector(getState());
           log('selected browser', browser.id, track);
-          log(getState());
+          // log(getState());
           dispatch(addTrack({ id: browser.id, trackId: track.id }));
         });
       })();
@@ -167,6 +173,7 @@ function initBrowserView(reduxStore: AppStore, browser: Browser) {
   setBounds();
 
   return {
+    id: browser.id,
     view,
     navigate,
     setBounds,
@@ -179,19 +186,11 @@ export function initBrowsers(mainWindow: BrowserWindow, reduxStore: AppStore): v
 
   subscribe(() => {
     const state = getState();
-
-    loadedBrowsers.forEach((loadedBrowser: LoadedBrowser, loadedBrowserIndex: number) => {
-      // check if this initialised browser has been removed from the store
-      if (!state.browsers.find((browser) => browser.id === loadedBrowser.id)) {
-        mainWindow.removeBrowserView(loadedBrowser.view);
-        loadedBrowsers.splice(loadedBrowserIndex, 1);
-      }
-
-      // navigate where necessary
-      const browserSelector = selectBrowserById(loadedBrowser.id);
-      const { url } = browserSelector(state);
-      loadedBrowser.navigate(url);
-    });
+    const activeBrowser = activeBrowserSelector(state);
+    if (!activeBrowser) {
+      // discard intermediary updates where no browser is active
+      return;
+    }
 
     state.browsers.forEach((browser: Browser) => {
       // initialise the browser if it is not loaded
@@ -207,24 +206,30 @@ export function initBrowsers(mainWindow: BrowserWindow, reduxStore: AppStore): v
       }
     });
 
-    loadedBrowsers.forEach((loadedBrowser: LoadedBrowser) => {
-      // navigate where necessary
-      const browserSelector = selectBrowserById(loadedBrowser.id);
-      const { url } = browserSelector(state);
-      loadedBrowser.navigate(url);
+    loadedBrowsers.forEach((loadedBrowser: LoadedBrowser, loadedBrowserIndex: number) => {
+      const browserFromState = state.browsers.find((browser) => browser.id === loadedBrowser.id);
 
-      // show or hide depending on display status
-      const browserIsActive = loadedBrowser.id === activeBrowserSelector(state).id;
+      if (!browserFromState) {
+        // browser has been removed from state
+        mainWindow.removeBrowserView(loadedBrowser.view);
+        loadedBrowsers.splice(loadedBrowserIndex, 1);
+        log('removed loaded browser', loadedBrowser);
+        return;
+      }
 
-      if (!browserIsActive) {
-        loadedBrowser.view.setBounds({ x: 0, y: 0, width: 0, height: 0 });
-      } else {
+      if (browserFromState.active) {
         const {
           verticalSplitterDimensions: { browserPanelHeight, metaPanelHeight },
           horizontalSplitterDimensions: { browserPaneWidth, listPaneWidth },
         } = state.ui;
         loadedBrowser.setBounds({ browserPanelHeight, metaPanelHeight, browserPaneWidth, listPaneWidth });
+      } else {
+        loadedBrowser.view.setBounds({ x: 0, y: 0, width: 0, height: 0 });
       }
+
+      // navigate where necessary
+      log('calling browser navigate to', browserFromState.url);
+      loadedBrowser.navigate(browserFromState.url);
     });
   });
 
@@ -237,8 +242,12 @@ export function initBrowsers(mainWindow: BrowserWindow, reduxStore: AppStore): v
   });
   ipcMain.handle('resize-browsers', (_event, args: [Sizes]) => {
     const state = getState();
-    const activeBrowserId = activeBrowserSelector(state).id;
-    const activeBrowser = loadedBrowsers.find((loadedBrowser) => loadedBrowser.id === activeBrowserId) as LoadedBrowser;
-    activeBrowser.setBounds(...args);
+    const activeBrowser = activeBrowserSelector(state);
+    if (activeBrowser) {
+      const activeLoadedBrowser = loadedBrowsers.find(
+        (loadedBrowser) => loadedBrowser.id === activeBrowser.id,
+      ) as LoadedBrowser;
+      activeLoadedBrowser.setBounds(...args);
+    }
   });
 }

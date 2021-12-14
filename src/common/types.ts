@@ -27,6 +27,12 @@ export enum TrackPreviewEmbedSize {
   Medium = 'MEDIUM',
 }
 
+export enum TabHistoryAction {
+  Created = 'CREATED',
+  Deleted = 'DELETED',
+  Selected = 'SELECTED',
+}
+
 export type LoadContext = {
   contextId?: number;
   contextType: LoadContextType;
@@ -95,6 +101,7 @@ export type UI = {
     metaPanelHeight: number;
   };
   trackPreviewEmbedSize: TrackPreviewEmbedSize;
+  tabHistory: Browser['id'][];
 };
 export interface AppState {
   embed: Embed;

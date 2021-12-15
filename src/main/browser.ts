@@ -6,6 +6,7 @@ import {
   addTrack,
   clearTracks,
   createBrowser,
+  loadedPageUrl,
   selectActiveBrowser,
   updatePageTitle,
   updatePageUrl,
@@ -122,11 +123,14 @@ function initBrowserView(reduxStore: AppStore, browser: Browser) {
   view.webContents.on('will-navigate', (event, url) => {
     log('will-navigate', url);
     event.preventDefault();
-    dispatch(updatePageUrl({ id: browser.id, url: sanitiseUrl(url) }));
+    const payload = { id: browser.id, url: sanitiseUrl(url) };
+    dispatch(updatePageUrl(payload));
   });
 
   view.webContents.on('did-finish-load', () => {
     const loadedUrl = view.webContents.getURL();
+    const payload = { id: browser.id, url: loadedUrl };
+    dispatch(loadedPageUrl(payload));
     currentlyNavigating = false;
     log('loaded url', loadedUrl);
 
@@ -166,6 +170,7 @@ function initBrowserView(reduxStore: AppStore, browser: Browser) {
       log('loading URL', url);
       currentlyNavigating = true;
       dispatch(clearTracks({ id: browser.id }));
+
       void view.webContents.loadURL(url);
     }
   };
@@ -189,6 +194,7 @@ export function initBrowsers(mainWindow: BrowserWindow, reduxStore: AppStore): v
     const activeBrowser = activeBrowserSelector(state);
     if (!activeBrowser) {
       // discard intermediary updates where no browser is active
+      log('discarding update');
       return;
     }
 
@@ -228,7 +234,6 @@ export function initBrowsers(mainWindow: BrowserWindow, reduxStore: AppStore): v
       }
 
       // navigate where necessary
-      log('calling browser navigate to', browserFromState.url);
       loadedBrowser.navigate(browserFromState.url);
     });
   });

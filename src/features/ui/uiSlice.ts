@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { AppState, UI, TrackPreviewEmbedSize, Browser, TabHistoryAction } from '../../common/types';
-import { log } from '../../main/helpers/console';
 
 const initialState = {
   statusText: '',
@@ -68,7 +67,6 @@ export const slice = createSlice({
       }
       if (action === TabHistoryAction.Deleted) {
         const updatedHistory = state.tabHistory.filter((historyItem) => historyItem !== tabId);
-        log('tabHistory delete action', tabId, state.tabHistory, updatedHistory);
         return { ...state, tabHistory: updatedHistory.length ? updatedHistory : [0] };
       }
 

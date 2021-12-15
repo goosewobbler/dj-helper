@@ -4,7 +4,7 @@ import { XYCoord } from 'dnd-core';
 import { selectTrackById } from './tracksSlice';
 import { LoadContext, Track } from '../../common/types';
 import { removeTrackFromSelectedList } from '../lists/listsSlice';
-import { CrossIcon } from './CrossIcon';
+import { CrossIcon } from '../../common/icons/CrossIcon';
 import { BaseTrack } from './BaseTrack';
 import { useAppDispatch, useAppSelector } from '../../common/hooks';
 

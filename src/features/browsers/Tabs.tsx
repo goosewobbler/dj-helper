@@ -7,6 +7,8 @@ import { AppThunk, Browser, TabHistoryAction } from '../../common/types';
 import { MetaPanel } from './MetaPanel';
 import { updateTabHistory } from '../ui/uiSlice';
 import { log } from '../../main/helpers/console';
+import { CrossIcon } from '../../common/icons/CrossIcon';
+import { NewTabIcon } from '../../common/icons/NewTabIcon';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
@@ -73,23 +75,32 @@ export const TabbedInterface = ({
                   isSelected(browser.id)
                     ? 'text-gray-900 cursor-default'
                     : 'text-gray-500 hover:text-gray-700 cursor-pointer',
-                  'float-left rounded-r-lg rounded-l-lg w-80 overflow-hidden overflow-ellipsis whitespace-nowrap',
-                  'group relative min-w-0 flex-1 bg-white py-4 px-4 text-sm font-medium text-center hover:bg-gray-50 focus:z-10',
+                  'float-left rounded-r-lg rounded-l-lg w-72 overflow-hidden overflow-ellipsis whitespace-nowrap',
+                  'group group-scoped relative min-w-0 flex-1 bg-white pt-4 pb-5 pl-9 pr-7 text-sm font-medium text-left hover:bg-gray-100 focus:z-10',
                 )}
               >
                 {displayTabCloseButton && (
                   <button
-                    className="absolute w-5 h-5 right-1"
+                    className="absolute w-5 h-5 opacity-0 right-2 hover:bg-red-100 group-scoped-hover:opacity-100"
                     type="button"
                     onClick={(event) => {
                       event.stopPropagation();
                       dispatch(clickCloseTabHandler(index, activeBrowser));
                     }}
                   >
-                    x
+                    <CrossIcon className="cross-icon" />
                   </button>
                 )}
-                <span className="overflow-hidden w-60 overflow-ellipsis whitespace-nowrap">{browser.title}</span>
+                {browser.loading ? (
+                  <div className="absolute w-5 h-5 overflow-hidden top-4 left-3">
+                    <div className="relative w-full h-full spinner-eclipse">
+                      <div className="box-content absolute top-0.5 left-0.5 w-4 h-4 rounded-xl animate-spin spinner-eclipse-shadow" />
+                    </div>
+                  </div>
+                ) : (
+                  <img className="absolute w-5 h-5 top-4 left-3" src="./bandcamp-favicon-32x32.png" />
+                )}
+                <span>{browser.title}</span>
                 <span
                   aria-hidden="true"
                   className={classNames(
@@ -101,11 +112,11 @@ export const TabbedInterface = ({
             ),
           )}
           <button
-            className="p-1 mx-2 mt-2 text-lg border-0 border-solid outline-none text-primary-text"
+            className="float-left px-4 py-4 text-lg border-0 border-solid rounded-l-lg rounded-r-lg outline-none hover:bg-gray-100 text-primary-text"
             type="button"
             onClick={() => dispatch(clickNewTabHandler())}
           >
-            +
+            <NewTabIcon className="" />
           </button>
         </TabList>
       </div>

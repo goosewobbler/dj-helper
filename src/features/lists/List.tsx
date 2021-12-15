@@ -16,6 +16,8 @@ import { EditIcon } from '../../icons/EditIcon';
 import { TrashIcon } from '../../icons/TrashIcon';
 import { useAppDispatch, useAppSelector } from '../../common/hooks';
 import { log } from '../../main/helpers/console';
+import { CrossIcon } from '../../icons/CrossIcon';
+import { TickIcon } from '../../icons/TickIcon';
 
 const KEY_ENTER = 'Enter';
 const KEY_ESCAPE = 'Escape';
@@ -40,6 +42,8 @@ export function List({ id }: { id: number }): ReactElement {
   const isValid = () => !!title;
 
   const handleClickEdit = () => dispatch(editList({ id }));
+  const handleClickConfirmEdit = () => dispatch(finishEditList());
+  const handleClickCancelEdit = () => dispatch(revertEditList());
   const handleClickDelete = () => dispatch(deleteList({ id }));
   const handleTitleChange = (event: BaseSyntheticEvent): void => {
     dispatch(updateListTitle({ id, title: (event.target as HTMLInputElement).value }));
@@ -68,7 +72,7 @@ export function List({ id }: { id: number }): ReactElement {
   return (
     <li id={listKey} className="flex flex-col list group-scoped" data-testid="list">
       <div
-        className={`accordion transition duration-500 ease-in-out outline-none border-none items-center group-scoped-hover:bg-green-400 bg-green-200 text-gray-700 flex cursor-pointer p-4 ${
+        className={`accordion transition duration-500 ease-in-out select-none outline-none border-none items-center group-scoped-hover:bg-green-400 bg-green-200 text-gray-700 flex cursor-pointer p-4 ${
           active ? 'font-black' : 'font-semibold'
         }`}
         role="menuitem"
@@ -76,19 +80,27 @@ export function List({ id }: { id: number }): ReactElement {
         onKeyPress={toggleAccordion}
         tabIndex={0}
       >
-        <span className="text-sm title w-80" data-testid="title">
+        <span className="h-10 pt-2 text-sm title w-96" data-testid="title">
           {editing ? (
-            <label htmlFor="list-title">
-              List Title
+            <label className="block h-full" htmlFor="list-title">
+              Enter List Title:
               <input
                 id="list-title"
-                className={`ring-4 ring-opacity-30 ${validityRing}`}
+                className={`mx-4 ring-4 ring-opacity-30 ${validityRing}`}
                 type="text"
                 onChange={(event): void => handleTitleChange(event)}
                 onKeyDown={(event): void => handleKeyDown(event)}
                 placeholder="List Title"
                 value={title}
               />
+              <div className="inline-block float-right h-full -mt-1">
+                <button className="p-1 pt-2 hover:bg-green-600" type="button" onClick={() => handleClickConfirmEdit()}>
+                  <TickIcon className="tick-icon" />
+                </button>
+                <button className="p-1 hover:bg-red-200" type="button" onClick={() => handleClickCancelEdit()}>
+                  <CrossIcon className="cross-icon" />
+                </button>
+              </div>
             </label>
           ) : (
             title

@@ -39,13 +39,6 @@ const theme = {
 };
 
 /**
- * @type {import("./src/common/types").LooseObject}
- */
-const variants = {
-  borderColor: ['responsive', 'hover', 'focus', 'focus-within', 'active'],
-};
-
-/**
  * @type {unknown[]}
  */
 const plugins = [require('tailwindcss-scoped-groups')];
@@ -53,11 +46,10 @@ const plugins = [require('tailwindcss-scoped-groups')];
 /**
  * @type {string[]}
  */
-const purge = ['./src/**/*.ts{,x}', './src/index.ejs'];
+const content = ['./src/**/*.ts{,x}', './src/index.ejs'];
 
 module.exports = {
-  purge,
+  content,
   theme,
-  variants,
   plugins,
 };

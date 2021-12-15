@@ -7,7 +7,7 @@ export function MetaPanel({ browser: { id, tracks } }: { browser: Browser }): Re
   log('tracks', tracks);
 
   return (
-    <div className="inline-block w-full overflow-y-scroll">
+    <div>
       {tracks?.map((trackId) => (
         <BrowserTrack key={trackId} id={trackId} context={{ contextId: id, contextType: LoadContextType.Browser }} />
       ))}

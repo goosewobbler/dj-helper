@@ -1,6 +1,6 @@
 import React, { ReactElement, BaseSyntheticEvent, KeyboardEvent, useRef, useCallback } from 'react';
 import { ListTrack } from '../tracks/ListTrack';
-import { ChevronIcon } from './ChevronIcon';
+import { ChevronIcon } from '../../common/icons/ChevronIcon';
 import {
   deleteList,
   editList,
@@ -12,8 +12,8 @@ import {
   updateListTitle,
 } from './listsSlice';
 import { LoadContextType, Track } from '../../common/types';
-import { EditIcon } from './EditIcon';
-import { TrashIcon } from './TrashIcon';
+import { EditIcon } from '../../common/icons/EditIcon';
+import { TrashIcon } from '../../common/icons/TrashIcon';
 import { useAppDispatch, useAppSelector } from '../../common/hooks';
 
 const KEY_ENTER = 'Enter';

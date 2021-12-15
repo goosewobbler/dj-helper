@@ -71,9 +71,9 @@ export function List({ id }: { id: number }): ReactElement {
   }
 
   return (
-    <li id={listKey} className="flex flex-col list group-scoped" data-testid="list">
+    <li id={listKey} className="flex flex-col list group-list" data-testid="list">
       <div
-        className={`accordion transition duration-500 ease-in-out select-none outline-none border-none items-center group-scoped-hover:bg-green-400 bg-green-200 text-gray-700 flex cursor-pointer p-4 ${
+        className={`accordion transition duration-500 ease-in-out select-none outline-none border-none items-center group-list-hover:bg-green-400 bg-green-200 text-gray-700 flex cursor-pointer p-4 ${
           active ? 'font-black' : 'font-semibold'
         }`}
         role="menuitem"
@@ -108,7 +108,7 @@ export function List({ id }: { id: number }): ReactElement {
           )}
         </span>
         {!editing && (
-          <span className="mr-4 opacity-0 action-btns group-scoped-hover:opacity-100">
+          <span className="mr-4 opacity-0 action-btns group-list-hover:opacity-100">
             <button className="p-1 mx-1 hover:bg-green-600" type="button" onClick={() => handleClickEdit()}>
               <EditIcon className="edit-icon" />
             </button>

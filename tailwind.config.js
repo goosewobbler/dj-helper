@@ -41,7 +41,11 @@ const theme = {
 /**
  * @type {unknown[]}
  */
-const plugins = [require('tailwindcss-scoped-groups')];
+const plugins = [
+  require('tailwindcss-scoped-groups')({
+    groups: ['list', 'track'],
+  }),
+];
 
 /**
  * @type {string[]}

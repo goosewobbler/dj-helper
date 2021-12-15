@@ -3,3 +3,5 @@ declare module 'tailwindcss/resolveConfig' {
     theme: { colors: { [Key: string]: { default: string } } };
   };
 }
+
+declare module 'tailwindcss-scoped-groups';

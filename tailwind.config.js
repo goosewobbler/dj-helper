@@ -48,7 +48,7 @@ const variants = {
 /**
  * @type {unknown[]}
  */
-const plugins = [require('tailwindcss-nested-groups')];
+const plugins = [require('tailwindcss-scoped-groups')];
 
 /**
  * @type {string[]}

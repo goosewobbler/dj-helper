@@ -15,7 +15,6 @@ import { LoadContextType, Track } from '../../common/types';
 import { EditIcon } from '../../icons/EditIcon';
 import { TrashIcon } from '../../icons/TrashIcon';
 import { useAppDispatch, useAppSelector } from '../../common/hooks';
-import { log } from '../../main/helpers/console';
 import { CrossIcon } from '../../icons/CrossIcon';
 import { TickIcon } from '../../icons/TickIcon';
 
@@ -39,10 +38,14 @@ export function List({ id }: { id: number }): ReactElement {
     return <> </>;
   }
   const { title, tracks, editing, active } = list;
-  const isValid = () => !!title;
+  const isValid = () => title !== '';
 
   const handleClickEdit = () => dispatch(editList({ id }));
-  const handleClickConfirmEdit = () => dispatch(finishEditList());
+  const handleClickConfirmEdit = () => {
+    if (isValid()) {
+      dispatch(finishEditList());
+    }
+  };
   const handleClickCancelEdit = () => dispatch(revertEditList());
   const handleClickDelete = () => dispatch(deleteList({ id }));
   const handleTitleChange = (event: BaseSyntheticEvent): void => {
@@ -62,8 +65,6 @@ export function List({ id }: { id: number }): ReactElement {
   const accordionContentMaxHeight = active ? accordionContentMaxHeightWhenActive : '0px';
   const chevronAdditionalClassNamesWhenActive = 'transform rotate-90';
   const chevronAdditionalClassNames = active ? chevronAdditionalClassNamesWhenActive : '';
-
-  log('rendering list');
 
   function toggleAccordion() {
     dispatch(selectList({ id }));
@@ -107,11 +108,11 @@ export function List({ id }: { id: number }): ReactElement {
           )}
         </span>
         {!editing && (
-          <span className="opacity-0 action-btns group-scoped-hover:opacity-100">
-            <button className="p-1" type="button" onClick={() => handleClickEdit()}>
+          <span className="mr-4 opacity-0 action-btns group-scoped-hover:opacity-100">
+            <button className="p-1 mx-1 hover:bg-green-600" type="button" onClick={() => handleClickEdit()}>
               <EditIcon className="edit-icon" />
             </button>
-            <button className="p-1" type="button" onClick={() => handleClickDelete()}>
+            <button className="p-1 mx-1 hover:bg-red-200" type="button" onClick={() => handleClickDelete()}>
               <TrashIcon className="trash-icon" />
             </button>
           </span>

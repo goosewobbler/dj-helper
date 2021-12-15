@@ -1,6 +1,7 @@
 import React, { ReactElement } from 'react';
 import { batch } from 'react-redux';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import classNames from 'classnames';
 import { useAppDispatch } from '../../common/hooks';
 import { createBrowser, deleteBrowser, tabSelected } from './browsersSlice';
 import { AppThunk, Browser, TabHistoryAction } from '../../common/types';
@@ -9,10 +10,6 @@ import { updateTabHistory } from '../ui/uiSlice';
 import { log } from '../../main/helpers/console';
 import { CrossIcon } from '../../icons/CrossIcon';
 import { NewTabIcon } from '../../icons/NewTabIcon';
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
-}
 
 const clickNewTabHandler = (): AppThunk => (dispatch, getState) => {
   batch(() => {

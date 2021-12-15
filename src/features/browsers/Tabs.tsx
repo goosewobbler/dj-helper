@@ -7,8 +7,8 @@ import { AppThunk, Browser, TabHistoryAction } from '../../common/types';
 import { MetaPanel } from './MetaPanel';
 import { updateTabHistory } from '../ui/uiSlice';
 import { log } from '../../main/helpers/console';
-import { CrossIcon } from '../../common/icons/CrossIcon';
-import { NewTabIcon } from '../../common/icons/NewTabIcon';
+import { CrossIcon } from '../../icons/CrossIcon';
+import { NewTabIcon } from '../../icons/NewTabIcon';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');

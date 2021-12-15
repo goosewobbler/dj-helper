@@ -60,7 +60,7 @@ export function List({ id }: { id: number }): ReactElement {
   };
 
   const listKey = `list-${id}`;
-  const validityRing = `ring-${isValid() ? 'green' : 'red'}-300`;
+  const validityRing = `focus:ring-${isValid() ? 'green' : 'red'}-300`;
   const accordionContentMaxHeightWhenActive = `${content?.current?.scrollHeight as number}px`;
   const accordionContentMaxHeight = active ? accordionContentMaxHeightWhenActive : '0px';
   const chevronAdditionalClassNamesWhenActive = 'transform rotate-90';
@@ -87,7 +87,7 @@ export function List({ id }: { id: number }): ReactElement {
               Enter List Title:
               <input
                 id="list-title"
-                className={`mx-4 ring-4 ring-opacity-30 ${validityRing}`}
+                className={`mx-4 focus:ring-4 focus:ring-offset-2 ring-opacity-30 ${validityRing}`}
                 type="text"
                 onChange={(event): void => handleTitleChange(event)}
                 onKeyDown={(event): void => handleKeyDown(event)}

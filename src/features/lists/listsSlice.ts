@@ -19,7 +19,22 @@ function reorderTracks(tracks: List['tracks'], trackIdToMove: Track['id'], newIn
   return tracksBefore.concat([trackIdToMove]).concat(tracksAfter);
 }
 
-export const initialState: List[] = [];
+export const initialState: List[] = [
+  {
+    id: 0,
+    title: 'Look a set list',
+    tracks: [],
+    editing: false,
+    active: true,
+  },
+  {
+    id: 1,
+    title: 'Wow such list',
+    tracks: [],
+    editing: false,
+    active: false,
+  },
+];
 
 export const slice = createSlice({
   name: 'lists',

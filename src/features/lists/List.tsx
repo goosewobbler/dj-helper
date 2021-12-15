@@ -15,6 +15,7 @@ import { LoadContextType, Track } from '../../common/types';
 import { EditIcon } from '../../icons/EditIcon';
 import { TrashIcon } from '../../icons/TrashIcon';
 import { useAppDispatch, useAppSelector } from '../../common/hooks';
+import { log } from '../../main/helpers/console';
 
 const KEY_ENTER = 'Enter';
 const KEY_ESCAPE = 'Escape';
@@ -57,6 +58,8 @@ export function List({ id }: { id: number }): ReactElement {
   const accordionContentMaxHeight = active ? accordionContentMaxHeightWhenActive : '0px';
   const chevronAdditionalClassNamesWhenActive = 'transform rotate-90';
   const chevronAdditionalClassNames = active ? chevronAdditionalClassNamesWhenActive : '';
+
+  log('rendering list');
 
   function toggleAccordion() {
     dispatch(selectList({ id }));
@@ -110,7 +113,7 @@ export function List({ id }: { id: number }): ReactElement {
         style={{ maxHeight: accordionContentMaxHeight }}
         className="overflow-hidden duration-500 ease-in-out bg-white accordion-content transition-max-height"
       >
-        <ol className="p-4 text-sm font-normal tracks">
+        <ol className="p-4 mb-12 text-sm font-normal tracks">
           {tracks.map(
             (trackId: Track['id'], index: number): ReactElement => (
               <ListTrack

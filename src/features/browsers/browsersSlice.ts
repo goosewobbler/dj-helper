@@ -6,9 +6,10 @@ const initialState: Browser[] = [
   {
     id: 0,
     url: 'https://bandcamp.com/wiggleweaver/wishlist',
-    title: 'Bandcamp',
+    title: 'Loading...',
     tracks: [],
     active: true,
+    loading: true,
   },
 ];
 
@@ -28,13 +29,16 @@ export const slice = createSlice({
         title,
         tracks: [],
         active: true,
+        loading: true,
       };
       // existing browsers set to inactive
       const existingBrowsers = state.map((browser) => ({ ...browser, active: false }));
       return [...existingBrowsers, newBrowser];
     },
     updatePageUrl: (state, { payload: { id, url } }: { payload: { id: number; url: string } }) =>
-      state.map((browser) => (browser.id === id ? { ...browser, url, title: 'Loading...' } : browser)),
+      state.map((browser) => (browser.id === id ? { ...browser, url, title: 'Loading...', loading: true } : browser)),
+    loadedPageUrl: (state, { payload: { id, url } }: { payload: { id: number; url: string } }) =>
+      state.map((browser) => (browser.id === id ? { ...browser, url, loading: false } : browser)),
     updatePageTitle: (state, { payload: { id, title } }: { payload: { id: number; title: string } }) =>
       state.map((browser) => (browser.id === id ? { ...browser, title } : browser)),
     addTrack: (state, { payload: { id, trackId } }: { payload: { id: number; trackId: number } }) =>
@@ -51,8 +55,16 @@ export const slice = createSlice({
   },
 });
 
-export const { createBrowser, updatePageUrl, updatePageTitle, addTrack, clearTracks, tabSelected, deleteBrowser } =
-  slice.actions;
+export const {
+  createBrowser,
+  updatePageUrl,
+  loadedPageUrl,
+  updatePageTitle,
+  addTrack,
+  clearTracks,
+  tabSelected,
+  deleteBrowser,
+} = slice.actions;
 
 export const selectBrowsers = (state: AppState): Browser[] => state.browsers;
 

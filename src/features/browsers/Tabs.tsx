@@ -76,12 +76,12 @@ export const TabbedInterface = ({
                     ? 'text-gray-900 cursor-default'
                     : 'text-gray-500 hover:text-gray-700 cursor-pointer',
                   'float-left rounded-r-lg rounded-l-lg w-72 overflow-hidden overflow-ellipsis whitespace-nowrap',
-                  'group group-scope relative min-w-0 flex-1 bg-white py-4 pl-4 pr-7 text-sm font-medium text-center hover:bg-gray-100 focus:z-10',
+                  'group group-scoped relative min-w-0 flex-1 bg-white pt-4 pb-5 pl-9 pr-7 text-sm font-medium text-left hover:bg-gray-100 focus:z-10',
                 )}
               >
                 {displayTabCloseButton && (
                   <button
-                    className="absolute w-5 h-5 opacity-0 right-2 hover:bg-red-100 group-scope-hover:opacity-100"
+                    className="absolute w-5 h-5 opacity-0 right-2 hover:bg-red-100 group-scoped-hover:opacity-100"
                     type="button"
                     onClick={(event) => {
                       event.stopPropagation();
@@ -90,6 +90,15 @@ export const TabbedInterface = ({
                   >
                     <CrossIcon className="cross-icon" />
                   </button>
+                )}
+                {browser.loading ? (
+                  <div className="absolute w-5 h-5 overflow-hidden top-4 left-3">
+                    <div className="relative w-full h-full spinner-eclipse">
+                      <div className="box-content absolute top-0.5 left-0.5 w-4 h-4 rounded-xl animate-spin spinner-eclipse-shadow" />
+                    </div>
+                  </div>
+                ) : (
+                  <img className="absolute w-5 h-5 top-4 left-3" src="./bandcamp-favicon-32x32.png" />
                 )}
                 <span>{browser.title}</span>
                 <span

@@ -13,8 +13,8 @@ describe('browsersSlice', () => {
       it('should append to the array', () => {
         const browsers = createBrowser(
           [
-            { id: 1, url: 'https://bleh.org', title: 'Bleh', tracks: [], active: true },
-            { id: 2, url: 'https://blah.org', title: 'Blah', tracks: [], active: false },
+            { id: 1, url: 'https://bleh.org', title: 'Bleh', tracks: [], active: true, loading: false },
+            { id: 2, url: 'https://blah.org', title: 'Blah', tracks: [], active: false, loading: false },
           ],
           { payload: { url: 'https://bluh.org', title: 'Bluh' } },
         );

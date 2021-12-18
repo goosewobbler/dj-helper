@@ -162,10 +162,12 @@ export const loadAndPlayNextTrack = (): AppThunk => (dispatch, getState) => {
         : getNextTrackOnList(params);
     return nextTrackSelector(state);
   };
-  log('loadAndPlayNextTrack', loadContext);
+
   if (loadContext && loadContext.contextId) {
     const nextTrackId = nextTrackFromContextSelector();
-    dispatch(loadAndPlayTrack({ trackId: nextTrackId, context: loadContext }));
+    if (nextTrackId) {
+      dispatch(loadAndPlayTrack({ trackId: nextTrackId, context: loadContext }));
+    }
   }
 };
 

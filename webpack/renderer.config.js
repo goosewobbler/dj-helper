@@ -7,7 +7,7 @@ const plugins = require('./renderer.plugins');
 
 const isDev = process.env.NODE_ENV === 'development';
 const devServerPort = process.env.PORT || 1212;
-const publicPath = `http://localhost:${devServerPort}/`;
+const publicPath = isDev ? `http://localhost:${devServerPort}/` : '/';
 const spawnOpts = {
   shell: true,
   env: process.env,
@@ -61,7 +61,7 @@ rules.push({
   type: 'asset/resource',
 });
 
-const baseEntry = [`webpack-dev-server/client?http://localhost:${devServerPort}/`];
+const baseEntry = isDev ? [`webpack-dev-server/client?http://localhost:${devServerPort}/`] : [];
 
 module.exports = {
   context: `${__dirname}/../`,

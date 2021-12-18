@@ -1,4 +1,5 @@
 const { ProgressPlugin } = require('webpack');
+const CopyPlugin = require('copy-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
@@ -51,6 +52,14 @@ plugins.push(
   }),
   new HtmlWebpackHarddiskPlugin(),
   new ReactRefreshWebpackPlugin(),
+  new CopyPlugin({
+    patterns: [
+      {
+        from: 'static/*',
+        to: './[name][ext]',
+      },
+    ],
+  }),
   // ElectronReloadPlugin(),
 );
 

@@ -1,18 +1,15 @@
 import React, { ReactElement } from 'react';
 import { batch } from 'react-redux';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import classNames from 'classnames';
 import { useAppDispatch } from '../../common/hooks';
 import { createBrowser, deleteBrowser, tabSelected } from './browsersSlice';
 import { AppThunk, Browser, TabHistoryAction } from '../../common/types';
 import { MetaPanel } from './MetaPanel';
 import { updateTabHistory } from '../ui/uiSlice';
 import { log } from '../../main/helpers/console';
-import { CrossIcon } from '../../common/icons/CrossIcon';
-import { NewTabIcon } from '../../common/icons/NewTabIcon';
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
-}
+import { CrossIcon } from '../../icons/CrossIcon';
+import { NewTabIcon } from '../../icons/NewTabIcon';
 
 const clickNewTabHandler = (): AppThunk => (dispatch, getState) => {
   batch(() => {
@@ -53,6 +50,7 @@ export const TabbedInterface = ({
 
   return (
     <Tabs
+      className="h-full"
       defaultIndex={activeBrowser ? activeBrowser.id : 0}
       onSelect={(index: number) => {
         batch(() => {
@@ -65,7 +63,7 @@ export const TabbedInterface = ({
       }}
       selectedIndex={activeBrowser.id}
     >
-      <div className="flex justify-between" data-testid="header">
+      <div className="flex justify-between select-none" data-testid="header">
         <TabList className="flex-grow">
           {browsers.map(
             (browser: Browser, index: number): ReactElement => (
@@ -76,12 +74,12 @@ export const TabbedInterface = ({
                     ? 'text-gray-900 cursor-default'
                     : 'text-gray-500 hover:text-gray-700 cursor-pointer',
                   'float-left rounded-r-lg rounded-l-lg w-72 overflow-hidden overflow-ellipsis whitespace-nowrap',
-                  'group group-scoped relative min-w-0 flex-1 bg-white pt-4 pb-5 pl-9 pr-7 text-sm font-medium text-left hover:bg-gray-100 focus:z-10',
+                  'group-tab relative min-w-0 flex-1 bg-white pt-4 pb-5 pl-9 pr-7 text-sm font-medium text-left hover:bg-gray-100 focus:z-10',
                 )}
               >
                 {displayTabCloseButton && (
                   <button
-                    className="absolute w-5 h-5 opacity-0 right-2 hover:bg-red-100 group-scoped-hover:opacity-100"
+                    className="absolute w-5 h-5 opacity-0 right-2 hover:bg-red-100 group-tab-hover:opacity-100"
                     type="button"
                     onClick={(event) => {
                       event.stopPropagation();

@@ -1,8 +1,8 @@
 import React, { ReactElement, useState } from 'react';
 import { useAppDispatch } from '../../common/hooks';
 import { resetStoreAction } from '../rootReducer';
-import { BombIcon } from '../../common/icons/BombIcon';
-import { ExplosionIcon } from '../../common/icons/ExplosionIcon';
+import { BombIcon } from '../../icons/BombIcon';
+import { ExplosionIcon } from '../../icons/ExplosionIcon';
 
 export function DeleteDataButton(): ReactElement {
   const { isDev } = window.api;

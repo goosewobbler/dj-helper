@@ -9,33 +9,35 @@ import { useAppDispatch, useAppSelector } from '../../common/hooks';
 
 export function SettingsPanel(): ReactElement {
   const dispatch = useAppDispatch();
-  const isSmallEmbed = useAppSelector(selectTrackPreviewEmbedSize) === TrackPreviewEmbedSize.Small;
+  const isLargeEmbed = useAppSelector(selectTrackPreviewEmbedSize) === TrackPreviewEmbedSize.Medium;
   const isAutoplayEnabled = useAppSelector(selectAutoplayEnabled);
-  const embedSize = (isSmall: boolean) => TrackPreviewEmbedSize[isSmall ? 'Small' : 'Medium'];
+  const embedSize = (isLarge: boolean) => TrackPreviewEmbedSize[isLarge ? 'Medium' : 'Small'];
   return (
     <div>
       <DeleteDataButton />
-      <Switch
-        id="embed-size-switch"
-        isOn={isSmallEmbed}
-        text="Small Embed"
-        handleToggle={() => {
-          batch(() => {
-            const size = embedSize(!isSmallEmbed);
-            dispatch(trackPreviewEmbedSizeToggled(size));
-            dispatch(resizeEmbed());
-          });
-        }}
-      />
-      <Switch
-        id="autoplay-switch"
-        isOn={isAutoplayEnabled}
-        text="Autoplay"
-        handleToggle={() => {
-          const autoplayEnabled = !isAutoplayEnabled;
-          dispatch(autoplayEnabledToggled(autoplayEnabled));
-        }}
-      />
+      <div className="float-right w-60">
+        <Switch
+          id="embed-size-switch"
+          isOn={isLargeEmbed}
+          text="Large Preview"
+          handleToggle={() => {
+            batch(() => {
+              const size = embedSize(!isLargeEmbed);
+              dispatch(trackPreviewEmbedSizeToggled(size));
+              dispatch(resizeEmbed());
+            });
+          }}
+        />
+        <Switch
+          id="autoplay-switch"
+          isOn={isAutoplayEnabled}
+          text="Autoplay"
+          handleToggle={() => {
+            const autoplayEnabled = !isAutoplayEnabled;
+            dispatch(autoplayEnabledToggled(autoplayEnabled));
+          }}
+        />
+      </div>
     </div>
   );
 }

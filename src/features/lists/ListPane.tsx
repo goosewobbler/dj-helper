@@ -18,7 +18,7 @@ export function ListPane(): ReactElement {
       </ol>
       <div className="mt-2">
         <button
-          className="p-1 bg-blue-100 border"
+          className="p-1 bg-blue-100 border hover:bg-blue-200"
           type="button"
           aria-label="New List"
           onClick={() => {

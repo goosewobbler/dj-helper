@@ -123,7 +123,7 @@ export const pauseTrack = (): AppThunk => async (dispatch, getState) => {
 
 export const loadAndPlayTrack =
   ({ trackId, context }: EmbedContext): AppThunk =>
-  (dispatch, getState) => {
+  async (dispatch, getState) => {
     const initialEmbed = getState().embed;
     log('load', initialEmbed);
     if (initialEmbed.status === EmbedStatus.Paused && trackId === initialEmbed.trackId) {
@@ -131,7 +131,7 @@ export const loadAndPlayTrack =
       return dispatch(playTrack());
     }
 
-    dispatch(loadTrack({ trackId, context }));
+    await dispatch(loadTrack({ trackId, context }));
     return dispatch(playTrack());
   };
 
@@ -162,10 +162,12 @@ export const loadAndPlayNextTrack = (): AppThunk => (dispatch, getState) => {
         : getNextTrackOnList(params);
     return nextTrackSelector(state);
   };
-  log('loadAndPlayNextTrack', loadContext);
+
   if (loadContext && loadContext.contextId) {
     const nextTrackId = nextTrackFromContextSelector();
-    dispatch(loadAndPlayTrack({ trackId: nextTrackId, context: loadContext }));
+    if (nextTrackId) {
+      dispatch(loadAndPlayTrack({ trackId: nextTrackId, context: loadContext }));
+    }
   }
 };
 

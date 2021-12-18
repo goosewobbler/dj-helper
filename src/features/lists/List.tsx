@@ -1,6 +1,6 @@
 import React, { ReactElement, BaseSyntheticEvent, KeyboardEvent, useRef, useCallback } from 'react';
 import { ListTrack } from '../tracks/ListTrack';
-import { ChevronIcon } from '../../common/icons/ChevronIcon';
+import { ChevronIcon } from '../../icons/ChevronIcon';
 import {
   deleteList,
   editList,
@@ -12,9 +12,11 @@ import {
   updateListTitle,
 } from './listsSlice';
 import { LoadContextType, Track } from '../../common/types';
-import { EditIcon } from '../../common/icons/EditIcon';
-import { TrashIcon } from '../../common/icons/TrashIcon';
+import { EditIcon } from '../../icons/EditIcon';
+import { TrashIcon } from '../../icons/TrashIcon';
 import { useAppDispatch, useAppSelector } from '../../common/hooks';
+import { CrossIcon } from '../../icons/CrossIcon';
+import { TickIcon } from '../../icons/TickIcon';
 
 const KEY_ENTER = 'Enter';
 const KEY_ESCAPE = 'Escape';
@@ -36,9 +38,15 @@ export function List({ id }: { id: number }): ReactElement {
     return <> </>;
   }
   const { title, tracks, editing, active } = list;
-  const isValid = () => !!title;
+  const isValid = () => title !== '';
 
   const handleClickEdit = () => dispatch(editList({ id }));
+  const handleClickConfirmEdit = () => {
+    if (isValid()) {
+      dispatch(finishEditList());
+    }
+  };
+  const handleClickCancelEdit = () => dispatch(revertEditList());
   const handleClickDelete = () => dispatch(deleteList({ id }));
   const handleTitleChange = (event: BaseSyntheticEvent): void => {
     dispatch(updateListTitle({ id, title: (event.target as HTMLInputElement).value }));
@@ -52,7 +60,7 @@ export function List({ id }: { id: number }): ReactElement {
   };
 
   const listKey = `list-${id}`;
-  const validityRing = `ring-${isValid() ? 'green' : 'red'}-300`;
+  const validityRing = `focus:ring-${isValid() ? 'green' : 'red'}-300`;
   const accordionContentMaxHeightWhenActive = `${content?.current?.scrollHeight as number}px`;
   const accordionContentMaxHeight = active ? accordionContentMaxHeightWhenActive : '0px';
   const chevronAdditionalClassNamesWhenActive = 'transform rotate-90';
@@ -63,9 +71,9 @@ export function List({ id }: { id: number }): ReactElement {
   }
 
   return (
-    <li id={listKey} className="flex flex-col list group-scoped" data-testid="list">
+    <li id={listKey} className="flex flex-col list group-list" data-testid="list">
       <div
-        className={`accordion transition duration-500 ease-in-out outline-none border-none items-center group-scoped-hover:bg-green-400 bg-green-200 text-gray-700 flex cursor-pointer p-4 ${
+        className={`accordion transition duration-500 ease-in-out select-none outline-none border-none items-center group-list-hover:bg-green-400 bg-green-200 text-gray-700 flex cursor-pointer p-4 ${
           active ? 'font-black' : 'font-semibold'
         }`}
         role="menuitem"
@@ -73,30 +81,38 @@ export function List({ id }: { id: number }): ReactElement {
         onKeyPress={toggleAccordion}
         tabIndex={0}
       >
-        <span className="text-sm title w-80" data-testid="title">
+        <span className="h-10 pt-2 text-sm title w-96" data-testid="title">
           {editing ? (
-            <label htmlFor="list-title">
-              List Title
+            <label className="block h-full" htmlFor="list-title">
+              Enter List Title:
               <input
                 id="list-title"
-                className={`ring-4 ring-opacity-30 ${validityRing}`}
+                className={`mx-4 focus:ring-4 focus:ring-offset-2 ring-opacity-30 ${validityRing}`}
                 type="text"
                 onChange={(event): void => handleTitleChange(event)}
                 onKeyDown={(event): void => handleKeyDown(event)}
                 placeholder="List Title"
                 value={title}
               />
+              <div className="inline-block float-right h-full -mt-1">
+                <button className="p-1 pt-2 hover:bg-green-600" type="button" onClick={() => handleClickConfirmEdit()}>
+                  <TickIcon className="tick-icon" />
+                </button>
+                <button className="p-1 hover:bg-red-200" type="button" onClick={() => handleClickCancelEdit()}>
+                  <CrossIcon className="cross-icon" />
+                </button>
+              </div>
             </label>
           ) : (
             title
           )}
         </span>
         {!editing && (
-          <span className="opacity-0 action-btns group-scoped-hover:opacity-100">
-            <button className="p-1" type="button" onClick={() => handleClickEdit()}>
+          <span className="mr-4 opacity-0 action-btns group-list-hover:opacity-100">
+            <button className="p-1 mx-1 hover:bg-green-600" type="button" onClick={() => handleClickEdit()}>
               <EditIcon className="edit-icon" />
             </button>
-            <button className="p-1" type="button" onClick={() => handleClickDelete()}>
+            <button className="p-1 mx-1 hover:bg-red-200" type="button" onClick={() => handleClickDelete()}>
               <TrashIcon className="trash-icon" />
             </button>
           </span>
@@ -110,7 +126,7 @@ export function List({ id }: { id: number }): ReactElement {
         style={{ maxHeight: accordionContentMaxHeight }}
         className="overflow-hidden duration-500 ease-in-out bg-white accordion-content transition-max-height"
       >
-        <ol className="p-4 text-sm font-normal tracks">
+        <ol className="p-4 mb-12 text-sm font-normal tracks">
           {tracks.map(
             (trackId: Track['id'], index: number): ReactElement => (
               <ListTrack

@@ -18,7 +18,7 @@ export const resetStoreAction = { type: 'store/reset' };
 
 export const storeHydrated = (): AppThunk => async (dispatch) => {
   // uncomment to reset store
-  // dispatch(resetStoreAction);
+  dispatch(resetStoreAction);
 
   dispatch(initEmbed());
   await window.api.invoke('update-window-bounds');

@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
-import { AddToListIcon } from '../../common/icons/AddToListIcon';
-import { RemoveFromListIcon } from '../../common/icons/RemoveFromListIcon';
+import { AddToListIcon } from '../../icons/AddToListIcon';
+import { RemoveFromListIcon } from '../../icons/RemoveFromListIcon';
 
 export function AddRemoveListButton({
   isOnSelectedList,

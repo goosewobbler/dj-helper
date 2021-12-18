@@ -2,7 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Tailwind base / preflight styles: https://unpkg.com/tailwindcss@2.2.4/dist/base.css */
+@import url('./fonts.css');
+
+/* Tailwind base / preflight styles: https://unpkg.com/tailwindcss@3.0.5/lib/css/preflight.css */
 
 * {
   @apply box-border;
@@ -17,6 +19,7 @@ body {
   @apply h-full;
   @apply w-full;
   @apply overflow-hidden;
+  @apply select-none;
 }
 
 button:focus,
@@ -43,18 +46,6 @@ button:disabled {
 
 .shadow-dialog {
   box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.2);
-}
-
-@font-face {
-  font-family: 'Radiotechnika';
-  font-style: normal;
-  src: local('Radiotechnika'), url(../../static/Radiotechnika.woff2) format('woff2');
-}
-
-@font-face {
-  font-family: 'Jura';
-  font-style: normal;
-  src: local('Jura'), url(../../static/Jura.woff2) format('woff2');
 }
 
 .flex-basis-4 {

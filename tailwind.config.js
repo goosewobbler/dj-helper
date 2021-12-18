@@ -43,7 +43,7 @@ const theme = {
  */
 const plugins = [
   require('tailwindcss-scoped-groups')({
-    groups: ['list', 'track'],
+    groups: ['list', 'track', 'tab'],
   }),
 ];
 

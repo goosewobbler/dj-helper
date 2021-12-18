@@ -73,7 +73,7 @@ export function List({ id }: { id: number }): ReactElement {
   return (
     <li id={listKey} className="flex flex-col list group-list" data-testid="list">
       <div
-        className={`accordion transition duration-500 ease-in-out select-none outline-none border-none items-center group-list-hover:bg-green-400 bg-green-200 text-gray-700 flex cursor-pointer p-4 ${
+        className={`accordion transition duration-500 ease-in-out outline-none border-none items-center group-list-hover:bg-green-400 bg-green-200 text-gray-700 flex cursor-pointer p-4 ${
           active ? 'font-black' : 'font-semibold'
         }`}
         role="menuitem"

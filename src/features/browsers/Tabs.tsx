@@ -63,7 +63,7 @@ export const TabbedInterface = ({
       }}
       selectedIndex={activeBrowser.id}
     >
-      <div className="flex justify-between select-none" data-testid="header">
+      <div className="flex justify-between" data-testid="header">
         <TabList className="flex-grow">
           {browsers.map(
             (browser: Browser, index: number): ReactElement => (

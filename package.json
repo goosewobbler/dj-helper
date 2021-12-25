@@ -15,7 +15,7 @@
     "check-types": "tsc --noEmit",
     "clean": "rm -rf ./dist",
     "clean:all": "rm -rf pnpm-lock.yaml ./node_modules ./dist",
-    "dev": "pnpm clean && pnpm dev:build:main && pnpm dev:build:preload && cross-env pnpm dev:start-server",
+    "dev": "pnpm clean && pnpm dev:bundle:main && pnpm dev:bundle:preload && cross-env pnpm dev:start-server",
     "build": "pnpm clean && pnpm bundle && electron-builder",
     "build:pack": "pnpm clean && pnpm bundle && electron-builder --dir",
     "bundle": "concurrently 'pnpm build:main' 'pnpm build:preload' 'pnpm build:renderer'",

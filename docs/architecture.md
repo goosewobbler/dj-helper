@@ -4,6 +4,7 @@ This application is comprised of the following root directory structure:
 
 ```
 .vscode/
+bundle/
 dist/
 docs/
 src/
@@ -18,9 +19,13 @@ webpack/
 
 A configuration directory for the VSCode editor.
 
+#### bundle/
+
+This directory is (re)created at build time - all bundled files and everything the app needs to run ends up in here.
+
 #### dist/
 
-This directory is (re)created at build time for the app to load - all compiled files and everything the app needs to run ends up in here.
+This directory is (re)created at build time - all fully built packages for publishing end up in here.
 
 #### docs/
 

@@ -43,7 +43,7 @@
     "lint:styles": "stylelint --ignore-path .eslintignore '**/*.pcss'",
     "lint:styles:fix": "pnpm --silent lint-styles --fix; exit 0",
     "test": "pnpm test:coverage && pnpm format && pnpm lint",
-    "test:e2e": "pnpx spectron ./spectron.conf.js",
+    "test:e2e": "pnpm build:dir && pnpx spectron ./spectron.conf.js",
     "test:coverage": "jest --coverage",
     "test:watch": "jest --watch",
     "test:watch-coverage": "jest --watch --coverage"

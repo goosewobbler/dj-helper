@@ -37,6 +37,7 @@ specifiers:
   '@wdio/mocha-framework': ^7.16.11
   autoprefixer: ^10.4.0
   babel-loader: ^8.2.3
+  ci-info: ^3.3.0
   classnames: ^2.2.6
   concurrently: ^6.5.1
   copy-webpack-plugin: ^10.2.0
@@ -144,6 +145,7 @@ devDependencies:
   '@wdio/mocha-framework': 7.16.11
   autoprefixer: 10.4.0_postcss@8.4.5
   babel-loader: 8.2.3_26251eab09162b25a254715ee98d7c5c
+  ci-info: 3.3.0
   classnames: 2.3.1
   concurrently: 6.5.1
   copy-webpack-plugin: 10.2.0_webpack@5.65.0

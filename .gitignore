@@ -2,7 +2,7 @@ lib
 node_modules
 public
 dist
-dist-src
+bundle
 coverage
 *.log
 .DS_Store

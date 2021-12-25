@@ -77,7 +77,7 @@ async function build(target) {
       await runCommand('pnpm clean:build');
       for (const availableTarget of availableTargets) {
         await build(availableTarget);
-        await runCommand('pnpm clean:build-src');
+        await runCommand('pnpm clean:bundle');
         await delay(1000);
       }
       return;
@@ -87,7 +87,7 @@ async function build(target) {
       throw Error(`Unknown target '${target}'. Available target: ${availableTargets.join(', ')}`);
     }
 
-    await runCommand('pnpm clean:build-src');
+    await runCommand('pnpm clean:bundle');
     await build(target);
   } catch (e) {
     console.error(e);

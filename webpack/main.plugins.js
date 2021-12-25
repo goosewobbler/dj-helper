@@ -24,7 +24,7 @@ if (isDev) {
     // }),
     // TODO: fix broken reload of app on main ts file update
     // ElectronReloadPlugin({
-    //   path: path.join(__dirname, './dist/main.dev.js'),
+    //   path: path.join(__dirname, './bundle/main.dev.js'),
     // }),
     ();
 }

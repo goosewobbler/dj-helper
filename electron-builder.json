@@ -5,7 +5,7 @@
   "productName": "DJ Helper",
   "artifactName": "${name}-${version}-${os}-${arch}.${ext}",
   "afterSign": "./scripts/notarize.js",
-  "files": ["dist/**/*", "build/**/*"],
+  "files": ["dist-src/**/*", "build/**/*"],
   "mac": {
     "category": "public.app-category.music",
     "icon": "build/icon.icns",

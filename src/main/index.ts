@@ -7,7 +7,7 @@ const appPath = app.getAppPath();
 const isDev = process.env.NODE_ENV === 'development';
 const isProd = process.env.NODE_ENV === 'production';
 const isDebugMode = isDev || process.env.DEBUG_PROD === 'true';
-const appRootPath = `${appPath}${app.isPackaged ? '/dist' : ''}`;
+const appRootPath = `${appPath}${app.isPackaged ? '/dist-src' : ''}`;
 
 let mainWindow: BrowserWindow | undefined;
 

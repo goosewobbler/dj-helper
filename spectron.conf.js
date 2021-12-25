@@ -8,7 +8,7 @@ const {
 
 const config = {
   spectronOpts: {
-    appPath: join(process.cwd(), 'dist'),
+    appPath: join(process.cwd(), 'dist-src'),
     appName: productName,
   },
   // hostname: '127.0.0.1',

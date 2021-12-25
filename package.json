@@ -4,7 +4,7 @@
   "version": "0.0.16",
   "author": "Sam Maister <goosewobbler@protonmail.com>",
   "license": "AGPL-3.0-or-later",
-  "main": "./dist/main.prod.js",
+  "main": "./dist-src/main.prod.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/goosewobbler/dj-helper.git"
@@ -13,8 +13,9 @@
     "init": "pnpm install",
     "preinstall": "npx only-allow pnpm",
     "check-types": "tsc --noEmit",
-    "clean": "cross-env rm -rf pnpm-lock.yaml ./node_modules ./dist",    
-    "clean:build": "cross-env rm -rf ./dist",
+    "clean": "cross-env rm -rf pnpm-lock.yaml ./node_modules ./dist-src ./dist",    
+    "clean:build": "cross-env rm -rf ./dist-src ./dist",
+    "clean:build-src": "cross-env rm -rf ./dist-src",
     "dev": "pnpm clean:build && pnpm dev:bundle:main && pnpm dev:bundle:preload && cross-env pnpm dev:start-server",
     "build": "pnpm clean:build && pnpm bundle && electron-builder",
     "build:all": "node scripts/build.mjs all",

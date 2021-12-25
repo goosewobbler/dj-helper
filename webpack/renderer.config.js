@@ -71,7 +71,7 @@ module.exports = {
     renderer: [...baseEntry, `${__dirname}/../src/renderer/index.tsx`],
   },
   output: {
-    path: `${__dirname}/../dist`,
+    path: `${__dirname}/../dist-src`,
     publicPath,
     filename: `[name].${isDev ? 'dev' : 'prod'}.js`,
   },

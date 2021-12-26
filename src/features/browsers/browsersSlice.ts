@@ -5,7 +5,7 @@ import { log } from '../../main/helpers/console';
 const initialState: Browser[] = [
   {
     id: 0,
-    url: 'https://bandcamp.com/wiggleweaver/wishlist',
+    url: 'https://bandcamp.com/login',
     title: 'Loading...',
     tracks: [],
     active: true,

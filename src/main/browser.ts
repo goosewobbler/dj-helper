@@ -10,6 +10,7 @@ import {
   updatePageTitle,
   updatePageUrl,
 } from '../features/browsers/browsersSlice';
+import { foundBandcampCollectionUrl } from '../features/ui/uiSlice';
 import { BandCurrency, BandData, parseBandcampPageData, TralbumCollectInfo, TralbumData } from './helpers/bandcamp';
 import { AnyObject, AppStore, Browser, TrackPreviewEmbedSize } from '../common/types';
 import { log } from './helpers/console';
@@ -111,6 +112,19 @@ function initBrowserView(reduxStore: AppStore, browser: Browser) {
     dispatch(loadedPageUrl(payload));
     currentlyNavigating = false;
     log('loaded url', loadedUrl);
+
+    if (/bandcamp.com/.exec(loadedUrl)) {
+      void (async () => {
+        const collectionUrl = (await view.webContents.executeJavaScript(
+          '$("a[title=\'collection\']").attr("href");',
+          true,
+        )) as string;
+
+        if (/https:\/\/bandcamp.com\/\w+/.exec(collectionUrl)) {
+          dispatch(foundBandcampCollectionUrl({ collectionUrl }));
+        }
+      })();
+    }
 
     if (/bandcamp.com\/track|album/.exec(loadedUrl)) {
       log('url is bandcamp album or track');

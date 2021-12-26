@@ -1,4 +1,4 @@
-import { Browser, EmbedStatus, List, Track, UI } from '../../src/common/types';
+import { BandcampTabHomepage, Browser, EmbedStatus, List, Track, UI } from '../../src/common/types';
 
 export function mockState({
   browsers = [],
@@ -27,6 +27,10 @@ export function mockState({
       verticalSplitterDimensions: { browserPanelHeight: 547, metaPanelHeight: 326 },
       trackPreviewEmbedSize: 'small' as UI['trackPreviewEmbedSize'],
       tabHistory: [0],
+      bandcampPageUrls: {
+        [BandcampTabHomepage.FrontPage]: 'https://bandcamp.com',
+      },
+      bandcampTabHomepage: BandcampTabHomepage.FrontPage,
     },
   };
 }

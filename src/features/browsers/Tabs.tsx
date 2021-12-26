@@ -13,7 +13,10 @@ import { NewTabIcon } from '../../icons/NewTabIcon';
 
 const clickNewTabHandler = (): AppThunk => (dispatch, getState) => {
   batch(() => {
-    dispatch(createBrowser({}));
+    const {
+      ui: { bandcampPageUrls, bandcampTabHomepage },
+    } = getState();
+    dispatch(createBrowser({ url: bandcampPageUrls[bandcampTabHomepage] }));
     const { browsers } = getState();
     const newBrowser = browsers[browsers.length - 1];
     dispatch(updateTabHistory({ tabId: newBrowser.id, action: TabHistoryAction.Created }));

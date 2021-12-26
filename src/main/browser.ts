@@ -1,7 +1,6 @@
 import { BrowserView, BrowserWindow, ipcMain } from 'electron';
 import { URL } from 'url';
 import { createTrack, selectTrackBySourceUrl, TrackData } from '../features/tracks/tracksSlice';
-import { mediaPaused, mediaPlaying } from '../features/embed/embedSlice';
 import {
   addTrack,
   clearTracks,
@@ -93,27 +92,6 @@ function initBrowserView(reduxStore: AppStore, browser: Browser) {
     log('windowOpenHandler', url);
     dispatch(createBrowser({ url: sanitiseUrl(url) }));
     return { action: 'deny' };
-  });
-
-  view.webContents.on('media-started-playing', () => {
-    void (async () => {
-      const titleLinkPlaying = (await view.webContents.executeJavaScript(
-        'document.querySelector(".inline_player .title_link").getAttribute("href");',
-        true,
-      )) as string;
-      log('playing from browser', { sourceUrl: titleLinkPlaying });
-      const trackData = await getPageTrackData(view, browser.url);
-      const playingTrack = trackData.trackinfo.find((track) => track.title_link === titleLinkPlaying);
-
-      if (playingTrack) {
-        dispatch(mediaPlaying());
-      }
-    })();
-  });
-
-  view.webContents.on('media-paused', () => {
-    log('pausing from browser', Date.now());
-    dispatch(mediaPaused());
   });
 
   view.webContents.on('page-title-updated', (event, title) => {

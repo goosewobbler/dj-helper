@@ -12,6 +12,7 @@ specifiers:
   '@goosewobbler/electron-redux': ^1.0.4
   '@goosewobbler/spectron': ^17.0.0-alpha3
   '@headlessui/react': ^1.4.2
+  '@heroicons/react': ^1.0.5
   '@pmmmwh/react-refresh-webpack-plugin': ^0.5.4
   '@redux-offline/redux-offline': ^2.6.0
   '@reduxjs/toolkit': ^1.7.1
@@ -120,6 +121,7 @@ devDependencies:
   '@babel/register': 7.16.5_@babel+core@7.16.5
   '@goosewobbler/spectron': 17.0.0-alpha3_bad060d5f9aca5284661d88d739ba15b
   '@headlessui/react': 1.4.2_react-dom@17.0.2+react@17.0.2
+  '@heroicons/react': 1.0.5_react@17.0.2
   '@pmmmwh/react-refresh-webpack-plugin': 0.5.4_5e5663c78d1dcc89553f2ca5686818f1
   '@redux-offline/redux-offline': 2.6.0_redux@4.1.2
   '@reduxjs/toolkit': 1.7.1_react-redux@7.2.6+react@17.0.2
@@ -1634,6 +1636,14 @@ packages:
     dependencies:
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
+    dev: true
+
+  /@heroicons/react/1.0.5_react@17.0.2:
+    resolution: {integrity: sha512-UDMyLM2KavIu2vlWfMspapw9yii7aoLwzI2Hudx4fyoPwfKfxU8r3cL8dEBXOjcLG0/oOONZzbT14M1HoNtEcg==}
+    peerDependencies:
+      react: '>= 16'
+    dependencies:
+      react: 17.0.2
     dev: true
 
   /@humanwhocodes/config-array/0.9.2:

@@ -1,4 +1,5 @@
 import { BrowserView, BrowserWindow, ipcMain } from 'electron';
+import { platform } from 'os';
 import { mediaLoaded, mediaPlaying, mediaPaused } from '../features/embed/embedSlice';
 import { AppStore, Track, TrackPreviewEmbedSize } from '../common/types';
 import { log } from './helpers/console';
@@ -21,7 +22,7 @@ export function initEmbed(mainWindow: BrowserWindow, reduxStore: AppStore): void
     const embedWidth = 500;
     embed.setBounds({
       x: 10,
-      y: height - embedHeight - 33,
+      y: height - embedHeight - (platform() === 'win32' ? 50 : 33),
       width: embedWidth,
       height: embedHeight,
     });

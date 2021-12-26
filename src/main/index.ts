@@ -38,6 +38,9 @@ async function createWindow(): Promise<void> {
     },
   });
 
+  // disable Windows application menu
+  mainWindow.setMenu(null);
+
   mainWindow.once('ready-to-show', () => {
     const browser = mainWindow as BrowserWindow;
     if (isDebugMode) {

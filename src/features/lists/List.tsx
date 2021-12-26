@@ -73,7 +73,7 @@ export function List({ id }: { id: number }): ReactElement {
   return (
     <li id={listKey} className="flex flex-col list group-list" data-testid="list">
       <div
-        className={`accordion transition duration-500 ease-in-out select-none outline-none border-none items-center group-list-hover:bg-green-400 bg-green-200 text-gray-700 flex cursor-pointer p-4 ${
+        className={`accordion transition duration-500 ease-in-out outline-none border-none items-center group-list-hover:bg-green-400 bg-green-200 text-gray-700 flex cursor-pointer p-4 ${
           active ? 'font-black' : 'font-semibold'
         }`}
         role="menuitem"
@@ -81,7 +81,7 @@ export function List({ id }: { id: number }): ReactElement {
         onKeyPress={toggleAccordion}
         tabIndex={0}
       >
-        <span className="h-10 pt-2 text-sm title w-96" data-testid="title">
+        <span className="w-full h-10 pt-2 text-sm title" data-testid="title">
           {editing ? (
             <label className="block h-full" htmlFor="list-title">
               Enter List Title:
@@ -104,18 +104,28 @@ export function List({ id }: { id: number }): ReactElement {
               </div>
             </label>
           ) : (
-            title
+            <>
+              <span className="inline-block overflow-hidden font-bold w-96 overflow-ellipsis whitespace-nowrap">
+                {title}
+                <button
+                  className="inline-block p-1 mx-4 align-middle opacity-0 hover:bg-green-600 group-list-hover:opacity-100"
+                  type="button"
+                  onClick={() => handleClickEdit()}
+                >
+                  <EditIcon className="edit-icon" />
+                </button>
+              </span>
+            </>
           )}
         </span>
         {!editing && (
-          <span className="mr-4 opacity-0 action-btns group-list-hover:opacity-100">
-            <button className="p-1 mx-1 hover:bg-green-600" type="button" onClick={() => handleClickEdit()}>
-              <EditIcon className="edit-icon" />
-            </button>
-            <button className="p-1 mx-1 hover:bg-red-200" type="button" onClick={() => handleClickDelete()}>
-              <TrashIcon className="trash-icon" />
-            </button>
-          </span>
+          <button
+            className="float-right p-1 mx-1 opacity-0 group-list-hover:opacity-100 hover:bg-red-200"
+            type="button"
+            onClick={() => handleClickDelete()}
+          >
+            <TrashIcon className="trash-icon" />
+          </button>
         )}
         <ChevronIcon
           className={`accordion-icon ml-auto transition-transform duration-500 ease-in-out ${chevronAdditionalClassNames}`}

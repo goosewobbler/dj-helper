@@ -1,7 +1,8 @@
 const { ProgressPlugin } = require('webpack');
+const CopyPlugin = require('copy-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+// const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
@@ -24,15 +25,17 @@ if (isDev) {
 }
 
 if (!isDev) {
-  plugins.push(
-    new BundleAnalyzerPlugin({
-      analyzerMode: 'static',
-      generateStatsFile: true,
-      openAnalyzer: true,
-      reportFilename: 'report.renderer.html',
-      statsFilename: 'stats.renderer.json',
-    }),
-  );
+  plugins
+    .push
+    // TODO: re-enable bundle analysis after webpack conf rework
+    // new BundleAnalyzerPlugin({
+    //   analyzerMode: 'static',
+    //   generateStatsFile: true,
+    //   openAnalyzer: true,
+    //   reportFilename: 'report.renderer.html',
+    //   statsFilename: 'stats.renderer.json',
+    // }),
+    ();
 }
 
 plugins.push(
@@ -51,6 +54,15 @@ plugins.push(
   }),
   new HtmlWebpackHarddiskPlugin(),
   new ReactRefreshWebpackPlugin(),
+  new CopyPlugin({
+    patterns: [
+      {
+        from: 'static/*',
+        to: './[name][ext]',
+      },
+    ],
+  }),
+  // TODO: fix broken reload of app on main ts file update
   // ElectronReloadPlugin(),
 );
 

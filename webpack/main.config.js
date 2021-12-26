@@ -9,7 +9,7 @@ module.exports = {
   devtool: isDev ? 'inline-source-map' : 'source-map',
   entry: './src/main/index.ts',
   output: {
-    path: `${__dirname}/../dist`,
+    path: `${__dirname}/../bundle`,
     filename: `main.${isDev ? 'dev' : 'prod'}.js`,
   },
   module: {

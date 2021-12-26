@@ -2,6 +2,7 @@ lib
 node_modules
 public
 dist
+bundle
 coverage
 *.log
 .DS_Store

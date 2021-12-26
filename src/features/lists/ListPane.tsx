@@ -8,8 +8,8 @@ export function ListPane(): ReactElement {
   const dispatch = useAppDispatch();
 
   return (
-    <div>
-      <ol className="listPane">
+    <div className="flex flex-col flex-grow">
+      <ol className="flex flex-col listPane">
         {lists.map(
           (list): ReactElement => (
             <List key={list.id} id={list.id} />

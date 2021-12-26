@@ -32,7 +32,7 @@ function render(reduxStore: Store): void {
   );
 }
 
-void (async () => {
+void (async function () {
   const reduxStore = await createReduxStore({
     context: 'renderer',
     syncFn: syncRenderer,

@@ -19,12 +19,13 @@
     <meta
       http-equiv="Content-Security-Policy"
       content="
-        default-src 'none'; 
-        script-src 'nonce-4AEemGb0xJptoIGFP3Nd'; 
-        frame-src https://bandcamp.com;
-        style-src-elem 'nonce-4AEemGb0xJptoIGFP3Nd'; 
-        font-src data:; 
-        connect-src *
+        default-src 'self';
+        script-src 'self';
+        connect-src * data:;
+        style-src 'self';
+        font-src data: 'self';
+        img-src data: 'self';
+        frame-src *
       "
     />
     <% } %>

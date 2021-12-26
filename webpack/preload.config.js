@@ -9,7 +9,7 @@ module.exports = {
   devtool: isDev ? 'inline-source-map' : 'source-map',
   entry: './src/renderer/preload.ts',
   output: {
-    path: `${__dirname}/../dist`,
+    path: `${__dirname}/../bundle`,
     filename: 'preload.js',
   },
   module: {

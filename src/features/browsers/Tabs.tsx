@@ -63,7 +63,7 @@ export const TabbedInterface = ({
       }}
       selectedIndex={activeBrowser.id}
     >
-      <div className="flex justify-between select-none" data-testid="header">
+      <div className="flex justify-between" data-testid="header">
         <TabList className="flex-grow">
           {browsers.map(
             (browser: Browser, index: number): ReactElement => (
@@ -71,10 +71,10 @@ export const TabbedInterface = ({
                 key={browser.id}
                 className={classNames(
                   isSelected(browser.id)
-                    ? 'text-gray-900 cursor-default'
+                    ? 'text-gray-900 font-extrabold cursor-default'
                     : 'text-gray-500 hover:text-gray-700 cursor-pointer',
                   'float-left rounded-r-lg rounded-l-lg w-72 overflow-hidden overflow-ellipsis whitespace-nowrap',
-                  'group-tab relative min-w-0 flex-1 bg-white pt-4 pb-5 pl-9 pr-7 text-sm font-medium text-left hover:bg-gray-100 focus:z-10',
+                  'group-tab relative min-w-0 flex-1 bg-white pt-4 pb-4 pl-9 pr-7 text-sm font-medium text-left hover:bg-gray-100 focus:z-10',
                 )}
               >
                 {displayTabCloseButton && (
@@ -118,7 +118,7 @@ export const TabbedInterface = ({
           </button>
         </TabList>
       </div>
-      <div className="relative flex flex-col flex-grow w-full h-full" data-testid="panels">
+      <div className="relative flex flex-col flex-grow w-full h-full mt-2 text-sm" data-testid="panels">
         {browsers.map(
           (browser: Browser): ReactElement => (
             <TabPanel key={browser.id} className="inline-block w-full overflow-y-scroll">

@@ -27,6 +27,12 @@ export enum TrackPreviewEmbedSize {
   Medium = 'MEDIUM',
 }
 
+export enum BandcampTabHomepage {
+  FrontPage = 'FRONT',
+  CollectionPage = 'COLLECTION',
+  WishlistPage = 'WISHLIST',
+}
+
 export enum TabHistoryAction {
   Created = 'CREATED',
   Deleted = 'DELETED',
@@ -91,6 +97,12 @@ export type Embed = {
 
 export type UI = {
   statusText: string;
+  bandcampPageUrls: {
+    [BandcampTabHomepage.FrontPage]: string;
+    [BandcampTabHomepage.CollectionPage]?: string;
+    [BandcampTabHomepage.WishlistPage]?: string;
+  };
+  bandcampTabHomepage: BandcampTabHomepage;
   darkModeEnabled: boolean;
   windowBounds: Rectangle;
   horizontalSplitterDimensions: {

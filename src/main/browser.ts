@@ -1,7 +1,6 @@
 import { BrowserView, BrowserWindow, ipcMain } from 'electron';
 import { URL } from 'url';
 import { createTrack, selectTrackBySourceUrl, TrackData } from '../features/tracks/tracksSlice';
-import { mediaPaused, mediaPlaying } from '../features/embed/embedSlice';
 import {
   addTrack,
   clearTracks,
@@ -11,6 +10,7 @@ import {
   updatePageTitle,
   updatePageUrl,
 } from '../features/browsers/browsersSlice';
+import { foundBandcampCollectionUrl } from '../features/ui/uiSlice';
 import { BandCurrency, BandData, parseBandcampPageData, TralbumCollectInfo, TralbumData } from './helpers/bandcamp';
 import { AnyObject, AppStore, Browser, TrackPreviewEmbedSize } from '../common/types';
 import { log } from './helpers/console';
@@ -95,27 +95,6 @@ function initBrowserView(reduxStore: AppStore, browser: Browser) {
     return { action: 'deny' };
   });
 
-  view.webContents.on('media-started-playing', () => {
-    void (async () => {
-      const titleLinkPlaying = (await view.webContents.executeJavaScript(
-        'document.querySelector(".inline_player .title_link").getAttribute("href");',
-        true,
-      )) as string;
-      log('playing from browser', { sourceUrl: titleLinkPlaying });
-      const trackData = await getPageTrackData(view, browser.url);
-      const playingTrack = trackData.trackinfo.find((track) => track.title_link === titleLinkPlaying);
-
-      if (playingTrack) {
-        dispatch(mediaPlaying());
-      }
-    })();
-  });
-
-  view.webContents.on('media-paused', () => {
-    log('pausing from browser', Date.now());
-    dispatch(mediaPaused());
-  });
-
   view.webContents.on('page-title-updated', (event, title) => {
     dispatch(updatePageTitle({ id: browser.id, title }));
   });
@@ -134,29 +113,42 @@ function initBrowserView(reduxStore: AppStore, browser: Browser) {
     currentlyNavigating = false;
     log('loaded url', loadedUrl);
 
-    if (/bandcamp.com\/track|album/.exec(loadedUrl)) {
-      log('url is bandcamp album or track');
+    if (/bandcamp.com/.exec(loadedUrl)) {
       void (async () => {
-        const pageTrackData = await getPageTrackData(view, loadedUrl);
-        pageTrackData.trackinfo.forEach(({ id, title, title_link, artist, duration }) => {
-          // pass price where we have it
-          const trackData: TrackData = {
-            title,
-            artist,
-            duration,
-            sourceId: id,
-            url: title_link,
-            priceCurrency: pageTrackData.currency,
-          };
-          dispatch(createTrack(trackData));
-          log('creating track', title_link);
-          const trackSelector = selectTrackBySourceUrl(title_link);
-          const track = trackSelector(getState());
-          log('selected browser', browser.id, track);
-          // log(getState());
-          dispatch(addTrack({ id: browser.id, trackId: track.id }));
-        });
+        const collectionUrl = (await view.webContents.executeJavaScript(
+          '$("a[title=\'collection\']").attr("href");',
+          true,
+        )) as string;
+
+        if (/https:\/\/bandcamp.com\/\w+/.exec(collectionUrl)) {
+          dispatch(foundBandcampCollectionUrl({ collectionUrl }));
+        }
       })();
+
+      if (/track|album/.exec(loadedUrl)) {
+        log('url is bandcamp album or track');
+        void (async () => {
+          const pageTrackData = await getPageTrackData(view, loadedUrl);
+          pageTrackData.trackinfo.forEach(({ id, title, title_link, artist, duration }) => {
+            // pass price where we have it
+            const trackData: TrackData = {
+              title,
+              artist,
+              duration,
+              sourceId: id,
+              url: title_link,
+              priceCurrency: pageTrackData.currency,
+            };
+            dispatch(createTrack(trackData));
+            log('creating track', title_link);
+            const trackSelector = selectTrackBySourceUrl(title_link);
+            const track = trackSelector(getState());
+            log('selected browser', browser.id, track);
+            // log(getState());
+            dispatch(addTrack({ id: browser.id, trackId: track.id }));
+          });
+        })();
+      }
     }
   });
 

@@ -1,8 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { AppState, UI, TrackPreviewEmbedSize, Browser, TabHistoryAction } from '../../common/types';
+import {
+  AppState,
+  UI,
+  TrackPreviewEmbedSize,
+  Browser,
+  TabHistoryAction,
+  BandcampTabHomepage,
+} from '../../common/types';
 
 const initialState = {
   statusText: '',
+  bandcampPageUrls: {
+    [BandcampTabHomepage.FrontPage]: 'https://bandcamp.com',
+  },
+  bandcampTabHomepage: BandcampTabHomepage.FrontPage,
   darkModeEnabled: false,
   windowBounds: { x: 0, y: 0, width: 1500, height: 1000 },
   horizontalSplitterDimensions: { listPaneWidth: 538, browserPaneWidth: 962 },
@@ -72,6 +83,12 @@ export const slice = createSlice({
 
       return state;
     },
+    foundBandcampCollectionUrl: (state, { payload: { collectionUrl } }: { payload: { collectionUrl: string } }) => {
+      const newState = { ...state };
+      newState.bandcampPageUrls[BandcampTabHomepage.CollectionPage] = collectionUrl;
+      newState.bandcampPageUrls[BandcampTabHomepage.WishlistPage] = `${collectionUrl}/wishlist`;
+      return newState;
+    },
   },
 });
 
@@ -82,6 +99,7 @@ export const {
   horizontalSplitterMoved,
   setStatus,
   updateTabHistory,
+  foundBandcampCollectionUrl,
 } = slice.actions;
 
 export const selectTrackPreviewEmbedSize = ({ ui }: AppState) => ui.trackPreviewEmbedSize;

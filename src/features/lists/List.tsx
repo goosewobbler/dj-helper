@@ -73,15 +73,15 @@ export function List({ id }: { id: number }): ReactElement {
   return (
     <li id={listKey} className="flex flex-col list group-list" data-testid="list">
       <div
-        className={`accordion transition duration-500 ease-in-out outline-none border-none items-center group-list-hover:bg-green-400 bg-green-200 text-gray-700 flex cursor-pointer p-4 ${
-          active ? 'font-black' : 'font-semibold'
+        className={`accordion transition text-base duration-500 ease-in-out outline-none border-none items-center group-list-hover:bg-green-400 bg-green-200 text-gray-700 flex cursor-pointer p-4 ${
+          active ? 'font-black' : 'font-normal'
         }`}
         role="menuitem"
         onClick={toggleAccordion}
         onKeyPress={toggleAccordion}
         tabIndex={0}
       >
-        <span className="w-full h-10 pt-2 text-sm title" data-testid="title">
+        <span className="w-full h-10 pt-2 title" data-testid="title">
           {editing ? (
             <label className="block h-full" htmlFor="list-title">
               Enter List Title:
@@ -105,10 +105,10 @@ export function List({ id }: { id: number }): ReactElement {
             </label>
           ) : (
             <>
-              <span className="inline-block overflow-hidden font-bold w-96 overflow-ellipsis whitespace-nowrap">
-                {title}
+              <span className="inline-block overflow-hidden">
+                <span className="inline-block overflow-hidden w-80 overflow-ellipsis whitespace-nowrap">{title}</span>
                 <button
-                  className="inline-block p-1 mx-4 align-middle opacity-0 hover:bg-green-600 group-list-hover:opacity-100"
+                  className="relative inline-block p-1 mx-4 align-middle opacity-0 bottom-2 hover:bg-green-600 group-list-hover:opacity-100"
                   type="button"
                   onClick={() => handleClickEdit()}
                 >

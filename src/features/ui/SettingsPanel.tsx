@@ -15,28 +15,30 @@ export function SettingsPanel(): ReactElement {
   return (
     <div>
       <DeleteDataButton />
-      <div className="float-right w-60">
-        <Switch
-          id="embed-size-switch"
-          isOn={isLargeEmbed}
-          text="Large Preview"
-          handleToggle={() => {
-            batch(() => {
-              const size = embedSize(!isLargeEmbed);
-              dispatch(trackPreviewEmbedSizeToggled(size));
-              dispatch(resizeEmbed());
-            });
-          }}
-        />
-        <Switch
-          id="autoplay-switch"
-          isOn={isAutoplayEnabled}
-          text="Autoplay"
-          handleToggle={() => {
-            const autoplayEnabled = !isAutoplayEnabled;
-            dispatch(autoplayEnabledToggled(autoplayEnabled));
-          }}
-        />
+      <div className="float-right w-6/12">
+        <span className="float-right mx-4">
+          <Switch
+            id="embed-size-switch"
+            isOn={isLargeEmbed}
+            text="Large Preview"
+            handleToggle={() => {
+              batch(() => {
+                const size = embedSize(!isLargeEmbed);
+                dispatch(trackPreviewEmbedSizeToggled(size));
+                dispatch(resizeEmbed());
+              });
+            }}
+          />
+          <Switch
+            id="autoplay-switch"
+            isOn={isAutoplayEnabled}
+            text="Autoplay"
+            handleToggle={() => {
+              const autoplayEnabled = !isAutoplayEnabled;
+              dispatch(autoplayEnabledToggled(autoplayEnabled));
+            }}
+          />
+        </span>
       </div>
     </div>
   );

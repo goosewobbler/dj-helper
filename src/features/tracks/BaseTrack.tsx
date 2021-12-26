@@ -40,16 +40,18 @@ export function BaseTrack({
       <span className="inline-block w-3/12 overflow-hidden whitespace-nowrap overflow-ellipsis">{artist}</span>
       <span className="inline-block w-6/12 overflow-hidden whitespace-nowrap overflow-ellipsis">{title}</span>
       <span className="inline-block w-1/12 overflow-hidden whitespace-nowrap">{displayTrackDuration(duration)}</span>
-      <span className="inline-block w-2/12 opacity-0 group-track-hover:opacity-100">
-        <PlayPauseButton
-          isPlaying={isPlaying}
-          showSpinner={showSpinner}
-          onClick={() => {
-            log('invoke play', { trackId: id, context });
-            dispatch(isPlaying ? pauseTrack() : loadAndPlayTrack({ trackId: id, context }));
-          }}
-        />
-        <span className="ml-1">{additionalButtons}</span>
+      <span className="relative inline-block w-2/12 font-serif align-middle opacity-0 bottom-1 group-track-hover:opacity-100">
+        <span className="float-right mx-2">{additionalButtons}</span>
+        <span className="float-right">
+          <PlayPauseButton
+            isPlaying={isPlaying}
+            showSpinner={showSpinner}
+            onClick={() => {
+              log('invoke play', { trackId: id, context });
+              dispatch(isPlaying ? pauseTrack() : loadAndPlayTrack({ trackId: id, context }));
+            }}
+          />
+        </span>
       </span>
     </div>
   );

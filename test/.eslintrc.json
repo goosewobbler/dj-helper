@@ -28,7 +28,10 @@
   },
   "rules": {
     "react/require-default-props": "off",
-    "react/jsx-filename-extension": "off"
+    "react/jsx-filename-extension": "off",
+    "testing-library/no-await-sync-query": "off",
+    "@typescript-eslint/no-namespace": ["error", { "allowDeclarations": true }],
+    "@typescript-eslint/no-empty-interface": ["error", { "allowSingleExtends": true }]
   },
   "settings": {
     "node": {

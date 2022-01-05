@@ -75,7 +75,7 @@ export function initEmbed(mainWindow: BrowserWindow, reduxStore: AppStore): void
       }
 
       log('dispatching setPaused, track ended = ', pausedByTrackEnding);
-      await dispatch(mediaPaused());
+      dispatch(mediaPaused());
       if (pausedByTrackEnding) {
         log('sending autoplay message');
         mainWindow.webContents.send('handle-autoplay');

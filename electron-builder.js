@@ -1,3 +1,4 @@
+/* eslint-disable no-template-curly-in-string */
 module.exports = {
   asar: true,
   appId: 'com.dj-helper.app',

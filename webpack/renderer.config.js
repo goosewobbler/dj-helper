@@ -31,7 +31,7 @@ const startMain = () => {
       console.log('received close', code);
       if (!startingMainProcess) {
         // can exit parent process if main is not about to restart
-        process.exit(code);
+        // process.exit(code);
       }
     })
     .on('error', (spawnError) => console.error(spawnError));
@@ -158,7 +158,7 @@ module.exports = {
           startingMainProcess = true;
           // already running & main files modified => restart
 
-          // buildMain().on('close', () => startMain());
+          buildMain().on('close', () => startMain());
         }
       });
     },

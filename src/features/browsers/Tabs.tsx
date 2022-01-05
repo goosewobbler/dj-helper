@@ -99,7 +99,7 @@ export const TabbedInterface = ({
                     </div>
                   </div>
                 ) : (
-                  <img className="absolute w-5 h-5 top-4 left-3" src="./bandcamp-favicon-32x32.png" />
+                  <img className="absolute w-5 h-5 top-4 left-3" alt="favicon" src="./bandcamp-favicon-32x32.png" />
                 )}
                 <span>{browser.title}</span>
                 <span

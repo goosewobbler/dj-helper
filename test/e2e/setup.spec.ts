@@ -36,7 +36,7 @@ describe('App', () => {
     it('should display a new list button', async () => {
       await delay(2000);
       const button = await screen.getByText('New List');
-      expect(button).toBeDefined();
+      expect(button).toBeInTheDocument();
     });
 
     describe('when the new list button is clicked', () => {

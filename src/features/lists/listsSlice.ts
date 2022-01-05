@@ -42,7 +42,7 @@ export const slice = createSlice({
   reducers: {
     createList: (state) => {
       const newList: List = {
-        id: state.length + 1,
+        id: state.length,
         title: initialListTitle,
         tracks: [],
         editing: true,
@@ -53,7 +53,7 @@ export const slice = createSlice({
     updateListTitle: (state, { payload: { id, title } }: { payload: { id: number; title: string } }) =>
       state.map((list) => (list.id === id ? { ...list, title } : list)),
     deleteList: (state, { payload: { id } }) =>
-      state.filter((list) => list.id !== id).map((list, index) => ({ ...list, id: index + 1 })),
+      state.filter((list) => list.id !== id).map((list, index) => ({ ...list, id: index })),
     editList: (state, { payload: { id } }) =>
       state.map((list) => (list.id === id ? { ...list, editing: true, oldTitle: list.title } : list)),
     finishEditList: (state) =>

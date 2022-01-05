@@ -1,5 +1,5 @@
 const { join } = require('path');
-const fs = require('fs-extra');
+const fs = require('fs');
 
 const packageJson = JSON.parse(fs.readFileSync('./package.json'));
 const {
@@ -7,10 +7,20 @@ const {
 } = packageJson;
 
 const config = {
-  spectronOpts: {
-    appPath: join(process.cwd(), 'dist'),
-    appName: productName,
-  },
+  services: [
+    [
+      'electron',
+      {
+        appPath: join(__dirname, 'dist'),
+        appName: productName,
+        chromedriver: {
+          port: 9519,
+          logFileName: 'wdio-chromedriver.log',
+        },
+        // args: ['--silent'],
+      },
+    ],
+  ],
   // hostname: '127.0.0.1',
   port: 9515,
   waitforTimeout: 5000,

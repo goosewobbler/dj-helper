@@ -28,7 +28,7 @@ const config = {
   connectionRetryTimeout: 30000,
   logLevel: 'debug',
   runner: 'local',
-  outputDir: 'all-logs',
+  outputDir: 'wdio-logs',
   specs: ['./test/e2e/*.spec.ts'],
   autoCompileOpts: {
     autoCompile: true,

@@ -1,7 +1,7 @@
 import { contextBridge, IpcRenderer, ipcRenderer } from 'electron';
 import process from 'process';
 import '@goosewobbler/electron-redux/preload';
-import '@goosewobbler/spectron/preload';
+// import '@goosewobbler/spectron/preload';
 
 const validChannels = [
   'play-track',

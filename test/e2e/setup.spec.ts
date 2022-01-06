@@ -1,4 +1,3 @@
-import { initSpectron, SpectronApp } from '@goosewobbler/spectron';
 import { setupBrowser, WebdriverIOQueries } from '@testing-library/webdriverio';
 
 declare global {
@@ -12,26 +11,22 @@ function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-let app: SpectronApp;
 let screen: WebdriverIOQueries;
 
 describe('App', () => {
-  before(async (): Promise<void> => {
-    // await app.client.getWindowHandles();
-    app = await initSpectron();
-    await app.client.waitUntilWindowLoaded();
-    screen = setupBrowser(app.client);
+  before(() => {
+    screen = setupBrowser(browser);
   });
 
-  it('should launch app', async () => {
-    const isVisible = await app.browserWindow.isVisible();
-    expect(isVisible).toBe(true);
-  });
+  // it('should launch app', async () => {
+  //   const isVisible = await app.browserWindow.isVisible();
+  //   expect(isVisible).toBe(true);
+  // });
 
   describe('lists', () => {
-    before(async () => {
-      await app.browserWindow.isVisible();
-    });
+    // before(async () => {
+    //   await app.browserWindow.isVisible();
+    // });
 
     it('should display a new list button', async () => {
       await delay(2000);

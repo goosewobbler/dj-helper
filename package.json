@@ -55,14 +55,14 @@
     "@goosewobbler/electron-redux": "^1.0.4"
   },
   "devDependencies": {
-    "@babel/cli": "^7.16.7",
+    "@babel/cli": "^7.16.8",
     "@babel/core": "^7.16.7",
     "@babel/plugin-proposal-optional-chaining": "^7.16.7",
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
-    "@babel/preset-env": "^7.16.7",
+    "@babel/preset-env": "^7.16.8",
     "@babel/preset-react": "^7.16.7",
     "@babel/preset-typescript": "^7.16.7",
-    "@babel/register": "^7.16.7",
+    "@babel/register": "^7.16.8",
     "@headlessui/react": "^1.4.2",
     "@heroicons/react": "^1.0.5",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.4",
@@ -85,8 +85,8 @@
     "@types/tailwindcss": "^3.0.2",
     "@types/webpack": "^5.28.0",
     "@types/webpack-env": "^1.16.3",
-    "@typescript-eslint/eslint-plugin": "^5.9.0",
-    "@typescript-eslint/parser": "^5.9.0",
+    "@typescript-eslint/eslint-plugin": "^5.9.1",
+    "@typescript-eslint/parser": "^5.9.1",
     "@wdio/cli": "^7.16.13",
     "@wdio/local-runner": "^7.16.13",
     "@wdio/mocha-framework": "^7.16.13",
@@ -178,7 +178,7 @@
     ]
   },
   "browserslist": [
-    "electron >= 15",
-    "node >= 14"
+    "electron >= 16",
+    "node >= 16"
   ]
 }

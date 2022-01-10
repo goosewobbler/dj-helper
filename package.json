@@ -146,7 +146,6 @@
     "react-refresh": "^0.11.0",
     "react-tabs": "^3.2.3",
     "redux": "^4.1.2",
-    "redux-devtools-extension": "^2.13.9",
     "source-map-loader": "^3.0.1",
     "source-map-support": "^0.5.21",
     "stylelint": "^14.2.0",

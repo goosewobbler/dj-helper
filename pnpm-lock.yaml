@@ -93,7 +93,6 @@ specifiers:
   react-refresh: ^0.11.0
   react-tabs: ^3.2.3
   redux: ^4.1.2
-  redux-devtools-extension: ^2.13.9
   source-map-loader: ^3.0.1
   source-map-support: ^0.5.21
   stylelint: ^14.2.0
@@ -208,7 +207,6 @@ devDependencies:
   react-refresh: 0.11.0
   react-tabs: 3.2.3_react@17.0.2
   redux: 4.1.2
-  redux-devtools-extension: 2.13.9_redux@4.1.2
   source-map-loader: 3.0.1_webpack@5.65.0
   source-map-support: 0.5.21
   stylelint: 14.2.0
@@ -10080,15 +10078,6 @@ packages:
     dependencies:
       indent-string: 4.0.0
       strip-indent: 3.0.0
-    dev: true
-
-  /redux-devtools-extension/2.13.9_redux@4.1.2:
-    resolution: {integrity: sha512-cNJ8Q/EtjhQaZ71c8I9+BPySIBVEKssbPpskBfsXqb8HJ002A3KRVHfeRzwRo6mGPqsm7XuHTqNSNeS1Khig0A==}
-    deprecated: Package moved to @redux-devtools/extension.
-    peerDependencies:
-      redux: ^3.1.0 || ^4.0.0
-    dependencies:
-      redux: 4.1.2
     dev: true
 
   /redux-persist/4.10.2:

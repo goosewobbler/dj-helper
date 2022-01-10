@@ -128,7 +128,7 @@ module.exports = {
       verbose: true,
       disableDotRule: false,
     },
-    onBeforeSetupMiddleware({ compiler }) {
+    setupMiddlewares(middlewares, { compiler }) {
       let requiresRestart = false;
       compiler.hooks.watchRun.tap('ElectronDevServerManagement', ({ modifiedFiles }) => {
         if (modifiedFiles) {
@@ -161,6 +161,8 @@ module.exports = {
           buildMain().on('close', () => startMain());
         }
       });
+
+      return middlewares;
     },
   },
 };

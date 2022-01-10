@@ -57,8 +57,6 @@ export const App = (): ReactElement => {
   //   [browsers, cachedActiveBrowser],
   // );
 
-  window.api.removeAllListeners('handle-autoplay');
-  window.api.removeAllListeners('window-resized');
   window.api.on('handle-autoplay', () => {
     log('dispatching handle-autoplay');
     void dispatch(handleAutoplay());

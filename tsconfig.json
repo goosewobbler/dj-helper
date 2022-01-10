@@ -5,7 +5,6 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "strict": true,
-    "noUnusedLocals": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "inlineSources": true,

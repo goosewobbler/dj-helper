@@ -2,6 +2,7 @@
 const { spawn } = require('child_process');
 const { cwd } = require('process');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const rules = require('./rules')('renderer');
 const plugins = require('./renderer.plugins');
 
@@ -16,6 +17,7 @@ const spawnOpts = {
 
 let mainProcess;
 let startingMainProcess = false;
+let optimization = {};
 
 const buildMain = () =>
   spawn('pnpm', ['dev:build:main'], spawnOpts).on('error', (spawnError) => console.error(spawnError));
@@ -61,6 +63,27 @@ rules.push({
   type: 'asset/resource',
 });
 
+if (!isDev) {
+  optimization = {
+    minimizer: [
+      new TerserPlugin({
+        exclude: ['node_modules'],
+      }),
+    ],
+    splitChunks: {
+      cacheGroups: {
+        styles: {
+          name: 'renderer',
+          type: 'css/mini-extract',
+          chunks: 'all',
+          enforce: true,
+        },
+      },
+    },
+    removeEmptyChunks: true,
+  };
+}
+
 const baseEntry = isDev ? [`webpack-dev-server/client?http://localhost:${devServerPort}/`] : [];
 
 module.exports = {
@@ -97,6 +120,7 @@ module.exports = {
     __dirname: true,
     __filename: true,
   },
+  optimization,
   devServer: {
     port: devServerPort,
     compress: false,

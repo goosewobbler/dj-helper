@@ -167,7 +167,7 @@
     "webpack-electron-reload": "^1.0.1"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=16.0.0"
   },
   "lint-staged": {
     "**/*.{js,ts}": [

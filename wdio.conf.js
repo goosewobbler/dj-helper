@@ -1,10 +1,5 @@
 const { join } = require('path');
-const fs = require('fs');
-
-const packageJson = JSON.parse(fs.readFileSync('./package.json'));
-const {
-  build: { productName },
-} = packageJson;
+const { productName } = require('./electron-builder');
 
 const config = {
   services: [
@@ -21,15 +16,16 @@ const config = {
       },
     ],
   ],
+  capabilities: [{}],
   // hostname: '127.0.0.1',
-  port: 9515,
+  port: 9519,
   waitforTimeout: 5000,
   connectionRetryCount: 10,
   connectionRetryTimeout: 30000,
   logLevel: 'debug',
   runner: 'local',
   outputDir: 'wdio-logs',
-  specs: ['./test/e2e/*.spec.ts'],
+  specs: ['test/e2e/*.spec.ts'],
   autoCompileOpts: {
     autoCompile: true,
     // see https://github.com/TypeStrong/ts-node#cli-and-programmatic-options
@@ -37,18 +33,18 @@ const config = {
     tsNodeOpts: {
       transpileOnly: true,
       files: true,
-      // moduleTypes: {
-      //   // WDIO doesn't currently support ESM
-      //   '*.conf.ts': 'cjs',
-      //   '*.spec.ts': 'cjs',
-      // },
+      moduleTypes: {
+        // WDIO doesn't currently support ESM
+        '*.conf.ts': 'cjs',
+        '*.spec.ts': 'cjs',
+      },
       project: './tsconfig.json',
     },
     // tsconfig-paths is only used if "tsConfigPathsOpts" are provided, if you
     // do please make sure "tsconfig-paths" is installed as dependency
-    tsConfigPathsOpts: {
-      baseUrl: './',
-    },
+    // tsConfigPathsOpts: {
+    //   baseUrl: './',
+    // },
   },
   framework: 'mocha',
 };

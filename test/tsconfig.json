@@ -1,0 +1,10 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "baseUrl": ".",
+    "outDir": "../dist",
+    "types": ["node", "jest", "@testing-library/jest-dom", "@testing-library/react"]
+  },
+  "include": ["./features/**/*.spec.ts", "./features/**/*.spec.tsx"]
+}

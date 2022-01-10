@@ -1,4 +1,6 @@
-import { setupBrowser, WebdriverIOQueries } from '@testing-library/webdriverio';
+import { setupBrowser, WebdriverIOBoundFunctions, WebdriverIOQueries } from '@testing-library/webdriverio';
+import { queries } from '@testing-library/dom';
+// import { setOptions } from 'expect-webdriverio';
 
 declare global {
   namespace WebdriverIO {
@@ -11,37 +13,45 @@ function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-let screen: WebdriverIOQueries;
+let screen: WebdriverIOBoundFunctions<typeof queries>;
 
-describe('App', () => {
-  before(() => {
+// describe('App', () => {
+//   before(() => {
+//     screen = setupBrowser(browser);
+//     setOptions({ wait: 5000 });
+//   });
+
+//   // it('should launch app', async () => {
+//   //   const isVisible = await app.browserWindow.isVisible();
+//   //   expect(isVisible).toBe(true);
+//   // });
+// });
+describe('lists', () => {
+  before(async () => {
     screen = setupBrowser(browser);
+    await delay(1000);
+    // await app.browserWindow.isVisible();
   });
 
-  // it('should launch app', async () => {
-  //   const isVisible = await app.browserWindow.isVisible();
-  //   expect(isVisible).toBe(true);
-  // });
+  it('should display a new list button', async () => {
+    console.log('looking for btn');
+    // const { getByText } = setupBrowser(browser);
+    // const button = await getByText('New List');
+    // const button = screen.queryByText('New List');
+    const button = await screen.getByRole('button', { name: /new list/i });
+    // const button = await $('.new-list-btn');
+    // console.log('yo', await button.getText());
+    console.log('btn plz', button);
+    expect(button).toExist();
+  });
 
-  describe('lists', () => {
-    // before(async () => {
-    //   await app.browserWindow.isVisible();
-    // });
-
-    it('should display a new list button', async () => {
-      await delay(2000);
-      const button = await screen.getByText('New List');
-      expect(button).toBeInTheDocument();
-    });
-
-    describe('when the new list button is clicked', () => {
-      it('should create a new list input box', async () => {
-        const button = await screen.getByText('New List');
-        // const button = app.client.$('.btn-make-bigger');
-        await button.click();
-        const input = await screen.getByLabelText('List Title');
-        expect(await input.getValue()).toEqual('New List');
-      });
+  describe('when the new list button is clicked', () => {
+    it('should create a new list input box', async () => {
+      const button = await screen.getByText(/New List/i);
+      // const button = app.client.$('.btn-make-bigger');
+      await button.click();
+      const input = await screen.getByLabelText('List Title');
+      expect(await input.getValue()).toEqual('New List');
     });
   });
 });

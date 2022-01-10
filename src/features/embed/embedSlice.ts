@@ -192,7 +192,7 @@ export const loadAndPlayNextTrack = (): AppThunk => (dispatch, getState) => {
     return nextTrackSelector(state);
   };
 
-  if (loadContext && loadContext.contextId) {
+  if (loadContext && loadContext.contextId !== undefined) {
     const nextTrackId = nextTrackFromContextSelector();
     if (nextTrackId) {
       dispatch(loadAndPlayTrack({ trackId: nextTrackId, context: loadContext }));

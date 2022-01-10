@@ -1,1 +1,6 @@
 package.json
+coverage
+bundle
+dist
+node_modules
+pnpm-lock.yaml

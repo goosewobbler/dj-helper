@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "baseUrl": ".",
+    "outDir": "../../dist",
+    "types": ["node", "webdriverio/async", "expect-webdriverio", "@wdio/mocha-framework", "mocha"]
+  },
+  "include": ["*.spec.ts"]
+}

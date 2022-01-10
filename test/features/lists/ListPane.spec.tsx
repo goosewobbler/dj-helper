@@ -1,3 +1,4 @@
+/* eslint-disable testing-library/no-render-in-setup */
 import * as React from 'react';
 import { render, screen, RenderResult, userEvent } from '../../helpers/integration';
 import { ListPane } from '../../../src/features/lists/ListPane';
@@ -11,12 +12,8 @@ describe('ListPane', () => {
       listPane = render(<ListPane />);
     });
 
-    it('should render no lists', () => {
-      expect(screen.queryByRole('listitem')).not.toBeInTheDocument();
-    });
-
     it('should render a new list button', () => {
-      expect(screen.queryByRole('button', { name: /New List/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /New List/i })).toBeInTheDocument();
     });
 
     it('should render the expected html', () => {
@@ -30,8 +27,12 @@ describe('ListPane', () => {
       });
 
       it('should render a new list', () => {
-        expect(screen.queryAllByRole('listitem').length).toEqual(1);
-        expect(screen.queryAllByTestId('title').map((title) => title.textContent)).toEqual(['List Title']);
+        expect(screen.queryAllByRole('listitem').length).toEqual(3);
+        expect(screen.queryAllByTestId('title').map((title) => title.textContent)).toEqual([
+          'Look a set list',
+          'Wow such list',
+          'Enter List Title:',
+        ]);
       });
 
       it('should render the expected html', () => {
@@ -45,9 +46,9 @@ describe('ListPane', () => {
       listPane = render(<ListPane />, {
         preloadedState: mockState({
           lists: [
-            { id: 1, title: 'test list one', tracks: [] },
-            { id: 2, title: 'test list two', tracks: [] },
-            { id: 3, title: 'test list three', tracks: [] },
+            { id: 0, title: 'test list one', tracks: [] },
+            { id: 1, title: 'test list two', tracks: [] },
+            { id: 2, title: 'test list three', tracks: [] },
           ],
         }),
       });
@@ -63,7 +64,7 @@ describe('ListPane', () => {
     });
 
     it('should render a new list button', () => {
-      expect(screen.queryByRole('button', { name: /New List/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /New List/i })).toBeInTheDocument();
     });
 
     it('should render the expected html', () => {
@@ -82,7 +83,7 @@ describe('ListPane', () => {
           'test list one',
           'test list two',
           'test list three',
-          'List Title',
+          'Enter List Title:',
         ]);
       });
 
@@ -93,7 +94,7 @@ describe('ListPane', () => {
 
     describe('when a list delete button is clicked', () => {
       beforeEach(() => {
-        const listDeleteBtns = screen.getAllByRole('button', { name: /Delete/i });
+        const listDeleteBtns = screen.getAllByRole('button', { name: /Delete List/i });
         userEvent.click(listDeleteBtns[1]);
       });
 
@@ -112,12 +113,12 @@ describe('ListPane', () => {
 
     describe('when a list edit button is clicked', () => {
       beforeEach(() => {
-        const listEditBtns = screen.getAllByRole('button', { name: /Edit/i });
+        const listEditBtns = screen.getAllByRole('button', { name: /Edit List Title/i });
         userEvent.click(listEditBtns[1]);
       });
 
       it('should render a text input with the expected value', () => {
-        expect(screen.getByLabelText('List Title')).toHaveValue('test list two');
+        expect(screen.getByLabelText('Enter List Title:')).toHaveValue('test list two');
       });
 
       it('should render the expected html', () => {
@@ -126,8 +127,8 @@ describe('ListPane', () => {
 
       describe('and the edit is cancelled', () => {
         beforeEach(() => {
-          const input = screen.getByLabelText('List Title') as HTMLInputElement;
-          input.setSelectionRange(0, 13);
+          const input = screen.getByLabelText('Enter List Title:');
+          (input as HTMLInputElement).setSelectionRange(0, 13);
           userEvent.type(input, 'new title for test list two{esc}');
         });
 
@@ -142,8 +143,8 @@ describe('ListPane', () => {
 
       describe('and the edit is completed', () => {
         beforeEach(() => {
-          const input = screen.getByLabelText('List Title') as HTMLInputElement;
-          input.setSelectionRange(0, 13);
+          const input = screen.getByLabelText('Enter List Title:');
+          (input as HTMLInputElement).setSelectionRange(0, 13);
           userEvent.type(input, '{backspace}new title for test list two{enter}');
         });
 
@@ -158,13 +159,13 @@ describe('ListPane', () => {
 
       describe('and an invalid title stops the edit from being completed', () => {
         beforeEach(() => {
-          const input = screen.getByLabelText('List Title') as HTMLInputElement;
-          input.setSelectionRange(0, 13);
+          const input = screen.getByLabelText('Enter List Title:');
+          (input as HTMLInputElement).setSelectionRange(0, 13);
           userEvent.type(input, '{backspace}');
         });
 
         it('should render a text input with the expected value', () => {
-          expect(screen.getByLabelText('List Title')).toHaveValue('');
+          expect(screen.getByLabelText('Enter List Title:')).toHaveValue('');
         });
 
         it('should render the expected html', () => {
@@ -179,7 +180,7 @@ describe('ListPane', () => {
         });
 
         it('should render a single text input with the expected value', () => {
-          expect(screen.getByLabelText('List Title')).toHaveValue('New List');
+          expect(screen.getByLabelText('Enter List Title:')).toHaveValue('New List');
         });
 
         it('should render the expected html', () => {

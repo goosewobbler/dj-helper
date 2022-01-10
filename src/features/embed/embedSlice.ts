@@ -1,5 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { AppState, AppThunk, Embed, Track, EmbedStatus, LoadContextType } from '../../common/types';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { AppState, Embed, Track, EmbedStatus, LoadContextType, AppThunk, Dispatch } from '../../common/types';
 import { log } from '../../main/helpers/console';
 import { getNextTrackOnMetaPanel } from '../browsers/browsersSlice';
 import { getNextTrackOnList } from '../lists/listsSlice';
@@ -94,45 +94,74 @@ export const {
   reset,
 } = slice.actions;
 
-export const loadTrack =
-  ({ trackId, context }: EmbedContext): AppThunk =>
-  async (dispatch, getState) => {
+type ThunkApi = {
+  dispatch: Dispatch;
+  state: AppState;
+};
+
+export const loadTrack = createAsyncThunk<void, EmbedContext, ThunkApi>(
+  'tracks/loadTrack',
+  async ({ trackId, context }: EmbedContext, { dispatch, getState }) => {
     log('load requested', { trackId, context });
     dispatch(requestLoad({ trackId, context }));
     if (getState().embed.status === EmbedStatus.LoadRequested) {
       await window.api.invoke('load-track', trackId);
     }
-    return Promise.resolve();
-  };
+  },
+);
 
-export const playTrack = (): AppThunk => async (dispatch, getState) => {
-  dispatch(requestPlay());
-  if (getState().embed.status === EmbedStatus.PlayRequested) {
-    await window.api.invoke('play-track');
-  }
-  return Promise.resolve();
-};
+// export const loadTrack =
+//   ({ trackId, context }: EmbedContext): AppThunk =>
+//   (dispatch, getState) => {
+//     log('load requested', { trackId, context });
+//     dispatch(requestLoad({ trackId, context }));
+//     if (getState().embed.status === EmbedStatus.LoadRequested) {
+//       void (async () => {
+//         await window.api.invoke('load-track', trackId);
+//       });
+//     }
+//   };
 
-export const pauseTrack = (): AppThunk => async (dispatch, getState) => {
-  dispatch(requestPause());
-  if (getState().embed.status === EmbedStatus.PauseRequested) {
-    await window.api.invoke('pause-track');
-  }
-  return Promise.resolve();
-};
+export const playTrack = createAsyncThunk<void, undefined, ThunkApi>(
+  'tracks/playTrack',
+  async (_empty, { dispatch, getState }) => {
+    dispatch(requestPlay());
+    if (getState().embed.status === EmbedStatus.PlayRequested) {
+      await window.api.invoke('play-track');
+    }
+  },
+);
+
+// export const playTrack = (): AppThunk => (dispatch, getState) => {
+//   dispatch(requestPlay());
+//   if (getState().embed.status === EmbedStatus.PlayRequested) {
+//     void (async () => {
+//       await window.api.invoke('play-track');
+//     });
+//   }
+// };
+
+export const pauseTrack = createAsyncThunk<void, undefined, ThunkApi>(
+  'tracks/pauseTrack',
+  async (_empty, { dispatch, getState }) => {
+    dispatch(requestPause());
+    if (getState().embed.status === EmbedStatus.PauseRequested) {
+      await window.api.invoke('pause-track');
+    }
+  },
+);
 
 export const loadAndPlayTrack =
   ({ trackId, context }: EmbedContext): AppThunk =>
   async (dispatch, getState) => {
     const initialEmbed = getState().embed;
     log('load', initialEmbed);
-    if (initialEmbed.status === EmbedStatus.Paused && trackId === initialEmbed.trackId) {
-      // play a track which is already loaded
-      return dispatch(playTrack());
-    }
+    const trackIsLoaded = initialEmbed.status === EmbedStatus.Paused && trackId === initialEmbed.trackId;
 
-    await dispatch(loadTrack({ trackId, context }));
-    return dispatch(playTrack());
+    if (!trackIsLoaded) {
+      await dispatch(loadTrack({ trackId, context }));
+    }
+    await dispatch(playTrack());
   };
 
 export const resizeEmbed = (): AppThunk => async (dispatch, getState) => {
@@ -143,7 +172,7 @@ export const resizeEmbed = (): AppThunk => async (dispatch, getState) => {
     await window.api.invoke('load-track', embedState.trackId);
     await window.api.invoke('resize-browsers');
     if (initialStatus === EmbedStatus.Playing) {
-      dispatch(playTrack());
+      await dispatch(playTrack());
     }
   }
 };
@@ -163,7 +192,7 @@ export const loadAndPlayNextTrack = (): AppThunk => (dispatch, getState) => {
     return nextTrackSelector(state);
   };
 
-  if (loadContext && loadContext.contextId) {
+  if (loadContext && loadContext.contextId !== undefined) {
     const nextTrackId = nextTrackFromContextSelector();
     if (nextTrackId) {
       dispatch(loadAndPlayTrack({ trackId: nextTrackId, context: loadContext }));
@@ -180,14 +209,14 @@ export const handleAutoplay = (): AppThunk => (dispatch, getState) => {
   }
 };
 
-export const handleInit = (): AppThunk => (dispatch, getState) => {
+export const handleInit = (): AppThunk => async (dispatch, getState) => {
   const { trackId, loadContext, status } = getState().embed;
   log('handleInit', trackId);
   dispatch(reset());
   if ([EmbedStatus.PlayRequested, EmbedStatus.Playing].includes(status)) {
     dispatch(loadAndPlayTrack({ trackId, context: loadContext }));
   } else {
-    dispatch(loadTrack({ trackId, context: loadContext }));
+    await dispatch(loadTrack({ trackId, context: loadContext }));
   }
 };
 

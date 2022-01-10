@@ -3,7 +3,7 @@ const path = require('path');
 const { execSync } = require('child_process');
 const { notarize } = require('electron-notarize');
 
-module.exports = async function (context) {
+module.exports = async (context) => {
   const {
     platformName,
     appOutDir,
@@ -26,7 +26,7 @@ module.exports = async function (context) {
     const appleIdPassword = `@keychain:AC_PASSWORD`;
     await notarize({
       appBundleId: appId,
-      appPath: appPath,
+      appPath,
       appleId: execSync('mas account'),
       appleIdPassword,
     });

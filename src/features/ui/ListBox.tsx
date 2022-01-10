@@ -20,18 +20,18 @@ function classNames(...classes: string[]) {
 }
 
 export function ListBox({ labelText }: { labelText: string }) {
-  const [selected, setSelected] = useState(people[3]);
+  const [selectedItem, setSelectedItem] = useState(people[3]);
 
   return (
-    <Listbox value={selected} onChange={setSelected}>
+    <Listbox value={selectedItem} onChange={setSelectedItem}>
       {({ open }) => (
         <>
           <Listbox.Label className="block text-sm font-medium text-gray-700">{labelText}</Listbox.Label>
           <div className="relative mt-1">
             <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-white border border-gray-300 rounded-md shadow-sm cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
               <span className="inline-flex w-full truncate">
-                <span className="truncate">{selected.name}</span>
-                <span className="ml-2 text-gray-500 truncate">{selected.username}</span>
+                <span className="truncate">{selectedItem.name}</span>
+                <span className="ml-2 text-gray-500 truncate">{selectedItem.username}</span>
               </span>
               <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                 <SelectorIcon className="w-5 h-5 text-gray-400" aria-hidden="true" />

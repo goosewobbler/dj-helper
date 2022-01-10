@@ -2,6 +2,7 @@
 const { spawn } = require('child_process');
 const { cwd } = require('process');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const rules = require('./rules')('renderer');
 const plugins = require('./renderer.plugins');
 
@@ -16,6 +17,7 @@ const spawnOpts = {
 
 let mainProcess;
 let startingMainProcess = false;
+let optimization = {};
 
 const buildMain = () =>
   spawn('pnpm', ['dev:build:main'], spawnOpts).on('error', (spawnError) => console.error(spawnError));
@@ -31,7 +33,7 @@ const startMain = () => {
       console.log('received close', code);
       if (!startingMainProcess) {
         // can exit parent process if main is not about to restart
-        process.exit(code);
+        // process.exit(code);
       }
     })
     .on('error', (spawnError) => console.error(spawnError));
@@ -60,6 +62,27 @@ rules.push({
   test: /\.(png|jpe?g|gif|svg|eot|ttf|woff|woff2)$/i,
   type: 'asset/resource',
 });
+
+if (!isDev) {
+  optimization = {
+    minimizer: [
+      new TerserPlugin({
+        exclude: ['node_modules'],
+      }),
+    ],
+    splitChunks: {
+      cacheGroups: {
+        styles: {
+          name: 'renderer',
+          type: 'css/mini-extract',
+          chunks: 'all',
+          enforce: true,
+        },
+      },
+    },
+    removeEmptyChunks: true,
+  };
+}
 
 const baseEntry = isDev ? [`webpack-dev-server/client?http://localhost:${devServerPort}/`] : [];
 
@@ -97,6 +120,7 @@ module.exports = {
     __dirname: true,
     __filename: true,
   },
+  optimization,
   devServer: {
     port: devServerPort,
     compress: false,
@@ -128,7 +152,7 @@ module.exports = {
       verbose: true,
       disableDotRule: false,
     },
-    onBeforeSetupMiddleware({ compiler }) {
+    setupMiddlewares(middlewares, { compiler }) {
       let requiresRestart = false;
       compiler.hooks.watchRun.tap('ElectronDevServerManagement', ({ modifiedFiles }) => {
         if (modifiedFiles) {
@@ -158,9 +182,11 @@ module.exports = {
           startingMainProcess = true;
           // already running & main files modified => restart
 
-          // buildMain().on('close', () => startMain());
+          buildMain().on('close', () => startMain());
         }
       });
+
+      return middlewares;
     },
   },
 };

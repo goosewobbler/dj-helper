@@ -5,19 +5,19 @@ module.exports = {
   collectCoverageFrom: ['src/**/*'],
   coverageThreshold: {
     global: {
-      branches: 100,
-      functions: 100,
-      lines: 100,
-      statements: 100,
+      branches: 10,
+      functions: 10,
+      lines: 10,
+      statements: 10,
     },
   },
   clearMocks: true,
-  testPathIgnorePatterns: ['.node_modules_production', 'e2e'],
+  testEnvironment: 'jest-environment-jsdom',
+  testPathIgnorePatterns: ['.node_modules_production'],
   modulePathIgnorePatterns: ['.node_modules_production'],
-  testMatch: ['**/test/**/*.spec.(ts|tsx)'],
-  setupFilesAfterEnv: ['./test/setup.ts'],
+  testMatch: ['**/test/features/**/*.spec.(ts|tsx)'],
+  setupFilesAfterEnv: ['<rootDir>/test/setup.ts'],
   testURL: 'https://github.com/goosewobbler/',
-  testEnvironment: 'jsdom',
   globals: {
     'ts-jest': {
       packageJson: './package.json',

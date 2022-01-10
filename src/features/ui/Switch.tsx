@@ -13,7 +13,7 @@ export const Switch = ({
   isOn: boolean;
   handleToggle: () => void;
 }) => (
-  <UISwitch.Group as="div" className="flex items-center mt-1 mb-2">
+  <UISwitch.Group id={id} as="div" className="flex items-center mt-1 mb-2">
     <UISwitch
       checked={isOn}
       onChange={handleToggle}

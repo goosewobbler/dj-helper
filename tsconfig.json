@@ -5,7 +5,6 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "strict": true,
-    "noUnusedLocals": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "inlineSources": true,
@@ -21,15 +20,17 @@
     "allowJs": true,
     "checkJs": true,
     "noEmit": true,
-    "types": ["node", "webdriverio/async", "mocha", "webpack-env"],
+    "types": ["node", "webpack-env"],
     "typeRoots": ["./types", "./node_modules/@types"]
   },
   "include": [
     "./src/**/*.ts",
     "./src/**/*.tsx",
-    "./test/**/*.ts",
-    "./test/**/*.tsx",
+    "./test/features/*.ts",
+    "./test/features/*.tsx",
+    "./test/helpers/*.tsx",
     "./types/**/*.ts",
-    "src/renderer/preload.js"
+    "src/renderer/preload.js",
+    "test/setup.ts"
   ]
 }

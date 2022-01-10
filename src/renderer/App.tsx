@@ -57,11 +57,9 @@ export const App = (): ReactElement => {
   //   [browsers, cachedActiveBrowser],
   // );
 
-  window.api.removeAllListeners('handle-autoplay');
-  window.api.removeAllListeners('window-resized');
   window.api.on('handle-autoplay', () => {
     log('dispatching handle-autoplay');
-    dispatch(handleAutoplay());
+    void dispatch(handleAutoplay());
   });
   window.api.on('window-resized', () => {
     const browserPanelHeightFromRef = browserPanel.current?.clientHeight;

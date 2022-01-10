@@ -54,7 +54,6 @@ export const TabbedInterface = ({
   return (
     <Tabs
       className="h-full"
-      defaultIndex={activeBrowser ? activeBrowser.id : 0}
       onSelect={(index: number) => {
         batch(() => {
           log('tab onSelect', index);
@@ -64,7 +63,7 @@ export const TabbedInterface = ({
           }
         });
       }}
-      selectedIndex={activeBrowser.id}
+      selectedIndex={activeBrowser ? activeBrowser.id : 0}
     >
       <div className="flex justify-between" data-testid="header">
         <TabList className="flex-grow">
@@ -99,7 +98,7 @@ export const TabbedInterface = ({
                     </div>
                   </div>
                 ) : (
-                  <img className="absolute w-5 h-5 top-4 left-3" src="./bandcamp-favicon-32x32.png" />
+                  <img className="absolute w-5 h-5 top-4 left-3" alt="favicon" src="./bandcamp-favicon-32x32.png" />
                 )}
                 <span>{browser.title}</span>
                 <span
@@ -115,6 +114,7 @@ export const TabbedInterface = ({
           <button
             className="float-left px-4 py-4 text-lg border-0 border-solid rounded-l-lg rounded-r-lg outline-none hover:bg-gray-100 text-primary-text"
             type="button"
+            aria-label="New Tab"
             onClick={() => dispatch(clickNewTabHandler())}
           >
             <NewTabIcon className="" />

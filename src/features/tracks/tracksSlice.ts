@@ -74,7 +74,7 @@ function trackHasSource(track: Track, sourceUrl: string, sourceId?: number): boo
     if (sourceId) {
       return trackSource.sourceId === sourceId;
     }
-    return trackSource.url.includes(sourceUrl);
+    return trackSource.url === sourceUrl;
   });
 }
 

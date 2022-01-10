@@ -1,3 +1,5 @@
+/* eslint-disable global-require */
+
 /**
  * @type {import("./src/common/types").LooseObject}
  */

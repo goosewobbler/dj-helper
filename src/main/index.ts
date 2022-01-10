@@ -1,7 +1,7 @@
 import { app, BrowserWindow } from 'electron';
 import { createApp } from './app';
 import { log } from './helpers/console';
-import '@goosewobbler/spectron/main';
+// import '@goosewobbler/spectron/main';
 
 const appPath = app.getAppPath();
 const isDev = process.env.NODE_ENV === 'development';

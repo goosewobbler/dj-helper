@@ -84,10 +84,13 @@ export const slice = createSlice({
       return state;
     },
     foundBandcampCollectionUrl: (state, { payload: { collectionUrl } }: { payload: { collectionUrl: string } }) => {
-      const newState = { ...state };
-      newState.bandcampPageUrls[BandcampTabHomepage.CollectionPage] = collectionUrl;
-      newState.bandcampPageUrls[BandcampTabHomepage.WishlistPage] = `${collectionUrl}/wishlist`;
-      return newState;
+      const bandcampPageUrls = { ...state.bandcampPageUrls };
+      bandcampPageUrls[BandcampTabHomepage.CollectionPage] = collectionUrl;
+      bandcampPageUrls[BandcampTabHomepage.WishlistPage] = `${collectionUrl}/wishlist`;
+      return {
+        ...state,
+        bandcampPageUrls,
+      };
     },
   },
 });

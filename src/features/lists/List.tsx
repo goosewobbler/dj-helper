@@ -31,12 +31,13 @@ export function List({ id }: { id: number }): ReactElement {
 
       dispatch(moveTrackToIndex({ trackId: dragTrack, newIndex: hoverIndex }));
     },
-    [list.tracks, dispatch],
+    [list?.tracks, dispatch],
   );
 
   if (!list) {
     return <> </>;
   }
+
   const { title, tracks, editing, active } = list;
   const isValid = () => title !== '';
 
@@ -104,18 +105,17 @@ export function List({ id }: { id: number }): ReactElement {
               </div>
             </label>
           ) : (
-            <>
-              <span className="inline-block overflow-hidden">
-                <span className="inline-block overflow-hidden w-80 overflow-ellipsis whitespace-nowrap">{title}</span>
-                <button
-                  className="relative inline-block p-1 mx-4 align-middle opacity-0 bottom-2 hover:bg-green-600 group-list-hover:opacity-100"
-                  type="button"
-                  onClick={() => handleClickEdit()}
-                >
-                  <EditIcon className="edit-icon" />
-                </button>
-              </span>
-            </>
+            <span className="inline-block overflow-hidden">
+              <span className="inline-block overflow-hidden w-80 overflow-ellipsis whitespace-nowrap">{title}</span>
+              <button
+                className="relative inline-block p-1 mx-4 align-middle opacity-0 bottom-2 hover:bg-green-600 group-list-hover:opacity-100"
+                type="button"
+                onClick={() => handleClickEdit()}
+                aria-label="Edit List Title"
+              >
+                <EditIcon className="edit-icon" />
+              </button>
+            </span>
           )}
         </span>
         {!editing && (
@@ -123,6 +123,7 @@ export function List({ id }: { id: number }): ReactElement {
             className="float-right p-1 mx-1 opacity-0 group-list-hover:opacity-100 hover:bg-red-200"
             type="button"
             onClick={() => handleClickDelete()}
+            aria-label="Delete List"
           >
             <TrashIcon className="trash-icon" />
           </button>

@@ -20,13 +20,17 @@ if (isDev) {
   const port = process.env.PORT || 1212;
   templateParameters = {
     rendererSrc: `http://localhost:${port}/renderer.dev.js`,
-    stylesheetHref: `http://localhost:${port}/renderer.css`,
+    stylesheetHref: './renderer.css',
   };
-}
-
-if (!isDev) {
-  plugins
-    .push
+  plugins.push(
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+      chunkFilename: '[id].css',
+    }),
+    new ReactRefreshWebpackPlugin(),
+  );
+} else {
+  plugins.push(
     // TODO: re-enable bundle analysis after webpack conf rework
     // new BundleAnalyzerPlugin({
     //   analyzerMode: 'static',
@@ -35,16 +39,16 @@ if (!isDev) {
     //   reportFilename: 'report.renderer.html',
     //   statsFilename: 'stats.renderer.json',
     // }),
-    ();
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+      runtime: false,
+    }),
+  );
 }
 
 plugins.push(
   new ProgressPlugin(),
   new ForkTsCheckerWebpackPlugin(),
-  new MiniCssExtractPlugin({
-    filename: '[name].css',
-    chunkFilename: '[id].css',
-  }),
   new HtmlWebpackPlugin({
     filename: 'index.html',
     template: 'src/index.ejs',
@@ -53,7 +57,6 @@ plugins.push(
     templateParameters,
   }),
   new HtmlWebpackHarddiskPlugin(),
-  new ReactRefreshWebpackPlugin(),
   new CopyPlugin({
     patterns: [
       {

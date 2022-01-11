@@ -78,7 +78,7 @@ async function build(target) {
       await runBuildCommands('--linux --arm64 -c.linux.target=AppImage');
       break;
     case mac:
-      await runBuildCommands('--mac --x64 --arm64');
+      await runBuildCommands('--mac');
       break;
     case macX64:
       await runBuildCommands('--mac --x64');

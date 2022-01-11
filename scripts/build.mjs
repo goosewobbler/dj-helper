@@ -50,7 +50,7 @@ async function build(target) {
   await Promise.resolve();
   switch (target) {
     case appimage:
-      await runBuildCommands('--linux --x64 --ia32 -c.linux.target=AppImage');
+      await runBuildCommands('--linux --ia32 -c.linux.target=AppImage');
       break;
     case appimageX64:
       await runBuildCommands('--linux --x64 -c.linux.target=AppImage');

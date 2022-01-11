@@ -1,4 +1,8 @@
-[![Libraries.io dependencies status](https://img.shields.io/librariesio/release/github/goosewobbler/dj-helper)](https://libraries.io/github/goosewobbler/dj-helper) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=goosewobbler_dj-helper&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=goosewobbler_dj-helper) [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=goosewobbler_dj-helper&metric=security_rating)](https://sonarcloud.io/dashboard?id=goosewobbler_dj-helper) [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=goosewobbler_dj-helper&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=goosewobbler_dj-helper) [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=goosewobbler_dj-helper&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=goosewobbler_dj-helper) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=goosewobbler_dj-helper&metric=alert_status)](https://sonarcloud.io/dashboard?id=goosewobbler_dj-helper)  
+[![Github release status](https://img.shields.io/github/v/release/goosewobbler/dj-helper?include_prereleases)](https://github.com/goosewobbler/dj-helper/releases)
+[![Libraries.io dependencies status](https://img.shields.io/librariesio/release/github/goosewobbler/dj-helper)](https://libraries.io/github/goosewobbler/dj-helper)
+[![Github build status](https://img.shields.io/github/workflow/status/goosewobbler/dj-helper/CI)](https://github.com/goosewobbler/dj-helper/actions/workflows/ci.yml)  
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=goosewobbler_dj-helper&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=goosewobbler_dj-helper) [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=goosewobbler_dj-helper&metric=security_rating)](https://sonarcloud.io/dashboard?id=goosewobbler_dj-helper) [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=goosewobbler_dj-helper&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=goosewobbler_dj-helper) [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=goosewobbler_dj-helper&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=goosewobbler_dj-helper) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=goosewobbler_dj-helper&metric=alert_status)](https://sonarcloud.io/dashboard?id=goosewobbler_dj-helper)  
+[![Github top language](https://img.shields.io/github/languages/top/goosewobbler/dj-helper)](https://typescriptlang.org)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
 # DJ Helper
@@ -56,4 +60,4 @@ The following technologies are used:
 - **[ESLint](https://eslint.org)** (TS & JS linting)
 - **[StyleLint](https://stylelint.io)** (CSS linting)
 
-.
+

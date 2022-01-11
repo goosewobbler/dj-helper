@@ -13,6 +13,7 @@ module.exports = {
     hardenedRuntime: true,
     entitlements: './build/entitlements.mac.plist',
     entitlementsInherit: './build/entitlements.mac.plist',
+    target: [{ target: 'default', arch: 'universal' }],
   },
   win: {
     target: 'nsis',

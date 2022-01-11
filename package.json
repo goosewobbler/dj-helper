@@ -25,7 +25,6 @@
     "build:appimage-x64": "node scripts/build.mjs appimage-x64",
     "build:appimage-arm64": "node scripts/build.mjs appimage-arm64",
     "build:windows": "node scripts/build.mjs windows",
-    "build:write-checksums": "node scripts/write-checksums.mjs",
     "build:dir": "pnpm clean:build && pnpm bundle && electron-builder --dir",
     "bundle": "concurrently 'pnpm bundle:main' 'pnpm bundle:preload' 'pnpm bundle:renderer'",
     "bundle:main": "cross-env NODE_ENV=production webpack --config ./webpack/main.config.js --color",

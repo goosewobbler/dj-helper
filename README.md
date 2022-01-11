@@ -55,3 +55,5 @@ The following technologies are used:
 - **[Prettier](https://prettier.io)** (Code formatting)
 - **[ESLint](https://eslint.org)** (TS & JS linting)
 - **[StyleLint](https://stylelint.io)** (CSS linting)
+
+.

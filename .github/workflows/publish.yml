@@ -34,6 +34,6 @@ jobs:
         with:
           version: 6.25.1
           run_install: true
+      - run: pnpm build:all
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: pnpm build:all

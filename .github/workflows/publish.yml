@@ -1,11 +1,12 @@
 name: Publish
 
 on:
+  push:
+    tags: v[0-9]+.[0-9]+.[0-9]+
+    branches: master
   pull_request:
-    branches:
-      - master
-    types:
-      - closed
+    branches: master
+    types: closed
 
 jobs:
   publish:

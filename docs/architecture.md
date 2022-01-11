@@ -4,9 +4,11 @@ This application is comprised of the following root directory structure:
 
 ```
 .vscode/
+build/
 bundle/
 dist/
 docs/
+scripts/
 src/
 static/
 test/
@@ -19,6 +21,10 @@ webpack/
 
 A configuration directory for the VSCode editor.
 
+#### build/
+
+Assets for `electron-builder` to be used in creating packages for different OS targets.
+
 #### bundle/
 
 This directory is (re)created at build time - all bundled files and everything the app needs to run ends up in here.
@@ -30,6 +36,10 @@ This directory is (re)created at build time - all fully built packages for publi
 #### docs/
 
 The home for documentation pages such as this one.
+
+#### scripts/
+
+Scripts for build, release, publish.
 
 #### src/
 
@@ -44,11 +54,11 @@ All files that comprise the application source. The source is split up into the 
 
 #### static/
 
-Static files such as fonts and images.
+Static files such as images.
 
 #### test/
 
-Contains [Jest](https://jestjs.io/) unit tests and [Spectron](https://electronjs.org/spectron) integration tests.
+Contains [Jest](https://jestjs.io/) unit / component integration tests and [WDIO](https://webdriver.io) end to end tests.
 
 #### types/
 
@@ -60,4 +70,4 @@ The webpack build configuration, split across two files for each process and one
 
 #### ...configuration files
 
-The rest of the things in the root directory are configuration files for ESLint, Git, Prettier, StyleLint, Jest, PNPM, PostCSS, TailwindCSS, and TypeScript.
+The rest of the things in the root directory are configuration files for ESLint, Git, Prettier, StyleLint, Jest, PNPM, PostCSS, TailwindCSS, Electron Builder and TypeScript.

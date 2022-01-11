@@ -1,7 +1,7 @@
 {
   "name": "dj-helper",
   "description": "A tool for constructing DJ sets",
-  "version": "0.2.0",
+  "version": "0.1.1",
   "author": "Sam Maister <goosewobbler@protonmail.com>",
   "license": "AGPL-3.0-or-later",
   "main": "./bundle/main.prod.js",

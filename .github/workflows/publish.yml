@@ -10,7 +10,7 @@ on:
 
 jobs:
   publish:
-    if: ${{ github.event.pull_request.merged }} && startsWith( github.ref, 'refs/tags/v')
+    if: github.event.pull_request.merged && startsWith( github.ref, 'refs/tags/v')
     runs-on: mac-latest
     strategy:
       matrix:

@@ -17,7 +17,11 @@ The problem is that the places for acquiring new digital music are online and to
 
 This problem will be made a lot easier if the gaps between local library, DJ software and online streaming / download platforms can be bridged in some way.
 
-## Setup
+## Installation
+
+See the current [Releases](https://github.com/goosewobbler/dj-helper/releases) for working builds to download and install.
+
+## Development
 
 [PNPM](https://pnpm.io) is the recommended package manager for use with this app, though others will likely work. The following command will initialise the repository for development:
 
@@ -25,9 +29,7 @@ This problem will be made a lot easier if the gaps between local library, DJ sof
 pnpm i
 ```
 
-## Development
-
-Start the development server:
+To start the development server:
 
 ```
 pnpm dev
@@ -49,6 +51,7 @@ The following technologies are used:
 - **[TailwindCSS](https://tailwindcss.com)** (Styling)
 - **[Jest](https://jestjs.io)** (Unit Testing)
 - **[Testing Library](https://testing-library.com)** (Unit Testing)
+- **[WebdriverIO](https://webdriver.io)** (End to End Testing)
 - **[Prettier](https://prettier.io)** (Code formatting)
 - **[ESLint](https://eslint.org)** (TS & JS linting)
 - **[StyleLint](https://stylelint.io)** (CSS linting)

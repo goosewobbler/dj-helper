@@ -86,6 +86,14 @@ export const getNextTrackOnMetaPanel =
     return panelTracks[currentTrackIndex + 1];
   };
 
+export const getPreviousTrackOnMetaPanel =
+  ({ id, currentTrackId }: { id: number; currentTrackId: number }) =>
+  (state: AppState): Track['id'] => {
+    const panelTracks = (state.browsers.find((browser) => browser.id === id) as Browser).tracks;
+    const currentTrackIndex = panelTracks.findIndex((track) => track === currentTrackId);
+    return panelTracks[currentTrackIndex - 1];
+  };
+
 export const browsersReducer = slice.reducer;
 
 export const reducers = slice.caseReducers;

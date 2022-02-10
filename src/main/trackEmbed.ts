@@ -21,7 +21,7 @@ export function initEmbed(mainWindow: BrowserWindow, reduxStore: AppStore): void
     const embedHeight = embedSize === TrackPreviewEmbedSize.Medium ? 120 : 42;
     const embedWidth = 500;
     embed.setBounds({
-      x: 10,
+      x: 48,
       y: height - embedHeight - (platform() === 'win32' ? 50 : 33),
       width: embedWidth,
       height: embedHeight,

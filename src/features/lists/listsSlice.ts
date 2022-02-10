@@ -108,6 +108,14 @@ export const getNextTrackOnList =
     return listTracks[currentTrackIndex + 1];
   };
 
+export const getPreviousTrackOnList =
+  ({ id, currentTrackId }: { id: number; currentTrackId: number }) =>
+  (state: AppState): Track['id'] => {
+    const listTracks = (state.lists.find((list) => list.id === id) as List).tracks;
+    const currentTrackIndex = listTracks.findIndex((track) => track === currentTrackId);
+    return listTracks[currentTrackIndex - 1];
+  };
+
 export const listsReducer = slice.reducer;
 
 export const reducers = slice.caseReducers;

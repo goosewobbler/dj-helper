@@ -35,9 +35,9 @@ export const slice = createSlice({
       const existingBrowsers = state.map((browser) => ({ ...browser, active: false }));
       return [...existingBrowsers, newBrowser];
     },
-    updatePageUrl: (state, { payload: { id, url } }: { payload: { id: number; url: string } }) =>
+    navigationStarted: (state, { payload: { id, url } }: { payload: { id: number; url: string } }) =>
       state.map((browser) => (browser.id === id ? { ...browser, url, title: 'Loading...', loading: true } : browser)),
-    loadedPageUrl: (state, { payload: { id, url } }: { payload: { id: number; url: string } }) =>
+    navigationCompleted: (state, { payload: { id, url } }: { payload: { id: number; url: string } }) =>
       state.map((browser) => (browser.id === id ? { ...browser, url, loading: false } : browser)),
     updatePageTitle: (state, { payload: { id, title } }: { payload: { id: number; title: string } }) =>
       state.map((browser) => (browser.id === id ? { ...browser, title } : browser)),
@@ -57,8 +57,8 @@ export const slice = createSlice({
 
 export const {
   createBrowser,
-  updatePageUrl,
-  loadedPageUrl,
+  navigationStarted,
+  navigationCompleted,
   updatePageTitle,
   addTrack,
   clearTracks,
@@ -76,7 +76,7 @@ export const selectBrowserById =
 export const selectActiveBrowser =
   () =>
   (state: AppState): Browser =>
-    state.browsers.find((browser) => browser.active === true) as Browser;
+    (state.browsers.find((browser) => browser.active === true) as Browser) || state.browsers[0];
 
 export const getNextTrackOnMetaPanel =
   ({ id, currentTrackId }: { id: number; currentTrackId: number }) =>

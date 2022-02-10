@@ -5,10 +5,10 @@ import {
   addTrack,
   clearTracks,
   createBrowser,
-  loadedPageUrl,
   selectActiveBrowser,
   updatePageTitle,
-  updatePageUrl,
+  navigationStarted,
+  navigationCompleted,
 } from '../features/browsers/browsersSlice';
 import { foundBandcampCollectionUrl } from '../features/ui/uiSlice';
 import { BandCurrency, BandData, parseBandcampPageData, TralbumCollectInfo, TralbumData } from './helpers/bandcamp';
@@ -103,18 +103,18 @@ function initBrowserView(reduxStore: AppStore, browser: Browser) {
     log('will-navigate', url);
     event.preventDefault();
     const payload = { id: browser.id, url: sanitiseUrl(url) };
-    dispatch(updatePageUrl(payload));
+    dispatch(navigationStarted(payload));
   });
 
   view.webContents.on('did-navigate-in-page', (event, url) => {
     const payload = { id: browser.id, url: sanitiseUrl(url) };
-    dispatch(updatePageUrl(payload));
+    dispatch(navigationCompleted(payload));
   });
 
   view.webContents.on('did-finish-load', () => {
     const loadedUrl = view.webContents.getURL();
     const payload = { id: browser.id, url: loadedUrl };
-    dispatch(loadedPageUrl(payload));
+    dispatch(navigationCompleted(payload));
     currentlyNavigating = false;
     log('loaded url', loadedUrl);
 

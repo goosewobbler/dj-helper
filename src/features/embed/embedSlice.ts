@@ -221,6 +221,7 @@ export const selectPreviousTrack = (state: AppState): Track['id'] | undefined =>
       id: loadContext?.contextId as number,
       currentTrackId: trackId as number,
     };
+    console.log('prevTrackSelector', loadContext?.contextType);
     const previousTrackSelector =
       loadContext?.contextType === LoadContextType.Browser
         ? getPreviousTrackOnMetaPanel(params)

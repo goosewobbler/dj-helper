@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd';
-import { XYCoord } from 'dnd-core';
+import { XYCoord, Identifier } from 'dnd-core';
 import { selectTrackById } from './tracksSlice';
 import { LoadContext, Track } from '../../common/types';
 import { removeTrackFromSelectedList } from '../lists/listsSlice';
@@ -35,7 +35,7 @@ export function ListTrack({
       isDragging: monitor.isDragging(),
     }),
   });
-  const [{ handlerId }, drop] = useDrop({
+  const [{ handlerId }, drop] = useDrop<DragItem, void, { handlerId: Identifier | null }>({
     accept: 'track',
     collect(monitor) {
       return {

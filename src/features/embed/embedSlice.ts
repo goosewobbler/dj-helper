@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { AppState, Embed, Track, EmbedStatus, LoadContextType, AppThunk, Dispatch } from '../../common/types';
 import { log } from '../../main/helpers/console';
-import { getNextTrackOnMetaPanel } from '../browsers/browsersSlice';
-import { getNextTrackOnList } from '../lists/listsSlice';
+import { getNextTrackOnMetaPanel, getPreviousTrackOnMetaPanel } from '../browsers/browsersSlice';
+import { getNextTrackOnList, getPreviousTrackOnList } from '../lists/listsSlice';
 
 const initialState = {
   status: EmbedStatus.Idle,
@@ -177,38 +177,6 @@ export const resizeEmbed = (): AppThunk => async (dispatch, getState) => {
   }
 };
 
-export const loadAndPlayNextTrack = (): AppThunk => (dispatch, getState) => {
-  const state = getState();
-  const { loadContext, trackId } = state.embed;
-  const nextTrackFromContextSelector = () => {
-    const params = {
-      id: loadContext?.contextId as number,
-      currentTrackId: trackId as number,
-    };
-    const nextTrackSelector =
-      loadContext?.contextType === LoadContextType.Browser
-        ? getNextTrackOnMetaPanel(params)
-        : getNextTrackOnList(params);
-    return nextTrackSelector(state);
-  };
-
-  if (loadContext && loadContext.contextId !== undefined) {
-    const nextTrackId = nextTrackFromContextSelector();
-    if (nextTrackId) {
-      dispatch(loadAndPlayTrack({ trackId: nextTrackId, context: loadContext }));
-    }
-  }
-};
-
-export const handleAutoplay = (): AppThunk => (dispatch, getState) => {
-  const state = getState();
-  const { trackId, autoplayEnabled } = state.embed;
-  log('handleAutoplay', autoplayEnabled, trackId);
-  if (autoplayEnabled && trackId) {
-    dispatch(loadAndPlayNextTrack());
-  }
-};
-
 export const handleInit = (): AppThunk => async (dispatch, getState) => {
   const { trackId, loadContext, status } = getState().embed;
   log('handleInit', trackId);
@@ -224,6 +192,76 @@ export const selectTrackByEmbedLoaded =
   () =>
   (state: AppState): Track =>
     state.tracks.find((track) => track.id === state.embed.trackId) as Track;
+
+export const selectNextTrack = (state: AppState): Track['id'] | undefined => {
+  const { loadContext, trackId } = state.embed;
+  const nextTrackFromContextSelector = () => {
+    const params = {
+      id: loadContext?.contextId as number,
+      currentTrackId: trackId as number,
+    };
+    const nextTrackSelector =
+      loadContext?.contextType === LoadContextType.Browser
+        ? getNextTrackOnMetaPanel(params)
+        : getNextTrackOnList(params);
+    return nextTrackSelector(state);
+  };
+
+  if (loadContext && loadContext.contextId !== undefined) {
+    return nextTrackFromContextSelector();
+  }
+
+  return undefined;
+};
+
+export const selectPreviousTrack = (state: AppState): Track['id'] | undefined => {
+  const { loadContext, trackId } = state.embed;
+  const previousTrackFromContextSelector = () => {
+    const params = {
+      id: loadContext?.contextId as number,
+      currentTrackId: trackId as number,
+    };
+    const previousTrackSelector =
+      loadContext?.contextType === LoadContextType.Browser
+        ? getPreviousTrackOnMetaPanel(params)
+        : getPreviousTrackOnList(params);
+    return previousTrackSelector(state);
+  };
+
+  if (loadContext && loadContext.contextId !== undefined) {
+    return previousTrackFromContextSelector();
+  }
+
+  return undefined;
+};
+
+export const loadAndPlayNextTrack = (): AppThunk => (dispatch, getState) => {
+  const state = getState();
+  const nextTrackId = selectNextTrack(state);
+
+  if (nextTrackId) {
+    dispatch(loadAndPlayTrack({ trackId: nextTrackId, context: state.embed.loadContext }));
+  }
+};
+
+export const loadAndPlayPreviousTrack = (): AppThunk => (dispatch, getState) => {
+  const state = getState();
+  const previousTrackId = selectPreviousTrack(state);
+
+  if (previousTrackId) {
+    dispatch(loadAndPlayTrack({ trackId: previousTrackId, context: state.embed.loadContext }));
+  }
+};
+
+export const handleAutoplay = (): AppThunk => (dispatch, getState) => {
+  const state = getState();
+  const { trackId, autoplayEnabled } = state.embed;
+  log('handleAutoplay', autoplayEnabled, trackId);
+  if (autoplayEnabled && trackId) {
+    // get next track
+    dispatch(loadAndPlayNextTrack());
+  }
+};
 
 export const selectAutoplayEnabled = (state: AppState): boolean => state.embed.autoplayEnabled;
 

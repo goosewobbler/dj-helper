@@ -106,6 +106,11 @@ function initBrowserView(reduxStore: AppStore, browser: Browser) {
     dispatch(updatePageUrl(payload));
   });
 
+  view.webContents.on('did-navigate-in-page', (event, url) => {
+    const payload = { id: browser.id, url: sanitiseUrl(url) };
+    dispatch(updatePageUrl(payload));
+  });
+
   view.webContents.on('did-finish-load', () => {
     const loadedUrl = view.webContents.getURL();
     const payload = { id: browser.id, url: loadedUrl };

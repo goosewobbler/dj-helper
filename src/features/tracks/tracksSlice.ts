@@ -33,7 +33,7 @@ function getUpdatedTrackSources(
   priceCurrency: TrackSource['priceCurrency'],
 ) {
   const trackSourceDupeIndex = getTrackSourceDuplicate(trackToUpdate, url);
-  if (trackSourceDupeIndex) {
+  if (trackSourceDupeIndex > -1) {
     // update price
     return trackToUpdate.sources.map((source, index) =>
       index === trackSourceDupeIndex ? { ...source, sourceId, price, priceCurrency } : source,

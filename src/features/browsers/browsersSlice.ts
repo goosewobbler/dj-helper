@@ -80,18 +80,24 @@ export const selectActiveBrowser =
 
 export const getNextTrackOnMetaPanel =
   ({ id, currentTrackId }: { id: number; currentTrackId: number }) =>
-  (state: AppState): Track['id'] => {
-    const panelTracks = (state.browsers.find((browser) => browser.id === id) as Browser).tracks;
-    const currentTrackIndex = panelTracks.findIndex((track) => track === currentTrackId);
-    return panelTracks[currentTrackIndex + 1];
+  (state: AppState): Track['id'] | undefined => {
+    const browser = state.browsers.find((stateBrowser) => stateBrowser.id === id) as Browser;
+    if (!browser) {
+      return undefined;
+    }
+    const currentTrackIndex = browser.tracks.findIndex((track) => track === currentTrackId);
+    return browser.tracks[currentTrackIndex + 1];
   };
 
 export const getPreviousTrackOnMetaPanel =
   ({ id, currentTrackId }: { id: number; currentTrackId: number }) =>
-  (state: AppState): Track['id'] => {
-    const panelTracks = (state.browsers.find((browser) => browser.id === id) as Browser).tracks;
-    const currentTrackIndex = panelTracks.findIndex((track) => track === currentTrackId);
-    return panelTracks[currentTrackIndex - 1];
+  (state: AppState): Track['id'] | undefined => {
+    const browser = state.browsers.find((stateBrowser) => stateBrowser.id === id) as Browser;
+    if (!browser) {
+      return undefined;
+    }
+    const currentTrackIndex = browser.tracks.findIndex((track) => track === currentTrackId);
+    return browser.tracks[currentTrackIndex - 1];
   };
 
 export const browsersReducer = slice.reducer;

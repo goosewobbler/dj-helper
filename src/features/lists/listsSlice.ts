@@ -102,16 +102,24 @@ export const trackIsOnSelectedList =
 
 export const getNextTrackOnList =
   ({ id, currentTrackId }: { id: number; currentTrackId: number }) =>
-  (state: AppState): Track['id'] => {
-    const listTracks = (state.lists.find((list) => list.id === id) as List).tracks;
-    const currentTrackIndex = listTracks.findIndex((track) => track === currentTrackId);
+  (state: AppState): Track['id'] | undefined => {
+    const list = state.lists.find((stateList) => stateList.id === id) as List;
+    const listTracks = (state.lists.find((stateList) => stateList.id === id) as List).tracks;
+    if (!list) {
+      return undefined;
+    }
+    const currentTrackIndex = list.tracks.findIndex((track) => track === currentTrackId);
     return listTracks[currentTrackIndex + 1];
   };
 
 export const getPreviousTrackOnList =
   ({ id, currentTrackId }: { id: number; currentTrackId: number }) =>
-  (state: AppState): Track['id'] => {
-    const listTracks = (state.lists.find((list) => list.id === id) as List).tracks;
+  (state: AppState): Track['id'] | undefined => {
+    const list = state.lists.find((stateList) => stateList.id === id) as List;
+    const listTracks = (state.lists.find((stateList) => stateList.id === id) as List).tracks;
+    if (!list) {
+      return undefined;
+    }
     const currentTrackIndex = listTracks.findIndex((track) => track === currentTrackId);
     return listTracks[currentTrackIndex - 1];
   };

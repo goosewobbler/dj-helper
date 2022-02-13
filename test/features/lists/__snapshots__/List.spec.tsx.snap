@@ -98,7 +98,7 @@ exports[`List when the edit button is clicked and a valid title is entered shoul
     id="list-546"
   >
     <div
-      class="accordion transition text-base duration-500 ease-in-out outline-none border-none items-center group-list-hover:bg-green-400 bg-green-200 text-gray-700 flex cursor-pointer p-4 font-black"
+      class="accordion transition text-base duration-500 ease-in-out outline-none border-none items-center group-list-hover:bg-green-400 bg-green-200 text-gray-700 flex cursor-pointer p-4 font-normal"
       role="menuitem"
       tabindex="0"
     >
@@ -151,7 +151,7 @@ exports[`List when the edit button is clicked and a valid title is entered shoul
         </svg>
       </button>
       <svg
-        class="accordion-icon ml-auto transition-transform duration-500 ease-in-out transform rotate-90"
+        class="accordion-icon ml-auto transition-transform duration-500 ease-in-out "
         height="20"
         viewBox="0 0 20 20"
         width="20"
@@ -182,7 +182,7 @@ exports[`List when the edit button is clicked and an invalid (empty) title is en
     id="list-546"
   >
     <div
-      class="accordion transition text-base duration-500 ease-in-out outline-none border-none items-center group-list-hover:bg-green-400 bg-green-200 text-gray-700 flex cursor-pointer p-4 font-black"
+      class="accordion transition text-base duration-500 ease-in-out outline-none border-none items-center group-list-hover:bg-green-400 bg-green-200 text-gray-700 flex cursor-pointer p-4 font-normal"
       role="menuitem"
       tabindex="0"
     >
@@ -241,7 +241,7 @@ exports[`List when the edit button is clicked and an invalid (empty) title is en
         </label>
       </span>
       <svg
-        class="accordion-icon ml-auto transition-transform duration-500 ease-in-out transform rotate-90"
+        class="accordion-icon ml-auto transition-transform duration-500 ease-in-out "
         height="20"
         viewBox="0 0 20 20"
         width="20"
@@ -272,7 +272,7 @@ exports[`List when the edit button is clicked and the edit is cancelled by press
     id="list-546"
   >
     <div
-      class="accordion transition text-base duration-500 ease-in-out outline-none border-none items-center group-list-hover:bg-green-400 bg-green-200 text-gray-700 flex cursor-pointer p-4 font-black"
+      class="accordion transition text-base duration-500 ease-in-out outline-none border-none items-center group-list-hover:bg-green-400 bg-green-200 text-gray-700 flex cursor-pointer p-4 font-normal"
       role="menuitem"
       tabindex="0"
     >
@@ -325,7 +325,7 @@ exports[`List when the edit button is clicked and the edit is cancelled by press
         </svg>
       </button>
       <svg
-        class="accordion-icon ml-auto transition-transform duration-500 ease-in-out transform rotate-90"
+        class="accordion-icon ml-auto transition-transform duration-500 ease-in-out "
         height="20"
         viewBox="0 0 20 20"
         width="20"

@@ -1,4 +1,4 @@
-import { reducers, trackIsOnSelectedList, getNextTrackOnList } from '../../../src/features/lists/listsSlice';
+import { reducers, trackIsOnActiveList, getNextTrackOnList } from '../../../src/features/lists/listsSlice';
 import { mockState } from '../../helpers/mockState';
 
 const {
@@ -8,8 +8,8 @@ const {
   editList,
   finishEditList,
   revertEditList,
-  addTrackToSelectedList,
-  removeTrackFromSelectedList,
+  addTrackToActiveList,
+  removeTrackFromActiveList,
 } = reducers;
 
 function getState(activeListIndex: number) {
@@ -155,7 +155,7 @@ describe('listsSlice', () => {
 
   describe('addTrackToSelectedList', () => {
     it('should add a track to the selected list', () => {
-      const lists = addTrackToSelectedList(
+      const lists = addTrackToActiveList(
         [
           { id: 0, title: 'first list', active: true, tracks: [0, 1, 2] },
           { id: 1, title: 'second list', tracks: [] },
@@ -173,7 +173,7 @@ describe('listsSlice', () => {
 
   describe('removeTrackFromSelectedList', () => {
     it('should add a track to the selected list', () => {
-      const lists = removeTrackFromSelectedList(
+      const lists = removeTrackFromActiveList(
         [
           { id: 0, title: 'first list', active: true, tracks: [0, 1, 2] },
           { id: 1, title: 'second list', tracks: [] },
@@ -192,13 +192,13 @@ describe('listsSlice', () => {
   describe('selectors', () => {
     describe('trackIsOnSelectedList', () => {
       it('should return true when a track is on the selected list', () => {
-        const isOnListSelector = trackIsOnSelectedList({ trackId: 2 });
+        const isOnListSelector = trackIsOnActiveList({ trackId: 2 });
         const isOnList = isOnListSelector(getState(0));
         expect(isOnList).toEqual(true);
       });
 
       it('should return false when a track is not on the selected list', () => {
-        const isOnListSelector = trackIsOnSelectedList({ trackId: 5 });
+        const isOnListSelector = trackIsOnActiveList({ trackId: 5 });
         const isOnList = isOnListSelector(getState(1));
         expect(isOnList).toEqual(false);
       });

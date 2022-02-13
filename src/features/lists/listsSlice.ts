@@ -64,11 +64,11 @@ export const slice = createSlice({
           ? { ...list, editing: undefined, title: list.oldTitle ?? initialListTitle, oldTitle: undefined }
           : list,
       ),
-    selectList: (state, { payload: { id } }: { payload: { id: number } }) =>
-      state.map((list) => (list.id === id ? { ...list, active: true } : { ...list, active: false })),
-    addTrackToSelectedList: (state, { payload: { trackId } }: { payload: { trackId: number } }) =>
+    toggleListActive: (state, { payload: { id } }: { payload: { id: number } }) =>
+      state.map((list) => (list.id === id ? { ...list, active: !list.active } : { ...list, active: false })),
+    addTrackToActiveList: (state, { payload: { trackId } }: { payload: { trackId: number } }) =>
       state.map((list) => (list.active ? { ...list, tracks: [...list.tracks, trackId] } : list)),
-    removeTrackFromSelectedList: (state, { payload: { trackId } }: { payload: { trackId: number } }) =>
+    removeTrackFromActiveList: (state, { payload: { trackId } }: { payload: { trackId: number } }) =>
       state.map((list) => (list.active ? { ...list, tracks: list.tracks.filter((track) => track !== trackId) } : list)),
     moveTrackToIndex: (state, { payload: { trackId, newIndex } }: { payload: { trackId: number; newIndex: number } }) =>
       state.map((list) => (list.active ? { ...list, tracks: reorderTracks(list.tracks, trackId, newIndex) } : list)),
@@ -82,20 +82,22 @@ export const {
   editList,
   revertEditList,
   finishEditList,
-  selectList,
-  addTrackToSelectedList,
-  removeTrackFromSelectedList,
+  toggleListActive,
+  addTrackToActiveList,
+  removeTrackFromActiveList,
   moveTrackToIndex,
 } = slice.actions;
 
 export const selectLists = (state: AppState): List[] => state.lists;
+
+export const selectActiveList = (state: AppState): List | undefined => state.lists.find((list) => list.active);
 
 export const selectListById =
   (id: number) =>
   (state: AppState): List =>
     state.lists.find((list) => list.id === id) as List;
 
-export const trackIsOnSelectedList =
+export const trackIsOnActiveList =
   ({ trackId }: { trackId: number }) =>
   (state: AppState): boolean =>
     (state.lists.find((list) => list.active) as List)?.tracks.some((track) => track === trackId);

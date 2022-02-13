@@ -7,7 +7,7 @@ import {
   finishEditList,
   moveTrackToIndex,
   revertEditList,
-  selectList,
+  toggleListActive,
   selectListById,
   updateListTitle,
 } from './listsSlice';
@@ -68,7 +68,7 @@ export function List({ id }: { id: number }): ReactElement {
   const chevronAdditionalClassNames = active ? chevronAdditionalClassNamesWhenActive : '';
 
   function toggleAccordion() {
-    dispatch(selectList({ id }));
+    dispatch(toggleListActive({ id }));
   }
 
   return (

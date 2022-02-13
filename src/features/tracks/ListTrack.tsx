@@ -3,7 +3,7 @@ import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd';
 import { XYCoord, Identifier } from 'dnd-core';
 import { selectTrackById } from './tracksSlice';
 import { LoadContext, Track } from '../../common/types';
-import { removeTrackFromSelectedList } from '../lists/listsSlice';
+import { removeTrackFromActiveList } from '../lists/listsSlice';
 import { CrossIcon } from '../../icons/CrossIcon';
 import { BaseTrack } from './BaseTrack';
 import { useAppDispatch, useAppSelector } from '../../common/hooks';
@@ -109,7 +109,7 @@ export function ListTrack({
           <button
             type="button"
             onClick={() => {
-              dispatch(removeTrackFromSelectedList({ trackId: id }));
+              dispatch(removeTrackFromActiveList({ trackId: id }));
             }}
           >
             <CrossIcon className="cross-icon" />

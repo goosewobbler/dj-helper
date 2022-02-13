@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax, no-await-in-loop */
 import { spawn } from 'child_process';
 import { isCI } from 'ci-info';
 
@@ -26,7 +27,9 @@ const availableTargets = [
 const allTargets = [appimage, mac, windows];
 
 function delay(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
 }
 
 function runCommand(fullCommand, extraEnv = {}) {
@@ -95,6 +98,7 @@ async function build(target) {
     case windowsX64:
       await runBuildCommands('--windows --x64');
       break;
+    default:
   }
 }
 
@@ -103,13 +107,15 @@ async function build(target) {
     const target = process.argv[2];
     if (target === 'all') {
       await runCommand('pnpm clean:build');
+
       for (const targetToBuild of allTargets) {
         await build(targetToBuild);
         await runCommand('pnpm clean:bundle');
         await delay(1000);
       }
       return;
-    } else if (!target) {
+    }
+    if (!target) {
       throw Error(`No target specified. Available targets: ${[...availableTargets, 'all'].join(', ')}`);
     } else if (!availableTargets.includes(target)) {
       throw Error(`Unknown target '${target}'. Available targets: ${[...availableTargets, 'all'].join(', ')}`);

@@ -4,9 +4,12 @@ import offlineConfig from '@redux-offline/redux-offline/lib/defaults';
 import ElectronStore from 'electron-store';
 import { rootReducer, storeHydrated } from '../features/rootReducer';
 import { AnyObject, AppStore } from './types';
+import { log } from '../main/helpers/console';
 
 function createElectronStorage() {
   const store = new ElectronStore({});
+
+  log(`loading config from ${store.path}...`);
 
   return {
     getItem: (key: string) => Promise.resolve(store.get(key)),

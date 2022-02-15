@@ -27,7 +27,7 @@ export function BaseTrack({
   const dispatch = useAppDispatch();
   const track = useAppSelector(selectTrackById(id));
   const isPlaying = useAppSelector(trackIsPlaying({ trackId: id }));
-  const showSpinner = useAppSelector(embedRequestInFlight());
+  const showSpinner = useAppSelector(embedRequestInFlight({ trackId: id }));
 
   if (!track) {
     return <> </>;
@@ -41,8 +41,8 @@ export function BaseTrack({
       <span className="inline-block w-6/12 overflow-hidden whitespace-nowrap overflow-ellipsis">{title}</span>
       <span className="inline-block w-1/12 overflow-hidden whitespace-nowrap">{displayTrackDuration(duration)}</span>
       <span className="relative inline-block w-2/12 font-serif align-middle opacity-0 bottom-1 group-track-hover:opacity-100">
-        <span className="mx-2">{additionalButtons}</span>
-        <span className="float-left">
+        <span className="">{additionalButtons}</span>
+        <span className="float-left mx-2">
           <PlayPauseButton
             isPlaying={isPlaying}
             showSpinner={showSpinner}

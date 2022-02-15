@@ -31,6 +31,7 @@ export const slice = createSlice({
         case EmbedStatus.Loaded:
         case EmbedStatus.Idle:
         case EmbedStatus.Paused:
+        case EmbedStatus.PlayRequested:
         case EmbedStatus.Playing:
           return { ...state, trackId, loadContext: context, status: EmbedStatus.LoadRequested };
         default:
@@ -75,6 +76,22 @@ export const slice = createSlice({
 
       return state;
     },
+    mediaPlaybackError: (state) => {
+      log('media playback error');
+      if ([EmbedStatus.PauseRequested, EmbedStatus.PlayRequested, EmbedStatus.Playing].includes(state.status)) {
+        return { ...state, status: EmbedStatus.Loaded };
+      }
+
+      return state;
+    },
+    mediaLoadError: (state) => {
+      log('media load error');
+      if ([EmbedStatus.LoadRequested].includes(state.status)) {
+        return { ...state, status: EmbedStatus.Idle };
+      }
+
+      return state;
+    },
     autoplayEnabledToggled: (state, { payload: autoplayEnabled }: { payload: Embed['autoplayEnabled'] }) => ({
       ...state,
       autoplayEnabled,
@@ -90,6 +107,8 @@ export const {
   mediaPlaying,
   requestPause,
   mediaPaused,
+  mediaLoadError,
+  mediaPlaybackError,
   autoplayEnabledToggled,
   reset,
 } = slice.actions;
@@ -281,10 +300,13 @@ export const trackIsLoaded =
     embed.trackId === trackId;
 
 export const embedRequestInFlight =
-  () =>
+  ({ trackId }: { trackId: Track['id'] }) =>
   ({ embed }: AppState): boolean => {
     log('embedRequestInFlight', embed);
-    return [EmbedStatus.LoadRequested, EmbedStatus.PauseRequested, EmbedStatus.PlayRequested].includes(embed.status);
+    return (
+      [EmbedStatus.LoadRequested, EmbedStatus.PauseRequested, EmbedStatus.PlayRequested].includes(embed.status) &&
+      embed.trackId === trackId
+    );
   };
 
 export const embedReducer = slice.reducer;

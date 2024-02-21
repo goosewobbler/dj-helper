@@ -262,9 +262,6 @@ devDependencies:
   stylelint:
     specifier: ^16.2.1
     version: 16.2.1(typescript@5.3.3)
-  stylelint-config-prettier:
-    specifier: ^9.0.5
-    version: 9.0.5(stylelint@16.2.1)
   stylelint-config-standard:
     specifier: ^36.0.0
     version: 36.0.0(stylelint@16.2.1)
@@ -11367,16 +11364,6 @@ packages:
       browserslist: 4.23.0
       postcss: 8.4.35
       postcss-selector-parser: 6.0.15
-    dev: true
-
-  /stylelint-config-prettier@9.0.5(stylelint@16.2.1):
-    resolution: {integrity: sha512-U44lELgLZhbAD/xy/vncZ2Pq8sh2TnpiPvo38Ifg9+zeioR+LAkHu0i6YORIOxFafZoVg0xqQwex6e6F25S5XA==}
-    engines: {node: '>= 12'}
-    hasBin: true
-    peerDependencies:
-      stylelint: '>= 11.x < 15'
-    dependencies:
-      stylelint: 16.2.1(typescript@5.3.3)
     dev: true
 
   /stylelint-config-recommended@14.0.0(stylelint@16.2.1):

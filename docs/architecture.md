@@ -58,7 +58,7 @@ Static files such as images.
 
 #### test/
 
-Contains [Jest](https://jestjs.io/) unit / component integration tests and [WDIO](https://webdriver.io) end to end tests.
+Contains [Vitest](https://vitest.dev/) unit / component integration tests and [WDIO](https://webdriver.io) end to end tests.
 
 #### types/
 
@@ -70,4 +70,4 @@ The webpack build configuration, split across two files for each process and one
 
 #### ...configuration files
 
-The rest of the things in the root directory are configuration files for ESLint, Git, Prettier, StyleLint, Jest, PNPM, PostCSS, TailwindCSS, Electron Builder and TypeScript.
+The rest of the things in the root directory are configuration files for ESLint, Git, Prettier, StyleLint, Vitest, PNPM, PostCSS, TailwindCSS, Electron Builder and TypeScript.

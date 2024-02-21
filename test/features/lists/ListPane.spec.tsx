@@ -1,5 +1,6 @@
-/* eslint-disable testing-library/no-render-in-setup */
 import * as React from 'react';
+import { expect, describe, beforeEach, it } from 'vitest';
+
 import { render, screen, RenderResult, userEvent } from '../../helpers/integration';
 import { ListPane } from '../../../src/features/lists/ListPane';
 import { mockState } from '../../helpers/mockState';

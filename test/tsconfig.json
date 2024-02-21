@@ -4,7 +4,7 @@
     "noEmit": true,
     "baseUrl": ".",
     "outDir": "../dist",
-    "types": ["node", "vitest", "@testing-library/react"]
+    "types": ["node", "vitest", "@testing-library/react", "@testing-library/jest-dom"]
   },
-  "include": ["./features/**/*.spec.ts", "./features/**/*.spec.tsx"]
+  "include": ["./features/**/*.spec.ts", "./features/**/*.spec.tsx", "./setup.ts"]
 }

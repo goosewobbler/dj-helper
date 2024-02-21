@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { expect, describe, it } from 'vitest';
+
 import { render, screen, RenderResult, userEvent } from '../../helpers/integration';
 import { List } from '../../../src/features/lists/List';
 import { mockState } from '../../helpers/mockState';

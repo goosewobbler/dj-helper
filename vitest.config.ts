@@ -5,10 +5,11 @@ export default defineConfig({
     include: ['test/features/**/*.spec.ts'],
     exclude: [...configDefaults.exclude],
     environment: 'jsdom',
+    setupFiles: ['test/setup.ts'],
     coverage: {
       enabled: true,
       include: ['src/**/*'],
-      // exclude: [],
+      exclude: [],
       thresholds: {
         lines: 85,
         functions: 85,

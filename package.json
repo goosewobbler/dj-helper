@@ -48,7 +48,7 @@
     "test:unit": "vitest --coverage --watch=false",
     "test:dev": "vitest --coverage",
     "release": "node scripts/create-draft-release.mjs",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "dependencies": {
     "@goosewobbler/electron-redux": "^1.0.4"

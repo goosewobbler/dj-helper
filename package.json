@@ -43,7 +43,7 @@
     "lint:code:fix": "pnpm lint:code --fix",
     "lint:styles": "stylelint --ignore-path .eslintignore '**/*.pcss'",
     "lint:styles:fix": "stylelint --ignore-path .eslintignore '**/*.pcss' --fix",
-    "test": "pnpm test:coverage && pnpm format && pnpm lint",
+    "test": "pnpm test:unit && pnpm format && pnpm lint",
     "test:e2e": "pnpm build:dir && pnpx wdio ./wdio.conf.js",
     "test:unit": "vitest --coverage --watch=false",
     "test:dev": "vitest --coverage",

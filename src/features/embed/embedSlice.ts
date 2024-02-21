@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { AppState, Embed, Track, EmbedStatus, LoadContextType, AppThunk, Dispatch } from '../../common/types';
+import { AppState, Embed, Track, EmbedStatus, LoadContextType, AppThunk } from '../../common/types';
 import { log } from '../../main/helpers/console';
 import { getNextTrackOnMetaPanel, getPreviousTrackOnMetaPanel } from '../browsers/browsersSlice';
 import { getNextTrackOnList, getPreviousTrackOnList } from '../lists/listsSlice';
@@ -114,7 +114,6 @@ export const {
 } = slice.actions;
 
 type ThunkApi = {
-  dispatch: Dispatch;
   state: AppState;
 };
 

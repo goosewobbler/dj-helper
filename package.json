@@ -166,7 +166,7 @@
     "webpack-electron-reload": "^1.0.1"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.9.0"
   },
   "lint-staged": {
     "**/*.{js,ts}": [
@@ -178,6 +178,6 @@
   },
   "browserslist": [
     "electron >= 17",
-    "node >= 18"
+    "node >= 20"
   ]
 }

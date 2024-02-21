@@ -1,6 +1,10 @@
+import url from 'node:url';
+import path from 'node:path';
+
 import plugins from './main.plugins.js';
 import rules from './rules.js';
 
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 const mainRules = rules('main');
 const isDev = process.env.NODE_ENV === 'development';
 

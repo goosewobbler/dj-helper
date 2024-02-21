@@ -1,11 +1,17 @@
 /* eslint no-console: off */
-import { spawn } from 'child_process';
-import { cwd } from 'process';
+import url from 'node:url';
+import path from 'node:path';
+import { spawn } from 'node:child_process';
+import { cwd } from 'node:process';
+
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
+
 import rules from './rules.js';
 import plugins from './renderer.plugins.js';
 
+const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const rendererRules = rules('renderer');
 const isDev = process.env.NODE_ENV === 'development';
 const devServerPort = process.env.PORT || 1212;

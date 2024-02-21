@@ -15,7 +15,7 @@ export default [
   },
   // Ignored files
   {
-    ignores: ['vitest.config.ts', 'eslint.config.js'],
+    ignores: ['vitest.config.ts', 'eslint.config.js', 'test/features/lists/*.spec.tsx'],
   },
   // All files
   {

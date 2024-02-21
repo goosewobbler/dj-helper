@@ -1,9 +1,10 @@
-const plugins = require('./main.plugins');
-const rules = require('./rules')('main');
+import plugins from './main.plugins.js';
+import rules from './rules.js';
 
+const mainRules = rules('main');
 const isDev = process.env.NODE_ENV === 'development';
 
-module.exports = {
+export default {
   context: `${__dirname}/..`,
   mode: process.env.NODE_ENV,
   devtool: isDev ? 'inline-source-map' : 'source-map',
@@ -13,7 +14,7 @@ module.exports = {
     filename: 'preload.js',
   },
   module: {
-    rules,
+    rules: mainRules,
   },
   plugins,
   resolve: {

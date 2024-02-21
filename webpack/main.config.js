@@ -1,9 +1,13 @@
-const plugins = require('./main.plugins');
-const rules = require('./rules')('main');
+import url from 'node:url';
+import path from 'node:path';
+import plugins from './main.plugins.js';
+import rules from './rules.js';
 
+const mainRules = rules('main');
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 const isDev = process.env.NODE_ENV === 'development';
 
-module.exports = {
+export default {
   context: `${__dirname}/..`,
   mode: process.env.NODE_ENV,
   devtool: isDev ? 'inline-source-map' : 'source-map',
@@ -13,7 +17,7 @@ module.exports = {
     filename: `main.${isDev ? 'dev' : 'prod'}.js`,
   },
   module: {
-    rules,
+    rules: mainRules,
   },
   plugins,
   resolve: {

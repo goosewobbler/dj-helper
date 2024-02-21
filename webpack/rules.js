@@ -1,9 +1,9 @@
 const isDev = process.env.NODE_ENV === 'development';
 const envName = isDev ? 'development' : 'production';
 
-const plugins = ['@babel/plugin-proposal-optional-chaining', '@babel/plugin-syntax-dynamic-import'];
+const plugins = ['@babel/plugin-syntax-dynamic-import'];
 
-module.exports = (context) => {
+export default (context) => {
   if (isDev && context === 'renderer') {
     plugins.push('react-refresh/babel');
   }

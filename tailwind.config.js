@@ -1,5 +1,3 @@
-/* eslint-disable global-require */
-
 /**
  * @type {import("./src/common/types").LooseObject}
  */
@@ -54,7 +52,7 @@ const plugins = [
  */
 const content = ['./src/**/*.ts{,x}', './src/index.ejs'];
 
-module.exports = {
+export default {
   content,
   theme,
   plugins,

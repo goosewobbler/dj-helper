@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "CommonJS",
+    "module": "ESNext",
     "moduleResolution": "node",
     "esModuleInterop": true,
     "strict": true,
@@ -9,7 +9,6 @@
     "noImplicitReturns": true,
     "inlineSources": true,
     "sourceMap": true,
-    "importsNotUsedAsValues": "preserve",
     "allowSyntheticDefaultImports": true,
     "newLine": "lf",
     "noEmitOnError": true,
@@ -31,6 +30,7 @@
     "./test/helpers/*.tsx",
     "./types/**/*.ts",
     "src/renderer/preload.js",
-    "test/setup.ts"
+    "test/setup.ts",
+    "wdio.conf.ts"
   ]
 }

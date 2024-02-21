@@ -1,3 +1,5 @@
+import { expect, describe, it } from 'vitest';
+
 import { reducers } from '../../../src/features/browsers/browsersSlice';
 
 const { createBrowser } = reducers;

@@ -1,10 +1,10 @@
-const { ProgressPlugin, ContextReplacementPlugin } = require('webpack');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+import webpack from 'webpack';
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 // const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 // const ElectronReloadPlugin = require('webpack-electron-reload');
 
 const isDev = process.env.NODE_ENV === 'development';
-
+const { ProgressPlugin, ContextReplacementPlugin } = webpack;
 const plugins = [new ProgressPlugin(), new ForkTsCheckerWebpackPlugin()];
 
 if (isDev) {
@@ -29,4 +29,4 @@ if (isDev) {
     ();
 }
 
-module.exports = plugins;
+export default plugins;

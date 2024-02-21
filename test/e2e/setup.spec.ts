@@ -1,5 +1,4 @@
-import { setupBrowser, WebdriverIOBoundFunctions, WebdriverIOQueries } from '@testing-library/webdriverio';
-import { queries } from '@testing-library/dom';
+import { setupBrowser, WebdriverIOQueries } from '@testing-library/webdriverio';
 // import { setOptions } from 'expect-webdriverio';
 
 declare global {
@@ -13,7 +12,7 @@ function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-let screen: WebdriverIOBoundFunctions<typeof queries>;
+let screen: WebdriverIOQueries;
 
 // describe('App', () => {
 //   before(() => {
@@ -42,7 +41,7 @@ describe('lists', () => {
     // const button = await $('.new-list-btn');
     // console.log('yo', await button.getText());
     console.log('btn plz', button);
-    expect(button).toExist();
+    await expect(button).toExist();
   });
 
   describe('when the new list button is clicked', () => {
@@ -51,7 +50,7 @@ describe('lists', () => {
       // const button = app.client.$('.btn-make-bigger');
       await button.click();
       const input = await screen.getByLabelText('List Title');
-      expect(await input.getValue()).toEqual('New List');
+      await expect(await input.getValue()).toEqual('New List');
     });
   });
 });

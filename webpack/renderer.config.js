@@ -1,11 +1,18 @@
 /* eslint no-console: off */
-const { spawn } = require('child_process');
-const { cwd } = require('process');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
-const rules = require('./rules')('renderer');
-const plugins = require('./renderer.plugins');
+import url from 'node:url';
+import path from 'node:path';
+import { spawn } from 'node:child_process';
+import { cwd } from 'node:process';
 
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import TerserPlugin from 'terser-webpack-plugin';
+
+import rules from './rules.js';
+import plugins from './renderer.plugins.js';
+
+const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const rendererRules = rules('renderer');
 const isDev = process.env.NODE_ENV === 'development';
 const devServerPort = process.env.PORT || 1212;
 const publicPath = isDev ? `http://localhost:${devServerPort}/` : '/';
@@ -39,7 +46,7 @@ const startMain = () => {
     .on('error', (spawnError) => console.error(spawnError));
 };
 
-rules.push({
+rendererRules.push({
   test: /\.p*css$/,
   use: [
     {
@@ -58,7 +65,7 @@ rules.push({
   ],
 });
 
-rules.push({
+rendererRules.push({
   test: /\.(png|jpe?g|gif|svg|eot|ttf|woff|woff2)$/i,
   type: 'asset/resource',
 });
@@ -86,7 +93,7 @@ if (!isDev) {
 
 const baseEntry = isDev ? [`webpack-dev-server/client?http://localhost:${devServerPort}/`] : [];
 
-module.exports = {
+export default {
   context: `${__dirname}/../`,
   mode: process.env.NODE_ENV,
   devtool: isDev ? 'inline-source-map' : 'source-map',
@@ -99,7 +106,7 @@ module.exports = {
     filename: `[name].${isDev ? 'dev' : 'prod'}.js`,
   },
   module: {
-    rules,
+    rules: rendererRules,
   },
   cache: {
     type: 'filesystem',

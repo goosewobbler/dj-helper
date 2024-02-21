@@ -24,8 +24,8 @@ const installExtension = async (extension: DevToolsExtension): Promise<string | 
       loadExtensionOptions: { allowFileAccess: true },
     });
     log(`Added Extension: ${installedExtension}`);
-  } catch ({ message }) {
-    logError(message as string);
+  } catch (e: unknown) {
+    logError((e as Error).message);
   }
 };
 

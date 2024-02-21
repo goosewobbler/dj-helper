@@ -53,11 +53,9 @@ The following technologies are used:
 - **[Redux Toolkit](https://redux-toolkit.js.org)** (State management)
 - **[PostCSS](https://postcss.org)** (CSS tooling)
 - **[TailwindCSS](https://tailwindcss.com)** (Styling)
-- **[Jest](https://jestjs.io)** (Unit Testing)
+- **[Vitest](https://vitest.dev)** (Unit Testing)
 - **[Testing Library](https://testing-library.com)** (Unit Testing)
 - **[WebdriverIO](https://webdriver.io)** (End to End Testing)
 - **[Prettier](https://prettier.io)** (Code formatting)
 - **[ESLint](https://eslint.org)** (TS & JS linting)
 - **[StyleLint](https://stylelint.io)** (CSS linting)
-
-

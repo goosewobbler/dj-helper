@@ -41,7 +41,10 @@ export function createReduxStore({
 
     store = configureStore({
       reducer: rootReducer,
-      enhancers,
+      enhancers: (getDefaultEnhancers) =>
+        getDefaultEnhancers({
+          autoBatch: { type: 'tick' },
+        }).concat(enhancers),
     });
 
     if (process.env.NODE_ENV !== 'production' && module.hot) {

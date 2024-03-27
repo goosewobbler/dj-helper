@@ -1,4 +1,4 @@
-import { Response, NetworkSystem } from '../../common/types';
+import { Response, NetworkSystem } from '../../common/types.js';
 
 interface ResponseError extends Error {
   response: Response;

@@ -1,6 +1,7 @@
 import React, { ReactElement, BaseSyntheticEvent, KeyboardEvent, useRef, useCallback } from 'react';
-import { ListTrack } from '../tracks/ListTrack';
-import { ChevronIcon } from '../../icons/ChevronIcon';
+
+import { ListTrack } from '../tracks/ListTrack.js';
+import { ChevronIcon } from '../../icons/ChevronIcon.js';
 import {
   deleteList,
   editList,
@@ -10,19 +11,20 @@ import {
   toggleListActive,
   selectListById,
   updateListTitle,
-} from './listsSlice';
-import { LoadContextType, Track } from '../../common/types';
-import { EditIcon } from '../../icons/EditIcon';
-import { TrashIcon } from '../../icons/TrashIcon';
-import { useAppDispatch, useAppSelector } from '../../common/hooks';
-import { CrossIcon } from '../../icons/CrossIcon';
-import { TickIcon } from '../../icons/TickIcon';
+} from './listsSlice.js';
+import { LoadContextType, Track } from '../../common/types.js';
+import { EditIcon } from '../../icons/EditIcon.js';
+import { TrashIcon } from '../../icons/TrashIcon.js';
+// import { useAppDispatch, useAppSelector } from '../../common/hooks.js';
+import { CrossIcon } from '../../icons/CrossIcon.js';
+import { TickIcon } from '../../icons/TickIcon.js';
+import { useDispatchThunk } from '../../renderer/hooks/useDispatch.js';
 
 const KEY_ENTER = 'Enter';
 const KEY_ESCAPE = 'Escape';
 
 export function List({ id }: { id: number }): ReactElement {
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatchThunk();
   const list = useAppSelector(selectListById(id));
   const content = useRef<HTMLDivElement>(null);
   const moveTrack = useCallback(

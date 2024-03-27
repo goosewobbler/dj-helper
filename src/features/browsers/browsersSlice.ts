@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { AppState, Browser, Track } from '../../common/types';
-import { log } from '../../main/helpers/console';
+
+import { AppState, Browser, Track } from '../../common/types.js';
+import { log } from '../../main/helpers/console.js';
 
 const initialState: Browser[] = [
   {

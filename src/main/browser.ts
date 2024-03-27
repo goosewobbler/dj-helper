@@ -1,6 +1,8 @@
+import { URL } from 'node:url';
+
 import { BrowserView, BrowserWindow, ipcMain } from 'electron';
-import { URL } from 'url';
-import { createTrack, selectTrackBySourceUrl, TrackData } from '../features/tracks/tracksSlice';
+
+import { createTrack, selectTrackBySourceUrl, TrackData } from '../features/tracks/tracksSlice.js';
 import {
   addTrack,
   clearTracks,
@@ -9,11 +11,11 @@ import {
   updatePageTitle,
   navigationStarted,
   navigationCompleted,
-} from '../features/browsers/browsersSlice';
-import { foundBandcampCollectionUrl } from '../features/ui/uiSlice';
-import { BandCurrency, BandData, parseBandcampPageData, TralbumCollectInfo, TralbumData } from './helpers/bandcamp';
-import { AnyObject, AppStore, Browser, TrackPreviewEmbedSize } from '../common/types';
-import { log } from './helpers/console';
+} from '../features/browsers/browsersSlice.js';
+import { foundBandcampCollectionUrl } from '../features/ui/uiSlice.js';
+import { BandCurrency, BandData, parseBandcampPageData, TralbumCollectInfo, TralbumData } from './helpers/bandcamp.js';
+import { AnyObject, AppStore, Browser, TrackPreviewEmbedSize } from '../common/types.js';
+import { log } from './helpers/console.js';
 
 type RawBandcampData = [TralbumData, BandData, TralbumCollectInfo, BandCurrency];
 

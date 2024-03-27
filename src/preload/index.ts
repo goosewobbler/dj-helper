@@ -1,7 +1,18 @@
+// import process from 'node:process';
+// import url from 'node:url';
+// import path from 'node:path';
+
 import { contextBridge, IpcRenderer, ipcRenderer } from 'electron';
-import process from 'process';
-import '@goosewobbler/electron-redux/preload';
-// import '@goosewobbler/spectron/preload';
+
+import { preloadReduxBridge } from 'zutron/preload';
+import { RootState } from '../features/rootReducer.js';
+// import { AppState } from '../common/types.js';
+
+const { handlers } = preloadReduxBridge<RootState>(ipcRenderer);
+
+contextBridge.exposeInMainWorld('zutron', handlers);
+
+// import '@goosewobbler/electron-redux/preload';
 
 const validChannels = [
   'play-track',
@@ -31,7 +42,9 @@ const on = (channel: string, listener: () => void): IpcRenderer | undefined => {
 };
 
 contextBridge.exposeInMainWorld('api', {
-  isDev: process.env.NODE_ENV === 'development',
+  // isDev: process.env.NODE_ENV === 'development',
   invoke,
   on,
 });
+
+// contextBridge.exposeInMainWorld('__dirname', path.dirname(url.fileURLToPath(import.meta.url)));

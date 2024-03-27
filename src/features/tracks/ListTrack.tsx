@@ -1,12 +1,13 @@
 import React, { useRef } from 'react';
 import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd';
 import { XYCoord, Identifier } from 'dnd-core';
-import { selectTrackById } from './tracksSlice';
-import { LoadContext, Track } from '../../common/types';
-import { removeTrackFromActiveList } from '../lists/listsSlice';
-import { CrossIcon } from '../../icons/CrossIcon';
-import { BaseTrack } from './BaseTrack';
-import { useAppDispatch, useAppSelector } from '../../common/hooks';
+
+import { selectTrackById } from './tracksSlice.js';
+import { LoadContext, Track } from '../../common/types.js';
+import { removeTrackFromActiveList } from '../lists/listsSlice.js';
+import { CrossIcon } from '../../icons/CrossIcon.js';
+import { BaseTrack } from './BaseTrack.js';
+import { useAppDispatch, useAppSelector } from '../../common/hooks.js';
 
 interface DragItem {
   index: number;

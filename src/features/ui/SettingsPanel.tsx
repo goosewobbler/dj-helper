@@ -1,11 +1,11 @@
 import React, { ReactElement } from 'react';
-import { batch } from 'react-redux';
-import { selectTrackPreviewEmbedSize, trackPreviewEmbedSizeToggled } from './uiSlice';
-import { autoplayEnabledToggled, resizeEmbed, selectAutoplayEnabled } from '../embed/embedSlice';
-import { DeleteDataButton } from './DeleteDataButton';
-import { Switch } from './Switch';
-import { TrackPreviewEmbedSize } from '../../common/types';
-import { useAppDispatch, useAppSelector } from '../../common/hooks';
+
+import { selectTrackPreviewEmbedSize, trackPreviewEmbedSizeToggled } from './uiSlice.js';
+import { autoplayEnabledToggled, resizeEmbed, selectAutoplayEnabled } from '../embed/embedSlice.js';
+import { DeleteDataButton } from './DeleteDataButton.js';
+import { Switch } from './Switch.js';
+import { TrackPreviewEmbedSize } from '../../common/types.js';
+import { useAppDispatch, useAppSelector } from '../../common/hooks.js';
 
 export function SettingsPanel(): ReactElement {
   const dispatch = useAppDispatch();
@@ -22,11 +22,9 @@ export function SettingsPanel(): ReactElement {
             isOn={isLargeEmbed}
             text="Large Preview"
             handleToggle={() => {
-              batch(() => {
-                const size = embedSize(!isLargeEmbed);
-                dispatch(trackPreviewEmbedSizeToggled(size));
-                dispatch(resizeEmbed());
-              });
+              const size = embedSize(!isLargeEmbed);
+              dispatch(trackPreviewEmbedSizeToggled(size));
+              dispatch(resizeEmbed());
             }}
           />
           <Switch

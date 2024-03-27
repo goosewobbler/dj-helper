@@ -2,9 +2,15 @@ import { configureStore, StoreEnhancer, Store } from '@reduxjs/toolkit';
 import { offline } from '@redux-offline/redux-offline';
 import offlineConfig from '@redux-offline/redux-offline/lib/defaults';
 import ElectronStore from 'electron-store';
-import { rootReducer, storeHydrated } from '../features/rootReducer';
-import { AnyObject, AppStore } from './types';
-import { log } from '../main/helpers/console';
+
+import { rootReducer, storeHydrated } from '../features/rootReducer.js';
+import { AnyObject, AppStore } from './types.js';
+import { log } from '../main/helpers/console.js';
+import { ViteHotContext } from 'vite/types/hot.js';
+
+interface ImportMeta {
+  readonly hot?: ViteHotContext;
+}
 
 function createElectronStorage() {
   const store = new ElectronStore({});
@@ -21,13 +27,13 @@ function createElectronStorage() {
 
 export function createReduxStore({
   context,
-  syncFn,
+  //  syncFn,
 }: {
   context: string;
-  syncFn: StoreEnhancer<AnyObject, AnyObject>;
+  //  syncFn: StoreEnhancer<AnyObject, AnyObject>;
 }): Promise<Store> {
   return new Promise((resolve) => {
-    const enhancers = [syncFn];
+    const enhancers: StoreEnhancer[] = []; // [syncFn];
     let store: Store;
     if (context === 'main') {
       offlineConfig.persistOptions = { storage: createElectronStorage() };
@@ -47,8 +53,10 @@ export function createReduxStore({
         }).concat(enhancers),
     });
 
-    if (process.env.NODE_ENV !== 'production' && module.hot) {
-      module.hot.accept('../features/rootReducer', () => store.replaceReducer(rootReducer));
+    const hot = (import.meta as ImportMeta)?.hot;
+
+    if (process.env.NODE_ENV !== 'production' && hot) {
+      hot.accept('../features/rootReducer', () => store.replaceReducer(rootReducer));
     }
 
     if (context === 'main') {

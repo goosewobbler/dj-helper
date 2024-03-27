@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+
 import {
   AppState,
   UI,
@@ -6,7 +7,7 @@ import {
   Browser,
   TabHistoryAction,
   BandcampTabHomepage,
-} from '../../common/types';
+} from '../../common/types.js';
 
 const initialState = {
   statusText: '',

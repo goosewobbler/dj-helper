@@ -50,7 +50,7 @@ const plugins = [
 /**
  * @type {string[]}
  */
-const content = ['./src/**/*.ts{,x}', './src/index.ejs'];
+const content = ['./src/**/*.ts{,x}', './src/renderer/index.html'];
 
 export default {
   content,

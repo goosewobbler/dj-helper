@@ -1,16 +1,17 @@
 import React, { ReactElement } from 'react';
-import { useAppDispatch, useAppSelector } from '../../common/hooks';
-import { TrackPreviewEmbedSize } from '../../common/types';
-import { NextTrackIcon } from '../../icons/NextTrackIcon';
-import { PreviousTrackIcon } from '../../icons/PreviousTrackIcon';
+
+import { useAppDispatch, useAppSelector } from '../../common/hooks.js';
+import { TrackPreviewEmbedSize } from '../../common/types.js';
+import { NextTrackIcon } from '../../icons/NextTrackIcon.js';
+import { PreviousTrackIcon } from '../../icons/PreviousTrackIcon.js';
 import {
   loadAndPlayNextTrack,
   loadAndPlayPreviousTrack,
   selectNextTrack,
   selectPreviousTrack,
-} from '../embed/embedSlice';
-import { SettingsPanel } from './SettingsPanel';
-import { selectStatusText, selectTrackPreviewEmbedSize } from './uiSlice';
+} from '../embed/embedSlice.js';
+import { SettingsPanel } from './SettingsPanel.js';
+import { selectStatusText, selectTrackPreviewEmbedSize } from './uiSlice.js';
 
 export function StatusBar(): ReactElement {
   const dispatch = useAppDispatch();

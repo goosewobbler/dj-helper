@@ -1,18 +1,19 @@
 import React, { ReactElement, useRef } from 'react';
 import { SplitPane } from 'react-multi-split-pane';
-import { selectActiveBrowser, selectBrowsers } from '../features/browsers/browsersSlice';
-import { TabbedInterface } from '../features/browsers/Tabs';
-import { handleAutoplay } from '../features/embed/embedSlice';
-import { ListPane } from '../features/lists/ListPane';
-import { StatusBar } from '../features/ui/StatusBar';
-import { log } from '../main/helpers/console';
+
+import { selectActiveBrowser, selectBrowsers } from '../features/browsers/browsersSlice.js';
+import { TabbedInterface } from '../features/browsers/Tabs.js';
+import { handleAutoplay } from '../features/embed/embedSlice.js';
+import { ListPane } from '../features/lists/ListPane.js';
+import { StatusBar } from '../features/ui/StatusBar.js';
+import { log } from '../main/helpers/console.js';
 import {
   horizontalSplitterMoved,
   selectHorizontalSplitterDimensions,
   selectVerticalSplitterDimensions,
   verticalSplitterMoved,
-} from '../features/ui/uiSlice';
-import { useAppDispatch, useAppSelector } from '../common/hooks';
+} from '../features/ui/uiSlice.js';
+import { useAppDispatch, useAppSelector } from '../common/hooks.js';
 
 let previousCallTime = 0;
 

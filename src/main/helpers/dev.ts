@@ -1,5 +1,6 @@
-import electronDevToolsInstaller, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
-import { log, logError } from './console';
+import electronDevToolsInstaller, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-assembler';
+
+import { log, logError } from './console.js';
 
 type DevToolsExtension = {
   ref: typeof REACT_DEVELOPER_TOOLS;

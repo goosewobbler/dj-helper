@@ -1,17 +1,19 @@
+import { platform } from 'node:os';
+
 import { BrowserView, BrowserWindow, ipcMain } from 'electron';
-import { platform } from 'os';
+
 import {
   mediaLoaded,
   mediaPlaying,
   mediaPaused,
   mediaPlaybackError,
   mediaLoadError,
-} from '../features/embed/embedSlice';
-import { AppStore, Track, TrackPreviewEmbedSize } from '../common/types';
-import { log } from './helpers/console';
-import { selectTrackSourceByIndex } from '../features/tracks/tracksSlice';
-import { createBrowser } from '../features/browsers/browsersSlice';
-import { sanitiseUrl } from './browser';
+} from '../features/embed/embedSlice.js';
+import { AppStore, Track, TrackPreviewEmbedSize } from '../common/types.js';
+import { log } from './helpers/console.js';
+import { selectTrackSourceByIndex } from '../features/tracks/tracksSlice.js';
+import { createBrowser } from '../features/browsers/browsersSlice.js';
+import { sanitiseUrl } from './browser.js';
 // function delay(ms: number) {
 //   return new Promise((resolve) => setTimeout(resolve, ms));
 // }

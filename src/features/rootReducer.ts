@@ -1,10 +1,19 @@
-import { combineReducers, Action } from '@reduxjs/toolkit';
-import { embedReducer, handleInit as initEmbed } from './embed/embedSlice';
-import { listsReducer } from './lists/listsSlice';
-import { tracksReducer } from './tracks/tracksSlice';
-import { browsersReducer } from './browsers/browsersSlice';
-import { uiReducer } from './ui/uiSlice';
-import { AppState, AppThunk } from '../common/types';
+import {
+  combineReducers,
+  UnknownAction,
+  Dispatch as BaseDispatch,
+  Reducer,
+  Observable,
+  Action as BaseAction,
+  ThunkAction,
+} from '@reduxjs/toolkit';
+
+import { embedReducer, handleInit as initEmbed } from './embed/embedSlice.js';
+import { listsReducer } from './lists/listsSlice.js';
+import { tracksReducer } from './tracks/tracksSlice.js';
+import { browsersReducer } from './browsers/browsersSlice.js';
+import { uiReducer } from './ui/uiSlice.js';
+import { AppState, AppThunk } from '../common/types.js';
 
 const combinedReducers = combineReducers({
   embed: embedReducer,
@@ -32,4 +41,22 @@ export const rootReducer = (state: AppState | undefined, action: Action) => {
   return combinedReducers(state, action);
 };
 
+type ActionOrAnyAction = BaseAction | UnknownAction;
+
+export type Dispatch = BaseDispatch<Action>;
+export type Subscribe = (listener: () => void) => () => void;
+export type Action = Exclude<ActionOrAnyAction, { type: '' }>;
 export type RootState = ReturnType<typeof combinedReducers>;
+export type Store = {
+  getState: () => RootState;
+  dispatch: Dispatch;
+  subscribe: Subscribe;
+  replaceReducer: (nextReducer: Reducer<RootState, Action>) => void;
+  [Symbol.observable](): Observable<RootState>;
+};
+
+type MiddlewareStore = Pick<Store, 'getState' | 'dispatch'>;
+
+export type Middleware<A extends ActionOrAnyAction = Action> = (
+  store: MiddlewareStore,
+) => (next: Dispatch) => (action: A) => Promise<Action>;

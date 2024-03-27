@@ -1,10 +1,11 @@
 import React, { ReactElement } from 'react';
-import { embedRequestInFlight, loadAndPlayTrack, pauseTrack, trackIsPlaying } from '../embed/embedSlice';
-import { selectTrackById } from './tracksSlice';
-import { LoadContext, Track } from '../../common/types';
-import { log } from '../../main/helpers/console';
-import { PlayPauseButton } from './PlayPauseButton';
-import { useAppDispatch, useAppSelector } from '../../common/hooks';
+
+import { embedRequestInFlight, loadAndPlayTrack, pauseTrack, trackIsPlaying } from '../embed/embedSlice.js';
+import { selectTrackById } from './tracksSlice.js';
+import { LoadContext, Track } from '../../common/types.js';
+import { log } from '../../main/helpers/console.js';
+import { PlayPauseButton } from './PlayPauseButton.js';
+import { useAppDispatch, useAppSelector } from '../../common/hooks.js';
 
 function displayTrackDuration(duration: number) {
   const date = new Date(duration * 1000);

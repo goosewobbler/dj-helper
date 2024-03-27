@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "ESNext",
-    "moduleResolution": "node",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "esModuleInterop": true,
     "strict": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "inlineSources": true,
     "sourceMap": true,
-    "allowSyntheticDefaultImports": true,
+    "resolvePackageJsonImports": true,
     "newLine": "lf",
     "noEmitOnError": true,
     "jsx": "react",
@@ -20,7 +20,9 @@
     "checkJs": true,
     "noEmit": true,
     "types": ["node", "webpack-env"],
-    "typeRoots": ["./types", "./node_modules/@types"]
+    "typeRoots": ["./types", "./node_modules/@types"],
+    "resolvePackageJsonExports": true,
+    "traceResolution": true
   },
   "include": [
     "./src/**/*.ts",

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { AppState, Track, TrackSource } from '../../common/types';
-import { log } from '../../main/helpers/console';
+import { AppState, Track, TrackSource } from '../../common/types.js';
+import { log } from '../../main/helpers/console.js';
 
 const initialState: Track[] = [];
 

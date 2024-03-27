@@ -1,6 +1,7 @@
 import { BrowserWindow, ipcMain } from 'electron';
-import { AppStore } from '../common/types';
-import { windowBoundsChanged } from '../features/ui/uiSlice';
+
+import { AppStore } from '../common/types.js';
+import { windowBoundsChanged } from '../features/ui/uiSlice.js';
 
 export function initWindow(mainWindow: BrowserWindow, reduxStore: AppStore): void {
   const { dispatch, getState } = reduxStore;

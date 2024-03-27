@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { AppState, List, Track } from '../../common/types';
+import { AppState, List, Track } from '../../common/types.js';
 
 const initialListTitle = 'New List';
 

@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { AppState, Embed, Track, EmbedStatus, LoadContextType, AppThunk } from '../../common/types';
-import { log } from '../../main/helpers/console';
-import { getNextTrackOnMetaPanel, getPreviousTrackOnMetaPanel } from '../browsers/browsersSlice';
-import { getNextTrackOnList, getPreviousTrackOnList } from '../lists/listsSlice';
+
+import { AppState, Embed, Track, EmbedStatus, LoadContextType, AppThunk } from '../../common/types.js';
+import { log } from '../../main/helpers/console.js';
+import { getNextTrackOnMetaPanel, getPreviousTrackOnMetaPanel } from '../browsers/browsersSlice.js';
+import { getNextTrackOnList, getPreviousTrackOnList } from '../lists/listsSlice.js';
 
 const initialState = {
   status: EmbedStatus.Idle,

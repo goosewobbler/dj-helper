@@ -51,7 +51,7 @@ export default [
   },
   // Electron renderer process files
   {
-    files: ['src/renderer/*.{ts,tsx}'],
+    files: ['src/renderer/*.{ts,tsx}', 'src/preload/*.ts'],
     languageOptions: {
       globals: {
         ...globals.browser,

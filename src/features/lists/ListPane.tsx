@@ -1,7 +1,8 @@
 import React, { ReactElement } from 'react';
-import { useAppDispatch, useAppSelector } from '../../common/hooks';
-import { List } from './List';
-import { createList, revertEditList, selectLists } from './listsSlice';
+
+import { useAppDispatch, useAppSelector } from '../../common/hooks.js';
+import { List } from './List.js';
+import { createList, revertEditList, selectLists } from './listsSlice.js';
 
 export function ListPane(): ReactElement {
   const lists = useAppSelector(selectLists);

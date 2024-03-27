@@ -1,14 +1,15 @@
 import React from 'react';
-import { useAppDispatch, useAppSelector } from '../../common/hooks';
-import { LoadContext, Track } from '../../common/types';
+
+import { useAppDispatch, useAppSelector } from '../../common/hooks.js';
+import { LoadContext, Track } from '../../common/types.js';
 import {
   addTrackToActiveList,
   removeTrackFromActiveList,
   selectActiveList,
   trackIsOnActiveList,
-} from '../lists/listsSlice';
-import { AddRemoveListButton } from './AddRemoveListButton';
-import { BaseTrack } from './BaseTrack';
+} from '../lists/listsSlice.js';
+import { AddRemoveListButton } from './AddRemoveListButton.js';
+import { BaseTrack } from './BaseTrack.js';
 
 export function BrowserTrack({ id, context }: { id: Track['id']; context: LoadContext }) {
   const dispatch = useAppDispatch();

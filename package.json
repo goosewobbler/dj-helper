@@ -63,7 +63,7 @@
     "@testing-library/user-event": "^14.5.2",
     "@testing-library/webdriverio": "^3.2.1",
     "@types/mocha": "^10.0.6",
-    "@types/node": "^20.11.19",
+    "@types/node": "^20.12.5",
     "@types/react": "^18.2.57",
     "@types/react-dom": "^18.2.19",
     "@types/request": "^2.48.12",

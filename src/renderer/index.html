@@ -2,7 +2,7 @@
 <html lang="en-gb" class="theme-default">
   <head>
     <title>DJ Helper</title>
-    <% if (process.env.NODE_ENV === 'development') { %>
+    
     <meta
       http-equiv="Content-Security-Policy"
       content="
@@ -16,20 +16,7 @@
         connect-src *;
       "
     />
-    <% } else { %>
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="
-        default-src 'self';
-        script-src 'self';
-        connect-src * data:;
-        style-src 'self';
-        font-src data: 'self';
-        img-src data: 'self';
-        frame-src *;
-      "
-    />
-    <% } %>
+    
   </head>
   <body>
     <div id="app" class="flex flex-col w-full h-full overflow-hidden"></div>

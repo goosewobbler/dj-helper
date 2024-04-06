@@ -1,8 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { AppState, Track, TrackSource } from '../../common/types';
-import { log } from '../../main/helpers/console';
+import { log } from '../../main/helpers/console.js';
+import type { AppState, AppStore, Track, TrackSource } from '../../common/types.js';
 
-const initialState: Track[] = [];
+export const initialState: Track[] = [];
 
 export type TrackData = {
   id?: Track['id'];
@@ -78,26 +77,23 @@ function trackHasSource(track: Track, sourceUrl: string, sourceId?: number): boo
   });
 }
 
-export const slice = createSlice({
-  name: 'tracks',
-  initialState,
-  reducers: {
-    createTrack: (
-      state,
-      { payload: { title, artist, duration, sourceId, url, price, priceCurrency } }: { payload: TrackData },
-    ) => {
-      const dupe = getTrackDuplicate(state, title, artist, duration);
+export const handlers = (store: AppStore) => ({
+  'TRACK:CREATE': ({ title, artist, duration, sourceId, url, price, priceCurrency }: TrackData) => {
+    return store.setState((state) => {
+      const dupe = getTrackDuplicate(state.tracks, title, artist, duration);
       if (dupe) {
         log('found track dupe');
 
-        return state.map((track) =>
-          track.id === dupe.id
-            ? { ...track, sources: getUpdatedTrackSources(track, sourceId, url, price, priceCurrency) }
-            : track,
-        );
+        return {
+          tracks: state.tracks.map((track) =>
+            track.id === dupe.id
+              ? { ...track, sources: getUpdatedTrackSources(track, sourceId, url, price, priceCurrency) }
+              : track,
+          ),
+        };
       }
       const newTrack: Track = {
-        id: state.length + 1,
+        id: state.tracks.length + 1,
         title,
         artist,
         duration,
@@ -110,35 +106,37 @@ export const slice = createSlice({
           },
         ],
       };
-      return [...state, newTrack];
-    },
-    updateTrack: (state, { payload }: { payload: TrackData }) =>
-      state.map((track) => {
+      return {
+        tracks: [...state.tracks, newTrack],
+      };
+    });
+  },
+  'TRACK:UPDATE': (payload: TrackData) =>
+    store.setState((state) => ({
+      tracks: state.tracks.map((track) => {
         if (track.id === payload.id) {
           return updateTrackData(track, payload);
         }
         return track;
       }),
-    deleteTrack: (state, { payload: { id } }) =>
-      state.filter((track) => track.id === id).map((track, index) => ({ ...track, index })),
-  },
+    })),
+  'TRACK:DELETE': (payload: TrackData) =>
+    store.setState((state) => ({
+      tracks: state.tracks.filter((track) => track.id === payload.id).map((track, index) => ({ ...track, index })),
+    })),
 });
-
-export const { createTrack, updateTrack, deleteTrack } = slice.actions;
 
 export const selectTrackById =
   (id: Track['id']) =>
-  (state: AppState): Track =>
-    state.tracks.find((track) => track.id === id) as Track;
+  (state: Partial<AppState>): Track =>
+    state.tracks?.find((track) => track.id === id) as Track;
 
 export const selectTrackBySourceUrl =
   (sourceUrl: TrackSource['url']) =>
-  (state: AppState): Track =>
-    state.tracks.find((track) => trackHasSource(track, sourceUrl)) as Track;
+  (state: Partial<AppState>): Track =>
+    state.tracks?.find((track) => trackHasSource(track, sourceUrl)) as Track;
 
 export const selectTrackSourceByIndex =
   (trackId: Track['id'], index: number) =>
-  (state: AppState): TrackSource =>
-    state.tracks.find((track) => track.id === trackId)?.sources[index] as TrackSource;
-
-export const tracksReducer = slice.reducer;
+  (state: Partial<AppState>): TrackSource =>
+    state.tracks?.find((track) => track.id === trackId)?.sources[index] as TrackSource;

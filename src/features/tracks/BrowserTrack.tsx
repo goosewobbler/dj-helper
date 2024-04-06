@@ -1,19 +1,16 @@
 import React from 'react';
-import { useAppDispatch, useAppSelector } from '../../common/hooks';
-import { LoadContext, Track } from '../../common/types';
-import {
-  addTrackToActiveList,
-  removeTrackFromActiveList,
-  selectActiveList,
-  trackIsOnActiveList,
-} from '../lists/listsSlice';
-import { AddRemoveListButton } from './AddRemoveListButton';
-import { BaseTrack } from './BaseTrack';
+
+import { LoadContext, Track } from '../../common/types.js';
+import { selectActiveList, trackIsOnActiveList } from '../lists/index.js';
+import { AddRemoveListButton } from './AddRemoveListButton.js';
+import { BaseTrack } from './BaseTrack.js';
+import { useDispatch } from '../../renderer/hooks/useDispatch.js';
+import { useStore } from '../../renderer/hooks/useStore.js';
 
 export function BrowserTrack({ id, context }: { id: Track['id']; context: LoadContext }) {
-  const dispatch = useAppDispatch();
-  const hasActiveList = !!useAppSelector(selectActiveList);
-  const isOnSelectedList = useAppSelector(trackIsOnActiveList({ trackId: id }));
+  const dispatch = useDispatch();
+  const hasActiveList = !!useStore(selectActiveList);
+  const isOnSelectedList = useStore(trackIsOnActiveList({ trackId: id }));
 
   return (
     <BaseTrack
@@ -25,9 +22,9 @@ export function BrowserTrack({ id, context }: { id: Track['id']; context: LoadCo
             isOnSelectedList={isOnSelectedList}
             onClick={() => {
               if (isOnSelectedList) {
-                dispatch(removeTrackFromActiveList({ trackId: id }));
+                dispatch('LIST:REMOVE_TRACK', { trackId: id });
               } else {
-                dispatch(addTrackToActiveList({ trackId: id }));
+                dispatch('LIST:ADD_TRACK', { trackId: id });
               }
             }}
           />

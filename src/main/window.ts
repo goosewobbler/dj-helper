@@ -1,13 +1,15 @@
 import { BrowserWindow, ipcMain } from 'electron';
-import { AppStore } from '../common/types';
-import { windowBoundsChanged } from '../features/ui/uiSlice';
 
-export function initWindow(mainWindow: BrowserWindow, reduxStore: AppStore): void {
-  const { dispatch, getState } = reduxStore;
+import { getStore, getDispatch } from './store/index.js';
+
+export function initWindow(mainWindow: BrowserWindow): void {
+  const store = getStore();
+  const dispatch = getDispatch();
+  const { getState } = store;
 
   function boundsChangeHandler() {
     const { x, y, width, height } = mainWindow.getBounds();
-    dispatch(windowBoundsChanged({ x, y, width, height }));
+    dispatch('UI:WINDOW_BOUNDS_CHANGED', { x, y, width, height });
   }
 
   mainWindow.on('resize', () => {

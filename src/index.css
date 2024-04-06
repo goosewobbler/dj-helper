@@ -1,0 +1,146 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@import url('./css/fonts.css');
+
+/* Tailwind base / preflight styles: https://unpkg.com/tailwindcss@3.4.3/lib/css/preflight.css */
+
+* {
+  @apply box-border;
+}
+
+html {
+  font-family: var(--font-family-name);
+
+  @apply h-full;
+}
+
+body {
+  @apply h-full;
+  @apply w-full;
+  @apply overflow-hidden;
+  @apply select-none;
+}
+
+button:focus,
+input:focus,
+div:focus {
+  @apply outline-none;
+}
+
+button:disabled {
+  @apply cursor-not-allowed;
+}
+
+::-webkit-scrollbar {
+  @apply w-1;
+}
+
+::-webkit-scrollbar-track {
+  background-color: rgb(0 0 0 / 2.5%);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgb(0 0 0 / 20%);
+}
+
+.embed-placeholder {
+  width: 500px;
+}
+
+.shadow-dialog {
+  box-shadow: 0 0 15px 5px rgb(0 0 0 / 20%);
+}
+
+.flex-basis-4 {
+  flex-basis: 4px;
+}
+
+.flex-basis-8 {
+  flex-basis: 8px;
+}
+
+.flex-basis-16 {
+  flex-basis: 16px;
+}
+
+.text-hidden {
+  font-size: 0;
+  line-height: 0;
+}
+
+.spinner-eclipse {
+  transform: translateZ(0) scale(1);
+  backface-visibility: hidden;
+  transform-origin: 0 0;
+}
+
+.spinner-eclipse div {
+  border-radius: 50%;
+  transform-origin: 8px 8px;
+}
+
+.spinner-eclipse-shadow {
+  box-shadow: 0 2px 0 0 #e15b64;
+}
+
+/* Splitters */
+/* stylelint-disable selector-class-pattern */
+
+.Resizer {
+  background: #000;
+  opacity: 0.2;
+  z-index: 1;
+  box-sizing: border-box;
+  background-clip: padding-box;
+}
+
+.Resizer:hover {
+  transition: all 2s ease;
+}
+
+.Resizer.horizontal {
+  height: 11px;
+  margin: -5px 0;
+  border-top: 5px solid rgb(255 255 255 / 0%);
+  border-bottom: 5px solid rgb(255 255 255 / 0%);
+  cursor: row-resize;
+}
+
+.Resizer.horizontal:hover,
+.Resizer.horizontal.resizing {
+  border-top: 5px solid rgb(0 0 0 / 50%);
+  border-bottom: 5px solid rgb(0 0 0 / 50%);
+}
+
+.Resizer.vertical {
+  width: 11px;
+  margin: 0 -5px;
+  border-left: 5px solid rgb(255 255 255 / 0%);
+  border-right: 5px solid rgb(255 255 255 / 0%);
+  cursor: col-resize;
+}
+
+.Resizer.vertical:hover,
+.Resizer.vertical.resizing {
+  border-left: 5px solid rgb(0 0 0 / 50%);
+  border-right: 5px solid rgb(0 0 0 / 50%);
+}
+
+.DragLayer {
+  z-index: 1;
+  pointer-events: none;
+}
+
+.DragLayer.resizing {
+  pointer-events: auto;
+}
+
+.DragLayer.horizontal {
+  cursor: row-resize;
+}
+
+.DragLayer.vertical {
+  cursor: col-resize;
+}

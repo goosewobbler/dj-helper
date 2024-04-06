@@ -1,17 +1,18 @@
 import React, { ReactElement } from 'react';
-import { batch } from 'react-redux';
-import { selectTrackPreviewEmbedSize, trackPreviewEmbedSizeToggled } from './uiSlice';
-import { autoplayEnabledToggled, resizeEmbed, selectAutoplayEnabled } from '../embed/embedSlice';
-import { DeleteDataButton } from './DeleteDataButton';
-import { Switch } from './Switch';
-import { TrackPreviewEmbedSize } from '../../common/types';
-import { useAppDispatch, useAppSelector } from '../../common/hooks';
+
+import { DeleteDataButton } from './DeleteDataButton.js';
+import { Switch } from './Switch.js';
+import { TrackPreviewEmbedSize } from '../../common/types.js';
+import { useStore } from '../../renderer/hooks/useStore.js';
+import { useDispatch } from '../../renderer/hooks/useDispatch.js';
+import { selectTrackPreviewEmbedSize } from './index.js';
+import { selectAutoplayEnabled } from '../embed/index.js';
 
 export function SettingsPanel(): ReactElement {
-  const dispatch = useAppDispatch();
-  const isLargeEmbed = useAppSelector(selectTrackPreviewEmbedSize) === TrackPreviewEmbedSize.Medium;
-  const isAutoplayEnabled = useAppSelector(selectAutoplayEnabled);
-  const embedSize = (isLarge: boolean) => TrackPreviewEmbedSize[isLarge ? 'Medium' : 'Small'];
+  const dispatch = useDispatch();
+  const isMediumEmbed = useStore(selectTrackPreviewEmbedSize(TrackPreviewEmbedSize.Medium));
+  const isAutoplayEnabled = useStore(selectAutoplayEnabled);
+  const embedSize = (isMedium: boolean) => TrackPreviewEmbedSize[isMedium ? 'Medium' : 'Small'];
   return (
     <div>
       <DeleteDataButton />
@@ -19,14 +20,12 @@ export function SettingsPanel(): ReactElement {
         <span className="float-right mx-4">
           <Switch
             id="embed-size-switch"
-            isOn={isLargeEmbed}
+            isOn={isMediumEmbed}
             text="Large Preview"
             handleToggle={() => {
-              batch(() => {
-                const size = embedSize(!isLargeEmbed);
-                dispatch(trackPreviewEmbedSizeToggled(size));
-                dispatch(resizeEmbed());
-              });
+              const size = embedSize(!isMediumEmbed);
+              dispatch('UI:TRACK_PREVIEW_EMBED_SIZE_TOGGLED', size);
+              dispatch('EMBED:REQUEST_LOAD', { isResize: true });
             }}
           />
           <Switch
@@ -34,8 +33,7 @@ export function SettingsPanel(): ReactElement {
             isOn={isAutoplayEnabled}
             text="Autoplay"
             handleToggle={() => {
-              const autoplayEnabled = !isAutoplayEnabled;
-              dispatch(autoplayEnabledToggled(autoplayEnabled));
+              dispatch('EMBED:AUTOPLAY_TOGGLED', !isAutoplayEnabled);
             }}
           />
         </span>

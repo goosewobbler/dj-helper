@@ -50,8 +50,9 @@ const plugins = [
 /**
  * @type {string[]}
  */
-const content = ['./src/**/*.ts{,x}', './src/index.ejs'];
+const content = ['./src/renderer/index.html', './src/renderer/**/*.{jsx,tsx}', './src/features/**/*.{jsx,tsx}'];
 
+/** @type {import('tailwindcss').Config} */
 export default {
   content,
   theme,

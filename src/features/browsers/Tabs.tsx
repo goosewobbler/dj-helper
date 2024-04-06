@@ -1,53 +1,42 @@
 import React, { ReactElement } from 'react';
-import { batch } from 'react-redux';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import classNames from 'classnames';
-import { useAppDispatch } from '../../common/hooks';
-import { createBrowser, deleteBrowser, tabSelected } from './browsersSlice';
-import { AppThunk, Browser, TabHistoryAction } from '../../common/types';
-import { MetaPanel } from './MetaPanel';
-import { updateTabHistory } from '../ui/uiSlice';
-import { log } from '../../main/helpers/console';
-import { CrossIcon } from '../../icons/CrossIcon';
-import { NewTabIcon } from '../../icons/NewTabIcon';
 
-const clickNewTabHandler = (): AppThunk => (dispatch, getState) => {
-  batch(() => {
-    const {
-      ui: { bandcampPageUrls, bandcampTabHomepage },
-    } = getState();
-    dispatch(createBrowser({ url: bandcampPageUrls[bandcampTabHomepage] }));
-    const { browsers } = getState();
-    const newBrowser = browsers[browsers.length - 1];
-    dispatch(updateTabHistory({ tabId: newBrowser.id, action: TabHistoryAction.Created }));
-  });
+import { getActiveBrowser } from './index.js';
+import { AppState, Browser, TabHistoryAction, UI } from '../../common/types.js';
+import { MetaPanel } from './MetaPanel.js';
+import { log } from '../../main/helpers/console.js';
+import { CrossIcon } from '../../icons/CrossIcon.js';
+import { NewTabIcon } from '../../icons/NewTabIcon.js';
+import { useDispatch } from '../../renderer/hooks/useDispatch.js';
+import { useStore } from '../../renderer/hooks/useStore.js';
+import { Thunk } from 'zutron';
+
+const clickNewTabHandler = (): Thunk<AppState> => (dispatch, store) => {
+  const { bandcampPageUrls, bandcampTabHomepage } = store.getState().ui as UI;
+  dispatch('BROWSER:CREATE', { url: bandcampPageUrls[bandcampTabHomepage] });
+  const browsers = store.getState().browsers as Browser[];
+  const newBrowser = browsers[browsers.length - 1];
+  dispatch('UI:UPDATE_TAB_HISTORY', { tabId: newBrowser.id, action: TabHistoryAction.Created });
 };
 
 const clickCloseTabHandler =
-  (tabIndex: number, activeBrowser: Browser): AppThunk =>
-  (dispatch, getState) => {
-    batch(() => {
-      dispatch(updateTabHistory({ tabId: tabIndex, action: TabHistoryAction.Deleted }));
-      if (tabIndex === activeBrowser.id) {
-        const {
-          ui: { tabHistory },
-        } = getState();
-        const previouslyActiveBrowserId = tabHistory[tabHistory.length - 1];
-        dispatch(tabSelected({ id: previouslyActiveBrowserId }));
-        log('selected tab', previouslyActiveBrowserId, tabHistory);
-      }
-      dispatch(deleteBrowser({ id: tabIndex }));
-    });
+  (tabIndex: number, activeBrowser: Browser): Thunk<AppState> =>
+  (dispatch, store) => {
+    dispatch('UI:UPDATE_TAB_HISTORY', { tabId: tabIndex, action: TabHistoryAction.Deleted });
+    if (tabIndex === activeBrowser.id) {
+      const { tabHistory } = store.getState().ui as UI;
+      const previouslyActiveBrowserId = tabHistory[tabHistory.length - 1];
+      dispatch('BROWSER:TAB_SELECTED', { id: previouslyActiveBrowserId });
+      log('selected tab', previouslyActiveBrowserId, tabHistory);
+    }
+    dispatch('BROWSER:DELETE', { id: tabIndex });
   };
 
-export const TabbedInterface = ({
-  browsers,
-  activeBrowser,
-}: {
-  browsers: Browser[];
-  activeBrowser: Browser;
-}): ReactElement => {
-  const dispatch = useAppDispatch();
+export const TabbedInterface = (): ReactElement => {
+  const dispatch = useDispatch();
+  const browsers = useStore((state) => state.browsers) || [];
+  const activeBrowser = getActiveBrowser(browsers);
   const isSelected = (id: number) => id === activeBrowser.id;
   const displayTabCloseButton = browsers.length > 1;
 
@@ -55,13 +44,11 @@ export const TabbedInterface = ({
     <Tabs
       className="h-full"
       onSelect={(index: number) => {
-        batch(() => {
-          log('tab onSelect', index);
-          if (index !== activeBrowser.id) {
-            dispatch(tabSelected({ id: index }));
-            dispatch(updateTabHistory({ tabId: index, action: TabHistoryAction.Selected }));
-          }
-        });
+        log('tab onSelect', index);
+        if (index !== activeBrowser.id) {
+          dispatch('BROWSER:TAB_SELECTED', { id: index });
+          dispatch('UI:UPDATE_TAB_HISTORY', { tabId: index, action: TabHistoryAction.Selected });
+        }
       }}
       selectedIndex={activeBrowser ? activeBrowser.id : 0}
     >

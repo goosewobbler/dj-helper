@@ -1,5 +1,5 @@
-import { AnyAction, ThunkAction, ThunkDispatch, Action, Unsubscribe } from '@reduxjs/toolkit';
 import { Rectangle } from 'electron';
+import { StoreApi } from 'zustand';
 
 export type AnyObject = Record<string, unknown>;
 export interface LooseObject {
@@ -14,6 +14,7 @@ export enum EmbedStatus {
   Playing = 'PLAYING',
   PauseRequested = 'PAUSE_REQUESTED',
   Paused = 'PAUSED',
+  PlaybackComplete = 'PLAYBACK_COMPLETE',
 }
 
 export enum LoadContextType {
@@ -116,7 +117,11 @@ export type UI = {
   trackPreviewEmbedSize: TrackPreviewEmbedSize;
   tabHistory: Browser['id'][];
 };
-export interface AppState {
+
+interface AnyState {
+  [name: string]: unknown;
+}
+export interface AppState extends AnyState {
   embed: Embed;
   lists: List[];
   tracks: Track[];
@@ -124,10 +129,10 @@ export interface AppState {
   ui: UI;
 }
 
-export type AppThunk = ThunkAction<void, AppState, unknown, Action<string>>;
-export type Dispatch = ThunkDispatch<AppState, undefined, AnyAction>;
-export type AppStore = {
-  dispatch: Dispatch;
-  getState: () => AppState;
-  subscribe: (listener: () => void) => Unsubscribe;
-};
+export type AppStore = StoreApi<AppState>;
+export type AppThunk = (dispatch: AppDispatch, store?: AppStore) => void;
+export type AppDispatch = (action: string | AppThunk, payload?: unknown) => void;
+export type AppHandler = (payload?: unknown) => void;
+export interface AppHandlers {
+  [name: string]: AppHandler;
+}

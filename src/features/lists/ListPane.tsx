@@ -1,11 +1,13 @@
 import React, { ReactElement } from 'react';
-import { useAppDispatch, useAppSelector } from '../../common/hooks';
-import { List } from './List';
-import { createList, revertEditList, selectLists } from './listsSlice';
+
+import { List } from './List.js';
+import { selectLists } from './index.js';
+import { useStore } from '../../renderer/hooks/useStore.js';
+import { useDispatch } from '../../renderer/hooks/useDispatch.js';
 
 export function ListPane(): ReactElement {
-  const lists = useAppSelector(selectLists);
-  const dispatch = useAppDispatch();
+  const lists = useStore(selectLists);
+  const dispatch = useDispatch();
 
   return (
     <div className="flex flex-col flex-grow">
@@ -22,8 +24,8 @@ export function ListPane(): ReactElement {
           type="button"
           aria-label="New List"
           onClick={() => {
-            dispatch(revertEditList());
-            dispatch(createList());
+            dispatch('LIST:EDIT_REVERT');
+            dispatch('LIST:CREATE');
           }}
         >
           New List

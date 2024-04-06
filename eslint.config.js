@@ -11,11 +11,11 @@ import globals from 'globals';
 export default [
   // Ignored dirs
   {
-    ignores: ['**/dist/**/*', '**/bundle/**/*', '**/static/**/*', '.vscode'],
+    ignores: ['**/out/**/*', '**/bundle/**/*', '**/static/**/*', '.vscode'],
   },
   // Ignored files
   {
-    ignores: ['vitest.config.ts', 'eslint.config.js', 'test/features/lists/*.spec.tsx'],
+    ignores: ['vite.config.ts', 'vitest.config.ts', 'eslint.config.js', 'test/features/lists/*.spec.tsx'],
   },
   // All files
   {
@@ -51,7 +51,7 @@ export default [
   },
   // Electron renderer process files
   {
-    files: ['src/renderer/*.{ts,tsx}'],
+    files: ['src/renderer/*.{ts,tsx}', 'src/preload/*.ts'],
     languageOptions: {
       globals: {
         ...globals.browser,

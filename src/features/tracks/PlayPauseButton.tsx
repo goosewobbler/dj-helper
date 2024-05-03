@@ -1,7 +1,8 @@
 import React, { ReactElement } from 'react';
-import { PauseIcon } from '../../icons/PauseIcon';
-import { PlayIcon } from '../../icons/PlayIcon';
-import { SpinnerIcon } from '../../icons/SpinnerIcon';
+
+import { PauseIcon } from '../../icons/PauseIcon.js';
+import { PlayIcon } from '../../icons/PlayIcon.js';
+import { SpinnerIcon } from '../../icons/SpinnerIcon.js';
 
 export function PlayPauseButton({
   isPlaying,

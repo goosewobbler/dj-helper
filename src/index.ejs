@@ -6,13 +6,14 @@
     <meta
       http-equiv="Content-Security-Policy"
       content="
-        default-src http://localhost:1212; 
-        script-src-elem http://localhost:1212 'nonce-4AEemGb0xJptoIGFP3Nd';
+        default-src 'self' http://localhost:5173 'unsafe-inline';
+        script-src-elem 'self' http://localhost:5173 'nonce-4AEemGb0xJptoIGFP3Nd' 'unsafe-inline';
         frame-src https://bandcamp.com;
-        style-src-elem http://localhost:1212 'nonce-4AEemGb0xJptoIGFP3Nd'; 
-        font-src data: http://localhost:1212; 
-        img-src http://localhost:1212; 
-        connect-src *
+        style-src 'self' 'unsafe-inline';
+        style-src-elem 'self' 'unsafe-inline';
+        font-src data: 'self' http://localhost:5173 'unsafe-inline';
+        img-src 'self' http://localhost:5173 'unsafe-inline';
+        connect-src *;
       "
     />
     <% } else { %>
@@ -25,14 +26,13 @@
         style-src 'self';
         font-src data: 'self';
         img-src data: 'self';
-        frame-src *
+        frame-src *;
       "
     />
     <% } %>
-    <link rel="stylesheet" type="text/css" href="<%= stylesheetHref %>" nonce="4AEemGb0xJptoIGFP3Nd" />
   </head>
   <body>
     <div id="app" class="flex flex-col w-full h-full overflow-hidden"></div>
-    <script defer src="<%= rendererSrc %>" nonce="4AEemGb0xJptoIGFP3Nd"></script>
+    <script type="module" src="/index.tsx" nonce="4AEemGb0xJptoIGFP3Nd"></script>
   </body>
 </html>

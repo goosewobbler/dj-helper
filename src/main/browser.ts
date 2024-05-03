@@ -1,19 +1,13 @@
+import { URL } from 'node:url';
+
 import { BrowserView, BrowserWindow, ipcMain } from 'electron';
-import { URL } from 'url';
-import { createTrack, selectTrackBySourceUrl, TrackData } from '../features/tracks/tracksSlice';
-import {
-  addTrack,
-  clearTracks,
-  createBrowser,
-  selectActiveBrowser,
-  updatePageTitle,
-  navigationStarted,
-  navigationCompleted,
-} from '../features/browsers/browsersSlice';
-import { foundBandcampCollectionUrl } from '../features/ui/uiSlice';
-import { BandCurrency, BandData, parseBandcampPageData, TralbumCollectInfo, TralbumData } from './helpers/bandcamp';
-import { AnyObject, AppStore, Browser, TrackPreviewEmbedSize } from '../common/types';
-import { log } from './helpers/console';
+
+import { selectTrackBySourceUrl, TrackData } from '../features/tracks/index.js';
+import { selectActiveBrowser } from '../features/browsers/index.js';
+import { BandCurrency, BandData, parseBandcampPageData, TralbumCollectInfo, TralbumData } from './helpers/bandcamp.js';
+import { AnyObject, AppStore, Browser, TrackPreviewEmbedSize } from '../common/types.js';
+import { log } from './helpers/console.js';
+import { getStore, getDispatch } from './store/index.js';
 
 type RawBandcampData = [TralbumData, BandData, TralbumCollectInfo, BandCurrency];
 
@@ -49,8 +43,9 @@ type LoadedBrowser = {
 
 const loadedBrowsers: LoadedBrowser[] = [];
 
-function initBrowserView(reduxStore: AppStore, browser: Browser) {
-  const { dispatch, getState } = reduxStore;
+function initBrowserView(store: AppStore, browser: Browser) {
+  const { getState } = store;
+  const dispatch = getDispatch();
   const view = new BrowserView();
   let currentlyNavigating = false;
 
@@ -91,30 +86,27 @@ function initBrowserView(reduxStore: AppStore, browser: Browser) {
 
   view.webContents.setWindowOpenHandler(({ url }) => {
     log('windowOpenHandler', url);
-    dispatch(createBrowser({ url: sanitiseUrl(url) }));
+    dispatch('BROWSER:CREATE', { url: sanitiseUrl(url) });
     return { action: 'deny' };
   });
 
   view.webContents.on('page-title-updated', (event, title) => {
-    dispatch(updatePageTitle({ id: browser.id, title }));
+    dispatch('BROWSER:UPDATE_PAGE_TITLE', { id: browser.id, title });
   });
 
   view.webContents.on('will-navigate', (event, url) => {
     log('will-navigate', url);
     event.preventDefault();
-    const payload = { id: browser.id, url: sanitiseUrl(url) };
-    dispatch(navigationStarted(payload));
+    dispatch('BROWSER:NAVIGATION_STARTED', { id: browser.id, url: sanitiseUrl(url) });
   });
 
   view.webContents.on('did-navigate-in-page', (event, url) => {
-    const payload = { id: browser.id, url: sanitiseUrl(url) };
-    dispatch(navigationCompleted(payload));
+    dispatch('BROWSER:NAVIGATION_COMPLETED', { id: browser.id, url: sanitiseUrl(url) });
   });
 
   view.webContents.on('did-finish-load', () => {
     const loadedUrl = view.webContents.getURL();
-    const payload = { id: browser.id, url: loadedUrl };
-    dispatch(navigationCompleted(payload));
+    dispatch('BROWSER:NAVIGATION_COMPLETED', { id: browser.id, url: loadedUrl });
     currentlyNavigating = false;
     log('loaded url', loadedUrl);
 
@@ -126,7 +118,7 @@ function initBrowserView(reduxStore: AppStore, browser: Browser) {
         )) as string;
 
         if (/https:\/\/bandcamp.com\/\w+/.exec(collectionUrl)) {
-          dispatch(foundBandcampCollectionUrl({ collectionUrl }));
+          dispatch('UI:FOUND_BANDCAMP_COLLECTION_URL', { collectionUrl });
         }
       })();
 
@@ -144,13 +136,13 @@ function initBrowserView(reduxStore: AppStore, browser: Browser) {
               url: title_link,
               priceCurrency: pageTrackData.currency,
             };
-            dispatch(createTrack(trackData));
+            dispatch('TRACK:CREATE', trackData);
             log('creating track', title_link);
             const trackSelector = selectTrackBySourceUrl(title_link);
             const track = trackSelector(getState());
             log('selected browser', browser.id, track);
             // log(getState());
-            dispatch(addTrack({ id: browser.id, trackId: track.id }));
+            dispatch('BROWSER:ADD_TRACK', { id: browser.id, trackId: track.id });
           });
         })();
       }
@@ -166,7 +158,7 @@ function initBrowserView(reduxStore: AppStore, browser: Browser) {
     if (forceNavigate || canNavigateTo(url)) {
       log('loading URL', url);
       currentlyNavigating = true;
-      dispatch(clearTracks({ id: browser.id }));
+      dispatch('BROWSER:CLEAR_TRACKS', { id: browser.id });
 
       void view.webContents.loadURL(url);
     }
@@ -182,13 +174,13 @@ function initBrowserView(reduxStore: AppStore, browser: Browser) {
   };
 }
 
-export function initBrowsers(mainWindow: BrowserWindow, reduxStore: AppStore): void {
-  const { subscribe, getState } = reduxStore;
-  const activeBrowserSelector = selectActiveBrowser();
+export function initBrowsers(mainWindow: BrowserWindow): void {
+  const store = getStore();
+  const { subscribe, getState } = store;
 
   subscribe(() => {
     const state = getState();
-    const activeBrowser = activeBrowserSelector(state);
+    const activeBrowser = selectActiveBrowser(state);
     if (!activeBrowser) {
       // discard intermediary updates where no browser is active
       log('discarding update');
@@ -198,7 +190,7 @@ export function initBrowsers(mainWindow: BrowserWindow, reduxStore: AppStore): v
     state.browsers.forEach((browser: Browser) => {
       // initialise the browser if it is not loaded
       if (!loadedBrowsers.find((loadedBrowser) => loadedBrowser.id === browser.id)) {
-        const { view, navigate, setBounds } = initBrowserView(reduxStore, browser);
+        const { view, navigate, setBounds } = initBrowserView(store, browser);
         mainWindow.addBrowserView(view);
         loadedBrowsers.push({
           id: browser.id,
@@ -241,15 +233,5 @@ export function initBrowsers(mainWindow: BrowserWindow, reduxStore: AppStore): v
       const { url } = browsers.find((browser) => loadedBrowser.id === browser.id) as Browser;
       loadedBrowser.navigate(url, true);
     });
-  });
-  ipcMain.handle('resize-browsers', (_event, args: [Sizes]) => {
-    const state = getState();
-    const activeBrowser = activeBrowserSelector(state);
-    if (activeBrowser) {
-      const activeLoadedBrowser = loadedBrowsers.find(
-        (loadedBrowser) => loadedBrowser.id === activeBrowser.id,
-      ) as LoadedBrowser;
-      activeLoadedBrowser.setBounds(...args);
-    }
   });
 }

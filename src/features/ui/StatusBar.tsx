@@ -1,24 +1,25 @@
 import React, { ReactElement } from 'react';
-import { useAppDispatch, useAppSelector } from '../../common/hooks';
-import { TrackPreviewEmbedSize } from '../../common/types';
-import { NextTrackIcon } from '../../icons/NextTrackIcon';
-import { PreviousTrackIcon } from '../../icons/PreviousTrackIcon';
+
+import { TrackPreviewEmbedSize } from '../../common/types.js';
+import { NextTrackIcon } from '../../icons/NextTrackIcon.js';
+import { PreviousTrackIcon } from '../../icons/PreviousTrackIcon.js';
 import {
   loadAndPlayNextTrack,
   loadAndPlayPreviousTrack,
   selectNextTrack,
   selectPreviousTrack,
-} from '../embed/embedSlice';
-import { SettingsPanel } from './SettingsPanel';
-import { selectStatusText, selectTrackPreviewEmbedSize } from './uiSlice';
+} from '../embed/index.js';
+import { SettingsPanel } from './SettingsPanel.js';
+import { selectStatusText, selectTrackPreviewEmbedSize } from './index.js';
+import { useDispatch } from '../../renderer/hooks/useDispatch.js';
+import { useStore } from '../../renderer/hooks/useStore.js';
 
 export function StatusBar(): ReactElement {
-  const dispatch = useAppDispatch();
-  const trackPreviewEmbedSize = useAppSelector(selectTrackPreviewEmbedSize);
-  const statusText = useAppSelector(selectStatusText);
-  const nextTrackId = useAppSelector(selectNextTrack);
-  const previousTrackId = useAppSelector(selectPreviousTrack);
-  const isSmallEmbed = trackPreviewEmbedSize === TrackPreviewEmbedSize.Small;
+  const dispatch = useDispatch();
+  const isSmallEmbed = useStore(selectTrackPreviewEmbedSize(TrackPreviewEmbedSize.Small));
+  const statusText = useStore(selectStatusText);
+  const nextTrackId = useStore(selectNextTrack);
+  const previousTrackId = useStore(selectPreviousTrack);
   const heightClassName = isSmallEmbed ? 'h-16' : 'h-36';
   const trackSkipIconMarginClassName = isSmallEmbed ? '' : 'my-10';
   const nextTrackBtnDisabled = !nextTrackId;

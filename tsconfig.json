@@ -1,16 +1,15 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "CommonJS",
-    "moduleResolution": "node",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "esModuleInterop": true,
     "strict": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "inlineSources": true,
     "sourceMap": true,
-    "importsNotUsedAsValues": "preserve",
-    "allowSyntheticDefaultImports": true,
+    "resolvePackageJsonImports": true,
     "newLine": "lf",
     "noEmitOnError": true,
     "jsx": "react",
@@ -20,8 +19,10 @@
     "allowJs": true,
     "checkJs": true,
     "noEmit": true,
-    "types": ["node", "webpack-env"],
-    "typeRoots": ["./types", "./node_modules/@types"]
+    "types": ["node"],
+    "typeRoots": ["./types", "./node_modules/@types"],
+    "resolvePackageJsonExports": true,
+    "traceResolution": true
   },
   "include": [
     "./src/**/*.ts",
@@ -31,6 +32,7 @@
     "./test/helpers/*.tsx",
     "./types/**/*.ts",
     "src/renderer/preload.js",
-    "test/setup.ts"
+    "test/setup.ts",
+    "wdio.conf.ts"
   ]
 }

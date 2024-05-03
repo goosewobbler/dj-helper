@@ -1,7 +1,9 @@
+import { fileURLToPath } from 'node:url';
+
 import { app, BrowserWindow } from 'electron';
-import { createApp } from './app';
-import { log } from './helpers/console';
-// import '@goosewobbler/spectron/main';
+
+import { createApp } from './app.js';
+import { log } from './helpers/console.js';
 
 const appPath = app.getAppPath();
 const isDev = process.env.NODE_ENV === 'development';
@@ -28,13 +30,17 @@ void (async () => {
 //   mainWindow?.close();
 // });
 
+// console.log('ZOMG', fileURLToPath(new URL('../preload/index.mjs', import.meta.url)));
+
 async function createWindow(): Promise<void> {
   mainWindow = new BrowserWindow({
     show: false,
     height: 1000,
     width: 1500,
     webPreferences: {
-      preload: `${appRootPath}/preload.js`,
+      contextIsolation: true,
+      sandbox: false,
+      preload: fileURLToPath(new URL('../preload/index.mjs', import.meta.url)),
     },
   });
 
@@ -59,13 +65,13 @@ async function createWindow(): Promise<void> {
   });
 
   if (isDebugMode) {
-    const { installDevToolsExtensions } = await import('./helpers/dev');
+    const { installDevToolsExtensions } = await import('./helpers/dev.js');
     void (await installDevToolsExtensions());
   }
 
   void (await createApp(mainWindow, isDev));
 
-  const htmlRoot = isDev ? 'http://localhost:1212' : `file:///${appRootPath}`;
+  const htmlRoot = isDev ? 'http://localhost:5173' : `file:///${appRootPath}/out/renderer`;
   void (await mainWindow.loadURL(`${htmlRoot}/index.html`));
 }
 

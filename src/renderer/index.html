@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en-gb" class="theme-default">
+  <head>
+    <title>DJ Helper</title>
+    
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
+        default-src 'self' http://localhost:5173 'unsafe-inline';
+        script-src-elem 'self' http://localhost:5173 'nonce-4AEemGb0xJptoIGFP3Nd' 'unsafe-inline';
+        frame-src https://bandcamp.com;
+        style-src 'self' 'unsafe-inline';
+        style-src-elem 'self' 'unsafe-inline';
+        font-src data: 'self' http://localhost:5173 'unsafe-inline';
+        img-src 'self' http://localhost:5173 'unsafe-inline';
+        connect-src *;
+      "
+    />
+    
+  </head>
+  <body>
+    <div id="app" class="flex flex-col w-full h-full overflow-hidden"></div>
+    <script type="module" src="/index.tsx" nonce="4AEemGb0xJptoIGFP3Nd"></script>
+  </body>
+</html>

@@ -13,7 +13,6 @@ src/
 static/
 test/
 types/
-webpack/
 ...configuration files
 ```
 
@@ -58,16 +57,12 @@ Static files such as images.
 
 #### test/
 
-Contains [Jest](https://jestjs.io/) unit / component integration tests and [WDIO](https://webdriver.io) end to end tests.
+Contains [Vitest](https://vitest.dev/) unit / component integration tests and [WDIO](https://webdriver.io) end to end tests.
 
 #### types/
 
 Contains custom type definitions.
 
-#### webpack/
-
-The webpack build configuration, split across two files for each process and one shared rules file. Babel is also configured here.
-
 #### ...configuration files
 
-The rest of the things in the root directory are configuration files for ESLint, Git, Prettier, StyleLint, Jest, PNPM, PostCSS, TailwindCSS, Electron Builder and TypeScript.
+The rest of the things in the root directory are configuration files for ESLint, Git, Prettier, StyleLint, Vitest, PNPM, PostCSS, TailwindCSS, Electron Builder and TypeScript.

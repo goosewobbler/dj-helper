@@ -1,5 +1,3 @@
-/* eslint-disable global-require */
-
 /**
  * @type {import("./src/common/types").LooseObject}
  */
@@ -52,9 +50,10 @@ const plugins = [
 /**
  * @type {string[]}
  */
-const content = ['./src/**/*.ts{,x}', './src/index.ejs'];
+const content = ['./src/renderer/index.html', './src/renderer/**/*.{jsx,tsx}', './src/features/**/*.{jsx,tsx}'];
 
-module.exports = {
+/** @type {import('tailwindcss').Config} */
+export default {
   content,
   theme,
   plugins,

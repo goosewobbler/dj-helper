@@ -39,7 +39,7 @@ To start the development server:
 pnpm dev
 ```
 
-Hot Module Replacement (HMR) with React Fast Refresh and Webpack Dev Server is in use for rapid iteration on both `renderer` and `main` processes.
+Hot Module Replacement (HMR) is in use for rapid iteration on both `renderer` and `main` processes.
 
 ### Tech Stack
 
@@ -47,17 +47,14 @@ The following technologies are used:
 
 - **[Electron](https://electronjs.org)** (App Framework)
 - **[TypeScript](https://www.typescriptlang.org)** (Core language)
-- **[Babel](https://babeljs.io)** (Transpilation of TS => JS)
-- **[Webpack](https://webpack.js.org)** (Development, Build and Deployment tooling)
+- **[Electron-Vite](https://electron-vite.org)** (Development, Build and Deployment tooling)
 - **[React](https://reactjs.org)** (UI)
-- **[Redux Toolkit](https://redux-toolkit.js.org)** (State management)
+- **[Zustand](https://docs.pmnd.rs/zustand/getting-started/introduction)** (State management)
 - **[PostCSS](https://postcss.org)** (CSS tooling)
 - **[TailwindCSS](https://tailwindcss.com)** (Styling)
-- **[Jest](https://jestjs.io)** (Unit Testing)
+- **[Vitest](https://vitest.dev)** (Unit Testing)
 - **[Testing Library](https://testing-library.com)** (Unit Testing)
 - **[WebdriverIO](https://webdriver.io)** (End to End Testing)
 - **[Prettier](https://prettier.io)** (Code formatting)
 - **[ESLint](https://eslint.org)** (TS & JS linting)
 - **[StyleLint](https://stylelint.io)** (CSS linting)
-
-

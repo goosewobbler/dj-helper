@@ -1,12 +1,13 @@
 import React, { useRef } from 'react';
 import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd';
 import { XYCoord, Identifier } from 'dnd-core';
-import { selectTrackById } from './tracksSlice';
-import { LoadContext, Track } from '../../common/types';
-import { removeTrackFromActiveList } from '../lists/listsSlice';
-import { CrossIcon } from '../../icons/CrossIcon';
-import { BaseTrack } from './BaseTrack';
-import { useAppDispatch, useAppSelector } from '../../common/hooks';
+
+import { selectTrackById } from './index.js';
+import { LoadContext, Track } from '../../common/types.js';
+import { CrossIcon } from '../../icons/CrossIcon.js';
+import { BaseTrack } from './BaseTrack.js';
+import { useDispatch } from '../../renderer/hooks/useDispatch.js';
+import { useStore } from '../../renderer/hooks/useStore.js';
 
 interface DragItem {
   index: number;
@@ -25,8 +26,8 @@ export function ListTrack({
   listIndex?: number;
   moveTrack?: (dragIndex: number, hoverIndex: number) => void;
 }) {
-  const dispatch = useAppDispatch();
-  const track = useAppSelector(selectTrackById(id));
+  const dispatch = useDispatch();
+  const track = useStore(selectTrackById(id));
   const dragRef = useRef<HTMLDivElement>(null);
   const [{ isDragging }, drag] = useDrag({
     type: 'track',
@@ -109,7 +110,7 @@ export function ListTrack({
           <button
             type="button"
             onClick={() => {
-              dispatch(removeTrackFromActiveList({ trackId: id }));
+              dispatch('LIST:REMOVE_TRACK', { trackId: id });
             }}
           >
             <CrossIcon className="cross-icon" />

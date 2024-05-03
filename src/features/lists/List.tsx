@@ -1,35 +1,28 @@
 import React, { ReactElement, BaseSyntheticEvent, KeyboardEvent, useRef, useCallback } from 'react';
-import { ListTrack } from '../tracks/ListTrack';
-import { ChevronIcon } from '../../icons/ChevronIcon';
-import {
-  deleteList,
-  editList,
-  finishEditList,
-  moveTrackToIndex,
-  revertEditList,
-  toggleListActive,
-  selectListById,
-  updateListTitle,
-} from './listsSlice';
-import { LoadContextType, Track } from '../../common/types';
-import { EditIcon } from '../../icons/EditIcon';
-import { TrashIcon } from '../../icons/TrashIcon';
-import { useAppDispatch, useAppSelector } from '../../common/hooks';
-import { CrossIcon } from '../../icons/CrossIcon';
-import { TickIcon } from '../../icons/TickIcon';
+
+import { ListTrack } from '../tracks/ListTrack.js';
+import { ChevronIcon } from '../../icons/ChevronIcon.js';
+import { selectListById } from './index.js';
+import { LoadContextType, Track } from '../../common/types.js';
+import { EditIcon } from '../../icons/EditIcon.js';
+import { TrashIcon } from '../../icons/TrashIcon.js';
+import { CrossIcon } from '../../icons/CrossIcon.js';
+import { TickIcon } from '../../icons/TickIcon.js';
+import { useDispatch } from '../../renderer/hooks/useDispatch.js';
+import { useStore } from '../../renderer/hooks/useStore.js';
 
 const KEY_ENTER = 'Enter';
 const KEY_ESCAPE = 'Escape';
 
 export function List({ id }: { id: number }): ReactElement {
-  const dispatch = useAppDispatch();
-  const list = useAppSelector(selectListById(id));
+  const dispatch = useDispatch();
+  const list = useStore(selectListById(id));
   const content = useRef<HTMLDivElement>(null);
   const moveTrack = useCallback(
     (dragIndex: number, hoverIndex: number) => {
       const dragTrack = list.tracks[dragIndex];
 
-      dispatch(moveTrackToIndex({ trackId: dragTrack, newIndex: hoverIndex }));
+      dispatch('LIST:MOVE_TRACK', { trackId: dragTrack, newIndex: hoverIndex });
     },
     [list?.tracks, dispatch],
   );
@@ -41,22 +34,22 @@ export function List({ id }: { id: number }): ReactElement {
   const { title, tracks, editing, active } = list;
   const isValid = () => title !== '';
 
-  const handleClickEdit = () => dispatch(editList({ id }));
+  const handleClickEdit = () => dispatch('LIST:EDIT', { id });
   const handleClickConfirmEdit = () => {
     if (isValid()) {
-      dispatch(finishEditList());
+      dispatch('LIST:EDIT_COMPLETE');
     }
   };
-  const handleClickCancelEdit = () => dispatch(revertEditList());
-  const handleClickDelete = () => dispatch(deleteList({ id }));
+  const handleClickCancelEdit = () => dispatch('LIST:EDIT_REVERT');
+  const handleClickDelete = () => dispatch('LIST:DELETE_LIST', { id });
   const handleTitleChange = (event: BaseSyntheticEvent): void => {
-    dispatch(updateListTitle({ id, title: (event.target as HTMLInputElement).value }));
+    dispatch('LIST:UPDATE_TITLE', { id, title: (event.target as HTMLInputElement).value });
   };
   const handleKeyDown = (event: KeyboardEvent): void => {
     if (event.key === KEY_ENTER && isValid()) {
-      dispatch(finishEditList());
+      dispatch('LIST:EDIT_COMPLETE');
     } else if (event.key === KEY_ESCAPE) {
-      dispatch(revertEditList());
+      dispatch('LIST:EDIT_REVERT');
     }
   };
 
@@ -68,7 +61,7 @@ export function List({ id }: { id: number }): ReactElement {
   const chevronAdditionalClassNames = active ? chevronAdditionalClassNamesWhenActive : '';
 
   function toggleAccordion() {
-    dispatch(toggleListActive({ id }));
+    dispatch('LIST:TOGGLE_ACTIVE', { id });
   }
 
   return (
@@ -90,16 +83,16 @@ export function List({ id }: { id: number }): ReactElement {
                 id="list-title"
                 className={`mx-4 focus:ring-4 focus:ring-offset-2 ring-opacity-30 ${validityRing}`}
                 type="text"
-                onChange={(event): void => handleTitleChange(event)}
-                onKeyDown={(event): void => handleKeyDown(event)}
+                onChange={handleTitleChange}
+                onKeyDown={handleKeyDown}
                 placeholder="List Title"
                 value={title}
               />
               <div className="inline-block float-right h-full -mt-1">
-                <button className="p-1 pt-2 hover:bg-green-600" type="button" onClick={() => handleClickConfirmEdit()}>
+                <button className="p-1 pt-2 hover:bg-green-600" type="button" onClick={handleClickConfirmEdit}>
                   <TickIcon className="tick-icon" />
                 </button>
-                <button className="p-1 hover:bg-red-200" type="button" onClick={() => handleClickCancelEdit()}>
+                <button className="p-1 hover:bg-red-200" type="button" onClick={handleClickCancelEdit}>
                   <CrossIcon className="cross-icon" />
                 </button>
               </div>
@@ -110,7 +103,7 @@ export function List({ id }: { id: number }): ReactElement {
               <button
                 className="relative inline-block p-1 mx-4 align-middle opacity-0 bottom-2 hover:bg-green-600 group-list-hover:opacity-100"
                 type="button"
-                onClick={() => handleClickEdit()}
+                onClick={handleClickEdit}
                 aria-label="Edit List Title"
               >
                 <EditIcon className="edit-icon" />
@@ -122,7 +115,7 @@ export function List({ id }: { id: number }): ReactElement {
           <button
             className="float-right p-1 mx-1 opacity-0 group-list-hover:opacity-100 hover:bg-red-200"
             type="button"
-            onClick={() => handleClickDelete()}
+            onClick={handleClickDelete}
             aria-label="Delete List"
           >
             <TrashIcon className="trash-icon" />

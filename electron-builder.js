@@ -1,5 +1,4 @@
-/* eslint-disable no-template-curly-in-string */
-module.exports = {
+export default {
   asar: true,
   appId: 'com.dj-helper.app',
   copyright: `Copyright © ${new Date().getFullYear()} Goosewobbler`,

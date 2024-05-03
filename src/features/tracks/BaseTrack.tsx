@@ -1,10 +1,12 @@
 import React, { ReactElement } from 'react';
-import { embedRequestInFlight, loadAndPlayTrack, pauseTrack, trackIsPlaying } from '../embed/embedSlice';
-import { selectTrackById } from './tracksSlice';
-import { LoadContext, Track } from '../../common/types';
-import { log } from '../../main/helpers/console';
-import { PlayPauseButton } from './PlayPauseButton';
-import { useAppDispatch, useAppSelector } from '../../common/hooks';
+
+import { embedRequestInFlight, loadAndPlayTrack, trackIsPlaying } from '../embed/index.js';
+import { selectTrackById } from './index.js';
+import { LoadContext, Track } from '../../common/types.js';
+import { log } from '../../main/helpers/console.js';
+import { PlayPauseButton } from './PlayPauseButton.js';
+import { useDispatch } from '../../renderer/hooks/useDispatch.js';
+import { useStore } from '../../renderer/hooks/useStore.js';
 
 function displayTrackDuration(duration: number) {
   const date = new Date(duration * 1000);
@@ -24,10 +26,10 @@ export function BaseTrack({
   context: LoadContext;
   additionalButtons: ReactElement;
 }) {
-  const dispatch = useAppDispatch();
-  const track = useAppSelector(selectTrackById(id));
-  const isPlaying = useAppSelector(trackIsPlaying({ trackId: id }));
-  const showSpinner = useAppSelector(embedRequestInFlight({ trackId: id }));
+  const track = useStore(selectTrackById(id));
+  const isPlaying = useStore(trackIsPlaying({ trackId: id }));
+  const showSpinner = useStore(embedRequestInFlight({ trackId: id }));
+  const dispatch = useDispatch();
 
   if (!track) {
     return <> </>;
@@ -48,7 +50,11 @@ export function BaseTrack({
             showSpinner={showSpinner}
             onClick={() => {
               log('invoke play', { trackId: id, context });
-              dispatch(isPlaying ? pauseTrack() : loadAndPlayTrack({ trackId: id, context }));
+              if (isPlaying) {
+                dispatch('EMBED:REQUEST_PAUSE');
+              } else {
+                dispatch(loadAndPlayTrack({ trackId: id, context }));
+              }
             }}
           />
         </span>

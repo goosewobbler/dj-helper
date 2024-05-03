@@ -1,5 +1,6 @@
-import electronDevToolsInstaller, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
-import { log, logError } from './console';
+import electronDevToolsInstaller, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-assembler';
+
+import { log, logError } from './console.js';
 
 type DevToolsExtension = {
   ref: typeof REACT_DEVELOPER_TOOLS;
@@ -24,8 +25,8 @@ const installExtension = async (extension: DevToolsExtension): Promise<string | 
       loadExtensionOptions: { allowFileAccess: true },
     });
     log(`Added Extension: ${installedExtension}`);
-  } catch ({ message }) {
-    logError(message as string);
+  } catch (e: unknown) {
+    logError((e as Error).message);
   }
 };
 

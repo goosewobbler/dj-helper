@@ -13,7 +13,6 @@ src/
 static/
 test/
 types/
-webpack/
 ...configuration files
 ```
 
@@ -63,10 +62,6 @@ Contains [Vitest](https://vitest.dev/) unit / component integration tests and [W
 #### types/
 
 Contains custom type definitions.
-
-#### webpack/
-
-The webpack build configuration, split across two files for each process and one shared rules file. Babel is also configured here.
 
 #### ...configuration files
 

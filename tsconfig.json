@@ -19,7 +19,7 @@
     "allowJs": true,
     "checkJs": true,
     "noEmit": true,
-    "types": ["node", "webpack-env"],
+    "types": ["node"],
     "typeRoots": ["./types", "./node_modules/@types"],
     "resolvePackageJsonExports": true,
     "traceResolution": true

@@ -2,20 +2,5 @@
   "eslint.probe": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
   "css.validate": false,
   "scss.validate": false,
-  "stylelint.enable": true,
-  "vsicons.associations.files": [
-    {
-      "icon": "webpack",
-      "extensions": [
-        "main.config.js",
-        "preload.config.js",
-        "renderer.config.js",
-        "main.plugins.js",
-        "renderer.plugins.js",
-        "rules.js"
-      ],
-      "filename": true,
-      "format": "svg"
-    }
-  ]
+  "stylelint.enable": true
 }

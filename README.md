@@ -5,6 +5,8 @@
 [![Github top language](https://img.shields.io/github/languages/top/goosewobbler/dj-helper)](https://typescriptlang.org)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
+## *⚠️ DJ Helper is no longer being worked on.  I learnt a lot about the problem space whilst developing it but the all-in-one design to the app has proven quite limiting, with a lot of work required to re-implement basic browser functionality in Electron.  I will be following this with a new, more streamlined approach.*
+
 # DJ Helper
 
 This is an app for helping DJs to construct and manage lists of tracks whilst browsing online music sources such as Bandcamp and Beatport. More generalised digital music curation features may be added in the future, focussing on ownership / downloadable content over streaming.
